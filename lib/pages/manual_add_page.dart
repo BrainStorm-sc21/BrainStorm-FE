@@ -1,79 +1,30 @@
+import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 
 class ManualAddPage extends StatelessWidget {
   const ManualAddPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        localizationsDelegates: const [
+    return const MaterialApp(
+        localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
+        supportedLocales: [
           Locale('ko', 'KR'),
           Locale('en', ''),
         ],
-        home:
-            /*Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "식품 등록",
-          ),
-          centerTitle: true,
-        ),
-        body: const FoodInfo(),
-      ),*/
-            Scaffold(
-          body: Stack(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                    Color.fromRGBO(35, 204, 135, 1.0),
-                    Colors.cyan
-                  ])),
-                  child: const Center(
-                    child: Text(
-                      '식품 등록',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 6,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                  ),
-                  child: const FoodInfo(),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: Colors.amber,
-                ),
-              ),
-            ],
+        home: Scaffold(
+          body: AddFoodLayout(
+            title: '식품 등록',
+            containerColor: Colors.white,
+            child: FoodInfo(),
           ),
         ));
   }
@@ -204,7 +155,8 @@ class _FoodInfoState extends State<FoodInfo> {
             const Spacer(),
             CupertinoButton(
               child: Text(
-                  '${expireDate.year}/${expireDate.month}/${expireDate.day}'),
+                '${expireDate.year}/${expireDate.month}/${expireDate.day}',
+              ),
               onPressed: () => showDateModalPopup(context),
             ),
             IconButton(
@@ -226,38 +178,34 @@ class _FoodInfoState extends State<FoodInfo> {
   Future<dynamic> showDateModalPopup(BuildContext context) {
     return showCupertinoModalPopup(
       context: context,
-      builder: (context) => Theme(
-        data: ThemeData.light(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 150,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                dateOrder: DatePickerDateOrder.ymd,
-                minimumYear: expireDate.year - 100,
-                maximumYear: expireDate.year + 100,
-                initialDateTime: expireDate,
-                onDateTimeChanged: (value) =>
-                    setState(() => expireDate = value),
+      builder: (context) => Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            height: 150,
+            child: CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.date,
+              dateOrder: DatePickerDateOrder.ymd,
+              minimumYear: expireDate.year - 100,
+              maximumYear: expireDate.year + 100,
+              initialDateTime: expireDate,
+              onDateTimeChanged: (value) => setState(() => expireDate = value),
+            ),
+          ),
+          Row(
+            children: [
+              CupertinoButton(
+                child: const Text('취소'),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-            ),
-            Row(
-              children: [
-                CupertinoButton(
-                  child: const Text('취소'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                const Spacer(),
-                CupertinoButton(
-                  child: const Text('완료'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          ],
-        ),
+              const Spacer(),
+              CupertinoButton(
+                child: const Text('완료'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
