@@ -1,10 +1,12 @@
 import 'package:brainstorm_meokjang/pages/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home_page.dart';
+import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(const ManualAddPage());
 }
 
 class MyApp extends StatelessWidget {
