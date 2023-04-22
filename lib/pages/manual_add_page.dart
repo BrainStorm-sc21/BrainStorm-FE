@@ -21,6 +21,7 @@ class ManualAddPage extends StatelessWidget {
           Locale('en', ''),
         ],
         home: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: AddFoodLayout(
             title: '식품 등록',
             containerColor: Colors.white,
@@ -44,7 +45,7 @@ class _FoodInfoState extends State<FoodInfo> {
   num stock = 1;
   DateTime expireDate = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
 
-  List<String> storageList = ['냉장', '냉동', '실온'];
+  List<String> storages = ['냉장', '냉동', '실온'];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -53,39 +54,79 @@ class _FoodInfoState extends State<FoodInfo> {
       children: [
         // 식료품 이름 입력
         TextField(
-          decoration: const InputDecoration(hintText: '식품 이름을 입력하세요'),
+          decoration: const InputDecoration(
+            hintText: '식품 이름을 입력하세요',
+            contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(
+                width: 2,
+                color: Color.fromRGBO(35, 204, 135, 1.0),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(
+                width: 2,
+                color: Color.fromRGBO(35, 204, 135, 1.0),
+              ),
+            ),
+          ),
           onChanged: (value) {
             setState(() {
               name = value;
             });
           },
         ),
+        const SizedBox(height: 30), // 여백
         // 보관 장소 선택
-        const Row(children: [
-          Text("보관 장소"),
+        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Text("보관장소"),
           Spacer(),
-          Icon(Icons.question_mark),
-          Text("OO 보관을 추천해요"),
+          Center(
+            child: Icon(
+              Icons.info_outline,
+              color: Colors.amber,
+              size: 18,
+            ),
+          ),
+          SizedBox(width: 5),
+          Text(
+            "냉장 보관을 추천해요",
+            style: TextStyle(
+              color: Colors.amber,
+              fontSize: 14,
+            ),
+          ),
         ]),
-        Wrap(
-          spacing: 5.0,
+        const SizedBox(height: 10), // 여백
+        // 냉장/냉동/실온 선택 버튼
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(3, (index) {
-            return ChoiceChip(
-              label: Text(storageList[index]),
-              selected: storage == storageList[index],
-              onSelected: (selected) {
-                setState(() {
-                  storage = storageList[index];
-                });
-              },
+            // bool selected = storage == storages[index];
+
+            return RoundedOutlinedButton(
+              text: storages[index],
+              onPressed: () => setState(() => storage = storages[index]),
+              width: MediaQuery.of(context).size.width / 3.0 - 50,
+              backgroundColor: storage == storages[index]
+                  ? const Color.fromRGBO(35, 204, 135, 1.0)
+                  : Colors.white,
+              foregroundColor:
+                  storage == storages[index] ? Colors.white : Colors.black,
+              borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
             );
           }),
         ),
+        const SizedBox(height: 10), // 여백
         // 구분선
-        const Divider(
+        Divider(
           thickness: 1,
           height: 1,
+          color: Colors.grey.shade200,
         ),
+        const SizedBox(height: 10), // 여백
         // 수량 조절
         Row(children: [
           const Text("수량"),
@@ -94,27 +135,29 @@ class _FoodInfoState extends State<FoodInfo> {
             children: [
               Row(children: [
                 IconButton(
-                    onPressed: decrementStock, icon: const Icon(Icons.remove)),
+                  color: Colors.grey.shade400,
+                  onPressed: decrementStock,
+                  icon: const Icon(Icons.remove),
+                ),
                 Form(
                   key: _formKey,
                   child: SizedBox(
-                    width: 60,
+                    width: 40,
                     child: TextFormField(
                       controller: TextEditingController(text: '$stock'),
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.center,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            RegExp(r'^(\d)\d{0,3}\.?\d{0,1}')),
-                        LengthLimitingTextInputFormatter(4),
+                            RegExp(r'^(\d)\d{0,2}\.?\d{0,1}')),
+                        LengthLimitingTextInputFormatter(3),
                       ],
                       decoration: const InputDecoration(
-                          errorStyle: TextStyle(fontSize: 0)),
+                        border: InputBorder.none,
+                      ),
                       onSaved: (value) {
-                        setState(() {
-                          stock = num.parse(value!);
-                        });
+                        setState(() => stock = num.parse(value!));
                         value = '$stock';
                       },
                       onFieldSubmitted: (value) {
@@ -128,47 +171,57 @@ class _FoodInfoState extends State<FoodInfo> {
                           _formKey.currentState!.save();
                         }
                         // textFormField 바깥 클릭 시, hide keyboard
-                        FocusScopeNode currentFocus = FocusScope.of(context);
-                        if (!currentFocus.hasPrimaryFocus &&
-                            currentFocus.focusedChild != null) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        }
+                        FocusScope.of(context).unfocus();
                       },
                     ),
                   ),
                 ),
                 IconButton(
-                    onPressed: incrementStock, icon: const Icon(Icons.add)),
+                  color: Colors.grey.shade400,
+                  onPressed: incrementStock,
+                  icon: const Icon(Icons.add),
+                ),
               ]),
             ],
           ),
         ]),
+        const SizedBox(height: 10), // 여백
         // 구분선
-        const Divider(
+        Divider(
           thickness: 1,
           height: 1,
+          color: Colors.grey.shade200,
         ),
+        const SizedBox(height: 10), // 여백
         // 소비기한 입력
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('소비기한'),
             const Spacer(),
-            CupertinoButton(
+            TextButton(
               child: Text(
-                '${expireDate.year}/${expireDate.month}/${expireDate.day}',
+                '${expireDate.year}. ${expireDate.month}. ${expireDate.day}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
               onPressed: () => showDateModalPopup(context),
             ),
             IconButton(
-                onPressed: () {
-                  showDialog(
+                iconSize: 18,
+                onPressed: () => showDialog(
                       context: context,
                       builder: (context) => DatePickerDialog(
-                          initialDate: expireDate,
-                          firstDate: expireDate,
-                          lastDate: expireDate));
-                },
-                icon: const Icon(Icons.date_range_rounded)),
+                        initialDate: expireDate,
+                        firstDate: DateTime(expireDate.year - 100),
+                        lastDate: DateTime(expireDate.year + 100, 12, 31),
+                      ),
+                    ),
+                icon: const Icon(
+                  Icons.date_range_rounded,
+                )),
           ],
         ),
       ],
@@ -218,6 +271,7 @@ class _FoodInfoState extends State<FoodInfo> {
     } else {
       setState(() => stock--);
     }
+    debugPrint('$stock');
   }
 
   void incrementStock() {
@@ -226,15 +280,5 @@ class _FoodInfoState extends State<FoodInfo> {
     } else {
       setState(() => stock++);
     }
-  }
-
-  void setStock(value) {
-    if (value.isNull || num.parse(value) == 0) {
-      return;
-    }
-    setState(() {
-      stock = num.parse(value);
-    });
-    value = '$stock';
   }
 }

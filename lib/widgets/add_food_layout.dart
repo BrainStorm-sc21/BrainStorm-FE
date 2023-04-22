@@ -74,20 +74,24 @@ class AddFoodLayout extends StatelessWidget {
                       // '등록하기' 버튼
                       RoundedOutlinedButton(
                         text: '등록하기',
-                        onPressed: () => register(),
+                        width: double.infinity,
+                        onPressed: register,
                         foregroundColor: Colors.white,
                         backgroundColor:
                             const Color.fromRGBO(35, 204, 135, 1.0),
                         borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
+                        fontSize: 18,
                       ),
                       // '취소하기' 버튼
                       RoundedOutlinedButton(
                         text: '취소하기',
-                        onPressed: () => cancel(),
+                        width: double.infinity,
+                        onPressed: cancel,
                         foregroundColor:
                             const Color.fromRGBO(35, 204, 135, 1.0),
                         backgroundColor: Colors.white,
                         borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
+                        fontSize: 18,
                       ),
                     ],
                   ),
