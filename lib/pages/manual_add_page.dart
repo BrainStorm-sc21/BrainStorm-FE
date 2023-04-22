@@ -11,6 +11,7 @@ class ManualAddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+        // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -45,8 +46,8 @@ class _FoodInfoState extends State<FoodInfo> {
   num stock = 1;
   DateTime expireDate = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
 
-  List<String> storages = ['냉장', '냉동', '실온'];
-  final _formKey = GlobalKey<FormState>();
+  final List<String> _storages = ['냉장', '냉동', '실온']; // 보관장소 선택을 위한 list
+  final _formKey = GlobalKey<FormState>(); // 수량 입력을 위한 formkey
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +84,9 @@ class _FoodInfoState extends State<FoodInfo> {
         const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
+
+          /// 보관 장소 추천 description
+          /// 추후 DB에 저장된 추천 가능 식료품에만 적용할 수 있도록 수정 필요
           Center(
             child: Icon(
               Icons.info_outline,
@@ -90,7 +94,7 @@ class _FoodInfoState extends State<FoodInfo> {
               size: 18,
             ),
           ),
-          SizedBox(width: 5),
+          SizedBox(width: 5), // 여백
           Text(
             "냉장 보관을 추천해요",
             style: TextStyle(
@@ -104,17 +108,15 @@ class _FoodInfoState extends State<FoodInfo> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(3, (index) {
-            // bool selected = storage == storages[index];
-
             return RoundedOutlinedButton(
-              text: storages[index],
-              onPressed: () => setState(() => storage = storages[index]),
+              text: _storages[index],
+              onPressed: () => setState(() => storage = _storages[index]),
               width: MediaQuery.of(context).size.width / 3.0 - 50,
-              backgroundColor: storage == storages[index]
+              backgroundColor: storage == _storages[index]
                   ? const Color.fromRGBO(35, 204, 135, 1.0)
                   : Colors.white,
               foregroundColor:
-                  storage == storages[index] ? Colors.white : Colors.black,
+                  storage == _storages[index] ? Colors.white : Colors.black,
               borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
             );
           }),
@@ -134,28 +136,33 @@ class _FoodInfoState extends State<FoodInfo> {
           Column(
             children: [
               Row(children: [
+                // 수량 빼기
                 IconButton(
                   color: Colors.grey.shade400,
                   onPressed: decrementStock,
                   icon: const Icon(Icons.remove),
                 ),
+                // 수량 표시 및 입력란
                 Form(
                   key: _formKey,
                   child: SizedBox(
                     width: 40,
                     child: TextFormField(
-                      controller: TextEditingController(text: '$stock'),
                       textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      // 입력란에 stock 변수의 값을 표시
+                      controller: TextEditingController(text: '$stock'),
+                      // 입력란 클릭 시, 숫자 키보드 표시
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
+                      // 0~999, x.y 꼴의 실수만 입력 가능 (ex. 0.0~9.9, 0~999, 10.~99.),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
                             RegExp(r'^(\d)\d{0,2}\.?\d{0,1}')),
                         LengthLimitingTextInputFormatter(3),
                       ],
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                      ),
                       onSaved: (value) {
                         setState(() => stock = num.parse(value!));
                         value = '$stock';
@@ -166,16 +173,17 @@ class _FoodInfoState extends State<FoodInfo> {
                         }
                       },
                       onTapOutside: (event) {
-                        // textFormField 바깥 클릭 시, state 저장
+                        // 입력란 바깥 클릭 시, 값을 변수에 저장
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                         }
-                        // textFormField 바깥 클릭 시, hide keyboard
+                        // 입력란 바깥 클릭 시, 키보드 숨김
                         FocusScope.of(context).unfocus();
                       },
                     ),
                   ),
                 ),
+                // 수량 더하기
                 IconButton(
                   color: Colors.grey.shade400,
                   onPressed: incrementStock,
@@ -199,6 +207,7 @@ class _FoodInfoState extends State<FoodInfo> {
           children: [
             const Text('소비기한'),
             const Spacer(),
+            // 소비기한 표시 및 선택 버튼(cupertino)
             TextButton(
               child: Text(
                 '${expireDate.year}. ${expireDate.month}. ${expireDate.day}',
@@ -209,6 +218,7 @@ class _FoodInfoState extends State<FoodInfo> {
               ),
               onPressed: () async => await showDateModalPopup(context),
             ),
+            // 달력 팝업 버튼
             IconButton(
               icon: const Icon(Icons.date_range_rounded),
               iconSize: 18,
