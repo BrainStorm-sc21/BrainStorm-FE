@@ -207,35 +207,40 @@ class _FoodInfoState extends State<FoodInfo> {
                   fontWeight: FontWeight.normal,
                 ),
               ),
-              onPressed: () => showDateModalPopup(context),
+              onPressed: () async => await showDateModalPopup(context),
             ),
             IconButton(
-                iconSize: 18,
-                onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => DatePickerDialog(
-                        initialDate: expireDate,
-                        firstDate: DateTime(expireDate.year - 100),
-                        lastDate: DateTime(expireDate.year + 100, 12, 31),
-                      ),
-                    ),
-                icon: const Icon(
-                  Icons.date_range_rounded,
-                )),
+              icon: const Icon(Icons.date_range_rounded),
+              iconSize: 18,
+              onPressed: () async {
+                final selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: expireDate,
+                  firstDate: DateTime(expireDate.year - 5),
+                  lastDate: DateTime(expireDate.year + 100, 12, 31),
+                );
+                if (selectedDate != null) {
+                  setState(() => expireDate = selectedDate);
+                }
+              },
+            ),
           ],
         ),
       ],
     );
   }
 
+// cupertino 날짜 선택기를 bottom 모달로 띄움
   Future<dynamic> showDateModalPopup(BuildContext context) {
     return showCupertinoModalPopup(
       context: context,
       builder: (context) => Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(
-            height: 150,
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            color: Colors.white,
+            height: 160,
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               dateOrder: DatePickerDateOrder.ymd,
@@ -244,19 +249,6 @@ class _FoodInfoState extends State<FoodInfo> {
               initialDateTime: expireDate,
               onDateTimeChanged: (value) => setState(() => expireDate = value),
             ),
-          ),
-          Row(
-            children: [
-              CupertinoButton(
-                child: const Text('취소'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              const Spacer(),
-              CupertinoButton(
-                child: const Text('완료'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
           ),
         ],
       ),
