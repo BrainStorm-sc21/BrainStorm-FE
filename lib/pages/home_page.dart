@@ -84,8 +84,21 @@ class _HomePageState extends State<HomePage> {
             Center(child: Text("상온")),
             ],
           ),
+        floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () async {
+          String? name = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => CreatePage()),
+          );
+          if (name != null) {
+            setState(() {
+              ingredientList.add(Ingredient(name, false)); //리스트에 추가
+            });
+          }
+        },
+      ),
       ),
     );
   }
 }
-
