@@ -73,6 +73,30 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                 Ingredient ingredient = ingredientList[index]; // index에 해당하는 ingredient 가져오기
                 return ListTile(
+                  //추가한 식재료 리스트
+                  title: Text(
+                    ingredient.name,
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: ingredient.isClick ? Colors.grey : Colors.black,
+                      decoration: ingredient.isClick
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  // 삭제 아이콘 버튼
+                  trailing: IconButton(
+                    icon: Icon(CupertinoIcons.delete),
+                    onPressed: () {
+                      // 삭제 버튼 클릭시
+                    },
+                  ),
+                  onTap: () {
+                    // 아이템 클릭시
+                    setState(() {
+                      ingredient.isClick = !ingredient.isClick; // isClick 상태 변경
+                    });
+                  },
                 );
               },
             ),
