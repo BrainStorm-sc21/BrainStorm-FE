@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 class AddFoodLayout extends StatelessWidget {
   final String title;
   final Color containerColor;
-  final Widget child;
+  final Widget body;
+  final VoidCallback onPressedAddButton;
 
   const AddFoodLayout({
     super.key,
     required this.title,
     this.containerColor = const Color.fromRGBO(249, 249, 249, 1.0),
-    required this.child,
+    required this.body,
+    required this.onPressedAddButton,
   });
 
   @override
@@ -67,7 +69,7 @@ class AddFoodLayout extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 식품 정보 박스
-                  child,
+                  body,
                   // 등록/취소 버튼
                   Column(
                     children: [
@@ -75,7 +77,7 @@ class AddFoodLayout extends StatelessWidget {
                       RoundedOutlinedButton(
                         text: '등록하기',
                         width: double.infinity,
-                        onPressed: register,
+                        onPressed: onPressedAddButton,
                         foregroundColor: Colors.white,
                         backgroundColor:
                             const Color.fromRGBO(35, 204, 135, 1.0),
@@ -86,7 +88,7 @@ class AddFoodLayout extends StatelessWidget {
                       RoundedOutlinedButton(
                         text: '취소하기',
                         width: double.infinity,
-                        onPressed: cancel,
+                        onPressed: () => Navigator.of(context).pop,
                         foregroundColor:
                             const Color.fromRGBO(35, 204, 135, 1.0),
                         backgroundColor: Colors.white,
@@ -103,8 +105,4 @@ class AddFoodLayout extends StatelessWidget {
       ],
     );
   }
-
-  void cancel() => debugPrint('pressed cancel');
-
-  void register() => debugPrint('pressed add');
 }

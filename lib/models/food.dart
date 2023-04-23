@@ -1,8 +1,8 @@
 class Food {
-  final String name;
-  final String storage;
-  final num stock;
-  final DateTime expireDate;
+  String name;
+  String storage;
+  num stock;
+  DateTime expireDate;
 
   Food({
     required this.name,
@@ -17,7 +17,7 @@ class Food {
     data['name'] = name;
     data['storage'] = storage;
     data['stock'] = stock;
-    data['expireDate'] = expireDate.toIso8601String();
+    data['expireDate'] = expireDate;
     return data;
   }
 
@@ -29,5 +29,17 @@ class Food {
       stock: json['stock'],
       expireDate: DateTime.parse(json['expireDate']),
     );
+  }
+
+  // validate food information
+  bool isFoodValid() {
+    if (name.trim().isEmpty || name.startsWith(' ')) {
+      return false;
+    } else if (name.trim().isEmpty || name.startsWith(' ')) {
+      return false;
+    } else if (stock <= 0) {
+      return false;
+    }
+    return true;
   }
 }
