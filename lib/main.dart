@@ -1,12 +1,11 @@
 import 'package:brainstorm_meokjang/pages/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home_page.dart';
-import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  // runApp(const MyApp());
-  runApp(const ManualAddPage());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', 'KR'),
+        Locale('en', ''),
+      ],
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

@@ -4,7 +4,6 @@ import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 
 // 수동 추가 화면
@@ -68,45 +67,31 @@ class _ManualAddPageState extends State<ManualAddPage> {
       ],
     );
 
-// 추후 merge 시, MaterialApp을 없애고 Scaffold만 return하도록 변경해야 함
-    return MaterialApp(
-      // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
-      // 추후 merge 시, localization 관련 코드는 main의 MaterialApp으로 옮겨야 함
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ko', 'KR'),
-        Locale('en', ''),
-      ],
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: AddFoodLayout(
-          title: '식품 등록',
-          containerColor: Colors.white,
-          body: Column(
-            children: [
-              FoodName(setName: setName), // 식료품 이름 입력
-              const SizedBox(height: 30), // 여백
-              FoodStorage(
-                  storage: food.storage, setStorage: setStorage), // 식료품 보관장소 선택
-              divider,
-              FoodStock(
-                  stock: food.stock,
-                  setStock: setStock,
-                  controller: _stockStringController,
-                  updateControllerText: updateControllerText,
-                  focusNode: _stockFocusNode), // 식료품 수량 조절
-              divider,
-              FoodExpireDate(
-                  expireDate: food.expireDate,
-                  setExpireDate: setExpireDate), // 식료품 소비기한 입력
-            ],
-          ),
-          onPressedAddButton: saveFoodInfo,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: AddFoodLayout(
+        title: '식품 등록',
+        containerColor: Colors.white,
+        body: Column(
+          children: [
+            FoodName(setName: setName), // 식료품 이름 입력
+            const SizedBox(height: 30), // 여백
+            FoodStorage(
+                storage: food.storage, setStorage: setStorage), // 식료품 보관장소 선택
+            divider,
+            FoodStock(
+                stock: food.stock,
+                setStock: setStock,
+                controller: _stockStringController,
+                updateControllerText: updateControllerText,
+                focusNode: _stockFocusNode), // 식료품 수량 조절
+            divider,
+            FoodExpireDate(
+                expireDate: food.expireDate,
+                setExpireDate: setExpireDate), // 식료품 소비기한 입력
+          ],
         ),
+        onPressedAddButton: saveFoodInfo,
       ),
     );
   }
@@ -393,8 +378,8 @@ class FoodExpireDate extends StatelessWidget {
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               dateOrder: DatePickerDateOrder.ymd,
-              minimumYear: expireDate.year - 100,
-              maximumYear: expireDate.year + 100,
+              minimumYear: 2020,
+              maximumYear: 2025,
               initialDateTime: expireDate,
               onDateTimeChanged: (value) => setExpireDate(value),
             ),
@@ -421,22 +406,6 @@ class FoodExpireDate extends StatelessWidget {
             ),
           ),
           onPressed: () async => await showDateModalPopup(context),
-        ),
-        // 달력 팝업 버튼
-        IconButton(
-          icon: const Icon(Icons.date_range_rounded),
-          iconSize: 18,
-          onPressed: () async {
-            final selectedDate = await showDatePicker(
-              context: context,
-              initialDate: expireDate,
-              firstDate: DateTime(expireDate.year - 5),
-              lastDate: DateTime(expireDate.year + 100, 12, 31),
-            );
-            if (selectedDate != null) {
-              setExpireDate(selectedDate);
-            }
-          },
         ),
       ],
     );
