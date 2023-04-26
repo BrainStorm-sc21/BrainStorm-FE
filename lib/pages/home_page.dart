@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -150,89 +151,10 @@ class _HomePageState extends State<HomePage> {
         onPressed: () async {
           String? name = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => CreatePage()),
+            MaterialPageRoute(builder: (_) => ManualAddPage()),
           );
-          if (name != null) {
-            setState(() {
-              ingredientList.add(Ingredient(name, false)); //리스트에 추가
-            });
-          }
         },
       ),
-      ),
-    );
-  }
-}
-
-class CreatePage extends StatefulWidget {
-  const CreatePage({Key? key}) : super(key: key);
-
-  @override
-  State<CreatePage> createState() => _CreatePageState();
-}
-
-class _CreatePageState extends State<CreatePage> {
-  String name = ''; // 재료 이름
-  String? error; // 경고 메세지
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("재료 추가하기"),
-        // 뒤로가기 버튼
-        leading: IconButton(
-          icon: Icon(CupertinoIcons.chevron_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // 텍스트 입력창
-            TextField(
-              onChanged: (v) {
-                // 텍스트 변경시 호출되는 함수
-                name = v;
-              },
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "추가하려는 재료 이름을 입력하세요",
-                errorText: error,
-              ),
-            ),
-            SizedBox(height: 32),
-            // 추가하기 버튼
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                child: Text(
-                  "추가하기",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                onPressed: () {
-                  // 추가하기 버튼 클릭시
-                  if (name.isEmpty) {
-                    setState(() {
-                      error = "내용을 입력해주세요."; // 내용이 없는 경우 에러 메세지
-                    });
-                  } else {
-                    setState(() {
-                      error = null; // 내용이 있는 경우 에러 메세지 숨기기
-                    });
-                    Navigator.pop(context, name); // 변수를 반환, 화면 종료.
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
