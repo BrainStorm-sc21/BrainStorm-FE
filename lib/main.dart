@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/pages/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home_page.dart';
 import 'package:brainstorm_meokjang/pages/onboarding_page.dart';
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -78,10 +79,9 @@ class JWTestApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: OnboardingPage(),
+      theme: ThemeData(
+        primaryColor: ColorStyles.mainColor,
+      ),
     );
   }
 }
-
-// class SignUpPage() extends StatefulWidget {
-  
-// }
