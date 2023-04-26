@@ -1,17 +1,8 @@
+import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
-class Ingredient {
-  String name; //재료 이름
-  // int number; //재료 개수
-  // String expirationDate; //유통기한
-  bool isClick; //세부사항 클릭 여부
-
-  // Bucket(this.name, this.number, this.expirationDate, this.isClick); // 생성자
-  Ingredient(this.name, this.isClick);
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,7 +14,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   // 식재료 리스트
-  List<Ingredient> ingredientList = [];
+  List<Food> foodList = new List.empty(growable: true);
+
+  void initState(){
+    super.initState();
+    var now = new DateTime.now(); 
+    foodList.add(Food(name: "토마토", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(name: "감자", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(name: "가지", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(name: "버섯", storage: "냉장", stock: 2, expireDate: now));
+  }
 
   // 삭제 확인 다이얼로그
   void showDeleteDialog(int index) {
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 setState(() {
                   // index에 해당하는 항목 삭제
-                  ingredientList.removeAt(index);
+                  foodList.removeAt(index);
                 });
                 Navigator.pop(context);
               },
@@ -84,13 +84,12 @@ class _HomePageState extends State<HomePage> {
               }
             ),
           ],
-
           bottom: TabBar(
             isScrollable: false,
             indicatorColor: Colors.green,
             indicatorWeight: 4,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.green,
+            unselectedLabelColor: Colors.black,
             labelStyle: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -103,48 +102,41 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: ingredientList.isEmpty ? Center(child: Text("냉장고에 재료가 없어요!"))
+        body: foodList.isEmpty ? Center(child: Text("냉장고에 재료가 없어요!"))
           : TabBarView(
             children: [
               ListView.builder(
-                itemCount: ingredientList.length, // ingredientList 개수 만큼 보여주기
+                itemCount: foodList.length, // ingredientList 개수 만큼 보여주기
                 itemBuilder: (context, index) {
-                Ingredient ingredient = ingredientList[index]; // index에 해당하는 ingredient 가져오기
-                return ListTile(
-                  //추가한 식재료 리스트
-                  title: Text(
-                    ingredient.name,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: ingredient.isClick ? Colors.grey : Colors.black,
-                      decoration: ingredient.isClick
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                  // 삭제 아이콘 버튼
-                  trailing: IconButton(
-                    icon: Icon(CupertinoIcons.delete),
-                    onPressed: () {
-                      // 삭제 버튼 클릭시
-                      showDeleteDialog(index);
-                    },
-                  ),
-                  onTap: () {
-                    // 아이템 클릭시
-                    setState(() {
-                      ingredient.isClick = !ingredient.isClick; // isClick 상태 변경
-                    });
-                  },
-                );
-              },
-            ),
+                  Food food = foodList[index]; // index에 해당하는 ingredient 가져오기
+                  return ExpansionTile(
+                    title: Text(food.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                    children: <Widget>[
+                      ListTile(
+                        title: Text(food.storage, style: TextStyle(fontSize: 15)),
+                      ),
+                      ListTile(
+                        title: Text('${food.stock}', style: TextStyle(fontSize: 15)),
+                      ),
+                      ListTile(
+                        title: Text('${food.expireDate}', style: TextStyle(fontSize: 15)),
+                        trailing: IconButton(
+                          icon: Icon(CupertinoIcons.delete),
+                          onPressed: () {
+                            // 삭제 버튼 클릭시
+                            showDeleteDialog(index);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              Center(child: Text("냉장")),
 
-            Center(child: Text("냉장")),
+              Center(child: Text("냉동")),
 
-            Center(child: Text("냉동")),
-
-            Center(child: Text("상온")),
+              Center(child: Text("상온")),
             ],
           ),
           floatingActionButton: floatingButtons(context),   
