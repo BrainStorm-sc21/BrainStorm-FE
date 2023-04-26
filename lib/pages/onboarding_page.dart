@@ -43,7 +43,7 @@ class OnboardingPage extends StatelessWidget {
                 //   ),
                 // )
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.85,
                   height: 50,
                   child: ElevatedButton(
                     child: const Text(

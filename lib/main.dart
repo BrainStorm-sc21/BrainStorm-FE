@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/home_page.dart';
 import 'package:brainstorm_meokjang/pages/onboarding_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const JWTestApp());

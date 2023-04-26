@@ -1,3 +1,6 @@
+import 'package:brainstorm_meokjang/pages/home_page.dart';
+import 'package:brainstorm_meokjang/pages/phone_login_page.dart';
+import 'package:brainstorm_meokjang/pages/signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +10,7 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -14,13 +18,17 @@ class StartPage extends StatelessWidget {
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
-        child: Center(
+        child: Container(
+          height: deviceHeight * 0.45,
           child: Column(
             children: [
               Container(
-                width: deviceWidth * 0.8,
+                width: deviceWidth * 0.85,
                 child: ElevatedButton(
-                  child: Text("카카오톡으로 로그인"),
+                  child: Text(
+                    "카카오톡으로 로그인",
+                    style: TextStyle(color: Colors.black),
+                  ),
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     primary: Colors.yellow,
@@ -28,7 +36,7 @@ class StartPage extends StatelessWidget {
                 ),
               ),
               Container(
-                width: deviceWidth * 0.8,
+                width: deviceWidth * 0.85,
                 child: ElevatedButton(
                   child: Text(
                     "구글로 로그인",
@@ -41,20 +49,32 @@ class StartPage extends StatelessWidget {
                 ),
               ),
               Container(
-                width: deviceWidth * 0.8,
+                width: deviceWidth * 0.85,
                 child: ElevatedButton(
                   child: Text("번호인증으로 로그인"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PhoneLoginPage()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     primary: ColorStyles.mainColor,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 120),
+                padding: const EdgeInsets.only(top: 70),
                 child: TextButton(
                   child: Text("회원가입"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpPage()),
+                    );
+                  },
                   style: TextButton.styleFrom(
                     primary: ColorStyles.mainColor,
                   ),
