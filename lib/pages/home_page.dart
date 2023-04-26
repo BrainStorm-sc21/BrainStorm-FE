@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Ingredient {
   String name; //재료 이름
@@ -146,16 +147,54 @@ class _HomePageState extends State<HomePage> {
             Center(child: Text("상온")),
             ],
           ),
-        floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () async {
-          String? name = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => ManualAddPage()),
-          );
-        },
-      ),
+          floatingActionButton: floatingButtons(context),   
       ),
     );
   }
 }
+
+Widget? floatingButtons(BuildContext context) {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      visible: true,
+      curve: Curves.bounceIn,
+      backgroundColor: Color.fromRGBO(28, 187, 217, 1),
+      childPadding: const EdgeInsets.all(1),
+      spaceBetweenChildren: 10,
+      //배경 투명하게 할 것인지, 아닌지
+      //renderOverlay: false,
+      //floating Button이 열려 있을 때 다른 배경 누를 시 닫게 할 것인지, 아닌지
+      closeManually: false,
+      children: [
+        SpeedDialChild(
+            child: const Icon(
+              Icons.camera_alt, 
+              color: Colors.white
+            ),
+            // label: "설정",
+            // labelStyle: const TextStyle(
+            //     fontWeight: FontWeight.w500,
+            //     color: Colors.white,
+            //     fontSize: 13.0),
+            // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
+            backgroundColor: Color.fromRGBO(28, 187, 217, 1),
+            onTap: () {
+              
+            }),
+        SpeedDialChild(
+          child: const Icon(
+            Icons.create,
+            color: Colors.white,
+          ),
+          backgroundColor: Color.fromRGBO(28, 187, 217, 1),
+          // label: "내 기록",
+          // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
+          // labelStyle: const TextStyle(
+          //     fontWeight: FontWeight.w500, color: Colors.white, fontSize: 13.0),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ManualAddPage())); 
+          },
+        )
+      ],
+    );
+  }
