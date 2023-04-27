@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^4.0.3
   intro_screen_onboarding_flutter: ^1.0.0
   flutter_native_splash: ^2.2.19
+  kpostal: ^0.5.1
 
 dev_dependencies:
   flutter_test:

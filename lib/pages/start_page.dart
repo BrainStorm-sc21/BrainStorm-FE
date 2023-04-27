@@ -19,68 +19,78 @@ class StartPage extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: deviceHeight * 0.45,
-          child: Column(
-            children: [
-              Container(
-                width: deviceWidth * 0.85,
-                child: ElevatedButton(
-                  child: Text(
-                    "카카오톡으로 로그인",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.yellow,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
+            child: Column(
+              children: [
+                Container(
+                  child: Image.asset(
+                    'assets/images/임시온보딩화면2.png',
                   ),
                 ),
-              ),
-              Container(
-                width: deviceWidth * 0.85,
-                child: ElevatedButton(
-                  child: Text(
-                    "구글로 로그인",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                  ),
-                ),
-              ),
-              Container(
-                width: deviceWidth * 0.85,
-                child: ElevatedButton(
-                  child: Text("번호인증으로 로그인"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PhoneLoginPage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: ColorStyles.mainColor,
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Container(
+                    width: deviceWidth * 0.85,
+                    child: ElevatedButton(
+                      child: Text(
+                        "카카오톡으로 로그인",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.yellow,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 70),
-                child: TextButton(
-                  child: Text("회원가입"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpPage()),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    primary: ColorStyles.mainColor,
+                Container(
+                  width: deviceWidth * 0.85,
+                  child: ElevatedButton(
+                    child: Text(
+                      "구글로 로그인",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  width: deviceWidth * 0.85,
+                  child: ElevatedButton(
+                    child: Text("번호인증으로 로그인"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PhoneLoginPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: ColorStyles.mainColor,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 70),
+                  child: TextButton(
+                    child: Text("회원가입"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      primary: ColorStyles.mainColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
