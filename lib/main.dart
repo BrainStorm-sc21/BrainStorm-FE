@@ -82,6 +82,7 @@ class JWTestApp extends StatelessWidget {
       home: OnboardingPage(),
       theme: ThemeData(
         primaryColor: ColorStyles.mainColor,
+        textTheme: GoogleFonts.getTextTheme('Nanum Gothic'),
       ),
     );
   }
