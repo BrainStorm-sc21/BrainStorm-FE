@@ -3,7 +3,6 @@ import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,17 +12,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   // 식재료 리스트
-  List<Food> foodList = new List.empty(growable: true);
+  List<Food> foodList = List.empty(growable: true);
 
-  void initState(){
+  @override
+  void initState() {
     super.initState();
-    var now = new DateTime.now(); 
-    foodList.add(Food(foodId:1, name : "토마토", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(foodId:2, name: "감자", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(foodId:3, name: "가지", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(foodId:4, name: "버섯", storage: "냉장", stock: 2, expireDate: now));
+    var now = DateTime.now();
+    foodList.add(
+        Food(foodId: 1, name: "토마토", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(
+        Food(foodId: 2, name: "감자", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(
+        Food(foodId: 3, name: "가지", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(
+        Food(foodId: 4, name: "버섯", storage: "냉장", stock: 2, expireDate: now));
   }
 
   // 삭제 확인 다이얼로그
@@ -33,14 +36,14 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("정말로 삭제하시겠습니까?"),
+          title: const Text("정말로 삭제하시겠습니까?"),
           actions: [
             // 취소 버튼
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("취소"),
+              child: const Text("취소"),
             ),
             // 확인 버튼
             TextButton(
@@ -51,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                 });
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 "확인",
                 style: TextStyle(color: Colors.pink),
               ),
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  bool expandedIcon = false;              
+  bool expandedIcon = false;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -70,7 +73,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
+          title: const Text(
             "냉장고",
             style: TextStyle(
               color: Colors.black,
@@ -80,13 +83,12 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           actions: [
             IconButton(
-              icon: Icon(Icons.search_outlined, color: Colors.grey),
-              onPressed: () {
-                print("우측 상단 검색 아이콘 클릭 됨");
-              }
-            ),
+                icon: const Icon(Icons.search_outlined, color: Colors.grey),
+                onPressed: () {
+                  print("우측 상단 검색 아이콘 클릭 됨");
+                }),
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             isScrollable: false,
             indicatorColor: Colors.green,
             indicatorWeight: 4,
@@ -104,101 +106,105 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        
-        body: foodList.isEmpty ? Center(child: Text("냉장고에 재료가 없어요!"))
-          : TabBarView(           
-            children: [              
-              ListView.builder(             
-                itemCount: foodList.length, // ingredientList 개수 만큼 보여주기
-                itemBuilder: (context, index) {
-                  Food food = foodList[index]; // index에 해당하는 ingredient 가져오기
-                  return Card(
-                    //key: PageStorageKey(food.foodId),
-                    child : ExpansionTile(          
-                      title: Text(food.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                      trailing: Icon(
-                        expandedIcon ? Icons.arrow_back : Icons.arrow_downward,
-                      ),
-                      children: [
-                        ListTile(
-                          title: Text(food.storage, style: TextStyle(fontSize: 15)),
-                        ),
-                        ListTile(
-                          title: Text('${food.stock}', style: TextStyle(fontSize: 15)),
-                        ),
-                        ListTile(
-                          title: Text('${food.expireDate}', style: TextStyle(fontSize: 15)),
-                          // 삭제 버튼
-                          trailing: IconButton(
-                            icon: Icon(CupertinoIcons.delete),
-                            onPressed: () {
-                              showDeleteDialog(index);
-                            },
+        body: foodList.isEmpty
+            ? const Center(child: Text("냉장고에 재료가 없어요!"))
+            : TabBarView(
+                children: [
+                  ListView.builder(
+                    itemCount: foodList.length, // ingredientList 개수 만큼 보여주기
+                    itemBuilder: (context, index) {
+                      Food food =
+                          foodList[index]; // index에 해당하는 ingredient 가져오기
+                      return Card(
+                        //key: PageStorageKey(food.foodId),
+                        child: ExpansionTile(
+                          title: Text(
+                            food.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          trailing: Icon(
+                            expandedIcon
+                                ? Icons.arrow_back
+                                : Icons.arrow_downward,
+                          ),
+                          children: [
+                            ListTile(
+                              title: Text(food.storage,
+                                  style: const TextStyle(fontSize: 15)),
+                            ),
+                            ListTile(
+                              title: Text('${food.stock}',
+                                  style: const TextStyle(fontSize: 15)),
+                            ),
+                            ListTile(
+                              title: Text('${food.expireDate}',
+                                  style: const TextStyle(fontSize: 15)),
+                              // 삭제 버튼
+                              trailing: IconButton(
+                                icon: const Icon(CupertinoIcons.delete),
+                                onPressed: () {
+                                  showDeleteDialog(index);
+                                },
+                              ),
+                            ),
+                          ],
+                          onExpansionChanged: (bool expanded) {
+                            setState(() => expandedIcon = expanded);
+                          },
                         ),
-                      ],
-                      onExpansionChanged: (bool expanded){
-                        setState(() => expandedIcon = expanded);
-                      },
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                  const Center(child: Text("냉장")),
+                  const Center(child: Text("냉동")),
+                  const Center(child: Text("상온")),
+                ],
               ),
-              Center(child: Text("냉장")),
-
-              Center(child: Text("냉동")),
-
-              Center(child: Text("상온")),
-            ],
-          ),
-          floatingActionButton: floatingButtons(context),   
+        floatingActionButton: floatingButtons(context),
       ),
     );
   }
 }
 
 Widget? floatingButtons(BuildContext context) {
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      visible: true,
-      curve: Curves.bounceIn,
-      backgroundColor: Color.fromRGBO(28, 187, 217, 1),
-      childPadding: const EdgeInsets.all(1),
-      spaceBetweenChildren: 10,
-      //배경 투명하게 할 것인지, 아닌지
-      //renderOverlay: false,
-      //floating Button이 열려 있을 때 다른 배경 누를 시 닫게 할 것인지, 아닌지
-      closeManually: false,
-      children: [
-        SpeedDialChild(
-            child: const Icon(
-              Icons.camera_alt, 
-              color: Colors.white
-            ),
-            // label: "설정",
-            // labelStyle: const TextStyle(
-            //     fontWeight: FontWeight.w500,
-            //     color: Colors.white,
-            //     fontSize: 13.0),
-            // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
-            backgroundColor: Color.fromRGBO(28, 187, 217, 1),
-            onTap: () {
-              
-            }),
-        SpeedDialChild(
-          child: const Icon(
-            Icons.create,
-            color: Colors.white,
-          ),
-          backgroundColor: Color.fromRGBO(28, 187, 217, 1),
-          // label: "내 기록",
-          // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
+  return SpeedDial(
+    icon: Icons.add,
+    activeIcon: Icons.close,
+    visible: true,
+    curve: Curves.bounceIn,
+    backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+    childPadding: const EdgeInsets.all(1),
+    spaceBetweenChildren: 10,
+    //배경 투명하게 할 것인지, 아닌지
+    //renderOverlay: false,
+    //floating Button이 열려 있을 때 다른 배경 누를 시 닫게 할 것인지, 아닌지
+    closeManually: false,
+    children: [
+      SpeedDialChild(
+          child: const Icon(Icons.camera_alt, color: Colors.white),
+          // label: "설정",
           // labelStyle: const TextStyle(
-          //     fontWeight: FontWeight.w500, color: Colors.white, fontSize: 13.0),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ManualAddPage())); 
-          },
-        )
-      ],
-    );
-  }
+          //     fontWeight: FontWeight.w500,
+          //     color: Colors.white,
+          //     fontSize: 13.0),
+          // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
+          backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+          onTap: () {}),
+      SpeedDialChild(
+        child: const Icon(
+          Icons.create,
+          color: Colors.white,
+        ),
+        backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+        // label: "내 기록",
+        // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
+        // labelStyle: const TextStyle(
+        //     fontWeight: FontWeight.w500, color: Colors.white, fontSize: 13.0),
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ManualAddPage()));
+        },
+      )
+    ],
+  );
+}
