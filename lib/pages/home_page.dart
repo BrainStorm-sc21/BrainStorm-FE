@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,10 +20,10 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
     var now = new DateTime.now(); 
-    foodList.add(Food(name: "토마토", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(name: "감자", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(name: "가지", storage: "냉장", stock: 2, expireDate: now));
-    foodList.add(Food(name: "버섯", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(foodId:1, name : "토마토", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(foodId:2, name: "감자", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(foodId:3, name: "가지", storage: "냉장", stock: 2, expireDate: now));
+    foodList.add(Food(foodId:4, name: "버섯", storage: "냉장", stock: 2, expireDate: now));
   }
 
   // 삭제 확인 다이얼로그
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  bool expandedIcon = false;              
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -102,33 +104,43 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        
         body: foodList.isEmpty ? Center(child: Text("냉장고에 재료가 없어요!"))
-          : TabBarView(
-            children: [
-              ListView.builder(
+          : TabBarView(           
+            children: [              
+              ListView.builder(             
                 itemCount: foodList.length, // ingredientList 개수 만큼 보여주기
                 itemBuilder: (context, index) {
                   Food food = foodList[index]; // index에 해당하는 ingredient 가져오기
-                  return ExpansionTile(
-                    title: Text(food.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(food.storage, style: TextStyle(fontSize: 15)),
+                  return Card(
+                    //key: PageStorageKey(food.foodId),
+                    child : ExpansionTile(          
+                      title: Text(food.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                      trailing: Icon(
+                        expandedIcon ? Icons.arrow_back : Icons.arrow_downward,
                       ),
-                      ListTile(
-                        title: Text('${food.stock}', style: TextStyle(fontSize: 15)),
-                      ),
-                      ListTile(
-                        title: Text('${food.expireDate}', style: TextStyle(fontSize: 15)),
-                        trailing: IconButton(
-                          icon: Icon(CupertinoIcons.delete),
-                          onPressed: () {
-                            // 삭제 버튼 클릭시
-                            showDeleteDialog(index);
-                          },
+                      children: [
+                        ListTile(
+                          title: Text(food.storage, style: TextStyle(fontSize: 15)),
                         ),
-                      ),
-                    ],
+                        ListTile(
+                          title: Text('${food.stock}', style: TextStyle(fontSize: 15)),
+                        ),
+                        ListTile(
+                          title: Text('${food.expireDate}', style: TextStyle(fontSize: 15)),
+                          // 삭제 버튼
+                          trailing: IconButton(
+                            icon: Icon(CupertinoIcons.delete),
+                            onPressed: () {
+                              showDeleteDialog(index);
+                            },
+                          ),
+                        ),
+                      ],
+                      onExpansionChanged: (bool expanded){
+                        setState(() => expandedIcon = expanded);
+                      },
+                    ),
                   );
                 },
               ),
