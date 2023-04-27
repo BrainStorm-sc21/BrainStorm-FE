@@ -1,10 +1,12 @@
 class Food {
+  int foodId;
   String name;
   String storage;
   num stock;
   DateTime expireDate;
 
   Food({
+    required this.foodId,
     required this.name,
     required this.storage,
     required this.stock,
@@ -14,6 +16,7 @@ class Food {
   // class to json
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['foodId'] = foodId;
     data['name'] = name;
     data['storage'] = storage;
     data['stock'] = stock;
@@ -24,6 +27,7 @@ class Food {
   // class from json
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
+      foodId: json['foodId'],
       name: json['name'],
       storage: json['storage'],
       stock: json['stock'],

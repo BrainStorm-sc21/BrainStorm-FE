@@ -88,7 +88,7 @@ class AddFoodLayout extends StatelessWidget {
                       RoundedOutlinedButton(
                         text: '취소하기',
                         width: double.infinity,
-                        onPressed: () => Navigator.of(context).pop,
+                        onPressed: () => Navigator.of(context).pop(),
                         foregroundColor:
                             const Color.fromRGBO(35, 204, 135, 1.0),
                         backgroundColor: Colors.white,
