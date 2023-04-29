@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: foodList.isEmpty
-            ? const Center(child: Text("냉장고에 재료가 없어요!"))
+            ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
             : TabBarView(
                 children: [
                   ListView.builder(
@@ -113,12 +114,23 @@ class _HomePageState extends State<HomePage> {
                       return Card(
                         key: PageStorageKey(food.foodId),
                         child: ExpansionTile(
-                          title: Text(
-                            food.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          title:  Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              child: Column(            
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    food.name,
+                                    style: const TextStyle(fontSize: 20,color: Color.fromARGB(255, 65, 60, 60), fontWeight: FontWeight.bold),
+                                  ),
+                                  progressBars(context),
+                                ],
+                              ),
                           ),
-                          // trailing: Icon(
-                          //   expandedIcon ? Icons.arrow_back : Icons.arrow_downward,
+                          //더보기 아이콘 없애고 싶을 때 이용
+                          // trailing: const Icon(
+                          //   color: Color.fromARGB(0, 255, 193, 7),
+                          //   Icons.arrow_back,
                           // ),
                           children: [
                             ListTile(
@@ -138,11 +150,13 @@ class _HomePageState extends State<HomePage> {
                                 },
                               ),
                             ),
+                            //progressBars(context),                     
                           ],
                           onExpansionChanged: (bool expanded) {
                             setState(() => expandedIcon = expanded);
                           },
                         ),
+                        
                       );
                     },
                   ),
@@ -173,14 +187,10 @@ Widget? floatingButtons(BuildContext context) {
     children: [
       SpeedDialChild(
           child: const Icon(Icons.camera_alt, color: Colors.white),
-          // label: "설정",
-          // labelStyle: const TextStyle(
-          //     fontWeight: FontWeight.w500,
-          //     color: Colors.white,
-          //     fontSize: 13.0),
-          // labelBackgroundColor: Color.fromRGBO(28, 187, 217, 1),
           backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
-          onTap: () {}),
+          onTap: () {
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAdd()));
+          }),
       SpeedDialChild(
         child: const Icon(
           Icons.create,
@@ -196,5 +206,32 @@ Widget? floatingButtons(BuildContext context) {
         },
       )
     ],
+  );
+}
+
+Widget progressBars(BuildContext context) {
+  return const Padding(
+    padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+    child:(
+      StepProgressIndicator(
+        totalSteps: 7,
+        currentStep: 4,
+        size: 8,
+        padding: 0,
+        selectedColor: Colors.yellow,
+        unselectedColor: Colors.cyan,
+        roundedEdges: Radius.circular(10),
+        selectedGradientColor: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.redAccent, Colors.yellowAccent],
+        ),
+        unselectedGradientColor: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blueGrey, Colors.grey],
+        ),
+      )
+    )
   );
 }
