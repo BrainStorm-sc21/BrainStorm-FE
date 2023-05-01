@@ -186,30 +186,10 @@ class FoodStorage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // "보관장소" title 및 보관장소 추천 description
+        // "보관장소" title
         const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
-          // 보관장소 추천 description: 추후 추천 가능한 식료품에만 적용할 수 있도록 수정 필요
-          Row(
-            children: [
-              Center(
-                child: Icon(
-                  Icons.info_outline,
-                  color: Colors.amber,
-                  size: 18,
-                ),
-              ),
-              SizedBox(width: 5), // 여백
-              Text(
-                "냉장 보관을 추천해요",
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
         ]),
         const SizedBox(height: 10), // 여백
         // 보관장소 선택 버튼 (냉장/냉동/실온)
