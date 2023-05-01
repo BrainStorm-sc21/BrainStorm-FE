@@ -1,7 +1,7 @@
-import 'package:brainstorm_meokjang/pages/home_page.dart';
 import 'package:brainstorm_meokjang/pages/phone_login_page.dart';
 import 'package:brainstorm_meokjang/pages/signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 
 class StartPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class StartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("먹장!"),
+        title: const Text("먹장!"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
@@ -28,39 +28,98 @@ class StartPage extends StatelessWidget {
                     'assets/images/임시온보딩화면2.png',
                   ),
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 30),
+                //   child: SizedBox(
+                //     width: deviceWidth * 0.85,
+                //     child: ElevatedButton(
+                //       onPressed: () {},
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Colors.white,
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Image.asset(
+                //             'assets/images/google.png',
+                //             width: 15,
+                //             height: 15,
+                //           ),
+                //           const Text(
+                //             "Google로 로그인",
+                //             style: TextStyle(color: Colors.black),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
-                  child: Container(
+                  child: SizedBox(
                     width: deviceWidth * 0.85,
                     child: ElevatedButton(
-                      child: Text(
-                        "카카오톡으로 로그인",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const KakaoWebView()),
+                        );
+                        print("클릭!");
+                      },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.yellow,
+                        backgroundColor: Colors.yellow,
+                      ),
+                      child: Row(
+                        children: [
+                          Center(
+                            child: Image.asset(
+                              'assets/images/kakao.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                          const Text(
+                            "Kakao로 로그인",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: deviceWidth * 0.85,
                   child: ElevatedButton(
-                    child: Text(
-                      "구글로 로그인",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NaverWebView()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
+                      backgroundColor: Colors.green,
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/naver.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        const Text(
+                          "Naver로 로그인",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: deviceWidth * 0.85,
                   child: ElevatedButton(
-                    child: Text("번호인증으로 로그인"),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -68,15 +127,18 @@ class StartPage extends StatelessWidget {
                             builder: (context) => const PhoneLoginPage()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: ColorStyles.mainColor,
+                    style: ElevatedButton.styleFrom(),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.call),
+                        Text("번호인증으로 로그인"),
+                      ],
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 70),
                   child: TextButton(
-                    child: Text("회원가입"),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -85,8 +147,9 @@ class StartPage extends StatelessWidget {
                       );
                     },
                     style: TextButton.styleFrom(
-                      primary: ColorStyles.mainColor,
+                      foregroundColor: Colors.black,
                     ),
+                    child: const Text("회원가입"),
                   ),
                 ),
               ],

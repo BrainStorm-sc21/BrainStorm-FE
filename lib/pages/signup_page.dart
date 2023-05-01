@@ -1,17 +1,21 @@
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:kpostal/kpostal.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("회원가입"),
+        title: const Text("회원가입"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Padding(
@@ -22,19 +26,19 @@ class SignUpPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  NicknameField(),
-                  GenderField(),
-                  PositionField(),
-                  AuthField(),
-                  Container(
+                  const NicknameField(),
+                  const GenderField(),
+                  const PositionField(),
+                  const AuthField(),
+                  SizedBox(
                     width: deviceWidth * 0.8,
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: Text(
-                        "회원가입하기",
-                      ),
                       style: ElevatedButton.styleFrom(
-                        primary: ColorStyles.mainColor,
+                        backgroundColor: Colors.grey,
+                      ),
+                      child: const Text(
+                        "회원가입하기",
                       ),
                     ),
                   )
@@ -60,14 +64,26 @@ class NicknameField extends StatelessWidget {
       child: Container(
         child: Column(
           children: [
-            Container(
-              width: deviceWidth * 0.8,
-              child: Text(
-                "닉네임",
-                textAlign: TextAlign.start,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: SizedBox(
+                width: deviceWidth * 0.8,
+                child: const Text(
+                  "닉네임",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-            TextField(),
+            SizedBox(
+              width: deviceWidth * 0.8,
+              child: const TextField(
+                decoration: InputDecoration(
+                  hintText: "2~10자 이내로 입력해주세요",
+                  hintStyle: TextStyle(fontSize: 12),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -87,34 +103,40 @@ class GenderField extends StatelessWidget {
       child: Container(
         child: Column(
           children: [
-            Container(
-              width: deviceWidth * 0.8,
-              child: Text(
-                "성별",
-                textAlign: TextAlign.start,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: SizedBox(
+                width: deviceWidth * 0.8,
+                child: const Text(
+                  "성별",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: deviceWidth * 0.4,
                   child: TextButton(
                     onPressed: () {},
-                    child: Text("남"),
                     style: TextButton.styleFrom(
-                      primary: Colors.blue,
+                      foregroundColor: Colors.blue,
+                      side: const BorderSide(color: Colors.grey),
                     ),
+                    child: const Text("남"),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: deviceWidth * 0.4,
                   child: TextButton(
                     onPressed: () {},
-                    child: Text("여"),
                     style: TextButton.styleFrom(
-                      primary: Colors.red,
+                      foregroundColor: Colors.red,
+                      side: const BorderSide(color: Colors.grey),
                     ),
+                    child: const Text("여"),
                   ),
                 ),
               ],
@@ -126,8 +148,17 @@ class GenderField extends StatelessWidget {
   }
 }
 
-class PositionField extends StatelessWidget {
+class PositionField extends StatefulWidget {
   const PositionField({super.key});
+
+  @override
+  State<PositionField> createState() => _PositionFieldState();
+}
+
+class _PositionFieldState extends State<PositionField> {
+  String posText = "내 주소를 입력해주세요.";
+  Color posColor = Colors.grey;
+  double posFontSize = 12;
 
   @override
   Widget build(BuildContext context) {
@@ -138,30 +169,59 @@ class PositionField extends StatelessWidget {
       child: Container(
         child: Column(
           children: [
-            Container(
-              width: deviceWidth * 0.8,
-              child: Text(
-                "주소",
-                textAlign: TextAlign.start,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: SizedBox(
+                width: deviceWidth * 0.8,
+                child: const Text(
+                  "주소",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                    bottom: BorderSide(color: Colors.grey),
+                  )),
                   width: deviceWidth * 0.65,
-                  child: TextField(),
-                ),
-                Container(
-                  width: deviceWidth * 0.15,
-                  child: ElevatedButton(
-                    onPressed: () {},
+                  height: 35,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 7),
                     child: Text(
+                      posText,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: posColor, fontSize: posFontSize),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: deviceWidth * 0.15,
+                  height: 35,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Kpostal result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => KpostalView()));
+                      //위치, 위도, 경도
+                      print("위치: ${result.address}");
+                      print("위도: ${result.latitude}");
+                      print("경도: ${result.longitude}");
+                      setState(() {
+                        posText = result.address;
+                        posColor = Colors.black;
+                        posFontSize = 14;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                    ),
+                    child: const Text(
                       "검색",
                       style: TextStyle(fontSize: 12),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
                     ),
                   ),
                 ),
@@ -187,24 +247,24 @@ class AuthField extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {},
-              child: Text("카카오톡 인증"),
               style: TextButton.styleFrom(
-                primary: ColorStyles.mainColor,
+                foregroundColor: ColorStyles.mainColor,
               ),
+              child: const Text("sns 인증"),
             ),
+            // TextButton(
+            //   onPressed: () {},
+            //   child: Text("구글 인증"),
+            //   style: TextButton.styleFrom(
+            //     primary: ColorStyles.mainColor,
+            //   ),
+            // ),
             TextButton(
               onPressed: () {},
-              child: Text("구글 인증"),
               style: TextButton.styleFrom(
-                primary: ColorStyles.mainColor,
+                foregroundColor: ColorStyles.mainColor,
               ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text("번호 인증"),
-              style: TextButton.styleFrom(
-                primary: ColorStyles.mainColor,
-              ),
+              child: const Text("번호 인증"),
             ),
           ],
         ),
