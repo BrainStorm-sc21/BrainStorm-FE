@@ -1,12 +1,15 @@
-import 'package:brainstorm_meokjang/pages/chat_page.dart';
-import 'package:brainstorm_meokjang/pages/deal_page.dart';
-import 'package:brainstorm_meokjang/pages/home_page.dart';
+import 'package:brainstorm_meokjang/firebase_options.dart';
 import 'package:brainstorm_meokjang/pages/onboarding_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const JWTestApp());
 }
 
@@ -79,7 +82,7 @@ class JWTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnboardingPage(),
+      home: const OnboardingPage(),
       theme: ThemeData(
         primaryColor: ColorStyles.mainColor,
         textTheme: GoogleFonts.getTextTheme('Nanum Gothic'),

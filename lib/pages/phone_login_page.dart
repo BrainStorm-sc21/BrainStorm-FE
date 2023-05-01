@@ -1,10 +1,28 @@
 import 'package:brainstorm_meokjang/pages/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
-class PhoneLoginPage extends StatelessWidget {
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+final _key = GlobalKey<FormState>();
+final TextEditingController _phoneController = TextEditingController();
+final TextEditingController _smsCodeController = TextEditingController();
+const bool _codeSent = false;
+late String _verificationId;
+
+class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
 
+  @override
+  State<PhoneLoginPage> createState() => _PhoneLoginPageState();
+}
+
+class _PhoneLoginPageState extends State<PhoneLoginPage> {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -12,11 +30,11 @@ class PhoneLoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("번호인증 로그인"),
+        title: const Text("번호인증 로그인"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           height: deviceHeight * 0.5,
           width: deviceWidth * 0.8,
           child: Column(
@@ -29,8 +47,8 @@ class PhoneLoginPage extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
+              const Padding(
+                padding: EdgeInsets.only(top: 50),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "휴대폰 번호(-없이 숫자만 입력)",
@@ -40,19 +58,44 @@ class PhoneLoginPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Container(
+                child: SizedBox(
                   width: deviceWidth * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+
+                      await auth.verifyPhoneNumber(
+                        //forceResendingToken: _resendToken,
+
+                        phoneNumber: "+82010-4401-0159",
+
+                        codeAutoRetrievalTimeout: (String verificationId) {},
+
+                        verificationCompleted:
+                            (PhoneAuthCredential credential) async {
+                          await auth.signInWithCredential(credential);
+                        },
+
+                        verificationFailed: (FirebaseException e) async {
+                          logger.e(e.message);
+                          setState(() {});
+                        },
+
+                        codeSent: (String verificationId,
+                            int? forceResendingToken) async {
+                          setState(() {});
+                        },
+                      );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const PhoneAuthPage()),
                       );
                     },
-                    child: Text("인증 문자 받기"),
                     style: ElevatedButton.styleFrom(
-                        primary: ColorStyles.mainColor),
+                        backgroundColor: ColorStyles.mainColor),
+                    child: const Text("인증 문자 받기"),
                   ),
                 ),
               )
@@ -64,9 +107,14 @@ class PhoneLoginPage extends StatelessWidget {
   }
 }
 
-class PhoneAuthPage extends StatelessWidget {
+class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({super.key});
 
+  @override
+  State<PhoneAuthPage> createState() => _PhoneAuthPageState();
+}
+
+class _PhoneAuthPageState extends State<PhoneAuthPage> {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -74,11 +122,11 @@ class PhoneAuthPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("번호인증 로그인"),
+        title: const Text("번호인증 로그인"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           height: deviceHeight * 0.5,
           width: deviceWidth * 0.8,
           child: Column(
@@ -91,8 +139,8 @@ class PhoneAuthPage extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
+              const Padding(
+                padding: EdgeInsets.only(top: 50),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "인증번호 입력",
@@ -102,19 +150,26 @@ class PhoneAuthPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Container(
+                child: SizedBox(
                   width: deviceWidth * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+
+                      PhoneAuthCredential credential =
+                          PhoneAuthProvider.credential(
+                              verificationId: _verificationId,
+                              smsCode: _smsCodeController.text);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const HomePage()),
                       );
                     },
-                    child: Text("인증하고 로그인하기"),
                     style: ElevatedButton.styleFrom(
-                        primary: ColorStyles.mainColor),
+                        backgroundColor: ColorStyles.mainColor),
+                    child: const Text("인증하고 로그인하기"),
                   ),
                 ),
               )
@@ -124,4 +179,28 @@ class PhoneAuthPage extends StatelessWidget {
       ),
     );
   }
+}
+
+TextFormField phoneNumberInput() {
+  return TextFormField(
+    controller: _phoneController,
+    autofocus: true,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return 'The input is empty.';
+      } else {
+        return null;
+      }
+    },
+    keyboardType: TextInputType.phone,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      hintText: 'Input your phone number.',
+      labelText: 'Phone Number',
+      labelStyle: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
 }

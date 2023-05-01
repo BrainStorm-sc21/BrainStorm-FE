@@ -2,6 +2,11 @@ import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
 
+bool valid_nickname = false;
+bool valid_gender = false;
+bool valid_address = false;
+bool valid_auth = false;
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -52,8 +57,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 }
 
-class NicknameField extends StatelessWidget {
+class NicknameField extends StatefulWidget {
   const NicknameField({super.key});
+
+  @override
+  State<NicknameField> createState() => _NicknameFieldState();
+}
+
+class _NicknameFieldState extends State<NicknameField> {
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +89,21 @@ class NicknameField extends StatelessWidget {
             ),
             SizedBox(
               width: deviceWidth * 0.8,
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: "2~10자 이내로 입력해주세요",
-                  hintStyle: TextStyle(fontSize: 12),
+              child: Form(
+                child: TextFormField(
+                  controller: controller,
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: "2글자 이상 10글자 이하로 입력해주세요.",
+                    hintStyle: TextStyle(fontSize: 12),
+                  ),
+                  validator: (value) {
+                    if (value!.length < 2) {
+                      return '2글자 이상 입력해주세요.';
+                    }
+                    return null;
+                  },
                 ),
               ),
             ),
@@ -91,8 +114,23 @@ class NicknameField extends StatelessWidget {
   }
 }
 
-class GenderField extends StatelessWidget {
+class GenderField extends StatefulWidget {
   const GenderField({super.key});
+
+  @override
+  State<GenderField> createState() => _GenderFieldState();
+}
+
+class _GenderFieldState extends State<GenderField> {
+  bool isMan = false;
+  bool isWoman = false;
+  late List<bool> isSelected;
+
+  @override
+  void initState() {
+    isSelected = [isMan, isWoman];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,37 +152,82 @@ class GenderField extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: deviceWidth * 0.4,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blue,
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                    child: const Text("남"),
+            ToggleButtons(
+              selectedColor: ColorStyles.mainColor,
+              hoverColor: Colors.yellowAccent,
+              borderRadius: BorderRadius.circular(4),
+              isSelected: isSelected,
+              constraints: const BoxConstraints(minWidth: 120, minHeight: 38),
+              onPressed: toggleSelect,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "남",
+                    style: TextStyle(color: Colors.blue, fontSize: 16),
                   ),
                 ),
-                SizedBox(
-                  width: deviceWidth * 0.4,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      side: const BorderSide(color: Colors.grey),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "여",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
                     ),
-                    child: const Text("여"),
                   ),
                 ),
               ],
-            )
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     SizedBox(
+            //       width: deviceWidth * 0.4,
+            //       child: TextButton(
+            //         onPressed: () {
+            //           setState(() {
+
+            //           });
+            //         },
+            //         style: TextButton.styleFrom(
+            //           foregroundColor: Colors.blue,
+            //           side: const BorderSide(color: Colors.grey),
+            //         ),
+
+            //         child: const Text("남"),
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       width: deviceWidth * 0.4,
+            //       child: TextButton(
+            //         onPressed: () {},
+            //         style: TextButton.styleFrom(
+            //           foregroundColor: Colors.red,
+            //           side: const BorderSide(color: Colors.grey),
+            //         ),
+            //         child: const Text("여"),
+            //       ),
+            //     ),
+            //   ],
+            // )
           ],
         ),
       ),
     );
+  }
+
+  void toggleSelect(value) {
+    if (value == 0) {
+      isMan = true;
+      isWoman = false;
+    } else {
+      isMan = false;
+      isWoman = true;
+    }
+    setState(() {
+      isSelected = [isMan, isWoman];
+    });
   }
 }
 

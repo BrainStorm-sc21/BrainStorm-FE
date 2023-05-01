@@ -2,7 +2,6 @@ import 'package:brainstorm_meokjang/pages/start_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:intro_screen_onboarding_flutter/intro_app.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -42,17 +41,10 @@ class OnboardingPage extends StatelessWidget {
                 //     ),
                 //   ),
                 // )
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
                   height: 50,
                   child: ElevatedButton(
-                    child: const Text(
-                      '먹장! 시작하기',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -61,7 +53,14 @@ class OnboardingPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorStyles.mainColor,
+                      backgroundColor: ColorStyles.mainColor,
+                    ),
+                    child: const Text(
+                      '먹장! 시작하기',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

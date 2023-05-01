@@ -87,7 +87,7 @@ class _KakaoWebViewState extends State<KakaoWebView> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        title: const Text("Flutter WebView Test"),
+        title: const Text("Kakao WebView"),
       ),
       body: WebViewWidget(controller: _controller),
     );
@@ -178,7 +178,7 @@ class _NaverWebViewState extends State<NaverWebView> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        title: const Text("Flutter WebView Test"),
+        title: const Text("Naver WebView"),
       ),
       body: WebViewWidget(controller: _controller),
     );
