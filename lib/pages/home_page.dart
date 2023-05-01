@@ -1,7 +1,6 @@
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -26,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     foodList.add(Food(foodId: 3, name: "버섯", storage: "냉장", stock: 2, expireDate: now));
   }
 
+  
   // 삭제 확인 다이얼로그
   void showDeleteDialog(int index) {
     // 다이얼로그 보여주기
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                         key: PageStorageKey(food.foodId),
                         child: ExpansionTile(
                           title:  Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                               child: Column(            
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -140,23 +140,35 @@ class _HomePageState extends State<HomePage> {
                               title: Text('${food.stock}', style: const TextStyle(fontSize: 15)),
                             ),
                             ListTile(
-                              title:
-                                  Text('${food.expireDate}', style: const TextStyle(fontSize: 15)),
-                              // 삭제 버튼
-                              trailing: IconButton(
-                                icon: const Icon(CupertinoIcons.delete),
-                                onPressed: () {
-                                  showDeleteDialog(index);
-                                },
-                              ),
+                              title: Text('${food.expireDate}', style: const TextStyle(fontSize: 15)),
                             ),
-                            //progressBars(context),                     
+                            const ListTile(
+                              // 삭제 버튼
+                              // trailing: Row(
+                              //   mainAxisAlignment: MainAxisAlignment.end,
+                              //   children: [
+                              //     OutlinedButton(
+                              //       //style: OutlinedButton.styleFrom(side: const BorderSide(width: 10)),
+                              //       onPressed: () {
+                              //         //showDeleteDialog(index);
+                              //       },
+                              //       child: const Text('수정', style: TextStyle(color: Colors.green)),
+                              //     ),
+                              //     const SizedBox(width: 10),
+                              //     OutlinedButton(
+                              //       child: const Text('삭제', style: TextStyle(color: Colors.green)),
+                              //       onPressed: () {
+                              //         showDeleteDialog(index);
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+                            ),                           
                           ],
                           onExpansionChanged: (bool expanded) {
                             setState(() => expandedIcon = expanded);
                           },
                         ),
-                        
                       );
                     },
                   ),
@@ -208,6 +220,7 @@ Widget? floatingButtons(BuildContext context) {
     ],
   );
 }
+
 
 Widget progressBars(BuildContext context) {
   return const Padding(
