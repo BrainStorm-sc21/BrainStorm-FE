@@ -2,7 +2,10 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+
+import '../widgets/all.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,21 +17,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // 식재료 리스트
   List<Food> foodList = List.empty(growable: true);
+  late Food food;
 
   @override
   void initState() {
     super.initState();
-    var now = DateTime.now();
+    var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
     foodList.add(Food(foodId: 0, name: "토마토", storage: "냉장", stock: 2, expireDate: now));
     foodList.add(Food(foodId: 1, name: "감자", storage: "냉장", stock: 2, expireDate: now));
     foodList.add(Food(foodId: 2, name: "가지", storage: "냉장", stock: 2, expireDate: now));
     foodList.add(Food(foodId: 3, name: "버섯", storage: "냉장", stock: 2, expireDate: now));
   }
 
-  
+  void setStock(num value) => setState(() => food.stock = value);
+  void setExpireDate(DateTime value) => setState(() => food.expireDate = value);
+
   // 삭제 확인 다이얼로그
   void showDeleteDialog(int index) {
-    // 다이얼로그 보여주기
     showDialog(
       context: context,
       builder: (context) {
@@ -46,7 +51,6 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  // index에 해당하는 항목 삭제
                   foodList.removeAt(index);
                 });
                 Navigator.pop(context);
@@ -62,45 +66,66 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  TabBar get _tabBar => const TabBar(
+        isScrollable: false,
+        indicatorColor: Colors.green,
+        indicatorWeight: 4,
+        labelColor: Colors.green,
+        unselectedLabelColor: Colors.black,
+        labelStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        tabs: [
+          Tab(text: "전체"),
+          Tab(text: "냉장"),
+          Tab(text: "냉동"),
+          Tab(text: "상온"),
+        ],
+      );
+
   bool expandedIcon = false;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "냉장고",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(130.0),
+          child: AppBar(
+            centerTitle: true,
+            title: const Text(
+              "냉장고",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
             ),
-          ),
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.search_outlined, color: Colors.grey),
-                onPressed: () {
-                  print("우측 상단 검색 아이콘 클릭 됨");
-                }),
-          ],
-          bottom: const TabBar(
-            isScrollable: false,
-            indicatorColor: Colors.green,
-            indicatorWeight: 4,
-            labelColor: Colors.green,
-            unselectedLabelColor: Colors.black,
-            labelStyle: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                    Colors.greenAccent,
+                    Colors.green,
+                  ])),
             ),
-            tabs: [
-              Tab(text: "전체"),
-              Tab(text: "냉장"),
-              Tab(text: "냉동"),
-              Tab(text: "상온"),
+            actions: [
+              IconButton(
+                  icon: const Icon(Icons.search_outlined, color: Colors.grey),
+                  onPressed: () {
+                    print("우측 상단 검색 아이콘 클릭 됨");
+                  }),
             ],
+            bottom: PreferredSize(
+              preferredSize: _tabBar.preferredSize,
+              child: Material(
+                color: Colors.white,
+                child: _tabBar,
+              ),
+            ),
           ),
         ),
         body: foodList.isEmpty
@@ -108,62 +133,62 @@ class _HomePageState extends State<HomePage> {
             : TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: foodList.length, // ingredientList 개수 만큼 보여주기
+                    itemCount: foodList.length,
                     itemBuilder: (context, index) {
-                      Food food = foodList[index]; // index에 해당하는 ingredient 가져오기
+                      Food food = foodList[index];
                       return Card(
                         key: PageStorageKey(food.foodId),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                         child: ExpansionTile(
-                          title:  Padding(
+                          title: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: Column(            
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    food.name,
-                                    style: const TextStyle(fontSize: 20,color: Color.fromARGB(255, 65, 60, 60), fontWeight: FontWeight.bold),
-                                  ),
-                                  progressBars(context),
-                                ],
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  food.name,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Color.fromARGB(255, 65, 60, 60),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                progressBars(context),
+                              ],
+                            ),
                           ),
-                          //더보기 아이콘 없애고 싶을 때 이용
-                          // trailing: const Icon(
-                          //   color: Color.fromARGB(0, 255, 193, 7),
-                          //   Icons.arrow_back,
-                          // ),
                           children: [
-                            ListTile(
-                              title: Text(food.storage, style: const TextStyle(fontSize: 15)),
+                            SizedBox(
+                              width: 350,
+                              child: FoodExpireDate(
+                                  expireDate: food.expireDate, setExpireDate: setExpireDate),
                             ),
-                            ListTile(
-                              title: Text('${food.stock}', style: const TextStyle(fontSize: 15)),
-                            ),
-                            ListTile(
-                              title: Text('${food.expireDate}', style: const TextStyle(fontSize: 15)),
-                            ),
-                            const ListTile(
-                              // 삭제 버튼
-                              // trailing: Row(
-                              //   mainAxisAlignment: MainAxisAlignment.end,
-                              //   children: [
-                              //     OutlinedButton(
-                              //       //style: OutlinedButton.styleFrom(side: const BorderSide(width: 10)),
-                              //       onPressed: () {
-                              //         //showDeleteDialog(index);
-                              //       },
-                              //       child: const Text('수정', style: TextStyle(color: Colors.green)),
-                              //     ),
-                              //     const SizedBox(width: 10),
-                              //     OutlinedButton(
-                              //       child: const Text('삭제', style: TextStyle(color: Colors.green)),
-                              //       onPressed: () {
-                              //         showDeleteDialog(index);
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
-                            ),                           
+
+                            // Container(
+                            //   child: ListTile(
+                            //     // 삭제 버튼
+                            //     title: const Text('a'),
+                            //     trailing: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.end,
+                            //       children: [
+                            //         OutlinedButton(
+                            //           onPressed: () {
+                            //             //showDeleteDialog(index);
+                            //           },
+                            //           child:
+                            //               const Text('수정', style: TextStyle(color: Colors.green)),
+                            //         ),
+                            //         //const SizedBox(width: 10),
+                            //         OutlinedButton(
+                            //           child:
+                            //               const Text('삭제', style: TextStyle(color: Colors.green)),
+                            //           onPressed: () {
+                            //             showDeleteDialog(index);
+                            //           },
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                           onExpansionChanged: (bool expanded) {
                             setState(() => expandedIcon = expanded);
@@ -192,9 +217,7 @@ Widget? floatingButtons(BuildContext context) {
     backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
     childPadding: const EdgeInsets.all(1),
     spaceBetweenChildren: 10,
-    //배경 투명하게 할 것인지, 아닌지
     renderOverlay: false,
-    //floating Button이 열려 있을 때 다른 배경 누를 시 닫게 할 것인지, 아닌지
     closeManually: false,
     children: [
       SpeedDialChild(
@@ -221,12 +244,10 @@ Widget? floatingButtons(BuildContext context) {
   );
 }
 
-
 Widget progressBars(BuildContext context) {
   return const Padding(
-    padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-    child:(
-      StepProgressIndicator(
+      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+      child: (StepProgressIndicator(
         totalSteps: 7,
         currentStep: 4,
         size: 8,
@@ -235,16 +256,14 @@ Widget progressBars(BuildContext context) {
         unselectedColor: Colors.cyan,
         roundedEdges: Radius.circular(10),
         selectedGradientColor: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.redAccent, Colors.yellowAccent],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.redAccent, Colors.yellowAccent],
         ),
         unselectedGradientColor: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blueGrey, Colors.grey],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.blueGrey, Colors.grey],
         ),
-      )
-    )
-  );
+      )));
 }
