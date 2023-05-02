@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 
 class FoodExpireDate extends StatelessWidget {
   final DateTime expireDate;
-  final void Function(DateTime value) setExpireDate;
+  final int? index;
+  final void Function(DateTime value, {int? index}) setExpireDate;
   const FoodExpireDate({
     super.key,
     required this.expireDate,
     required this.setExpireDate,
+    this.index,
   });
 
 // cupertino 날짜 선택기를 하단에 모달로 띄우는 메서드
@@ -23,13 +25,18 @@ class FoodExpireDate extends StatelessWidget {
             color: Colors.white,
             height: 160,
             child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.date,
-              dateOrder: DatePickerDateOrder.ymd,
-              minimumYear: 2020,
-              maximumYear: 2025,
-              initialDateTime: expireDate,
-              onDateTimeChanged: (value) => setExpireDate(value),
-            ),
+                mode: CupertinoDatePickerMode.date,
+                dateOrder: DatePickerDateOrder.ymd,
+                minimumYear: 2020,
+                maximumYear: 2025,
+                initialDateTime: expireDate,
+                onDateTimeChanged: (value) {
+                  if (index == null) {
+                    setExpireDate(value);
+                  } else {
+                    setExpireDate(value, index: index);
+                  }
+                }),
           ),
         ],
       ),

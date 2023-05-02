@@ -44,7 +44,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
   void setName(String value) => setState(() => food.name = value);
   void setStorage(String value) => setState(() => food.storage = value);
   void setStock(num value) => setState(() => food.stock = value);
-  void setExpireDate(DateTime value) => setState(() => food.expireDate = value);
+  void setExpireDate(DateTime value, {int? index}) => setState(() => food.expireDate = value);
   // 수량 입력란에 stock 값이 표시되도록 set state
   void updateControllerText() =>
       setState(() => _stockStringController.text = food.stock.toString());

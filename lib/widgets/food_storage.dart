@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 
-class FoodStorageDropdown extends StatefulWidget {
-  const FoodStorageDropdown({Key? key}) : super(key: key);
-
-  @override
-  State<FoodStorageDropdown> createState() => _FoodStorageDropdown();
-}
-
-class _FoodStorageDropdown extends State<FoodStorageDropdown> {
+class FoodStorageDropdown extends StatelessWidget {
   final _storages = ['냉장', '냉동', '실온'];
-  String? _selectedStorage = '';
+  //String _selectedStorage = '';
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      _selectedStorage = _storages[0];
-    });
-  }
+  final String storage;
+  final int index;
+  final void Function(int index, String value) setStorage;
+  FoodStorageDropdown(
+      {super.key, required this.index, required this.storage, required this.setStorage});
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +19,16 @@ class _FoodStorageDropdown extends State<FoodStorageDropdown> {
         const Spacer(),
         // 드롭다운
         DropdownButton(
-          value: _selectedStorage,
-          items: _storages
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            setState(() {
-              _selectedStorage = value!;
-            });
-          },
-        ),
+            value: storage,
+            items: _storages
+                .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              setStorage(index, value!);
+            }),
       ],
     );
   }
