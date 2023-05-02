@@ -157,6 +157,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           children: [
+                            const SizedBox(
+                              width: 350,
+                              child: FoodStorageDropdown(),
+                            ),
                             SizedBox(
                               width: 350,
                               child: FoodExpireDate(
