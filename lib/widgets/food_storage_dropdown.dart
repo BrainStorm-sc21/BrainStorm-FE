@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class FoodStorageDropdown extends StatelessWidget {
   final _storages = ['냉장', '냉동', '실온'];
-  //String _selectedStorage = '';
 
   final String storage;
   final int index;
@@ -17,7 +16,6 @@ class FoodStorageDropdown extends StatelessWidget {
       children: [
         const Text('보관방법'),
         const Spacer(),
-        // 드롭다운
         DropdownButton(
             value: storage,
             items: _storages
