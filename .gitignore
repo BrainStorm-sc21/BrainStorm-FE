@@ -46,3 +46,4 @@ app.*.map.json
 #gradle version
 gradle-wrapper.properties
 android/gradle/wrapper/gradle-wrapper.properties
+android/build.gradle
