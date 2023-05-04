@@ -61,8 +61,7 @@ class StartPage extends StatelessWidget {
                       onPressed: () async {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const KakaoWebView()),
+                          MaterialPageRoute(builder: (context) => const KakaoWebView()),
                         );
                         print("클릭!");
                       },
@@ -93,8 +92,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const NaverWebView()),
+                        MaterialPageRoute(builder: (context) => const NaverWebView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -123,8 +121,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const PhoneLoginPage()),
+                        MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(),
@@ -142,8 +139,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUpPage()),
+                        MaterialPageRoute(builder: (context) => const SignUpPage()),
                       );
                     },
                     style: TextButton.styleFrom(

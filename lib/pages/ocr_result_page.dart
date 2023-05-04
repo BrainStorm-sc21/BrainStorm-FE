@@ -35,7 +35,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           ? const LoadingPage()
           : AddFoodLayout(
               title: '식품 등록',
-              body: const Column(children: []),
+              body: Column(children: const []),
               onPressedAddButton: saveFoodInfo,
             ),
     );
