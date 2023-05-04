@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "471504723896",
+    "project_id": "mukjang-12e08",
+    "storage_bucket": "mukjang-12e08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471504723896:android:16e492afd3b623577cb94d",
+        "android_client_info": {
+          "package_name": "com.example.brainstorm_meokjang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471504723896-3bsk5q26roltju94k31vafbuvvicd11k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAydF38pRX53fmQf9i_hVlLVB2F8jLjP70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471504723896-3bsk5q26roltju94k31vafbuvvicd11k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
