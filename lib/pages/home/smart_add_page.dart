@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/pages/take_picture_page.dart';
+import 'package:brainstorm_meokjang/pages/home/take_picture_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 

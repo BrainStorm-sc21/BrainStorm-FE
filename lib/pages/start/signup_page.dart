@@ -1,9 +1,9 @@
-import 'package:brainstorm_meokjang/pages/phone_login_page.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
-import '../models/user_model.dart';
 
 bool valid_nickname = false;
 bool valid_gender = false;
