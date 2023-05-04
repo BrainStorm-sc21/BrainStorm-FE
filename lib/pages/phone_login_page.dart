@@ -1,7 +1,6 @@
 import 'package:brainstorm_meokjang/pages/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
@@ -30,7 +29,7 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("번호인증 로그인"),
+        title: const Text("번호인증"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
@@ -122,7 +121,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("번호인증 로그인"),
+        title: const Text("번호인증"),
         backgroundColor: ColorStyles.mainColor,
       ),
       body: Center(
