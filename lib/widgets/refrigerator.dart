@@ -17,7 +17,7 @@ class Refrigerator extends StatefulWidget {
 class _RefrigeratorState extends State<Refrigerator> {
   late Food food;
   List<Food> foodList = List.empty(growable: true);
-  List<bool> absorbBool = List.filled(4, true, growable: true);
+  List<bool> absorbBool = List.filled(100, true, growable: true);
 
   @override
   void initState() {
@@ -72,23 +72,28 @@ class _RefrigeratorState extends State<Refrigerator> {
               ),
             ),
             children: [
-              SizedBox(
-                width: 350,
-                child: FoodStorageDropdown(
-                    index: index, storage: food.storage, setStorage: setStorage),
-              ),
-              SizedBox(
-                width: 350,
-                child: FoodStockButton(
-                  index: index,
-                  stock: food.stock,
-                  setStock: setStock,
+              AbsorbPointer(
+                absorbing: absorbBool[index],
+                child: SizedBox(
+                  width: 350,
+                  child: FoodStorageDropdown(
+                      index: index, storage: food.storage, setStorage: setStorage),
                 ),
               ),
-              SizedBox(
-                width: 350,
-                child: FoodExpireDate(
-                    index: index, expireDate: food.expireDate, setExpireDate: setExpireDate),
+              AbsorbPointer(
+                absorbing: absorbBool[index],
+                child: SizedBox(
+                  width: 350,
+                  child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
+                ),
+              ),
+              AbsorbPointer(
+                absorbing: absorbBool[index],
+                child: SizedBox(
+                  width: 350,
+                  child: FoodExpireDate(
+                      index: index, expireDate: food.expireDate, setExpireDate: setExpireDate),
+                ),
               ),
               SizedBox(
                 width: 350,
@@ -103,10 +108,10 @@ class _RefrigeratorState extends State<Refrigerator> {
                           absorbBool[index] = !absorbBool[index];
                         });
                       },
-                      // child: absorbBool[index]
-                      //     ? const Text('확인', style: TextStyle(color: Colors.green))
-                      //     : const Text('수정', style: TextStyle(color: Colors.green))),
-                      child: const Text('확인', style: TextStyle(color: Colors.green)),
+                      child: absorbBool[index]
+                          ? const Text('수정', style: TextStyle(color: Colors.green))
+                          : const Text('확인', style: TextStyle(color: Colors.green)),
+                      //child: const Text('확인', style: TextStyle(color: Colors.green)),
                     ),
                     const SizedBox(width: 10),
                     //const SizedBox(width: 10),
