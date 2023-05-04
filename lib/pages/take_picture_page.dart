@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:brainstorm_meokjang/pages/ocr_result_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -54,8 +55,11 @@ class _TakePicturePageState extends State<TakePicturePage> {
         if (!mounted) return;
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DisplayPicturePage(
-              imagePath: image.path,
+            // builder: (context) => DisplayPicturePage(
+            //   imagePath: image.path,
+            // ),
+            builder: (context) => OCRResultPage(
+              image: Image.file(File(image.path)),
             ),
           ),
         );
