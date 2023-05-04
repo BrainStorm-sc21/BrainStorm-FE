@@ -5,7 +5,9 @@ class TitleInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: const Text("타이틀을 입력하는 부분"),
+    );
   }
 }
 

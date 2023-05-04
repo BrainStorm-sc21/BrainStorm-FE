@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.dart';
 import 'package:flutter/material.dart';
 
 class ExchangePage extends StatelessWidget {
@@ -9,6 +10,13 @@ class ExchangePage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("교환"),
+      ),
+      body: Column(
+        children: const [
+          TitleInput(),
+          ExpirationDateInput(),
+          DescriptionInput(),
+        ],
       ),
     );
   }
