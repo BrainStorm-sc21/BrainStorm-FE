@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class AddFoodLayout extends StatelessWidget {
   const AddFoodLayout({
     super.key,
     required this.title,
-    this.containerColor = const Color.fromRGBO(249, 249, 249, 1.0),
+    this.containerColor = ColorStyles.mainColor,
     required this.body,
     required this.onPressedAddButton,
   });
@@ -26,7 +27,7 @@ class AddFoodLayout extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  colors: [Color.fromRGBO(35, 204, 135, 1.0), Colors.cyan]),
+                  colors: [ColorStyles.mainColor, ColorStyles.cyan]),
             ),
           ),
         ),
@@ -42,7 +43,7 @@ class AddFoodLayout extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: ColorStyles.white,
                 ),
               ),
             ),
@@ -78,10 +79,9 @@ class AddFoodLayout extends StatelessWidget {
                         text: '등록하기',
                         width: double.infinity,
                         onPressed: onPressedAddButton,
-                        foregroundColor: Colors.white,
-                        backgroundColor:
-                            const Color.fromRGBO(35, 204, 135, 1.0),
-                        borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
+                        foregroundColor: ColorStyles.white,
+                        backgroundColor: ColorStyles.mainColor,
+                        borderColor: ColorStyles.mainColor,
                         fontSize: 18,
                       ),
                       // '취소하기' 버튼
@@ -89,10 +89,9 @@ class AddFoodLayout extends StatelessWidget {
                         text: '취소하기',
                         width: double.infinity,
                         onPressed: () => Navigator.of(context).pop(),
-                        foregroundColor:
-                            const Color.fromRGBO(35, 204, 135, 1.0),
-                        backgroundColor: Colors.white,
-                        borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
+                        foregroundColor: ColorStyles.mainColor,
+                        backgroundColor: ColorStyles.white,
+                        borderColor: ColorStyles.mainColor,
                         fontSize: 18,
                       ),
                     ],
