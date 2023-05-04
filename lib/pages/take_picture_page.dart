@@ -3,9 +3,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-// 카메라 ->  ...   ->  로딩 -> 스마트 등록
-//  ...   -> 갤러리 ->  ...
-
 class TakePicturePage extends StatefulWidget {
   final CameraDescription camera;
   const TakePicturePage({
@@ -48,6 +45,8 @@ class _TakePicturePageState extends State<TakePicturePage> {
     double? mediaHeight = MediaQuery.of(context).size.height;
 
     // 사진 촬영 시 실행될 함수
+    /// 촬영한 사진을 backend로 보내기
+    /// 응답 변수를 만들어서 nav) res ? {OCRResult} : {loading}
     Future<void> takePicture() async {
       try {
         await _initControllerFuture;
