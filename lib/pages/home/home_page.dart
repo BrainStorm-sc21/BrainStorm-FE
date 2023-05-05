@@ -1,6 +1,6 @@
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/pages/manual_add_page.dart';
-import 'package:brainstorm_meokjang/pages/smart_add_page.dart';
+import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
+import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
 import 'package:brainstorm_meokjang/widgets/refrigerator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -123,7 +123,8 @@ Widget? floatingButtons(BuildContext context) {
           child: const Icon(Icons.camera_alt, color: Colors.white),
           backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SmartAddPage()));
           }),
       SpeedDialChild(
         child: const Icon(
@@ -132,7 +133,8 @@ Widget? floatingButtons(BuildContext context) {
         ),
         backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualAddPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ManualAddPage()));
         },
       )
     ],

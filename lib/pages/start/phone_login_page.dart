@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/pages/home_page.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

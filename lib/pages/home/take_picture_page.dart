@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/pages/ocr_result_page.dart';
+import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 

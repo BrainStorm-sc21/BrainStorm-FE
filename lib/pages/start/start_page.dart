@@ -1,5 +1,5 @@
-import 'package:brainstorm_meokjang/pages/phone_login_page.dart';
-import 'package:brainstorm_meokjang/pages/signup_page.dart';
+import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
+import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
@@ -125,8 +125,8 @@ class StartPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(),
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         Icon(Icons.call),
                         Text("번호인증으로 로그인"),
                       ],

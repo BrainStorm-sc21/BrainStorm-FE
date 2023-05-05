@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/pages/start_page.dart';
+import 'package:brainstorm_meokjang/pages/start/start_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
