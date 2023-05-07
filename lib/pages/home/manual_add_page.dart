@@ -78,7 +78,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
             FoodStorage(
                 storage: food.storage, setStorage: setStorage), // 식료품 보관장소 선택
             divider,
-            FoodStock(
+            FoodStockTextfield(
                 stock: food.stock,
                 setStock: setStock,
                 controller: _stockStringController,
