@@ -3,14 +3,14 @@ import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FoodStock extends StatelessWidget {
+class FoodStockTextfield extends StatelessWidget {
   final num stock;
   final void Function(num value) setStock;
   final TextEditingController controller;
   final void Function() updateControllerText;
   final FocusNode focusNode;
 
-  const FoodStock(
+  const FoodStockTextfield(
       {Key? key,
       required this.stock,
       required this.setStock,
@@ -80,11 +80,14 @@ class FoodStock extends StatelessWidget {
               // 입력란에 실제로 표시되는 값: controller.text
               controller: controller,
               // 입력란 클릭 시, 숫자 키보드 표시
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               // 0~999, x.y 꼴의 실수만 입력 가능 (ex. 0.0~9.9, 0~999, 10.~99.),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^(\d)\d{0,2}\.?\d{0,1}')),
-                LengthLimitingTextInputFormatter(StockRange.maxStock.toString().length),
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'^(\d)\d{0,2}\.?\d{0,1}')),
+                LengthLimitingTextInputFormatter(
+                    StockRange.maxStock.toString().length),
               ],
               onChanged: (value) {
                 if (value.isNotEmpty && num.parse(value) != 0) {
