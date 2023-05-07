@@ -14,7 +14,7 @@ class GroupPurchasePage extends StatelessWidget {
       body: Column(
         children: const [
           TitleInput(),
-          ExpirationDateInput(),
+          NumOfPeopleInput(),
           DescriptionInput(),
         ],
       ),

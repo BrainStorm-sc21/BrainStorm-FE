@@ -7,9 +7,10 @@ class SharingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("공동구매"),
+        title: const Text("나눔"),
       ),
       body: Column(
         children: const [
