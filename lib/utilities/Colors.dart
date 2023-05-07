@@ -7,4 +7,5 @@ class ColorStyles {
   static const Color cyan = Colors.cyan;
   static Color errorRed = Colors.redAccent.shade700;
   static Color lightGrey = Colors.grey.shade200;
+  static const Color transperant = Colors.transparent;
 }
