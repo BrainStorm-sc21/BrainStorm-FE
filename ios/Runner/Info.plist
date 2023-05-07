@@ -54,6 +54,14 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
+
+	<key>NMFClientId</key>
+	<string>wgnjkzhuhc</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
