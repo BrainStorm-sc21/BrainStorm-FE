@@ -1,18 +1,18 @@
 import 'dart:ffi';
 
 class User {
-  int user_id;
-  String user_name;
-  String? phone_number;
-  int sns_connet;
+  int userId;
+  String userName;
+  String? phoneNumber;
+  int snsConnet;
   Position pos;
   int gender;
   Float reliability;
-  DateTime? stop_until;
-  DateTime created_at;
+  DateTime? stopUntil;
+  DateTime createdAt;
 
-  User(this.user_id, this.user_name, this.phone_number, this.sns_connet,
-      this.pos, this.gender, this.reliability, this.created_at);
+  User(this.userId, this.userName, this.phoneNumber, this.snsConnet, this.pos, this.gender,
+      this.reliability, this.createdAt);
 }
 
 class Position {

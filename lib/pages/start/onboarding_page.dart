@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/pages/start/start_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -48,8 +48,7 @@ class OnboardingPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const StartPage()),
+                        MaterialPageRoute(builder: (context) => const StartPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

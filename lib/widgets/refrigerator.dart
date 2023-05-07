@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -112,10 +112,8 @@ class _RefrigeratorState extends State<Refrigerator> {
                       child: absorbBool[index]
                           ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
                           : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
-                      //child: const Text('확인', style: TextStyle(color: Colors.green)),
                     ),
                     const SizedBox(width: 10),
-                    //const SizedBox(width: 10),
                     OutlinedButton(
                       child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                       onPressed: () {

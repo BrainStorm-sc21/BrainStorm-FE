@@ -123,8 +123,7 @@ Widget? floatingButtons(BuildContext context) {
           child: const Icon(Icons.camera_alt, color: Colors.white),
           backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
           }),
       SpeedDialChild(
         child: const Icon(
@@ -133,8 +132,7 @@ Widget? floatingButtons(BuildContext context) {
         ),
         backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ManualAddPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualAddPage()));
         },
       )
     ],

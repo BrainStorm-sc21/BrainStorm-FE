@@ -1,6 +1,6 @@
 import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
 import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -125,8 +124,8 @@ class StartPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(),
-                    child: const Row(
-                      children: [
+                    child: Row(
+                      children: const [
                         Icon(Icons.call),
                         Text("번호인증으로 로그인"),
                       ],
