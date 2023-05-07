@@ -1,12 +1,12 @@
 class Food {
-  int foodId;
+  late int foodId;
   String name;
   String storage;
   num stock;
   DateTime expireDate;
 
   Food({
-    required this.foodId,
+    this.foodId = 0,
     required this.name,
     required this.storage,
     required this.stock,

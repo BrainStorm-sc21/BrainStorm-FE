@@ -26,7 +26,6 @@ class _ManualAddPageState extends State<ManualAddPage> {
     super.initState();
     // food 인스턴스 초기화
     food = Food(
-      foodId: 1,
       name: '',
       storage: '냉장',
       stock: 1,
