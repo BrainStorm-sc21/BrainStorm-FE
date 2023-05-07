@@ -73,6 +73,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
         containerColor: ColorStyles.white,
         body: Column(
           children: [
+            const SizedBox(height: 15),
             FoodName(setName: setName), // 식료품 이름 입력
             const SizedBox(height: 30), // 여백
             FoodStorage(
