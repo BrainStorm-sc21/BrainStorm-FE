@@ -72,10 +72,10 @@ class AddFoodLayout extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [containerColor, ColorStyles.transperant],
-                  stops: const [0.75, 0.83],
+                  stops: const [0.8, 0.85],
                 ).createShader(bounds);
               },
-              blendMode: BlendMode.dstATop,
+              blendMode: BlendMode.dstIn,
               child: SingleChildScrollView(
                 child: body,
               ),
