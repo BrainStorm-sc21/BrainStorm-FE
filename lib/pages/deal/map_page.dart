@@ -145,19 +145,19 @@ class _MapPageState extends State<MapPage> {
         children: [
           SpeedDialChild(
               child: const Text('나눔'),
-              backgroundColor: ColorStyles.mainColor,
+              backgroundColor: ColorStyles.shareColor,
               onTap: () {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
               }),
           SpeedDialChild(
               child: const Text('교환'),
-              backgroundColor: ColorStyles.mainColor,
+              backgroundColor: ColorStyles.exchangColor,
               onTap: () {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
               }),
           SpeedDialChild(
               child: const Text('공구'),
-              backgroundColor: ColorStyles.mainColor,
+              backgroundColor: ColorStyles.groupBuyColor,
               onTap: () {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
               }),
