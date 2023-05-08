@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
+import 'package:brainstorm_meokjang/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -26,8 +27,10 @@ class _MapPageState extends State<MapPage> {
   ];
 
   void setDeal(int index) => setState(() => _isDeal[index] = !_isDeal[index]);
+  void setSearch() => setState(() {});
 
   final LocationTrackingMode _trackingMode = LocationTrackingMode.NoFollow;
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +101,14 @@ class _MapPageState extends State<MapPage> {
   _searchLayout() {
     return Column(
       children: [
-        Container(
-            decoration:
-                BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
-            child: const TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.black,
-                  ),
-                  hintText: "거래 검색하기"),
-            )),
+        SearchBar(
+          hinttext: '원하는 거래 검색하기',
+          onTap: () => setSearch(),
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.black,
+          borderColor: Colors.black,
+          textEditingController: _textEditingController,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: List<Widget>.generate(3, (index) {
