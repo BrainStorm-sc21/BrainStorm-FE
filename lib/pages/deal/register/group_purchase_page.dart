@@ -9,14 +9,28 @@ class GroupPurchasePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("공동구매"),
+        title: const Text("공동구매 게시글"),
       ),
-      body: Column(
-        children: const [
-          TitleInput(),
-          NumOfPeopleInput(),
-          DescriptionInput(),
-        ],
+      body: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              TitleInput(),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: NumOfPeopleInput(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: DescriptionInput(),
+              ),
+              Spacer(),
+              BottomButton(),
+            ],
+          ),
+        ),
       ),
     );
   }

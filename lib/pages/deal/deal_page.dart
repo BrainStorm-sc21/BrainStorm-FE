@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
+import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:flutter/material.dart';
 
 class DealPage extends StatelessWidget {
@@ -40,6 +41,16 @@ class DealPage extends StatelessWidget {
                 );
               },
               child: const Text("나눔"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OnboardingPage()),
+                );
+              },
+              child: const Text("로그인/회원가입 테스트"),
             ),
           ],
         ),

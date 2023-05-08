@@ -10,14 +10,27 @@ class SharingPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("나눔"),
+        title: const Text("나눔 게시글"),
       ),
-      body: Column(
-        children: const [
-          TitleInput(),
-          ExpirationDateInput(),
-          DescriptionInput(),
-        ],
+      body: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: const [
+              TitleInput(),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: ExpirationDateInput(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: DescriptionInput(),
+              ),
+              Spacer(),
+              BottomButton(),
+            ],
+          ),
+        ),
       ),
     );
   }

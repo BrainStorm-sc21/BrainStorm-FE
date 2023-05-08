@@ -9,14 +9,27 @@ class ExchangePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("교환"),
+        title: const Text("교환 게시글"),
       ),
-      body: Column(
-        children: const [
-          TitleInput(),
-          ExpirationDateInput(),
-          DescriptionInput(),
-        ],
+      body: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: const [
+              TitleInput(),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: ExpirationDateInput(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: DescriptionInput(),
+              ),
+              Spacer(),
+              BottomButton(),
+            ],
+          ),
+        ),
       ),
     );
   }
