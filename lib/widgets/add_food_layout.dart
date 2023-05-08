@@ -1,5 +1,8 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
+
+double paddingSize = 15;
 
 /// 식품 등록 화면 레이아웃
 /// 구조: 배경, 제목, 내용(식품정보), 버튼
@@ -12,7 +15,7 @@ class AddFoodLayout extends StatelessWidget {
   const AddFoodLayout({
     super.key,
     required this.title,
-    this.containerColor = const Color.fromRGBO(249, 249, 249, 1.0),
+    this.containerColor = ColorStyles.white,
     required this.body,
     required this.onPressedAddButton,
   });
@@ -26,7 +29,7 @@ class AddFoodLayout extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  colors: [Color.fromRGBO(35, 204, 135, 1.0), Colors.cyan]),
+                  colors: [ColorStyles.mainColor, ColorStyles.cyan]),
             ),
           ),
         ),
@@ -42,7 +45,7 @@ class AddFoodLayout extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: ColorStyles.white,
                 ),
               ),
             ),
@@ -62,46 +65,57 @@ class AddFoodLayout extends StatelessWidget {
                 topRight: Radius.circular(20.0),
               ),
             ),
-            child: Container(
-              padding: const EdgeInsets.only(
-                  top: 30, left: 20, right: 20, bottom: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // 식품 정보 박스
-                  body,
-                  // 등록/취소 버튼
-                  Column(
-                    children: [
-                      // '등록하기' 버튼
-                      RoundedOutlinedButton(
-                        text: '등록하기',
-                        width: double.infinity,
-                        onPressed: onPressedAddButton,
-                        foregroundColor: Colors.white,
-                        backgroundColor:
-                            const Color.fromRGBO(35, 204, 135, 1.0),
-                        borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
-                        fontSize: 18,
-                      ),
-                      // '취소하기' 버튼
-                      RoundedOutlinedButton(
-                        text: '취소하기',
-                        width: double.infinity,
-                        onPressed: () => Navigator.of(context).pop(),
-                        foregroundColor:
-                            const Color.fromRGBO(35, 204, 135, 1.0),
-                        backgroundColor: Colors.white,
-                        borderColor: const Color.fromRGBO(35, 204, 135, 1.0),
-                        fontSize: 18,
-                      ),
-                    ],
-                  ),
-                ],
+            padding: EdgeInsets.all(paddingSize),
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [containerColor, ColorStyles.transperant],
+                  stops: const [0.8, 0.85],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.dstIn,
+              child: SingleChildScrollView(
+                child: body,
               ),
             ),
           ),
         ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            color: containerColor,
+            padding:
+                EdgeInsets.symmetric(vertical: 10, horizontal: paddingSize),
+            child: Column(
+              children: [
+                // '등록하기' 버튼
+                RoundedOutlinedButton(
+                  text: '등록하기',
+                  width: double.infinity,
+                  onPressed: onPressedAddButton,
+                  foregroundColor: ColorStyles.white,
+                  backgroundColor: ColorStyles.mainColor,
+                  borderColor: ColorStyles.mainColor,
+                  fontSize: 18,
+                ),
+                // '취소하기' 버튼
+                RoundedOutlinedButton(
+                  text: '취소하기',
+                  width: double.infinity,
+                  onPressed: () => Navigator.of(context).pop(),
+                  foregroundColor: ColorStyles.mainColor,
+                  backgroundColor: ColorStyles.white,
+                  borderColor: ColorStyles.mainColor,
+                  fontSize: 18,
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }

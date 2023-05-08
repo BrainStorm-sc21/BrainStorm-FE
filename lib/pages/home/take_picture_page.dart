@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -118,7 +119,7 @@ class _TakePicturePageState extends State<TakePicturePage> {
                         width: 65,
                         height: 65,
                         decoration: const BoxDecoration(
-                          color: Colors.white,
+                          color: ColorStyles.white,
                           shape: BoxShape.circle,
                         ),
                       ),

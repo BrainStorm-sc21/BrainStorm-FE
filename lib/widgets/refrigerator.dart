@@ -1,11 +1,9 @@
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/models/food.dart';
+import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-
-import '../models/food.dart';
-import '../utilities/rule.dart';
-import 'all.dart';
 
 class Refrigerator extends StatefulWidget {
   final String storage;
@@ -41,8 +39,10 @@ class _RefrigeratorState extends State<Refrigerator> {
     );
   }
 
-  void setStock(int index, num value) => setState(() => foodList[index].stock = value);
-  void setStorage(int index, String value) => setState(() => foodList[index].storage = value);
+  void setStock(int index, num value) =>
+      setState(() => foodList[index].stock = value);
+  void setStorage(int index, String value) =>
+      setState(() => foodList[index].storage = value);
   void setExpireDate(DateTime value, {int? index}) =>
       setState(() => foodList[index!].expireDate = value);
 
@@ -54,7 +54,8 @@ class _RefrigeratorState extends State<Refrigerator> {
         food = foodList[index];
         return Card(
           key: PageStorageKey(food.foodId),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: ExpansionTile(
             title: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -78,14 +79,17 @@ class _RefrigeratorState extends State<Refrigerator> {
                 child: SizedBox(
                   width: 350,
                   child: FoodStorageDropdown(
-                      index: index, storage: food.storage, setStorage: setStorage),
+                      index: index,
+                      storage: food.storage,
+                      setStorage: setStorage),
                 ),
               ),
               AbsorbPointer(
                 absorbing: absorbBool[index],
                 child: SizedBox(
                   width: 350,
-                  child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
+                  child: FoodStockButton(
+                      index: index, stock: food.stock, setStock: setStock),
                 ),
               ),
               AbsorbPointer(
@@ -93,7 +97,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                 child: SizedBox(
                   width: 350,
                   child: FoodExpireDate(
-                      index: index, expireDate: food.expireDate, setExpireDate: setExpireDate),
+                      index: index,
+                      expireDate: food.expireDate,
+                      setExpireDate: setExpireDate),
                 ),
               ),
               SizedBox(
@@ -167,100 +173,25 @@ class _RefrigeratorState extends State<Refrigerator> {
 
 Widget progressBars(BuildContext context) {
   return const Padding(
-      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-      child: (StepProgressIndicator(
-        totalSteps: 7,
-        currentStep: 5,
-        size: 8,
-        padding: 0,
-        selectedColor: Colors.yellow,
-        unselectedColor: Colors.cyan,
-        roundedEdges: Radius.circular(10),
-        selectedGradientColor: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.redAccent, Colors.yellowAccent],
-        ),
-        unselectedGradientColor: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.blueGrey, Colors.grey],
-        ),
-      )));
-}
-
-class FoodStockButton extends StatelessWidget {
-  final num stock;
-  final void Function(int index, num value) setStock;
-  final int index;
-
-  const FoodStockButton(
-      {super.key, required this.index, required this.stock, required this.setStock});
-
-  void decreaseStock() {
-    if (stock <= StockRange.minStock) return;
-
-    num result = 0;
-    if (0.1 < stock && stock <= 0.5) {
-      result = num.parse((stock - 0.1).toStringAsFixed(1));
-    } else if (0.5 < stock && stock <= 1) {
-      result = 0.5;
-    } else if (1 < stock && stock <= 1.5) {
-      result = 1;
-    } else if (1.5 < stock && stock <= 2) {
-      result = 1.5;
-    } else {
-      result = (stock - 1).ceil();
-    }
-    setStock(index, result);
-  }
-
-  void increaseStock() {
-    if (stock >= StockRange.maxStock) return;
-
-    num result = 0;
-    if (0.1 <= stock && stock < 0.5) {
-      result = 0.5;
-    } else if (0.5 <= stock && stock < 1) {
-      result = 1;
-    } else if (1 <= stock && stock < 1.5) {
-      result = 1.5;
-    } else {
-      result = (stock + 1).floor();
-    }
-    setStock(index, result);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Text("수량"),
-        const Spacer(),
-        Row(children: [
-          // 수량 빼기
-          IconButton(
-            color: Colors.grey.shade400,
-            onPressed: () => decreaseStock(),
-            icon: const Icon(Icons.remove),
-          ),
-          // 수량 표시 및 입력란
-          SizedBox(
-            width: 30,
-            child: Text(
-              '$stock',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-          // 수량 더하기
-          IconButton(
-            color: Colors.grey.shade400,
-            onPressed: increaseStock,
-            icon: const Icon(Icons.add),
-          ),
-        ]),
-      ],
-    );
-  }
+    padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+    child: (StepProgressIndicator(
+      totalSteps: 7,
+      currentStep: 5,
+      size: 8,
+      padding: 0,
+      selectedColor: Colors.yellow,
+      unselectedColor: Colors.cyan,
+      roundedEdges: Radius.circular(10),
+      selectedGradientColor: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.redAccent, Colors.yellowAccent],
+      ),
+      unselectedGradientColor: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.blueGrey, Colors.grey],
+      ),
+    )),
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 // task 4.07
@@ -9,7 +10,7 @@ class LoadingPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: const Color.fromRGBO(35, 204, 135, 1.0),
+      color: ColorStyles.mainColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -19,7 +20,7 @@ class LoadingPage extends StatelessWidget {
             width: 200,
             height: 200,
             child: Container(
-              color: Colors.amber,
+              color: ColorStyles.black,
             ),
           ),
           const SizedBox(height: 20.0), // 여백
@@ -28,7 +29,7 @@ class LoadingPage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               decoration: TextDecoration.none,
-              color: Colors.white,
+              color: ColorStyles.white,
               fontSize: 20.0,
               fontWeight: FontWeight.w300,
               height: 1.5,
