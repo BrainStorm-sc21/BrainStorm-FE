@@ -77,7 +77,6 @@ class AddFoodLayout extends StatelessWidget {
               },
               blendMode: BlendMode.dstATop,
               child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
                 child: body,
               ),
             ),

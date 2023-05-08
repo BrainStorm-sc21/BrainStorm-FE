@@ -108,6 +108,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
               title: '식품 등록',
               containerColor: ColorStyles.lightGrey,
               body: ListView.builder(
+                physics: const ScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: foods.length,
