@@ -1,0 +1,64 @@
+import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:flutter/material.dart';
+
+class SearchBar extends StatelessWidget {
+  final String hinttext;
+  final VoidCallback onTap;
+  final double width;
+  final double height;
+  final double borderRadius;
+  final Color foregroundColor;
+  final Color backgroundColor;
+  final Color borderColor;
+  final double fontSize;
+
+  final TextEditingController textEditingController;
+
+  const SearchBar({
+    super.key,
+    this.hinttext = '검색',
+    required this.onTap,
+    this.width = 50,
+    this.height = 35,
+    this.borderRadius = 40,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.borderColor,
+    this.fontSize = 16,
+    required this.textEditingController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration:
+          BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
+      child: TextField(
+        controller: textEditingController,
+        decoration: InputDecoration(
+          hintText: hinttext,
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: ColorStyles.mainColor, width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: ColorStyles.mainColor, width: 2.0),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+          ),
+          suffixIcon: GestureDetector(
+            child: const Icon(
+              Icons.search,
+              color: ColorStyles.mainColor,
+              size: 20,
+            ),
+            onTap: () => onTap,
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,6 @@
 import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
 import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,8 +60,7 @@ class StartPage extends StatelessWidget {
                       onPressed: () async {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const KakaoWebView()),
+                          MaterialPageRoute(builder: (context) => const KakaoWebView()),
                         );
                         print("클릭!");
                       },
@@ -93,8 +91,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const NaverWebView()),
+                        MaterialPageRoute(builder: (context) => const NaverWebView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -123,8 +120,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const PhoneLoginPage()),
+                        MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(),
@@ -142,8 +138,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUpPage()),
+                        MaterialPageRoute(builder: (context) => const SignUpPage()),
                       );
                     },
                     style: TextButton.styleFrom(
