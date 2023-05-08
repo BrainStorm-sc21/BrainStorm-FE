@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:brainstorm_meokjang/widgets/search_bar.dart';
@@ -58,6 +61,7 @@ class _MapPageState extends State<MapPage> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+            //padding: const EdgeInsets.all(70),
             child: _searchLayout(),
           ),
           _registerButton(),
@@ -68,7 +72,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -76,7 +81,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapLongTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onLongTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onLongTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -84,7 +90,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapDoubleTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onDoubleTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onDoubleTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -92,7 +99,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTwoFingerTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTwoFingerTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onTwoFingerTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -101,7 +109,7 @@ class _MapPageState extends State<MapPage> {
   _searchLayout() {
     return Column(
       children: [
-        SearchBar(
+        CustomSearchBar(
           hinttext: '원하는 거래 검색하기',
           onTap: () => setSearch(),
           backgroundColor: Colors.black,
@@ -118,8 +126,10 @@ class _MapPageState extends State<MapPage> {
                   text: _deals[index],
                   fontSize: 15,
                   onPressed: () => setDeal(index),
-                  width: MediaQuery.of(context).size.width / 4.0 - 100,
-                  backgroundColor: _isDeal[index] ? _colors[index] : Colors.white,
+                  //width: MediaQuery.of(context).size.width / 4.0 - 100,
+                  width: 50,
+                  backgroundColor:
+                      _isDeal[index] ? _colors[index] : Colors.white,
                   foregroundColor: _isDeal[index] ? Colors.white : Colors.black,
                   borderColor: _colors[index],
                 ));
@@ -147,19 +157,28 @@ class _MapPageState extends State<MapPage> {
               child: const Text('나눔'),
               backgroundColor: ColorStyles.shareColor,
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SharingPage()));
               }),
           SpeedDialChild(
               child: const Text('교환'),
               backgroundColor: ColorStyles.exchangColor,
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ExchangePage()));
               }),
           SpeedDialChild(
               child: const Text('공구'),
               backgroundColor: ColorStyles.groupBuyColor,
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const GroupPurchasePage()));
               }),
         ],
       ),

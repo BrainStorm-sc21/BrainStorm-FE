@@ -1,7 +1,7 @@
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
+class CustomSearchBar extends StatelessWidget {
   final String hinttext;
   final VoidCallback onTap;
   final double width;
@@ -14,7 +14,7 @@ class SearchBar extends StatelessWidget {
 
   final TextEditingController textEditingController;
 
-  const SearchBar({
+  const CustomSearchBar({
     super.key,
     this.hinttext = '검색',
     required this.onTap,
@@ -31,13 +31,14 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
+      decoration: BoxDecoration(
+          color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
       child: TextField(
         controller: textEditingController,
         decoration: InputDecoration(
           hintText: hinttext,
-          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(40)),
           ),
