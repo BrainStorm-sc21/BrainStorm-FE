@@ -128,8 +128,8 @@ class StartPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(),
-                    child: const Row(
-                      children: [
+                    child: Row(
+                      children: const [
                         Icon(Icons.call),
                         Text("번호인증으로 로그인"),
                       ],
