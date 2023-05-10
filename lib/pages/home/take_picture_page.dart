@@ -56,9 +56,6 @@ class _TakePicturePageState extends State<TakePicturePage> {
         if (!mounted) return;
         await Navigator.of(context).push(
           MaterialPageRoute(
-            // builder: (context) => DisplayPicturePage(
-            //   imagePath: image.path,
-            // ),
             builder: (context) => OCRResultPage(
               image: Image.file(File(image.path)),
             ),
@@ -131,19 +128,6 @@ class _TakePicturePageState extends State<TakePicturePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class DisplayPicturePage extends StatelessWidget {
-  final String imagePath;
-  const DisplayPicturePage({super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('촬영한 사진')),
-      body: Image.file(File(imagePath)),
     );
   }
 }
