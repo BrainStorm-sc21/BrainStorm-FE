@@ -12,6 +12,7 @@ class SmartAddPage extends StatefulWidget {
 class _SmartAddPageState extends State<SmartAddPage> {
   late List<CameraDescription> cameras;
   late CameraDescription camera;
+  bool isCameraInitialized = false;
 
   @override
   void initState() {
@@ -22,10 +23,18 @@ class _SmartAddPageState extends State<SmartAddPage> {
   void initCamera() async {
     cameras = await availableCameras();
     camera = cameras.first;
+    setState(() => isCameraInitialized = true);
   }
 
   @override
   Widget build(BuildContext context) {
-    return TakePicturePage(camera: camera);
+    if (isCameraInitialized) {
+      return TakePicturePage(camera: camera);
+    } else {
+      return const SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
   }
 }
