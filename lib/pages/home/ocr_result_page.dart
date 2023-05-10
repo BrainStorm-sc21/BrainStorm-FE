@@ -64,6 +64,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
     super.initState();
     initLoading();
     initFoods();
+    initController();
+  }
   }
 
   void initFoods() {
@@ -84,6 +86,23 @@ class _OCRResultPageState extends State<OCRResultPage> {
         _isLoading = false;
       });
     });
+  void initController() {
+    for (int index = 0; index < foods.length; index++) {
+      _foodNameController.add(TextEditingController());
+      _foodNameController[index].text = foods[index].name;
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeController();
+    super.dispose();
+  }
+
+  void disposeController() {
+    for (var controller in _foodNameController) {
+      controller.dispose();
+    }
   }
 
   void setStorage(int index, String value) {
@@ -110,7 +129,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
         body: SliverList.builder(
           itemCount: foods.length,
           itemBuilder: (context, index) {
-            _foodNameController.add(TextEditingController());
             return Card(
               elevation: 0.5,
               margin: const EdgeInsets.only(bottom: 10),
