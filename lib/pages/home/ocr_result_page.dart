@@ -66,6 +66,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
     initFoods();
     initController();
   }
+
+  void initLoading() {
+    _isLoading = true;
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   void initFoods() {
@@ -79,13 +87,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
-  void initLoading() {
-    _isLoading = true;
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
   void initController() {
     for (int index = 0; index < foods.length; index++) {
       _foodNameController.add(TextEditingController());
