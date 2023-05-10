@@ -17,6 +17,8 @@ class OCRResultPage extends StatefulWidget {
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
   final List<TextEditingController> _foodNameController = [];
+  final Color containerColor = ColorStyles.lightGrey;
+  final double paddingSize = 10;
   late bool _isLoading;
   Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
     'list': {
@@ -100,78 +102,76 @@ class _OCRResultPageState extends State<OCRResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: _isLoading
-          ? const LoadingPage()
-          : AddFoodLayout(
-              title: '식품 등록',
-              containerColor: ColorStyles.lightGrey,
-              body: ListView.builder(
-                physics: const ScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: foods.length,
-                itemBuilder: (context, index) {
-                  _foodNameController.add(TextEditingController());
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 20,
-                    ),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    decoration: const BoxDecoration(
-                      color: ColorStyles.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                    ),
-                    child: Column(
+    if (_isLoading) {
+      return const LoadingPage();
+    } else {
+      return AddFoodLayout(
+        title: '식품 등록',
+        onPressedAddButton: saveFoodInfo,
+        containerColor: ColorStyles.lightGrey,
+        body: SliverList.builder(
+          itemCount: foods.length,
+          itemBuilder: (context, index) {
+            _foodNameController.add(TextEditingController());
+            return Card(
+              elevation: 0.5,
+              margin: const EdgeInsets.only(bottom: 10),
+              color: ColorStyles.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 200.0,
-                              child: TextField(
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                controller: _foodNameController[index],
-                              ),
+                        SizedBox(
+                          width: 200.0,
+                          child: TextField(
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const Spacer(),
-                            // TODO: 삭제 기능 수정 필요
-                            IconButton(
-                              onPressed: () {
-                                foods.remove(foods[index]);
-                              },
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
+                            controller: _foodNameController[index],
+                          ),
                         ),
-                        FoodStorageDropdown(
-                          index: index,
-                          storage: foods[index].storage,
-                          setStorage: setStorage,
-                        ),
-                        FoodStockButton(
-                          index: index,
-                          stock: foods[index].stock,
-                          setStock: setStock,
-                        ),
-                        FoodExpireDate(
-                          expireDate: foods[index].expireDate,
-                          setExpireDate: setExpireDate,
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            foods.remove(foods[index]);
+                          },
+                          icon: const Icon(Icons.close),
                         ),
                       ],
                     ),
-                  );
-                },
+                    FoodStorageDropdown(
+                      index: index,
+                      storage: foods[index].storage,
+                      setStorage: setStorage,
+                    ),
+                    FoodStockButton(
+                      index: index,
+                      stock: foods[index].stock,
+                      setStock: setStock,
+                    ),
+                    FoodExpireDate(
+                      expireDate: foods[index].expireDate,
+                      setExpireDate: setExpireDate,
+                    ),
+                  ],
+                ),
               ),
-              onPressedAddButton: saveFoodInfo,
-            ),
-    );
+            );
+          },
+        ),
+      );
+    }
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수

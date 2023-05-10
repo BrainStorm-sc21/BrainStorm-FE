@@ -66,32 +66,28 @@ class _ManualAddPageState extends State<ManualAddPage> {
       ],
     );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: AddFoodLayout(
-        title: '식품 등록',
-        containerColor: ColorStyles.white,
-        body: Column(
-          children: [
-            const SizedBox(height: 15),
-            FoodName(setName: setName), // 식료품 이름 입력
-            const SizedBox(height: 30), // 여백
-            FoodStorage(
-                storage: food.storage, setStorage: setStorage), // 식료품 보관장소 선택
-            divider,
-            FoodStockTextfield(
-                stock: food.stock,
-                setStock: setStock,
-                controller: _stockStringController,
-                updateControllerText: updateControllerText,
-                focusNode: _stockFocusNode), // 식료품 수량 조절
-            divider,
-            FoodExpireDate(
-                expireDate: food.expireDate,
-                setExpireDate: setExpireDate), // 식료품 소비기한 입력
-          ],
-        ),
-        onPressedAddButton: saveFoodInfo,
+    return AddFoodLayout(
+      title: '식품 등록',
+      onPressedAddButton: saveFoodInfo,
+      horizontalPaddingSize: 15,
+      body: SliverList(
+        delegate: SliverChildListDelegate([
+          FoodName(setName: setName), // 식료품 이름 입력
+          const SizedBox(height: 30), // 여백
+          FoodStorage(
+              storage: food.storage, setStorage: setStorage), // 식료품 보관장소 선택
+          divider,
+          FoodStockTextfield(
+              stock: food.stock,
+              setStock: setStock,
+              controller: _stockStringController,
+              updateControllerText: updateControllerText,
+              focusNode: _stockFocusNode), // 식료품 수량 조절
+          divider,
+          FoodExpireDate(
+              expireDate: food.expireDate,
+              setExpireDate: setExpireDate), // 식료품 소비기한 입력
+        ]),
       ),
     );
   }
@@ -186,7 +182,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
+        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
         ]),

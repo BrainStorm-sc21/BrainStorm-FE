@@ -1,122 +1,128 @@
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
-
-double paddingSize = 15;
 
 /// 식품 등록 화면 레이아웃
 /// 구조: 배경, 제목, 내용(식품정보), 버튼
 class AddFoodLayout extends StatelessWidget {
   final String title;
-  final Color containerColor;
-  final Widget body;
   final VoidCallback onPressedAddButton;
+  final Color containerColor;
+  final double horizontalPaddingSize;
+  final Widget body; // it must be sliver widget
 
   const AddFoodLayout({
     super.key,
     required this.title,
-    this.containerColor = ColorStyles.white,
-    required this.body,
     required this.onPressedAddButton,
+    this.containerColor = ColorStyles.white,
+    this.horizontalPaddingSize = 10,
+    required this.body,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // 그라데이션 배경
-        Positioned.fill(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [ColorStyles.mainColor, ColorStyles.cyan]),
-            ),
-          ),
-        ),
-        // 제목
-        Positioned(
-          top: 100,
-          left: 0,
-          right: 0,
-          child: SizedBox(
-            child: Center(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: ColorStyles.white,
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          color: containerColor,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                floating: false,
+                pinned: false,
+                expandedHeight: 200,
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [ColorStyles.mainColor, ColorStyles.cyan],
+                    ),
+                  ),
+                  child: FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: ColorStyles.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              SliverToBoxAdapter(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 20,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [ColorStyles.mainColor, ColorStyles.cyan],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: containerColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverPadding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: horizontalPaddingSize),
+                sliver: body,
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 10, horizontal: horizontalPaddingSize),
+                    child: SizedBox(
+                      height: 78, // button 35 + sizedbox 8 + button 35
+                      child: Column(
+                        children: [
+                          // '등록하기' 버튼
+                          RoundedOutlinedButton(
+                            text: '등록하기',
+                            width: double.infinity,
+                            onPressed: onPressedAddButton,
+                            foregroundColor: ColorStyles.white,
+                            backgroundColor: ColorStyles.mainColor,
+                            borderColor: ColorStyles.mainColor,
+                            fontSize: 18,
+                          ),
+                          const SizedBox(height: 8), //여백
+                          // '취소하기' 버튼
+                          RoundedOutlinedButton(
+                            text: '취소하기',
+                            width: double.infinity,
+                            onPressed: () => Navigator.of(context).pop(),
+                            foregroundColor: ColorStyles.mainColor,
+                            backgroundColor: ColorStyles.white,
+                            borderColor: ColorStyles.mainColor,
+                            fontSize: 18,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        // 식품 정보 및 버튼 컨테이너
-        Positioned(
-          top: 180,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            decoration: BoxDecoration(
-              color: containerColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-              ),
-            ),
-            padding: EdgeInsets.all(paddingSize),
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [containerColor, ColorStyles.transperant],
-                  stops: const [0.8, 0.85],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.dstIn,
-              child: SingleChildScrollView(
-                child: body,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            color: containerColor,
-            padding:
-                EdgeInsets.symmetric(vertical: 10, horizontal: paddingSize),
-            child: Column(
-              children: [
-                // '등록하기' 버튼
-                RoundedOutlinedButton(
-                  text: '등록하기',
-                  width: double.infinity,
-                  onPressed: onPressedAddButton,
-                  foregroundColor: ColorStyles.white,
-                  backgroundColor: ColorStyles.mainColor,
-                  borderColor: ColorStyles.mainColor,
-                  fontSize: 18,
-                ),
-                // '취소하기' 버튼
-                RoundedOutlinedButton(
-                  text: '취소하기',
-                  width: double.infinity,
-                  onPressed: () => Navigator.of(context).pop(),
-                  foregroundColor: ColorStyles.mainColor,
-                  backgroundColor: ColorStyles.white,
-                  borderColor: ColorStyles.mainColor,
-                  fontSize: 18,
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 }
