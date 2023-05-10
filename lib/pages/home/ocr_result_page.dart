@@ -17,8 +17,6 @@ class OCRResultPage extends StatefulWidget {
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
   final List<TextEditingController> _foodNameController = [];
-  final Color containerColor = ColorStyles.lightGrey;
-  final double paddingSize = 10;
   late bool _isLoading;
   Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
     'list': {
@@ -108,7 +106,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       return AddFoodLayout(
         title: '식품 등록',
         onPressedAddButton: saveFoodInfo,
-        containerColor: ColorStyles.lightGrey,
+        containerColor: ColorStyles.snow,
         body: SliverList.builder(
           itemCount: foods.length,
           itemBuilder: (context, index) {
