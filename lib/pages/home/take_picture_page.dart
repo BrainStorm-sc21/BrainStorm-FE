@@ -47,14 +47,13 @@ class _TakePicturePageState extends State<TakePicturePage> {
     double? mediaHeight = MediaQuery.of(context).size.height;
 
     // 사진 촬영 시 실행될 함수
-    /// 촬영한 사진을 backend로 보내기
-    /// 응답 변수를 만들어서 nav) res ? {OCRResult} : {loading}
+    // 촬영한 사진을 backend로 보내기
     Future<void> takePicture() async {
       try {
         await _initControllerFuture;
         final image = await _controller.takePicture();
         if (!mounted) return;
-        await Navigator.of(context).push(
+        await Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => OCRResultPage(
               image: Image.file(File(image.path)),
