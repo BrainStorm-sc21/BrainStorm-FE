@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 class FoodStorageDropdown extends StatelessWidget {
@@ -7,7 +8,10 @@ class FoodStorageDropdown extends StatelessWidget {
   final int index;
   final void Function(int index, String value) setStorage;
   FoodStorageDropdown(
-      {super.key, required this.index, required this.storage, required this.setStorage});
+      {super.key,
+      required this.index,
+      required this.storage,
+      required this.setStorage});
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +21,25 @@ class FoodStorageDropdown extends StatelessWidget {
         const Text('보관방법'),
         const Spacer(),
         DropdownButton(
-            value: storage,
-            items: _storages
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              setStorage(index, value!);
-            }),
+          value: storage,
+          items: _storages
+              .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ))
+              .toList(),
+          onChanged: (value) {
+            setStorage(index, value!);
+          },
+          icon: const Icon(Icons.arrow_drop_down_rounded),
+          iconSize: 20,
+          underline: Container(),
+          elevation: 2,
+          dropdownColor: ColorStyles.white,
+        ),
       ],
     );
   }
