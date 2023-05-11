@@ -187,7 +187,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             setState(() {
                               foods.removeAt(index);
                               _foodNameController.removeAt(index);
-                              _foodNameController[index].dispose();
                             });
                           },
                           icon: const Icon(Icons.close),
