@@ -69,9 +69,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initFoods() {
     for (var fooditem in ocrResult['list']!.values) {
       foods.add(Food(
-        name: fooditem['food_name'],
+        foodName: fooditem['food_name'],
         stock: fooditem['stock'],
-        storage: '냉장',
+        storageWay: '냉장',
         expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
       ));
     }
@@ -87,7 +87,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void setStorage(int index, String value) {
-    setState(() => foods[index].storage = value);
+    setState(() => foods[index].storageWay = value);
   }
 
   void setStock(int index, num value) {
@@ -152,7 +152,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         ),
                         FoodStorageDropdown(
                           index: index,
-                          storage: foods[index].storage,
+                          storage: foods[index].storageWay,
                           setStorage: setStorage,
                         ),
                         FoodStockButton(
