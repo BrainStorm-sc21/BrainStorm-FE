@@ -7,30 +7,40 @@ class GroupPurchasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("공동구매 게시글"),
-      ),
-      body: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              TitleInput(),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: NumOfPeopleInput(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: DescriptionInput(),
-              ),
-              Spacer(),
-              BottomButton(),
-            ],
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          const SafeArea(
+            child: TopBar(
+              title: '공동구매하기',
+              subTitle: '묶음으로만 파는 식재료를\n이웃과 공동구매해요',
+            ),
           ),
-        ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: SingleChildScrollView(
+              child: Column(
+                children: const [
+                  TitleInput(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: NumOfPeopleInput(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: DescriptionInput(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: PhotoBoxInput(),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const Spacer(),
+          const BottomButton(),
+        ],
       ),
     );
   }

@@ -39,33 +39,35 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: Stack(
-        children: <Widget>[
-          NaverMap(
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(37.566570, 126.978442),
-              zoom: 17,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            NaverMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.566570, 126.978442),
+                zoom: 17,
+              ),
+              onMapCreated: onMapCreated,
+              mapType: MapType.Basic,
+              initLocationTrackingMode: _trackingMode,
+              locationButtonEnable: true,
+              indoorEnable: true,
+              onCameraIdle: _onCameraIdle,
+              onMapTap: _onMapTap,
+              onMapLongTap: _onMapLongTap,
+              onMapDoubleTap: _onMapDoubleTap,
+              onMapTwoFingerTap: _onMapTwoFingerTap,
+              maxZoom: 17,
+              minZoom: 15,
             ),
-            onMapCreated: onMapCreated,
-            mapType: MapType.Basic,
-            initLocationTrackingMode: _trackingMode,
-            locationButtonEnable: true,
-            indoorEnable: true,
-            onCameraIdle: _onCameraIdle,
-            onMapTap: _onMapTap,
-            onMapLongTap: _onMapLongTap,
-            onMapDoubleTap: _onMapDoubleTap,
-            onMapTwoFingerTap: _onMapTwoFingerTap,
-            maxZoom: 17,
-            minZoom: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
-            //padding: const EdgeInsets.all(70),
-            child: _searchLayout(),
-          ),
-          _registerButton(),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+              //padding: const EdgeInsets.all(70),
+              child: _searchLayout(),
+            ),
+            _registerButton(),
+          ],
+        ),
       ),
     );
   }
