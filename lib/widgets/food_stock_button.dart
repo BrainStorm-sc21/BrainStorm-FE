@@ -58,7 +58,12 @@ class FoodStockButton extends StatelessWidget {
             color: Colors.grey.shade400,
             onPressed: () => decreaseStock(),
             icon: const Icon(Icons.remove),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
           ),
+          const SizedBox(width: 5),
           // 수량 표시 및 입력란
           SizedBox(
             width: 30,
@@ -68,11 +73,16 @@ class FoodStockButton extends StatelessWidget {
               style: const TextStyle(fontSize: 15),
             ),
           ),
+          const SizedBox(width: 5),
           // 수량 더하기
           IconButton(
             color: Colors.grey.shade400,
             onPressed: increaseStock,
             icon: const Icon(Icons.add),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
           ),
         ]),
       ],
