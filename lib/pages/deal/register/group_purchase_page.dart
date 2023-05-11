@@ -22,10 +22,10 @@ class GroupPurchasePage extends StatelessWidget {
               child: Column(
                 children: const [
                   TitleInput(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: NumOfPeopleInput(),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20),
+                  //   child: NumOfPeopleInput(),
+                  // ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: DescriptionInput(),

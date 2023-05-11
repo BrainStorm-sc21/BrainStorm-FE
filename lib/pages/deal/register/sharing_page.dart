@@ -23,18 +23,18 @@ class SharingPage extends StatelessWidget {
               child: Column(
                 children: const [
                   TitleInput(),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20),
+                  //   child: ExpirationDateInput(),
+                  // ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
-                    child: ExpirationDateInput(),
+                    child: PhotoBoxInput(),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: DescriptionInput(),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: PhotoBoxInput(),
-                  )
                 ],
               ),
             ),
