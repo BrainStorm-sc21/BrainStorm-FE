@@ -149,13 +149,18 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     Row(
                       children: [
                         SizedBox(
-                          width: 200.0,
+                          width: 320,
                           child: TextField(
+                            controller: _foodNameController[index],
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              counterText: '',
+                            ),
                             style: const TextStyle(
                               fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
-                            controller: _foodNameController[index],
+                            maxLength: 20,
                           ),
                         ),
                         const Spacer(),
@@ -164,6 +169,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             foods.remove(foods[index]);
                           },
                           icon: const Icon(Icons.close),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
                       ],
                     ),
