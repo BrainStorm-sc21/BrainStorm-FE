@@ -334,7 +334,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                             builder: (BuildContext context) {
                               return Container(
                                 height: 150,
-                                color: ColorStyles.transperant,
+                                color: ColorStyles.transparent,
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment:

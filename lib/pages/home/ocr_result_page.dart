@@ -90,7 +90,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initController() {
     for (int index = 0; index < foods.length; index++) {
       _foodNameController.add(TextEditingController());
-      _foodNameController[index].text = foods[index].name;
+      _foodNameController[index].text = foods[index].foodName;
     }
   }
 
@@ -127,94 +127,95 @@ class _OCRResultPageState extends State<OCRResultPage> {
         title: '식품 등록',
         onPressedAddButton: saveFoodInfo,
         containerColor: ColorStyles.snow,
-        body: SliverList.builder(
-          itemCount: foods.length,
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 3,
-              shadowColor: ColorStyles.white,
-              margin: const EdgeInsets.only(bottom: 15),
-              color: ColorStyles.white,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
-                ),
-              ),
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorStyles.mustardYellow,
-                      ColorStyles.transparent,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment(-0.95, 0),
-                    stops: [1, 1],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
+        body: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return Card(
+                elevation: 3,
+                shadowColor: ColorStyles.white,
+                margin: const EdgeInsets.only(bottom: 15),
+                color: ColorStyles.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
                   ),
                 ),
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  left: 30,
-                  right: 20,
-                  bottom: 10,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.75,
-                          child: TextField(
-                            controller: _foodNameController[index],
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              counterText: '',
-                            ),
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLength: 20,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              foods.removeAt(index);
-                              _foodNameController.removeAt(index);
-                            });
-                          },
-                          icon: const Icon(Icons.close),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorStyles.mustardYellow,
+                        ColorStyles.transparent,
                       ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment(-0.95, 0),
+                      stops: [1, 1],
                     ),
-                    FoodStorageDropdown(
-                      index: index,
-                      storage: foods[index].storage,
-                      setStorage: setStorage,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
                     ),
-                    FoodStockButton(
-                      index: index,
-                      stock: foods[index].stock,
-                      setStock: setStock,
-                    ),
-                    FoodExpireDate(
-                      index: index,
-                      expireDate: foods[index].expireDate,
-                      setExpireDate: setExpireDate,
-                    ),
-                  ],
+                  ),
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 30,
+                    right: 20,
+                    bottom: 10,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.75,
+                            child: TextField(
+                              controller: _foodNameController[index],
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                counterText: '',
+                              ),
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLength: 20,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                foods.removeAt(index);
+                                _foodNameController.removeAt(index);
+                              });
+                            },
+                            icon: const Icon(Icons.close),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                        ],
+                      ),
+                      FoodStorageDropdown(
+                        index: index,
+                        storage: foods[index].storageWay,
+                        setStorage: setStorage,
+                      ),
+                      FoodStockButton(
+                        index: index,
+                        stock: foods[index].stock,
+                        setStock: setStock,
+                      ),
+                      FoodExpireDate(
+                        index: index,
+                        expireDate: foods[index].expireDate,
+                        setExpireDate: setExpireDate,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       );
     }
