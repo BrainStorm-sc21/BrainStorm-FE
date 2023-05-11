@@ -37,9 +37,7 @@ class TopBar extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                    color: ColorStyles.mainColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    color: ColorStyles.mainColor, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -77,8 +75,7 @@ class TitleInput extends StatelessWidget {
             TextFormField(
               decoration: InputDecoration(
                 hintText: "게시글 제목을 입력해주세요",
-                hintStyle: const TextStyle(
-                    fontSize: 14, color: ColorStyles.hintTextColor),
+                hintStyle: const TextStyle(fontSize: 14, color: ColorStyles.hintTextColor),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: const BorderSide(color: ColorStyles.borderColor),
@@ -132,8 +129,7 @@ class _ExpirationDateInputState extends State<ExpirationDateInput> {
                     style: const TextStyle(fontSize: 14),
                     decoration: InputDecoration(
                       hintText: '2023-05-26',
-                      hintStyle: const TextStyle(
-                          fontSize: 14, color: ColorStyles.hintTextColor),
+                      hintStyle: const TextStyle(fontSize: 14, color: ColorStyles.hintTextColor),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: const BorderSide(
@@ -257,8 +253,7 @@ class DescriptionInput extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText:
                       '상세 내용에는 아래의 내용들을 포함시켜 작성해주세요.\n\n - 식재료 명\n - 거래 장소\n - 거래 식재료의 간단한 소개',
-                  hintStyle: const TextStyle(
-                      fontSize: 12, color: ColorStyles.hintTextColor),
+                  hintStyle: const TextStyle(fontSize: 12, color: ColorStyles.hintTextColor),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(
@@ -322,8 +317,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(color: ColorStyles.borderColor, width: 1.0),
+                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: _image == null
@@ -334,21 +328,18 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                             builder: (BuildContext context) {
                               return Container(
                                 height: 150,
-                                color: ColorStyles.transperant,
+                                color: ColorStyles.transparent,
                                 child: Center(
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Container(
                                         width: 80,
                                         height: 80,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              color: ColorStyles.borderColor,
-                                              width: 2),
+                                          borderRadius: BorderRadius.circular(20),
+                                          border:
+                                              Border.all(color: ColorStyles.borderColor, width: 2),
                                         ),
                                         child: Column(
                                           children: [
@@ -356,8 +347,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                                               onPressed: () {
                                                 getImage(ImageSource.camera);
                                               },
-                                              icon: const Icon(
-                                                  Icons.camera_alt_outlined),
+                                              icon: const Icon(Icons.camera_alt_outlined),
                                             ),
                                             const Text("카메라"),
                                           ],
@@ -367,11 +357,9 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                                         width: 80,
                                         height: 80,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              color: ColorStyles.borderColor,
-                                              width: 2),
+                                          borderRadius: BorderRadius.circular(20),
+                                          border:
+                                              Border.all(color: ColorStyles.borderColor, width: 2),
                                         ),
                                         child: Column(
                                           children: [
@@ -406,8 +394,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(color: ColorStyles.borderColor, width: 1.0),
+                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -415,8 +402,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(color: ColorStyles.borderColor, width: 1.0),
+                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -424,8 +410,7 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                  border:
-                      Border.all(color: ColorStyles.borderColor, width: 1.0),
+                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),

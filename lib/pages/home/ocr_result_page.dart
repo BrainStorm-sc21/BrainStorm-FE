@@ -90,7 +90,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initController() {
     for (int index = 0; index < foods.length; index++) {
       _foodNameController.add(TextEditingController());
-      _foodNameController[index].text = foods[index].name;
+      _foodNameController[index].text = foods[index].foodName;
     }
   }
 
@@ -197,7 +197,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     ),
                     FoodStorageDropdown(
                       index: index,
-                      storage: foods[index].storage,
+                      storage: foods[index].storageWay,
                       setStorage: setStorage,
                     ),
                     FoodStockButton(
