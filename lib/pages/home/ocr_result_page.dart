@@ -136,20 +136,37 @@ class _OCRResultPageState extends State<OCRResultPage> {
               color: ColorStyles.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
+                  Radius.circular(8.0),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorStyles.mustardYellow,
+                      ColorStyles.transperant,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment(-0.95, 0),
+                    stops: [1, 1],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0),
+                  ),
+                ),
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 30,
+                  right: 20,
+                  bottom: 10,
                 ),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         SizedBox(
-                          width: 320,
+                          width: MediaQuery.of(context).size.width * 0.75,
                           child: TextField(
                             controller: _foodNameController[index],
                             decoration: const InputDecoration(
