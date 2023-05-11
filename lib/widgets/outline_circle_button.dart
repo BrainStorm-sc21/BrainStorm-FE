@@ -34,7 +34,7 @@ class OutlineCircleButton extends StatelessWidget {
           child: InkWell(
               child: child,
               onTap: () {
-                onTap;
+                onTap();
               }),
         ),
       ),
