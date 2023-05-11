@@ -127,9 +127,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
         title: '식품 등록',
         onPressedAddButton: saveFoodInfo,
         containerColor: ColorStyles.snow,
-        body: SliverList.builder(
-          itemCount: foods.length,
-          itemBuilder: (context, index) {
+        body: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
             return Card(
               elevation: 3,
               shadowColor: ColorStyles.white,
@@ -214,7 +213,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                 ),
               ),
             );
-          },
+          }, childCount: foods.length),
         ),
       );
     }
