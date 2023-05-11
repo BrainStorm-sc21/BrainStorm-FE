@@ -25,7 +25,10 @@ class FoodStorageDropdown extends StatelessWidget {
           items: _storages
               .map((e) => DropdownMenuItem(
                     value: e,
-                    child: Text(e),
+                    child: Text(
+                      e,
+                      style: const TextStyle(fontSize: 15),
+                    ),
                   ))
               .toList(),
           onChanged: (value) {
