@@ -1,6 +1,6 @@
 import 'package:brainstorm_meokjang/firebase_options.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
         children: const [
           HomePage(),
-          MapPage(),
+          DealPage(),
           ChatPage(),
         ],
       ),
