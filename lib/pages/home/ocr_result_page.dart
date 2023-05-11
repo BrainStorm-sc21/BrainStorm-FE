@@ -144,7 +144,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                   gradient: LinearGradient(
                     colors: [
                       ColorStyles.mustardYellow,
-                      ColorStyles.transperant,
+                      ColorStyles.transparent,
                     ],
                     begin: Alignment.centerLeft,
                     end: Alignment(-0.95, 0),

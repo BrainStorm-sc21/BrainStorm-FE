@@ -36,7 +36,7 @@ class AddFoodLayout extends StatelessWidget {
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [ColorStyles.mainColor, ColorStyles.cyan],
+                      colors: [ColorStyles.mainColor, ColorStyles.subColor],
                     ),
                   ),
                   child: FlexibleSpaceBar(
@@ -59,7 +59,7 @@ class AddFoodLayout extends StatelessWidget {
                       height: 20,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [ColorStyles.mainColor, ColorStyles.cyan],
+                          colors: [ColorStyles.mainColor, ColorStyles.subColor],
                         ),
                       ),
                     ),
