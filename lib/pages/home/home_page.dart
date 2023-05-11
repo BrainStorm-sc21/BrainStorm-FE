@@ -23,10 +23,10 @@ class _HomePageState extends State<HomePage> {
 
     var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
     foodList = [
-      Food(foodId: 0, name: "토마토", storage: "냉장", stock: 2, expireDate: now),
-      Food(foodId: 1, name: "감자", storage: "실온", stock: 5, expireDate: now),
-      Food(foodId: 2, name: "가지", storage: "냉동", stock: 1, expireDate: now),
-      Food(foodId: 3, name: "버섯", storage: "냉장", stock: 4, expireDate: now),
+      Food(foodId: 0, foodName: "토마토", storageWay: "냉장", stock: 2, expireDate: now),
+      Food(foodId: 1, foodName: "감자", storageWay: "실온", stock: 5, expireDate: now),
+      Food(foodId: 2, foodName: "가지", storageWay: "냉동", stock: 1, expireDate: now),
+      Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
     ];
   }
 
