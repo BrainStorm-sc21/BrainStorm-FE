@@ -74,8 +74,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
         delegate: SliverChildListDelegate([
           FoodName(setName: setName), // 식료품 이름 입력
           const SizedBox(height: 30), // 여백
-          FoodStorage(
-              storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
+          FoodStorage(storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
           divider,
           FoodStockTextfield(
               stock: food.stock,
@@ -84,9 +83,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
               updateControllerText: updateControllerText,
               focusNode: _stockFocusNode), // 식료품 수량 조절
           divider,
-          FoodExpireDate(
-              expireDate: food.expireDate,
-              setExpireDate: setExpireDate), // 식료품 소비기한 입력
+          FoodExpireDate(expireDate: food.expireDate, setExpireDate: setExpireDate), // 식료품 소비기한 입력
         ]),
       ),
     );

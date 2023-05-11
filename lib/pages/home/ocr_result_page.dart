@@ -128,6 +128,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
         onPressedAddButton: saveFoodInfo,
         containerColor: ColorStyles.snow,
         body: SliverList(
+<<<<<<< HEAD
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return Card(
@@ -138,6 +139,29 @@ class _OCRResultPageState extends State<OCRResultPage> {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
+=======
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Card(
+              elevation: 3,
+              shadowColor: ColorStyles.white,
+              margin: const EdgeInsets.only(bottom: 15),
+              color: ColorStyles.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+              ),
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorStyles.mustardYellow,
+                      ColorStyles.transparent,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment(-0.95, 0),
+                    stops: [1, 1],
+>>>>>>> Iteration3
                   ),
                 ),
                 child: Container(
@@ -151,9 +175,21 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       end: Alignment(-0.95, 0),
                       stops: [1, 1],
                     ),
+<<<<<<< HEAD
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8.0),
                       bottomLeft: Radius.circular(8.0),
+=======
+                    FoodStorageDropdown(
+                      index: index,
+                      storage: foods[index].storageWay,
+                      setStorage: setStorage,
+                    ),
+                    FoodStockButton(
+                      index: index,
+                      stock: foods[index].stock,
+                      setStock: setStock,
+>>>>>>> Iteration3
                     ),
                   ),
                   padding: const EdgeInsets.only(
@@ -213,9 +249,15 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     ],
                   ),
                 ),
+<<<<<<< HEAD
               );
             },
           ),
+=======
+              ),
+            );
+          }, childCount: foods.length),
+>>>>>>> Iteration3
         ),
       );
     }
