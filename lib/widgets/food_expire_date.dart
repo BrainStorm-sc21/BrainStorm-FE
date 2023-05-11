@@ -1,4 +1,5 @@
 // 식료품 소비기한
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +56,7 @@ class FoodExpireDate extends StatelessWidget {
           child: Text(
             '${expireDate.year}. ${expireDate.month}. ${expireDate.day}',
             style: const TextStyle(
+              color: ColorStyles.iconColor,
               fontWeight: FontWeight.normal,
             ),
           ),
