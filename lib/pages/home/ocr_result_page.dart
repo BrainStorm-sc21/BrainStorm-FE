@@ -131,8 +131,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
           itemCount: foods.length,
           itemBuilder: (context, index) {
             return Card(
-              elevation: 0.5,
-              margin: const EdgeInsets.only(bottom: 10),
+              elevation: 3,
+              shadowColor: ColorStyles.white,
+              margin: const EdgeInsets.only(bottom: 15),
               color: ColorStyles.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
