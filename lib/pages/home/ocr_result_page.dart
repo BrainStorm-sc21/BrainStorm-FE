@@ -178,6 +178,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       setStock: setStock,
                     ),
                     FoodExpireDate(
+                      index: index,
                       expireDate: foods[index].expireDate,
                       setExpireDate: setExpireDate,
                     ),
