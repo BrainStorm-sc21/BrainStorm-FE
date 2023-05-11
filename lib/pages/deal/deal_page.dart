@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/post_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,9 @@ class _DealPageState extends State<DealPage> {
       body: Stack(
         children: <Widget>[
           checkpage
-              ? Container(padding: const EdgeInsets.fromLTRB(0, 100, 0, 0), child: const PostPage())
+              ? Container(
+                  padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                  child: const PostPage())
               : const MapPage(),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -85,8 +87,10 @@ class _DealPageState extends State<DealPage> {
                       fontSize: 15,
                       onPressed: () => setDeal(index),
                       width: MediaQuery.of(context).size.width / 4.0 - 100,
-                      backgroundColor: _isDeal[index] ? _colors[index] : Colors.white,
-                      foregroundColor: _isDeal[index] ? Colors.white : Colors.black,
+                      backgroundColor:
+                          _isDeal[index] ? _colors[index] : Colors.white,
+                      foregroundColor:
+                          _isDeal[index] ? Colors.white : Colors.black,
                       borderColor: _colors[index],
                     ));
               }),
@@ -102,7 +106,8 @@ class _DealPageState extends State<DealPage> {
                 },
                 child: checkpage
                     ? const Icon(Icons.map, color: ColorStyles.mainColor)
-                    : const Icon(Icons.format_list_bulleted, color: ColorStyles.mainColor)),
+                    : const Icon(Icons.format_list_bulleted,
+                        color: ColorStyles.mainColor)),
           ],
         )
       ],
