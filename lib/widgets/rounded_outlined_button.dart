@@ -26,19 +26,28 @@ class RoundedOutlinedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        minimumSize: Size(width, height),
-        foregroundColor: foregroundColor,
-        backgroundColor: backgroundColor,
+      style: ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: MaterialStateProperty.all(Size(width, height)),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         alignment: Alignment.center,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
+        shape: MaterialStateProperty.all(
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(50),
+            ),
+          ),
         ),
-        side: BorderSide(
-          color: borderColor,
-          width: 1.5,
+        side: MaterialStateProperty.all(
+          BorderSide(
+            color: borderColor,
+            width: 1.5,
+          ),
         ),
-        textStyle: TextStyle(fontSize: fontSize),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(fontSize: fontSize),
+        ),
       ),
       child: Text(text),
     );

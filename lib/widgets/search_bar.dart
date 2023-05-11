@@ -7,8 +7,6 @@ class CustomSearchBar extends StatelessWidget {
   final double width;
   final double height;
   final double borderRadius;
-  final Color foregroundColor;
-  final Color backgroundColor;
   final Color borderColor;
   final double fontSize;
 
@@ -21,8 +19,6 @@ class CustomSearchBar extends StatelessWidget {
     this.width = 50,
     this.height = 35,
     this.borderRadius = 40,
-    required this.backgroundColor,
-    required this.foregroundColor,
     required this.borderColor,
     this.fontSize = 16,
     required this.textEditingController,
@@ -31,19 +27,20 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
+      decoration:
+          BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
       child: TextField(
         controller: textEditingController,
         decoration: InputDecoration(
           hintText: hinttext,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          filled: true,
+          fillColor: Colors.transparent,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(40)),
           ),
           enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: ColorStyles.mainColor, width: 1.0),
+            borderSide: BorderSide(color: ColorStyles.mainColor, width: 1.5),
             borderRadius: BorderRadius.all(Radius.circular(40)),
           ),
           focusedBorder: const OutlineInputBorder(
@@ -54,7 +51,7 @@ class CustomSearchBar extends StatelessWidget {
             child: const Icon(
               Icons.search,
               color: ColorStyles.mainColor,
-              size: 20,
+              size: 25,
             ),
             onTap: () => onTap,
           ),

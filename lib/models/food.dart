@@ -1,14 +1,14 @@
 class Food {
   late int foodId;
-  String name;
-  String storage;
+  String foodName;
+  String storageWay;
   num stock;
   DateTime expireDate;
 
   Food({
     this.foodId = 0,
-    required this.name,
-    required this.storage,
+    required this.foodName,
+    required this.storageWay,
     required this.stock,
     required this.expireDate,
   });
@@ -17,8 +17,8 @@ class Food {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['foodId'] = foodId;
-    data['name'] = name;
-    data['storage'] = storage;
+    data['name'] = foodName;
+    data['storage'] = storageWay;
     data['stock'] = stock;
     data['expireDate'] = expireDate;
     return data;
@@ -28,8 +28,8 @@ class Food {
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       foodId: json['foodId'],
-      name: json['name'],
-      storage: json['storage'],
+      foodName: json['name'],
+      storageWay: json['storage'],
       stock: json['stock'],
       expireDate: DateTime.parse(json['expireDate']),
     );
@@ -37,9 +37,9 @@ class Food {
 
   // validate food information
   bool isFoodValid() {
-    if (name.trim().isEmpty || name.startsWith(' ')) {
+    if (foodName.trim().isEmpty || foodName.startsWith(' ')) {
       return false;
-    } else if (name.trim().isEmpty || name.startsWith(' ')) {
+    } else if (foodName.trim().isEmpty || foodName.startsWith(' ')) {
       return false;
     } else if (stock <= 0) {
       return false;

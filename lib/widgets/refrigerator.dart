@@ -24,25 +24,23 @@ class _RefrigeratorState extends State<Refrigerator> {
 
     var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
     foodList = [
-      Food(foodId: 0, name: "토마토", storage: "냉장", stock: 2, expireDate: now),
-      Food(foodId: 1, name: "감자", storage: "실온", stock: 5, expireDate: now),
-      Food(foodId: 2, name: "가지", storage: "냉동", stock: 1, expireDate: now),
-      Food(foodId: 3, name: "버섯", storage: "냉장", stock: 4, expireDate: now),
+      Food(foodId: 0, foodName: "토마토", storageWay: "냉장", stock: 2, expireDate: now),
+      Food(foodId: 1, foodName: "감자", storageWay: "실온", stock: 5, expireDate: now),
+      Food(foodId: 2, foodName: "가지", storageWay: "냉동", stock: 1, expireDate: now),
+      Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
     ];
 
     food = Food(
       foodId: 1,
-      name: '',
-      storage: '냉장',
+      foodName: '',
+      storageWay: '냉장',
       stock: 1,
       expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
     );
   }
 
-  void setStock(int index, num value) =>
-      setState(() => foodList[index].stock = value);
-  void setStorage(int index, String value) =>
-      setState(() => foodList[index].storage = value);
+  void setStock(int index, num value) => setState(() => foodList[index].stock = value);
+  void setStorage(int index, String value) => setState(() => foodList[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
       setState(() => foodList[index!].expireDate = value);
 
@@ -54,8 +52,7 @@ class _RefrigeratorState extends State<Refrigerator> {
         food = foodList[index];
         return Card(
           key: PageStorageKey(food.foodId),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: ExpansionTile(
             title: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -63,7 +60,7 @@ class _RefrigeratorState extends State<Refrigerator> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    food.name,
+                    food.foodName,
                     style: const TextStyle(
                         fontSize: 20,
                         color: Color.fromARGB(255, 65, 60, 60),
@@ -79,17 +76,14 @@ class _RefrigeratorState extends State<Refrigerator> {
                 child: SizedBox(
                   width: 350,
                   child: FoodStorageDropdown(
-                      index: index,
-                      storage: food.storage,
-                      setStorage: setStorage),
+                      index: index, storage: food.storageWay, setStorage: setStorage),
                 ),
               ),
               AbsorbPointer(
                 absorbing: absorbBool[index],
                 child: SizedBox(
                   width: 350,
-                  child: FoodStockButton(
-                      index: index, stock: food.stock, setStock: setStock),
+                  child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
                 ),
               ),
               AbsorbPointer(
@@ -97,9 +91,7 @@ class _RefrigeratorState extends State<Refrigerator> {
                 child: SizedBox(
                   width: 350,
                   child: FoodExpireDate(
-                      index: index,
-                      expireDate: food.expireDate,
-                      setExpireDate: setExpireDate),
+                      index: index, expireDate: food.expireDate, setExpireDate: setExpireDate),
                 ),
               ),
               SizedBox(
