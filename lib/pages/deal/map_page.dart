@@ -1,10 +1,5 @@
 import 'dart:async';
 
-import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
-import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:brainstorm_meokjang/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +22,33 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: NaverMap(
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(37.566570, 126.978442),
-          zoom: 17,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            NaverMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.566570, 126.978442),
+                zoom: 17,
+              ),
+              onMapCreated: onMapCreated,
+              mapType: MapType.Basic,
+              initLocationTrackingMode: _trackingMode,
+              locationButtonEnable: true,
+              indoorEnable: true,
+              onCameraIdle: _onCameraIdle,
+              onMapTap: _onMapTap,
+              onMapLongTap: _onMapLongTap,
+              onMapDoubleTap: _onMapDoubleTap,
+              onMapTwoFingerTap: _onMapTwoFingerTap,
+              maxZoom: 17,
+              minZoom: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+              //padding: const EdgeInsets.all(70),
+              child: _searchLayout(),
+            ),
+          ],
         ),
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
@@ -110,65 +128,6 @@ class _MapPageState extends State<MapPage> {
           }),
         ),
       ],
-    );
-  }
-
-  _registerButton() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: SpeedDial(
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        visible: true,
-        curve: Curves.bounceIn,
-        backgroundColor: ColorStyles.mainColor,
-        childPadding: const EdgeInsets.all(1),
-        spaceBetweenChildren: 10,
-        renderOverlay: false,
-        closeManually: false,
-        children: [
-          SpeedDialChild(
-              child: const Text('나눔'),
-              backgroundColor: ColorStyles.shareColor,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SharingPage()));
-              }),
-          SpeedDialChild(
-              child: const Text('교환'),
-              backgroundColor: ColorStyles.exchangColor,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ExchangePage()));
-              }),
-          SpeedDialChild(
-              child: const Text('공구'),
-              backgroundColor: ColorStyles.groupBuyColor,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GroupPurchasePage()));
-              }),
-          SpeedDialChild(
-              child: const Text('게시글'),
-              backgroundColor: ColorStyles.mainColor,
-              onTap: () {
-                Popups.goToPost(
-                  context,
-                  '나눔',
-                );
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => const GroupPurchasePage()));
-              }),
-        ],
-      ),
     );
   }
 
