@@ -56,7 +56,7 @@ class FoodExpireDate extends StatelessWidget {
           child: Text(
             '${expireDate.year}. ${expireDate.month}. ${expireDate.day}',
             style: const TextStyle(
-              color: ColorStyles.iconColor,
+              color: ColorStyles.textColor,
               fontWeight: FontWeight.normal,
             ),
           ),
