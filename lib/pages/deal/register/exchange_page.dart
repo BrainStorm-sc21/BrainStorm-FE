@@ -7,29 +7,40 @@ class ExchangePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("교환 게시글"),
-      ),
-      body: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            children: const [
-              TitleInput(),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: ExpirationDateInput(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: DescriptionInput(),
-              ),
-              Spacer(),
-              BottomButton(),
-            ],
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          const SafeArea(
+            child: TopBar(
+              title: '교환하기',
+              subTitle: '필요 이상으로 많은 식재료를\n이웃과 교환해요',
+            ),
           ),
-        ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: SingleChildScrollView(
+              child: Column(
+                children: const [
+                  TitleInput(),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20),
+                  //   child: ExpirationDateInput(),
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: DescriptionInput(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: PhotoBoxInput(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Spacer(),
+          const BottomButton(),
+        ],
       ),
     );
   }

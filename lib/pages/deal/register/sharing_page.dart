@@ -8,29 +8,40 @@ class SharingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("나눔 게시글"),
-      ),
-      body: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            children: const [
-              TitleInput(),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: ExpirationDateInput(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: DescriptionInput(),
-              ),
-              Spacer(),
-              BottomButton(),
-            ],
+      body: Column(
+        children: [
+          const SafeArea(
+            child: TopBar(
+              title: '나눔하기',
+              subTitle: '필요 이상으로 많은 식재료를\n이웃에게 나눔해요',
+            ),
           ),
-        ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: const [
+                  TitleInput(),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 20),
+                  //   child: ExpirationDateInput(),
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: PhotoBoxInput(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: DescriptionInput(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Spacer(),
+          const BottomButton(),
+        ],
       ),
     );
   }

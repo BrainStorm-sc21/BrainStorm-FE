@@ -60,6 +60,7 @@ dependencies:
     git: https://github.com/LBSTECH/naver_map_plugin.git
   flutter_screenutil: ^5.7.0
   flutter_web_auth: ^0.5.0
+  image_picker: ^0.8.7+4
 
 dependency_overrides:
   intl: ^0.18.0
