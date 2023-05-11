@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/post_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/widgets/outline_circle_button.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:brainstorm_meokjang/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _DealPageState extends State<DealPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //extendBodyBehindAppBar: checkpage ? true : false,
+      //extendBodyBehindAppBar: checkpage ? false : true,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50.0),
           child: checkpage
@@ -48,8 +49,7 @@ class _DealPageState extends State<DealPage> {
                   backgroundColor: ColorStyles.white,
                   elevation: 0,
                 )
-              : const EmptyAppBar()),
-      //extendBodyBehindAppBar: true,
+              : AppBar()), //const EmptyAppBar()),
       body: Stack(
         children: <Widget>[
           checkpage ? const PostPage() : const MapPage(),
@@ -73,21 +73,38 @@ class _DealPageState extends State<DealPage> {
           textEditingController: _textEditingController,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: List<Widget>.generate(3, (index) {
-            return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: RoundedOutlinedButton(
-                  text: _deals[index],
-                  fontSize: 15,
-                  onPressed: () => setDeal(index),
-                  width: MediaQuery.of(context).size.width / 4.0 - 100,
-                  backgroundColor: _isDeal[index] ? _colors[index] : Colors.white,
-                  foregroundColor: _isDeal[index] ? Colors.white : Colors.black,
-                  borderColor: _colors[index],
-                ));
-          }),
-        ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: List<Widget>.generate(3, (index) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: RoundedOutlinedButton(
+                      text: _deals[index],
+                      fontSize: 15,
+                      onPressed: () => setDeal(index),
+                      width: MediaQuery.of(context).size.width / 4.0 - 100,
+                      backgroundColor: _isDeal[index] ? _colors[index] : Colors.white,
+                      foregroundColor: _isDeal[index] ? Colors.white : Colors.black,
+                      borderColor: _colors[index],
+                    ));
+              }),
+            ),
+            OutlineCircleButton(
+                radius: 40.0,
+                borderSize: 0.5,
+                borderColor: Colors.grey,
+                onTap: () {
+                  setState(() {
+                    checkpage = !checkpage;
+                  });
+                },
+                child: checkpage
+                    ? const Icon(Icons.map, color: ColorStyles.mainColor)
+                    : const Icon(Icons.format_list_bulleted, color: ColorStyles.mainColor)),
+          ],
+        )
       ],
     );
   }
@@ -110,10 +127,6 @@ class _DealPageState extends State<DealPage> {
               child: const Text('나눔'),
               backgroundColor: ColorStyles.shareColor,
               onTap: () {
-                setState(() {
-                  checkpage = !checkpage;
-                });
-                print('checkpage : $checkpage');
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
               }),
           SpeedDialChild(
