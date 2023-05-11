@@ -1,9 +1,7 @@
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/post_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/widgets/outline_circle_button.dart';
-import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
-import 'package:brainstorm_meokjang/widgets/search_bar.dart';
+import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -52,7 +50,9 @@ class _DealPageState extends State<DealPage> {
               : AppBar()), //const EmptyAppBar()),
       body: Stack(
         children: <Widget>[
-          checkpage ? const PostPage() : const MapPage(),
+          checkpage
+              ? Container(padding: const EdgeInsets.fromLTRB(0, 100, 0, 0), child: const PostPage())
+              : const MapPage(),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: _searchLayout(),
@@ -110,39 +110,36 @@ class _DealPageState extends State<DealPage> {
   }
 
   _registerButton() {
-    return Align(
-      alignment: const Alignment(0.96, 0.96),
-      child: SpeedDial(
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        visible: true,
-        curve: Curves.bounceIn,
-        backgroundColor: ColorStyles.mainColor,
-        childPadding: const EdgeInsets.all(1),
-        spaceBetweenChildren: 10,
-        renderOverlay: false,
-        closeManually: false,
-        children: [
-          SpeedDialChild(
-              child: const Text('나눔'),
-              backgroundColor: ColorStyles.shareColor,
-              onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
-              }),
-          SpeedDialChild(
-              child: const Text('교환'),
-              backgroundColor: ColorStyles.exchangColor,
-              onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
-              }),
-          SpeedDialChild(
-              child: const Text('공구'),
-              backgroundColor: ColorStyles.groupBuyColor,
-              onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
-              }),
-        ],
-      ),
+    return SpeedDial(
+      icon: Icons.add,
+      activeIcon: Icons.close,
+      visible: true,
+      curve: Curves.bounceIn,
+      backgroundColor: ColorStyles.mainColor,
+      childPadding: const EdgeInsets.all(1),
+      spaceBetweenChildren: 10,
+      renderOverlay: false,
+      closeManually: false,
+      children: [
+        SpeedDialChild(
+            child: const Text('나눔'),
+            backgroundColor: ColorStyles.shareColor,
+            onTap: () {
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            }),
+        SpeedDialChild(
+            child: const Text('교환'),
+            backgroundColor: ColorStyles.exchangColor,
+            onTap: () {
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            }),
+        SpeedDialChild(
+            child: const Text('공구'),
+            backgroundColor: ColorStyles.groupBuyColor,
+            onTap: () {
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            }),
+      ],
     );
   }
 }
