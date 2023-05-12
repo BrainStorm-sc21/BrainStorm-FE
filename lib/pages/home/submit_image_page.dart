@@ -5,18 +5,18 @@ import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-class TakePicturePage extends StatefulWidget {
+class SubmitImagePage extends StatefulWidget {
   final CameraDescription camera;
-  const TakePicturePage({
+  const SubmitImagePage({
     super.key,
     required this.camera,
   });
 
   @override
-  State<TakePicturePage> createState() => _TakePicturePageState();
+  State<SubmitImagePage> createState() => _SubmitImagePageState();
 }
 
-class _TakePicturePageState extends State<TakePicturePage> {
+class _SubmitImagePageState extends State<SubmitImagePage> {
   late CameraController _controller;
   late Future<void> _initControllerFuture;
 
