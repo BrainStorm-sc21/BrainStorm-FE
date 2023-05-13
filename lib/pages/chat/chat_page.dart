@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/widgets/enter_chat/enter_chat_widget.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatelessWidget {
@@ -21,11 +22,39 @@ class ChatPage extends StatelessWidget {
       ),
       body: SizedBox(
         width: double.infinity,
-        child: Stack(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
               child: GoRecipe(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: const [
+                    ChatUnit(),
+                    ChatUnit(
+                      imgUrl: 'assets/images/naver.png',
+                      name: '먹짱 2호',
+                      content: '네 그럼 1시에 받으러 가겠습니다👍👍',
+                      time: '오전 11:46',
+                    ),
+                    ChatUnit(
+                      imgUrl: 'assets/images/google.png',
+                      name: '먹짱 3호',
+                      content: '네 수고하셔요~',
+                      time: '오전 10:57',
+                    ),
+                    ChatUnit(
+                      imgUrl: 'assets/images/먹장로고.png',
+                      name: '먹짱 4호',
+                      content: '다음에 계란 사실 때 연락주세요☺️',
+                      time: '어제',
+                    ),
+                  ],
+                ),
+              ),
             ),
             // Positioned(
             //   bottom: 18,
@@ -52,62 +81,6 @@ class ChatPage extends StatelessWidget {
             // ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class GoRecipe extends StatelessWidget {
-  const GoRecipe({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 80,
-      decoration: BoxDecoration(
-        color: ColorStyles.mainColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: SizedBox(
-              width: 150,
-              height: 40,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text('냉장고 속 식품 레시피',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.white)),
-                  Text('지금 확인하기',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.white)),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Container(
-              width: 70,
-              height: 50,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/chatGPT.png'),
-              )),
-            ),
-          )
-        ],
       ),
     );
   }

@@ -37,9 +37,10 @@ class Popups {
                       width: 150,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: ColorStyles.mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                          color: ColorStyles.mainColor,
+                          borderRadius: BorderRadius.circular(20),
+                          image: const DecorationImage(
+                              image: AssetImage('assets/images/먹장로고.png'))),
                     ),
                     const Spacer(),
                     SizedBox(
