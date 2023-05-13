@@ -24,6 +24,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
   final ImagePicker picker = ImagePicker();
   XFile? _pickedFile;
   CroppedFile? _croppedFile;
+  late String imageType = '';
 
   @override
   void initState() {
@@ -46,29 +47,14 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     super.dispose();
   }
 
-  // 사진 촬영 시 실행될 함수
-  // 촬영한 사진을 backend로 보내기
   Future<void> takePicture() async {
-    try {
-      await _initControllerFuture;
-      final XFile image = await _controller.takePicture();
-      if (!mounted) return;
-      setState(() {
-        _pickedFile = image;
-      });
-      cropImage();
-      /*
-        await Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => OCRResultPage(
-              image: Image.file(File(image.path)),
-            ),
-          ),
-        );
-        */
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    await _initControllerFuture;
+    final XFile image = await _controller.takePicture();
+    if (!mounted) return;
+    setState(() {
+      _pickedFile = image;
+    });
+    cropImage();
   }
 
   Future<void> getImage(ImageSource imageSource) async {
@@ -117,85 +103,139 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     double? mediaWidth = MediaQuery.of(context).size.width;
     double? mediaHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // 카메라 뷰 빌더
-            FutureBuilder<void>(
-              future: _initControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return SizedBox(
-                    width: mediaWidth,
-                    height: mediaHeight,
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: CameraPreview(_controller), // 실제 카메라 뷰
+    if (_croppedFile != null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
+          leading: const Text('취소'),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                selectImageType();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => OCRResultPage(
+                      imagePath: _croppedFile!.path,
+                      imageType: imageType,
                     ),
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                  ),
+                );
               },
-            ),
-            // 하단 바
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                height: 120.0,
-                color: const Color.fromRGBO(0, 0, 0, 0.8),
-                child: Stack(
-                  children: [
-                    // 갤러리 버튼
-                    Align(
-                      alignment: const Alignment(-0.7, 0),
-                      child: IconButton(
-                        onPressed: () {
-                          getImage(ImageSource.gallery);
-                        },
-                        icon: const Icon(Icons.photo),
-                      ),
-                    ),
-                    // 사진 촬영 버튼
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          takePicture();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
-                          shape: const CircleBorder(
-                            side: BorderSide(
-                              color: Color.fromRGBO(35, 204, 135, 1.0),
-                              width: 5.0,
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            width: 65,
-                            height: 65,
-                            decoration: const BoxDecoration(
-                              color: ColorStyles.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              icon: const Icon(Icons.done),
             ),
           ],
         ),
-      ),
+        body: Container(
+          color: ColorStyles.black,
+          child: Center(
+            child: Image.file(
+              File(_croppedFile!.path),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // 카메라 뷰 빌더
+              FutureBuilder<void>(
+                future: _initControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return SizedBox(
+                      width: mediaWidth,
+                      height: mediaHeight,
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: CameraPreview(_controller), // 실제 카메라 뷰
+                      ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+              // 하단 바
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  height: 120.0,
+                  color: const Color.fromRGBO(0, 0, 0, 0.8),
+                  child: Stack(
+                    children: [
+                      // 갤러리 버튼
+                      Align(
+                        alignment: const Alignment(-0.7, 0),
+                        child: IconButton(
+                          onPressed: () {
+                            getImage(ImageSource.gallery);
+                          },
+                          icon: const Icon(Icons.photo),
+                        ),
+                      ),
+                      // 사진 촬영 버튼
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            takePicture();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
+                            shape: const CircleBorder(
+                              side: BorderSide(
+                                color: Color.fromRGBO(35, 204, 135, 1.0),
+                                width: 5.0,
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: 65,
+                              height: 65,
+                              decoration: const BoxDecoration(
+                                color: ColorStyles.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
+  SimpleDialog selectImageType() {
+    return SimpleDialog(
+      title: const Text('사진 유형을 선택해주세요'),
+      children: [
+        SimpleDialogOption(
+          onPressed: () => setState(() {
+            imageType = 'document';
+          }),
+          child: const Text('영수증'),
+        ),
+        SimpleDialogOption(
+          onPressed: () => setState(() {
+            imageType = 'general';
+          }),
+          child: const Text('마켓컬리 구매내역'),
+        ),
+      ],
     );
   }
 }

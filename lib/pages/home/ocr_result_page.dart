@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class OCRResultPage extends StatefulWidget {
-  final Image image;
+  final String imagePath;
+  final String imageType;
 
-  const OCRResultPage({super.key, required this.image});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
