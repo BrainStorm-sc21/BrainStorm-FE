@@ -103,6 +103,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     double? mediaWidth = MediaQuery.of(context).size.width;
     double? mediaHeight = MediaQuery.of(context).size.height;
 
+    // crop한 이미지가 있는 경우, crop한 이미지를 보여주고 이미지 type 선택
     if (_croppedFile != null) {
       return Scaffold(
         appBar: AppBar(
@@ -135,7 +136,9 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
           ),
         ),
       );
-    } else {
+    }
+    // crop한 이미지가 없는 경우(=이미지를 선택하지 않은 경우), 사진 촬영/선택
+    else {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
