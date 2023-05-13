@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,51 @@ class Popups {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  // 스마트 등록에서 이미지 submit 시 이미지 유형을 선택
+  static void selectImageType(context, croppedFile) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text(
+            '사진 유형을 선택해주세요',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          children: [
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => OCRResultPage(
+                      imagePath: croppedFile!.path,
+                      imageType: 'document',
+                    ),
+                  ),
+                );
+              },
+              child: const Text('영수증'),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => OCRResultPage(
+                      imagePath: croppedFile!.path,
+                      imageType: 'general',
+                    ),
+                  ),
+                );
+              },
+              child: const Text('마켓컬리 구매내역'),
+            ),
+          ],
         );
       },
     );

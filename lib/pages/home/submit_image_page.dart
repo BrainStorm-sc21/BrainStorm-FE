@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -108,19 +108,10 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
-          leading: const Text('취소'),
           actions: [
             IconButton(
-              onPressed: () async {
-                showDialogToSelectImageType();
-                await Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => OCRResultPage(
-                      imagePath: _croppedFile!.path,
-                      imageType: imageType,
-                    ),
-                  ),
-                );
+              onPressed: () {
+                Popups.selectImageType(context, _croppedFile);
               },
               icon: const Icon(Icons.done),
             ),
@@ -220,25 +211,5 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
         ),
       );
     }
-  }
-
-  SimpleDialog showDialogToSelectImageType() {
-    return SimpleDialog(
-      title: const Text('사진 유형을 선택해주세요'),
-      children: [
-        SimpleDialogOption(
-          onPressed: () => setState(() {
-            imageType = 'document';
-          }),
-          child: const Text('영수증'),
-        ),
-        SimpleDialogOption(
-          onPressed: () => setState(() {
-            imageType = 'general';
-          }),
-          child: const Text('마켓컬리 구매내역'),
-        ),
-      ],
-    );
   }
 }
