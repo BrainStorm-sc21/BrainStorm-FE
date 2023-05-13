@@ -1,6 +1,10 @@
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/post_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -36,6 +40,7 @@ class _DealPageState extends State<DealPage> {
           preferredSize: const Size.fromHeight(50.0),
           child: checkpage
               ? AppBar(
+                  centerTitle: false,
                   title: const Text(
                     "같이 먹장",
                     style: TextStyle(
@@ -51,7 +56,9 @@ class _DealPageState extends State<DealPage> {
       body: Stack(
         children: <Widget>[
           checkpage
-              ? Container(padding: const EdgeInsets.fromLTRB(0, 100, 0, 0), child: const PostPage())
+              ? Container(
+                  padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                  child: const PostPage())
               : const MapPage(),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -85,8 +92,10 @@ class _DealPageState extends State<DealPage> {
                       fontSize: 15,
                       onPressed: () => setDeal(index),
                       width: MediaQuery.of(context).size.width / 4.0 - 100,
-                      backgroundColor: _isDeal[index] ? _colors[index] : Colors.white,
-                      foregroundColor: _isDeal[index] ? Colors.white : Colors.black,
+                      backgroundColor:
+                          _isDeal[index] ? _colors[index] : Colors.white,
+                      foregroundColor:
+                          _isDeal[index] ? Colors.white : Colors.black,
                       borderColor: _colors[index],
                     ));
               }),
@@ -102,7 +111,8 @@ class _DealPageState extends State<DealPage> {
                 },
                 child: checkpage
                     ? const Icon(Icons.map, color: ColorStyles.mainColor)
-                    : const Icon(Icons.format_list_bulleted, color: ColorStyles.mainColor)),
+                    : const Icon(Icons.format_list_bulleted,
+                        color: ColorStyles.mainColor)),
           ],
         )
       ],
@@ -125,19 +135,36 @@ class _DealPageState extends State<DealPage> {
             child: const Text('나눔'),
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SharingPage()));
             }),
         SpeedDialChild(
             child: const Text('교환'),
             backgroundColor: ColorStyles.exchangColor,
             onTap: () {
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ExchangePage()));
             }),
         SpeedDialChild(
             child: const Text('공구'),
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const GroupPurchasePage()));
+            }),
+        SpeedDialChild(
+            child: const Text('게시글'),
+            backgroundColor: ColorStyles.mainColor,
+            onTap: () {
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const GroupPurchasePage()));
+              Popups.goToPost(context, '나눔');
             }),
       ],
     );
