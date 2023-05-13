@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SubmitImagePage extends StatefulWidget {
   final CameraDescription camera;
@@ -19,6 +20,8 @@ class SubmitImagePage extends StatefulWidget {
 class _SubmitImagePageState extends State<SubmitImagePage> {
   late CameraController _controller;
   late Future<void> _initControllerFuture;
+  XFile? _image;
+  final ImagePicker picker = ImagePicker();
 
   @override
   void initState() {
@@ -39,6 +42,16 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future getImage(ImageSource imageSource) async {
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path);
+        debugPrint('${_image.hashCode}');
+      });
+    }
   }
 
   @override
@@ -97,30 +110,43 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
                 width: double.infinity,
                 height: 120.0,
                 color: const Color.fromRGBO(0, 0, 0, 0.8),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () => takePicture(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
-                      shape: const CircleBorder(
-                        side: BorderSide(
-                          color: Color.fromRGBO(35, 204, 135, 1.0),
-                          width: 5.0,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: const Alignment(-0.7, 0),
+                      child: IconButton(
+                        onPressed: () {
+                          getImage(ImageSource.gallery);
+                        },
+                        icon: const Icon(Icons.photo),
+                      ),
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () => takePicture(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
+                          shape: const CircleBorder(
+                            side: BorderSide(
+                              color: Color.fromRGBO(35, 204, 135, 1.0),
+                              width: 5.0,
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            width: 65,
+                            height: 65,
+                            decoration: const BoxDecoration(
+                              color: ColorStyles.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        width: 65,
-                        height: 65,
-                        decoration: const BoxDecoration(
-                          color: ColorStyles.white,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
               ),
             ),
