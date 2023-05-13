@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SubmitImagePage extends StatefulWidget {
@@ -20,8 +21,9 @@ class SubmitImagePage extends StatefulWidget {
 class _SubmitImagePageState extends State<SubmitImagePage> {
   late CameraController _controller;
   late Future<void> _initControllerFuture;
-  XFile? _image;
   final ImagePicker picker = ImagePicker();
+  XFile? _pickedFile;
+  CroppedFile? _croppedFile;
 
   @override
   void initState() {
@@ -44,12 +46,68 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     super.dispose();
   }
 
-  Future getImage(ImageSource imageSource) async {
+  // 사진 촬영 시 실행될 함수
+  // 촬영한 사진을 backend로 보내기
+  Future<void> takePicture() async {
+    try {
+      await _initControllerFuture;
+      final XFile image = await _controller.takePicture();
+      if (!mounted) return;
+      setState(() {
+        _pickedFile = image;
+      });
+      cropImage();
+      /*
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => OCRResultPage(
+              image: Image.file(File(image.path)),
+            ),
+          ),
+        );
+        */
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> getImage(ImageSource imageSource) async {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
-        _image = XFile(pickedFile.path);
-        debugPrint('${_image.hashCode}');
+        _pickedFile = pickedFile;
+        debugPrint('선택 이미지: ${_pickedFile.hashCode}');
+      });
+      cropImage();
+    }
+  }
+
+  Future<void> cropImage() async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: _pickedFile!.path,
+      compressFormat: ImageCompressFormat.png,
+      compressQuality: 100,
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: '',
+          toolbarColor: ColorStyles.black,
+          toolbarWidgetColor: ColorStyles.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+          hideBottomControls: true,
+        ),
+        IOSUiSettings(
+          title: '',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+    if (croppedFile != null) {
+      setState(() {
+        _croppedFile = croppedFile;
+        debugPrint('크롭 이미지: ${_croppedFile.hashCode}');
       });
     }
   }
@@ -58,25 +116,6 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
   Widget build(BuildContext context) {
     double? mediaWidth = MediaQuery.of(context).size.width;
     double? mediaHeight = MediaQuery.of(context).size.height;
-
-    // 사진 촬영 시 실행될 함수
-    // 촬영한 사진을 backend로 보내기
-    Future<void> takePicture() async {
-      try {
-        await _initControllerFuture;
-        final image = await _controller.takePicture();
-        if (!mounted) return;
-        await Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => OCRResultPage(
-              image: Image.file(File(image.path)),
-            ),
-          ),
-        );
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -112,6 +151,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
                 color: const Color.fromRGBO(0, 0, 0, 0.8),
                 child: Stack(
                   children: [
+                    // 갤러리 버튼
                     Align(
                       alignment: const Alignment(-0.7, 0),
                       child: IconButton(
@@ -121,9 +161,12 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
                         icon: const Icon(Icons.photo),
                       ),
                     ),
+                    // 사진 촬영 버튼
                     Center(
                       child: ElevatedButton(
-                        onPressed: () => takePicture(),
+                        onPressed: () {
+                          takePicture();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
                           shape: const CircleBorder(
