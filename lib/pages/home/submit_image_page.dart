@@ -47,12 +47,12 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     super.dispose();
   }
 
-  Future<void> takePicture() async {
+  Future<void> captureImage() async {
     await _initControllerFuture;
-    final XFile image = await _controller.takePicture();
+    final XFile capturedImageFile = await _controller.takePicture();
     if (!mounted) return;
     setState(() {
-      _pickedFile = image;
+      _pickedFile = capturedImageFile;
     });
     cropImage();
   }
@@ -111,7 +111,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
           actions: [
             IconButton(
               onPressed: () async {
-                selectImageType();
+                showDialogToSelectImageType();
                 await Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => OCRResultPage(
@@ -184,7 +184,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            takePicture();
+                            captureImage();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
@@ -219,7 +219,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     }
   }
 
-  SimpleDialog selectImageType() {
+  SimpleDialog showDialogToSelectImageType() {
     return SimpleDialog(
       title: const Text('사진 유형을 선택해주세요'),
       children: [
