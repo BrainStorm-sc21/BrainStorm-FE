@@ -62,6 +62,7 @@ class ChatUnit extends StatefulWidget {
   final String name;
   final String content;
   final String time;
+  final int unread;
 
   const ChatUnit({
     super.key,
@@ -69,6 +70,7 @@ class ChatUnit extends StatefulWidget {
     this.name = '먹짱 1호',
     this.content = '혹시 감자도 파시나요?',
     this.time = '오후 1:36',
+    this.unread = 1,
   });
 
   @override
@@ -128,14 +130,37 @@ class _ChatUnitState extends State<ChatUnit> {
               ),
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                widget.time,
-                style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: ColorStyles.textColor),
+            SizedBox(
+              height: 55,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    widget.time,
+                    style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                        color: ColorStyles.textColor),
+                  ),
+                  widget.unread != 0
+                      ? Container(
+                          width: 18,
+                          height: 18,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9),
+                            color: ColorStyles.mainColor,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${widget.unread}',
+                              style: const TextStyle(
+                                  fontSize: 12, color: ColorStyles.white),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
             ),
           ],
