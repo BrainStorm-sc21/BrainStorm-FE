@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 class SubmitImagePage extends StatefulWidget {
   final CameraDescription camera;
@@ -30,6 +31,66 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
   void initState() {
     super.initState();
     initCamera();
+
+    // show guide popup
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await showDialog(
+        barrierColor: Colors.black87,
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            // width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.6,
+            decoration: BoxDecoration(
+              color: ColorStyles.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: IntroductionScreen(
+              rawPages: const [
+                GuidePage(
+                  title: '스마트 등록이란?',
+                  imagePath: 'assets/images/임시온보딩화면1.png',
+                  body: '구매 내역 사진을 업로드하면\n자동으로 문자를 인식해요.\n등록할 식품이 많아도 걱정 없어요!',
+                ),
+                GuidePage(
+                  title: '영수증',
+                  imagePath: 'assets/images/임시온보딩화면2.png',
+                  body: '영수증을 빳빳하게 편 다음\n글자가 잘 보이도록 촬영하고\n상품 목록 전체가 보이게 잘라주세요',
+                ),
+                GuidePage(
+                  title: '온라인 구매 내역',
+                  imagePath: 'assets/images/임시온보딩화면3.png',
+                  body: '온라인 구매 내역을 캡처한 후\n사진을 상품 목록 칸에\n딱 맞추어 잘라주세요',
+                ),
+              ],
+              showNextButton: false,
+              showDoneButton: false,
+              done: const Text(
+                '확인',
+                style: TextStyle(color: ColorStyles.textColor),
+              ),
+              onDone: () {
+                Navigator.of(context).pop();
+              },
+              dotsDecorator: const DotsDecorator(
+                size: Size(10, 10),
+                activeSize: Size(25.0, 10.0),
+                activeColor: ColorStyles.mainColor,
+                activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Future<void> initCamera() async {
@@ -211,5 +272,75 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
         ),
       );
     }
+  }
+}
+
+class GuidePage extends StatelessWidget {
+  final String title;
+  final String imagePath;
+  final String body;
+
+  const GuidePage({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorStyles.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 5,
+            ),
+            child: Center(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: ColorStyles.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 5,
+            ),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                body,
+                style: const TextStyle(
+                  color: ColorStyles.textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
