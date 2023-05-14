@@ -1,12 +1,12 @@
 class Food {
-  late int foodId;
+  late int? foodId;
   String foodName;
   String storageWay;
   num stock;
   DateTime expireDate;
 
   Food({
-    this.foodId = 0,
+    this.foodId,
     required this.foodName,
     required this.storageWay,
     required this.stock,
@@ -14,13 +14,13 @@ class Food {
   });
 
   // class to json
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['foodId'] = foodId;
-    data['name'] = foodName;
-    data['storage'] = storageWay;
-    data['stock'] = stock;
-    data['expireDate'] = expireDate;
+  Map<String, String> toJson() {
+    final Map<String, String> data = <String, String>{};
+    // if (foodId != null) data['foodId'] = foodId.toString();
+    data['foodName'] = foodName;
+    data['stock'] = stock.toString();
+    data['expireDate'] = expireDate.toString().substring(0, 10);
+    data['storageWay'] = storageWay;
     return data;
   }
 
