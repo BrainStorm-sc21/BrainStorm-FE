@@ -11,28 +11,29 @@ class LoadingPage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       color: ColorStyles.mainColor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
+        fit: StackFit.loose,
         children: [
-          // 이 부분을 추후 이미지로 변경
-          SizedBox(
-            width: 200,
-            height: 200,
-            child: Container(
-              color: ColorStyles.black,
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.3,
+            left: MediaQuery.of(context).size.width * 0.25,
+            child: Image.asset(
+              'assets/images/smart_add_loading.png',
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 20.0), // 여백
-          const Text(
-            '스캔한 식품들을\n냉장고에 넣고 있어요',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              decoration: TextDecoration.none,
-              color: ColorStyles.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-              height: 1.5,
+          const Align(
+            alignment: AlignmentDirectional(0, 0.55),
+            child: Text(
+              '스캔한 식품들을\n냉장고에 넣고 있어요',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: ColorStyles.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: -1),
             ),
           ),
         ],
