@@ -78,11 +78,10 @@ class TradingBoard extends StatelessWidget {
                   color: dealColors[dealType],
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  dealType,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 10, color: ColorStyles.white),
-                ),
+                child: Text(dealType,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 11, color: ColorStyles.white, fontWeight: FontWeight.w400)),
               ),
               const SizedBox(width: 8),
               Column(
