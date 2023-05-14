@@ -24,7 +24,6 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
   final ImagePicker picker = ImagePicker();
   XFile? _pickedFile;
   CroppedFile? _croppedFile;
-  late String imageType = '';
 
   @override
   void initState() {
