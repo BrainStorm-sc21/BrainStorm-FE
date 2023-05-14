@@ -42,13 +42,9 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Container(
-            // width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.6,
-            decoration: BoxDecoration(
-              color: ColorStyles.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.65,
             child: IntroductionScreen(
               rawPages: const [
                 GuidePage(
@@ -67,15 +63,32 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
                   body: '온라인 구매 내역을 캡처한 후\n사진을 제외한 상품 목록을\n구분선에 맞추어 잘라주세요',
                 ),
               ],
-              showNextButton: false,
-              showDoneButton: false,
-              done: const Text(
-                '확인',
-                style: TextStyle(color: ColorStyles.textColor),
+              showNextButton: true,
+              showDoneButton: true,
+              next: const Align(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.arrow_forward_rounded,
+                  color: ColorStyles.textColor,
+                ),
+              ),
+              done: const Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '확인',
+                  style: TextStyle(
+                    color: ColorStyles.textColor,
+                  ),
+                ),
               ),
               onDone: () {
                 Navigator.of(context).pop();
               },
+              baseBtnStyle: ButtonStyle(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              ),
               dotsDecorator: const DotsDecorator(
                 size: Size(10, 10),
                 activeSize: Size(25.0, 10.0),
@@ -289,18 +302,13 @@ class GuidePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorStyles.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 5,
-            ),
+            margin: const EdgeInsets.symmetric(vertical: 15),
             child: Center(
               child: Text(
                 title,
@@ -312,22 +320,16 @@ class GuidePage extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: Center(
           if (imagePath != null)
             Center(
               child: Image.asset(
                 imagePath!,
                 fit: BoxFit.contain,
+                height: MediaQuery.of(context).size.height * 0.32,
               ),
             ),
-          ),
           Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 5,
-            ),
+            padding: const EdgeInsets.fromLTRB(10, 15, 10, 30),
             child: Align(
               alignment: Alignment.topCenter,
               child: Text(
