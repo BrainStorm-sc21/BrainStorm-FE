@@ -53,18 +53,18 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
               rawPages: const [
                 GuidePage(
                   title: '스마트 등록이란?',
-                  imagePath: 'assets/images/임시온보딩화면1.png',
-                  body: '구매 내역 사진을 업로드하면\n자동으로 문자를 인식해요.\n등록할 식품이 많아도 걱정 없어요!',
+                  body:
+                      '영수증이나 온라인 구매 내역 사진을\n업로드하면 쉽고 빠른 등록이 가능해요.\n등록할 식품이 많아도 걱정 없어요!\n\n(지원 형식: 영수증, 마켓컬리 주문내역)',
                 ),
                 GuidePage(
                   title: '영수증',
-                  imagePath: 'assets/images/임시온보딩화면2.png',
-                  body: '영수증을 빳빳하게 편 다음\n글자가 잘 보이도록 촬영하고\n상품 목록 전체가 보이게 잘라주세요',
+                  imagePath: 'assets/images/크롭가이드_영수증.png',
+                  body: '영수증을 빳빳하게 편 다음\n글자가 잘 보이도록 촬영하고\n상품 목록 전체를 포함하여 잘라주세요',
                 ),
                 GuidePage(
                   title: '온라인 구매 내역',
-                  imagePath: 'assets/images/임시온보딩화면3.png',
-                  body: '온라인 구매 내역을 캡처한 후\n사진을 상품 목록 칸에\n딱 맞추어 잘라주세요',
+                  imagePath: 'assets/images/크롭가이드_마켓컬리주문내역.png',
+                  body: '온라인 구매 내역을 캡처한 후\n사진을 제외한 상품 목록을\n구분선에 맞추어 잘라주세요',
                 ),
               ],
               showNextButton: false,
@@ -277,13 +277,13 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
 
 class GuidePage extends StatelessWidget {
   final String title;
-  final String imagePath;
+  final String? imagePath;
   final String body;
 
   const GuidePage({
     super.key,
     required this.title,
-    required this.imagePath,
+    this.imagePath,
     required this.body,
   });
 
@@ -315,8 +315,10 @@ class GuidePage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Center(
+          if (imagePath != null)
+            Center(
               child: Image.asset(
-                imagePath,
+                imagePath!,
                 fit: BoxFit.contain,
               ),
             ),
