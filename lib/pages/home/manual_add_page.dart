@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
