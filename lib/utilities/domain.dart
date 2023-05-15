@@ -1,3 +1,3 @@
 library meokjang.domain;
 
-const String domain = 'http://www.meokjang.com';
+const String baseURI = 'http://www.meokjang.com';
