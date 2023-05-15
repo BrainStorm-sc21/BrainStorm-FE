@@ -5,6 +5,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -117,27 +118,40 @@ class _ManualAddPageState extends State<ManualAddPage> {
         onTimeout: () {
           throw TimeoutException('Connection time out');
         },
-      );
-
-      if (!mounted) return;
-      if (res.statusCode == 200) {
-        debugPrint('Response: ${res.body}');
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-          (route) => false,
-        );
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
-      }
+      ).then((res) {
+        if (!mounted) return;
+        if (res.statusCode == 200) {
+          debugPrint('Response: ${res.body}');
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+            (route) => false,
+          );
+        } else {
+          throw Exception('Failed to send data [${res.statusCode}]');
+        }
+      });
     } on TimeoutException {
-      debugPrint('타임 아웃 오류');
+      Popups.popSimpleDialog(
+        context,
+        title: '오류',
+        body: '응답 시간 초과',
+      );
     } on SocketException {
-      debugPrint('인터넷 연결 확인 필요');
+      Popups.popSimpleDialog(
+        context,
+        title: '오류',
+        body: '인터넷 연결 안 됨',
+      );
     } catch (err) {
       debugPrint('$err');
+      Popups.popSimpleDialog(
+        context,
+        title: '오류',
+        body: '$err',
+      );
     }
   }
 }
