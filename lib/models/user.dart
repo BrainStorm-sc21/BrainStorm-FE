@@ -1,24 +1,25 @@
-import 'dart:ffi';
-
 class User {
-  int userId;
+  //int userId;
   String userName;
   String? phoneNumber;
-  int snsConnet;
-  Position pos;
+  String? snsType;
+  String? snsKey;
+  String location;
+  double? latitude;
+  double? longitude;
   int gender;
-  Float reliability;
-  DateTime? stopUntil;
-  DateTime createdAt;
+  //Float reliability;
+  // DateTime? stopUntil;
+  // DateTime createdAt;
 
-  User(this.userId, this.userName, this.phoneNumber, this.snsConnet, this.pos, this.gender,
-      this.reliability, this.createdAt);
+  User(
+      this.userName, this.location, this.latitude, this.longitude, this.gender);
 }
 
-class Position {
-  String address;
-  Float latitude;
-  Float longitude;
+// class Position {
+//   String address;
+//   double? latitude;
+//   double? longitude;
 
-  Position(this.address, this.latitude, this.longitude);
-}
+//   Position(this.address, this.latitude, this.longitude);
+// }

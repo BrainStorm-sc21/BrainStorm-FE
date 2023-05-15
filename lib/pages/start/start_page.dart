@@ -19,12 +19,14 @@ class StartPage extends StatelessWidget {
       body: Center(
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
+            padding: const EdgeInsets.fromLTRB(50, 50, 50, 0),
             child: Column(
               children: [
-                Container(
+                SizedBox(
+                  width: 250,
+                  height: 250,
                   child: Image.asset(
-                    'assets/images/임시온보딩화면2.png',
+                    'assets/images/온보딩화면2.png',
                   ),
                 ),
                 // Padding(
@@ -60,7 +62,8 @@ class StartPage extends StatelessWidget {
                       onPressed: () async {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const KakaoWebView()),
+                          MaterialPageRoute(
+                              builder: (context) => const KakaoWebView()),
                         );
                         print("클릭!");
                       },
@@ -91,7 +94,8 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const NaverWebView()),
+                        MaterialPageRoute(
+                            builder: (context) => const NaverWebView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -120,7 +124,8 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const PhoneLoginPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(),
@@ -138,7 +143,8 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()),
                       );
                     },
                     style: TextButton.styleFrom(
