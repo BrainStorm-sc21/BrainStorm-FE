@@ -48,7 +48,8 @@ class OnboardingPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const StartPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const StartPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -68,31 +69,31 @@ class OnboardingPage extends StatelessWidget {
           ),
           pages: [
             PageViewModel(
-              title: "1st",
-              body: "실시간 우리동네 인기식품",
+              title: "언제, 어디서든\n냉장고 속 식품 확인",
+              body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/임시온보딩화면1.png',
+                  'assets/images/온보딩화면1.png',
                 ),
               ),
               decoration: getPageDecoration(),
             ),
             PageViewModel(
-              title: "2nd",
-              body: "오늘의 추천 레시피",
+              title: "주변 이웃들과\n거래하며 식비절약",
+              body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/임시온보딩화면1.png',
+                  'assets/images/온보딩화면2.png',
                 ),
               ),
               decoration: getPageDecoration(),
             ),
             PageViewModel(
-              title: "3rd",
-              body: "우리동네 공동구매 현황",
+              title: "나에게 꼭 맞는 레시피 추천",
+              body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/임시온보딩화면1.png',
+                  'assets/images/온보딩화면3.png',
                 ),
               ),
               decoration: getPageDecoration(),
