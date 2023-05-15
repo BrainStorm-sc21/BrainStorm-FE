@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  const MapPage({super.key, required this.posts});
+  final List<Deal> posts;
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -13,35 +15,19 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
   Completer<NaverMapController> _controller = Completer();
 
   final List<Marker> _markers = [];
 
+  final Map markerImage = {
+    '공구': 'assets/images/groupMarker.png',
+    '교환': 'assets/images/exchangeMarker.png',
+    '나눔': 'assets/images/shareMarker.png'
+  };
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      OverlayImage.fromAssetImage(
-        assetName: 'icon/marker.png',
-        devicePixelRatio: window.devicePixelRatio,
-      ).then((image) {
-        setState(() {
-          _markers.add(Marker(
-              markerId: 'id',
-              position: const LatLng(37.566570, 126.978442),
-              captionText: "커스텀 아이콘",
-              captionColor: Colors.indigo,
-              captionTextSize: 20.0,
-              alpha: 0.8,
-              captionOffset: 30,
-              //icon: image,
-              anchor: AnchorPoint(0.5, 1),
-              width: 45,
-              height: 45,
-              infoWindow: '인포 윈도우',
-              onMarkerTab: _onMarkerTap));
-        });
-      });
-    });
     super.initState();
   }
 
@@ -58,18 +44,40 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  // _onMapTap(LatLng position) async {
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
-  //     duration: const Duration(milliseconds: 500),
-  //     backgroundColor: Colors.black,
-  //   ));
-  // }
+  _onMapTap(LatLng position) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: const Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
+  }
 
   /// 지도 생성 완료시
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
+
+    customM(widget.posts);
+  }
+
+  void customM(List<Deal> posts) {
+    for (var post in posts) {
+      OverlayImage.fromAssetImage(
+        assetName: markerImage[post.dealType],
+        devicePixelRatio: window.devicePixelRatio,
+      ).then((image) {
+        _markers.add(Marker(
+          markerId: DateTime.now().toIso8601String(),
+          icon: image,
+          captionText: post.dealName,
+          width: 30,
+          height: 40,
+          position: post.location,
+          onMarkerTab: _onMarkerTap,
+        ));
+        setState(() {});
+      });
+    }
   }
 
   _naverMap() {
@@ -79,6 +87,7 @@ class _MapPageState extends State<MapPage> {
         target: LatLng(37.566570, 126.978442),
         zoom: 17,
       ),
+      zoomGestureEnable: true,
       onMapCreated: onMapCreated,
       mapType: MapType.Basic,
       indoorEnable: true,
@@ -89,22 +98,22 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-  // ================== method ==========================
-
-  void _onMapTap(LatLng latLng) {
-    OverlayImage.fromAssetImage(
-      assetName: 'assets/images/임시공구마커.png',
-      devicePixelRatio: window.devicePixelRatio,
-    ).then((image) {
-      _markers.add(Marker(
-        markerId: DateTime.now().toIso8601String(),
-        //icon: image,
-        position: latLng,
-        onMarkerTab: _onMarkerTap,
-      ));
-      setState(() {});
-    });
-  }
+  // void _onMapTap(LatLng latLng) {
+  //   OverlayImage.fromAssetImage(
+  //     assetName: "assets/images/exchangeMarker.png",
+  //     devicePixelRatio: window.devicePixelRatio,
+  //   ).then((image) {
+  //     _markers.add(Marker(
+  //       markerId: DateTime.now().toIso8601String(),
+  //       icon: image,
+  //       width: 30,
+  //       height: 40,
+  //       position: latLng,
+  //       onMarkerTab: _onMarkerTap,
+  //     ));
+  //     setState(() {});
+  //   });
+  // }
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
@@ -114,5 +123,10 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _markers.removeWhere((m) => m.markerId == marker!.markerId);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
