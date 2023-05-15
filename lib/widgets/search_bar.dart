@@ -20,7 +20,7 @@ class CustomSearchBar extends StatelessWidget {
     this.hinttext = '',
     required this.onTap,
     this.width = 50,
-    this.height = 35,
+    this.height = 40,
     this.borderRadius = 40,
     this.borderwidth = 1.5,
     this.fillColor = ColorStyles.transparent,
@@ -33,6 +33,7 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
       child: TextField(
         controller: textEditingController,
@@ -57,7 +58,7 @@ class CustomSearchBar extends StatelessWidget {
             child: const Icon(
               Icons.search,
               color: ColorStyles.mainColor,
-              size: 25,
+              size: 30,
             ),
             onTap: () => onTap,
           ),
