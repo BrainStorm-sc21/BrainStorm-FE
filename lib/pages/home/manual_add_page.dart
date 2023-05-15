@@ -107,7 +107,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
     if (food.isFoodValid() == false) {
       return;
     }
-    final url = Uri.parse('$baseURI/food/add');
+    final Uri url = Uri.parse('$baseURI/food/add');
     Map<String, String> body = food.toJson();
     body['userId'] = 'mirim'; // 임시로 userId 부여
     debugPrint('req data: $body');
