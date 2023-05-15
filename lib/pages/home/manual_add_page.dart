@@ -1,7 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 // 수동 추가 화면
@@ -88,12 +94,42 @@ class _ManualAddPageState extends State<ManualAddPage> {
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
-  void saveFoodInfo() {
+  void saveFoodInfo() async {
     if (food.isFoodValid() == false) {
       return;
     }
-    debugPrint('${food.toJson()}');
-    // 추후 DB에 저장하는 로직 구현 필요
+    final url = Uri.parse('$domain/food/add');
+    Map<String, String> body = food.toJson();
+    body['userId'] = 'mirim'; // 임시로 userId 부여
+    debugPrint('req data: $body');
+    try {
+      final res = await http.post(url, body: body).timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          throw TimeoutException('Connection time out');
+        },
+      );
+
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        debugPrint('Response: ${res.body}');
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    } on TimeoutException {
+      debugPrint('타임 아웃 오류');
+    } on SocketException {
+      debugPrint('인터넷 연결 확인 필요');
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 }
 
