@@ -5,6 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Popups {
+  static void popSimpleDialog(context,
+      {required title, required body, onClose}) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: const TextStyle(color: ColorStyles.black),
+          ),
+          content: Text(body),
+          actions: [
+            TextButton(
+              onPressed: () => onClose ?? Navigator.of(context).pop(),
+              child: const Text(
+                '확인',
+                style: TextStyle(color: ColorStyles.textColor),
+              ),
+            ),
+          ],
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   static void goToPost(context, type) {
     showDialog(
       context: context,
