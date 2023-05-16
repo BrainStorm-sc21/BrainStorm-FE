@@ -1,6 +1,9 @@
 import 'package:brainstorm_meokjang/models/food.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +70,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initState() {
     super.initState();
     initFormData();
+    sendImageAndGetOCRResult();
     initFoods();
     initController();
   }
@@ -75,6 +79,59 @@ class _OCRResultPageState extends State<OCRResultPage> {
     _imageFormData = FormData.fromMap({
       'image': MultipartFile.fromFileSync(widget.imagePath),
     });
+  }
+
+  // 이미지를 보내고, OCR 결과 및 소비기한 추천 데이터를 받음
+  void sendImageAndGetOCRResult() async {
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10)
+      ..contentType = 'multipart/form-data'; // to upload image
+
+    // setup data
+    Map<String, dynamic> data = {
+      'type': widget.imageType,
+      'image': _imageFormData,
+    };
+
+    try {
+      // send data
+      final res = await dio.post(
+        '/food/recommend',
+        data: data,
+      );
+
+      // handle response
+      if (res.statusCode == 200) {
+        setState(() {
+          ocrResult = res.data;
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, navigate to home & show error dialog
+    on DioError catch (err) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+        (route) => false,
+      );
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+      return;
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 
   void initFoods() {
