@@ -278,15 +278,59 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
-  void saveFoodInfo() {
+  void saveFoodInfo() async {
     for (var food in foods) {
       if (food.isFoodValid() == false) return;
     }
 
-    for (var food in foods) {
-      debugPrint('${food.toJson()}');
-    }
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
 
-    // 추후 DB에 저장하는 로직 구현 필요
+    // setup data
+    // json.encode(foods);
+    List<Map<String, String>> data = [];
+    for (var food in foods) {
+      Map<String, String> foodItem = food.toJson();
+      foodItem['userId'] = 'mirim'; // 임시로 userId 부여
+      data.add(foodItem);
+    }
+    debugPrint('req data: $data');
+
+    try {
+      // save data
+      final res = await dio.post(
+        '/food/addList',
+        data: data,
+      );
+
+      // handle response
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, show error dialog
+    on DioError catch (err) {
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+      return;
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 }
