@@ -59,7 +59,6 @@ dependencies:
   flutter_web_auth: ^0.5.0
   image_picker: ^0.8.7+4
   image_cropper: ^3.0.3
-  http: ^0.13.6
 
 dependency_overrides:
   intl: ^0.18.0
