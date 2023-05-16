@@ -128,7 +128,6 @@ class _ManualAddPageState extends State<ManualAddPage> {
       // handle response
       if (!mounted) return;
       if (res.statusCode == 200) {
-        debugPrint('Response: ${res.data}');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
