@@ -1,14 +1,11 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 // 수동 추가 화면
@@ -108,50 +105,50 @@ class _ManualAddPageState extends State<ManualAddPage> {
     if (food.isFoodValid() == false) {
       return;
     }
-    final Uri url = Uri.parse('$baseURI/food/add');
-    Map<String, String> body = food.toJson();
-    body['userId'] = 'mirim'; // 임시로 userId 부여
-    debugPrint('req data: $body');
+
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    // setup data
+    Map<String, String> data = food.toJson();
+    data['userId'] = 'mirim'; // 임시로 userId 부여
+    debugPrint('req data: $data');
+
     try {
-      final res = await http.post(url, body: body).timeout(
-        const Duration(seconds: 3),
-        onTimeout: () {
-          throw TimeoutException('Connection time out');
-        },
-      ).then((res) {
-        if (!mounted) return;
-        if (res.statusCode == 200) {
-          debugPrint('Response: ${res.body}');
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-            (route) => false,
-          );
-        } else {
-          throw Exception('Failed to send data [${res.statusCode}]');
-        }
-      });
-    } on TimeoutException {
-      Popups.popSimpleDialog(
-        context,
-        title: '오류',
-        body: '응답 시간 초과',
+      // save data
+      final res = await dio.post(
+        '/food/add',
+        data: data,
       );
-    } on SocketException {
+
+      // handle response
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        debugPrint('Response: ${res.data}');
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, show error dialog
+    on DioError catch (err) {
       Popups.popSimpleDialog(
         context,
-        title: '오류',
-        body: '인터넷 연결 안 됨',
+        title: '${err.type}',
+        body: '${err.message}',
       );
     } catch (err) {
       debugPrint('$err');
-      Popups.popSimpleDialog(
-        context,
-        title: '오류',
-        body: '$err',
-      );
     }
   }
 }
