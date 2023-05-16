@@ -19,7 +19,7 @@ class OCRResultPage extends StatefulWidget {
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
   final List<TextEditingController> _foodNameController = [];
-  late bool _isLoading;
+  late bool _isLoading = true;
   Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
     'list': {
       0: {
@@ -64,17 +64,10 @@ class _OCRResultPageState extends State<OCRResultPage> {
   @override
   void initState() {
     super.initState();
-    initLoading();
     initFoods();
     initController();
   }
 
-  void initLoading() {
-    _isLoading = true;
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
     });
   }
 
