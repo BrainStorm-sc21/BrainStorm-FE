@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Popups {
-  static void popSimpleDialog(context,
-      {required title, required body, onClose}) {
+  static void popSimpleDialog(
+    context, {
+    required title,
+    required body,
+  }) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -19,7 +22,7 @@ class Popups {
           content: Text(body),
           actions: [
             TextButton(
-              onPressed: () => onClose ?? Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text(
                 '확인',
                 style: TextStyle(color: ColorStyles.textColor),
