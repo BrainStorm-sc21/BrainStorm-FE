@@ -30,6 +30,10 @@ class _RefrigeratorState extends State<Refrigerator> {
       Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
     ];
 
+    if (widget.storage != '전체') {
+      foodList = foodList.where((foodStorage) => foodStorage.storageWay == widget.storage).toList();
+    }
+
     food = Food(
       foodId: 1,
       foodName: '',
