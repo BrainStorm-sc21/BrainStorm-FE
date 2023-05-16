@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -60,14 +61,19 @@ class _OCRResultPageState extends State<OCRResultPage> {
       },
     },
   };
+  late final FormData _imageFormData;
 
   @override
   void initState() {
     super.initState();
+    initFormData();
     initFoods();
     initController();
   }
 
+  void initFormData() {
+    _imageFormData = FormData.fromMap({
+      'image': MultipartFile.fromFileSync(widget.imagePath),
     });
   }
 
