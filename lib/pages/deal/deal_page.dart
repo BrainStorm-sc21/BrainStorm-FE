@@ -92,7 +92,8 @@ class _DealPageState extends State<DealPage> {
                       text: _deals[index],
                       fontSize: 15,
                       onPressed: () => setDeal(index),
-                      width: MediaQuery.of(context).size.width / 4.0 - 100,
+                      //width: MediaQuery.of(context).size.width / 4.0 - 100,
+
                       backgroundColor:
                           _isDeal[index] ? _colors[index] : Colors.white,
                       foregroundColor:
