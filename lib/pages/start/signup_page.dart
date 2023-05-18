@@ -20,8 +20,13 @@ String? phoneNumber;
 String? snsType;
 String? snsKey;
 
-User user =
-    User(userName: '', location: '', latitude: 0.0, longitude: 0.0, gender: 0);
+User user = User(
+    userName: '먹짱 2호',
+    phoneNumber: '010-1234-1234',
+    location: '강남역',
+    latitude: 0.0,
+    longitude: 0.0,
+    gender: 0);
 
 final _nicknameController = TextEditingController();
 
@@ -64,14 +69,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       onPressed: () {
                         print(postSignUp(user));
 
-                        //print('http 요청');
-                        // print('userName: ${_nicknameController.text}');
-                        // print('gender: ${user.gender}');
-                        // print(
-                        //     'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
-                        // print('phoneNumber: ${user.phoneNumber}');
-                        // print(
-                        //     'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
+                        print('http 요청');
+                        print('userName: ${user.userName}');
+                        print('gender: ${user.gender}');
+                        print(
+                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
+                        print('phoneNumber: ${user.phoneNumber}');
+                        print(
+                            'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor,

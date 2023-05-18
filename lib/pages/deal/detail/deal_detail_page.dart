@@ -43,19 +43,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
             ],
           ),
         ),
-        // Positioned(
-        //   top: 20,
-        //   left: 20,
-        //   child: IconButton(
-        //     icon: const Icon(
-        //       Icons.arrow_back_ios,
-        //       color: ColorStyles.mainColor,
-        //     ),
-        //     onPressed: () {
-        //       Navigator.pop(context);
-        //     },
-        //   ),
-        // ),
         Positioned(
           bottom: 0,
           left: 0,
@@ -116,6 +103,19 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 )
               ],
             ),
+          ),
+        ),
+        Positioned(
+          top: 20,
+          left: 20,
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: ColorStyles.mainColor,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ]),
