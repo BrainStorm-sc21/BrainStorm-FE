@@ -1,4 +1,6 @@
 import 'package:brainstorm_meokjang/pages/home/take_picture_page.dart';
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/pages/home/submit_image_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class SmartAddPage extends StatefulWidget {
 class _SmartAddPageState extends State<SmartAddPage> {
   late List<CameraDescription> cameras;
   late CameraDescription camera;
-  bool isCameraInitialized = false;
+  bool isCameraInitialized = true;
 
   @override
   void initState() {
@@ -29,9 +31,10 @@ class _SmartAddPageState extends State<SmartAddPage> {
   @override
   Widget build(BuildContext context) {
     if (isCameraInitialized) {
-      return TakePicturePage(camera: camera);
+      return SubmitImagePage(camera: camera);
     } else {
-      return const SizedBox(
+      return Container(
+        color: ColorStyles.mainColor,
         width: double.infinity,
         height: double.infinity,
       );

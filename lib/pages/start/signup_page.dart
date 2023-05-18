@@ -10,13 +10,25 @@ bool valid_gender = false;
 bool valid_address = false;
 bool valid_auth = false;
 
-late User user;
-late String user_nickname;
-late int gender;
-Position? pos;
-String? address;
-String? latitude;
-String? longitude;
+late String userName;
+late int gender; //남 - 0, 여 - 1
+String location = '';
+double? latitude;
+double? longitude;
+
+String? phoneNumber;
+String? snsType;
+String? snsKey;
+
+User user = User(
+    userName: '먹짱 2호',
+    phoneNumber: '010-1234-1234',
+    location: '강남역',
+    latitude: 0.0,
+    longitude: 0.0,
+    gender: 0);
+
+final _nicknameController = TextEditingController();
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -26,6 +38,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -49,7 +66,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     width: deviceWidth * 0.8,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(postSignUp(user));
+
+                        print('http 요청');
+                        print('userName: ${user.userName}');
+                        print('gender: ${user.gender}');
+                        print(
+                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
+                        print('phoneNumber: ${user.phoneNumber}');
+                        print(
+                            'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor,
                       ),
@@ -76,8 +104,6 @@ class NicknameField extends StatefulWidget {
 }
 
 class _NicknameFieldState extends State<NicknameField> {
-  final TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -102,7 +128,7 @@ class _NicknameFieldState extends State<NicknameField> {
               width: deviceWidth * 0.8,
               child: Form(
                 child: TextFormField(
-                  controller: controller,
+                  controller: _nicknameController,
                   maxLength: 10,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -164,8 +190,7 @@ class _GenderFieldState extends State<GenderField> {
               ),
             ),
             ToggleButtons(
-              selectedColor: ColorStyles.mainColor,
-              hoverColor: Colors.yellowAccent,
+              fillColor: ColorStyles.mainColor.withOpacity(0.5),
               borderRadius: BorderRadius.circular(4),
               isSelected: isSelected,
               constraints: const BoxConstraints(minWidth: 120, minHeight: 38),
@@ -198,9 +223,11 @@ class _GenderFieldState extends State<GenderField> {
 
   void toggleSelect(value) {
     if (value == 0) {
+      user.gender = 0;
       isMan = true;
       isWoman = false;
     } else {
+      user.gender = 1;
       isMan = false;
       isWoman = true;
     }
@@ -266,12 +293,15 @@ class _PositionFieldState extends State<PositionField> {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Kpostal result = await Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => KpostalView()));
+                      Kpostal result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => KpostalView()));
                       //위치, 위도, 경도
-                      print("위치: ${result.address}");
-                      print("위도: ${result.latitude}");
-                      print("경도: ${result.longitude}");
+                      // print("위치: ${result.address}");
+                      // print("위도: ${result.latitude}");
+                      // print("경도: ${result.longitude}");
+                      user.location = result.address;
+                      user.latitude = result.latitude;
+                      user.longitude = result.longitude;
                       setState(() {
                         posText = result.address;
                         posColor = Colors.black;
@@ -339,11 +369,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const NaverWebView()),
+                                                  builder: (context) =>
+                                                      const NaverWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Naver로\n인증하기"),
                                         ),
@@ -359,11 +391,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const KakaoWebView()),
+                                                  builder: (context) =>
+                                                      const KakaoWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Kakao로\n인증하기"),
                                         ),
@@ -402,7 +436,8 @@ class _AuthFieldState extends State<AuthField> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const PhoneLoginPage()),
                     );
                   },
                   style: TextButton.styleFrom(
