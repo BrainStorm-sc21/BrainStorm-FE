@@ -37,9 +37,7 @@ class TopBar extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                    color: ColorStyles.mainColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    color: ColorStyles.mainColor, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -77,8 +75,7 @@ class TitleInput extends StatelessWidget {
             TextFormField(
               decoration: InputDecoration(
                 hintText: "게시글 제목을 입력해주세요",
-                hintStyle: const TextStyle(
-                    fontSize: 14, color: ColorStyles.hintTextColor),
+                hintStyle: const TextStyle(fontSize: 14, color: ColorStyles.hintTextColor),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: const BorderSide(color: ColorStyles.borderColor),
@@ -132,8 +129,7 @@ class _ExpirationDateInputState extends State<ExpirationDateInput> {
                     style: const TextStyle(fontSize: 14),
                     decoration: InputDecoration(
                       hintText: '2023-05-26',
-                      hintStyle: const TextStyle(
-                          fontSize: 14, color: ColorStyles.hintTextColor),
+                      hintStyle: const TextStyle(fontSize: 14, color: ColorStyles.hintTextColor),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: const BorderSide(
@@ -257,8 +253,7 @@ class DescriptionInput extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText:
                       '상세 내용에는 아래의 내용들을 포함시켜 작성해주세요.\n\n - 식재료 명\n - 거래 장소\n - 거래 식재료의 간단한 소개',
-                  hintStyle: const TextStyle(
-                      fontSize: 12, color: ColorStyles.hintTextColor),
+                  hintStyle: const TextStyle(fontSize: 12, color: ColorStyles.hintTextColor),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(

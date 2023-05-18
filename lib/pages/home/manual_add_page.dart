@@ -1,6 +1,10 @@
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -75,30 +79,78 @@ class _ManualAddPageState extends State<ManualAddPage> {
           FoodName(setName: setName), // 식료품 이름 입력
           const SizedBox(height: 30), // 여백
           FoodStorage(
-              storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
+            storage: food.storageWay,
+            setStorage: setStorage,
+          ), // 식료품 보관장소 선택
           divider,
           FoodStockTextfield(
-              stock: food.stock,
-              setStock: setStock,
-              controller: _stockStringController,
-              updateControllerText: updateControllerText,
-              focusNode: _stockFocusNode), // 식료품 수량 조절
+            stock: food.stock,
+            setStock: setStock,
+            controller: _stockStringController,
+            updateControllerText: updateControllerText,
+            focusNode: _stockFocusNode,
+          ), // 식료품 수량 조절
           divider,
           FoodExpireDate(
-              expireDate: food.expireDate,
-              setExpireDate: setExpireDate), // 식료품 소비기한 입력
+            expireDate: food.expireDate,
+            setExpireDate: setExpireDate,
+          ), // 식료품 소비기한 입력
         ]),
       ),
     );
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
-  void saveFoodInfo() {
+  void saveFoodInfo() async {
     if (food.isFoodValid() == false) {
       return;
     }
-    debugPrint('${food.toJson()}');
-    // 추후 DB에 저장하는 로직 구현 필요
+
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    // setup data
+    final data = {
+      "userId": "1",
+      "food": food.toJson(),
+    };
+    debugPrint('req data: $data');
+
+    try {
+      // save data
+      final res = await dio.post(
+        '/food/add',
+        data: data,
+      );
+
+      // handle response
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, show error dialog
+    on DioError catch (err) {
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 }
 

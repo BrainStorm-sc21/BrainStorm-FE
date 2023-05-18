@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart
 import 'package:brainstorm_meokjang/pages/deal/register/post_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -93,7 +94,7 @@ class _DealPageState extends State<DealPage> {
                       fontSize: 15,
                       onPressed: () => setDeal(index),
                       //width: MediaQuery.of(context).size.width / 4.0 - 100,
-
+                      width: MediaQuery.of(context).size.width / 4.0 - 100,
                       backgroundColor:
                           _isDeal[index] ? _colors[index] : Colors.white,
                       foregroundColor:

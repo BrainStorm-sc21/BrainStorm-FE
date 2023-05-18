@@ -1,5 +1,5 @@
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
-import '../utilities/rule.dart';
 
 class FoodStockButton extends StatelessWidget {
   final num stock;

@@ -1,7 +1,7 @@
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
-import 'package:brainstorm_meokjang/widgets/refrigerator.dart';
+import 'package:brainstorm_meokjang/widgets/food/refrigerator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
@@ -23,10 +23,30 @@ class _HomePageState extends State<HomePage> {
 
     var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
     foodList = [
-      Food(foodId: 0, foodName: "토마토", storageWay: "냉장", stock: 2, expireDate: now),
-      Food(foodId: 1, foodName: "감자", storageWay: "실온", stock: 5, expireDate: now),
-      Food(foodId: 2, foodName: "가지", storageWay: "냉동", stock: 1, expireDate: now),
-      Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
+      Food(
+          foodId: 0,
+          foodName: "토마토",
+          storageWay: "냉장",
+          stock: 2,
+          expireDate: now),
+      Food(
+          foodId: 1,
+          foodName: "감자",
+          storageWay: "실온",
+          stock: 5,
+          expireDate: now),
+      Food(
+          foodId: 2,
+          foodName: "가지",
+          storageWay: "냉동",
+          stock: 1,
+          expireDate: now),
+      Food(
+          foodId: 3,
+          foodName: "버섯",
+          storageWay: "냉장",
+          stock: 4,
+          expireDate: now),
     ];
   }
 
@@ -123,7 +143,8 @@ Widget? floatingButtons(BuildContext context) {
           child: const Icon(Icons.camera_alt, color: Colors.white),
           backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SmartAddPage()));
           }),
       SpeedDialChild(
         child: const Icon(
@@ -132,7 +153,8 @@ Widget? floatingButtons(BuildContext context) {
         ),
         backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualAddPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ManualAddPage()));
         },
       )
     ],
