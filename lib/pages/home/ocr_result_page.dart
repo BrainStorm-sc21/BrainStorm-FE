@@ -14,7 +14,8 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -152,7 +153,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   // initState에 추가 필요
   void initRecommendList() {
     setState(() {
-      recommendList = ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
     });
   }
 
@@ -197,21 +199,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
         onPressedAddButton: saveFoodInfo,
         containerColor: ColorStyles.snow,
         body: SliverList(
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return Card(
-                elevation: 3,
-                shadowColor: ColorStyles.white,
-                margin: const EdgeInsets.only(bottom: 15),
-                color: ColorStyles.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
-=======
->>>>>>> Iteration3
           delegate: SliverChildBuilderDelegate((context, index) {
             return Card(
               elevation: 3,
@@ -235,7 +222,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       stops: [1, 1],
                     ),
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0))),
+                        topLeft: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0))),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,
@@ -284,10 +272,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       stock: foods[index].stock,
                       setStock: setStock,
-<<<<<<< HEAD
-=======
->>>>>>> Iteration3
->>>>>>> Iteration3
                     ),
                     FoodExpireDate(
                       index: index,
@@ -296,21 +280,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     ),
                   ],
                 ),
-<<<<<<< HEAD
               ),
             );
           }, childCount: foods.length),
-=======
-<<<<<<< HEAD
-              );
-            },
-          ),
-=======
-              ),
-            );
-          }, childCount: foods.length),
->>>>>>> Iteration3
->>>>>>> Iteration3
         ),
       );
     }
