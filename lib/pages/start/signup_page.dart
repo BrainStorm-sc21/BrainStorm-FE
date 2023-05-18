@@ -10,7 +10,6 @@ bool valid_gender = false;
 bool valid_address = false;
 bool valid_auth = false;
 
-User user = User('', '', 0.0, 0.0, 0);
 late String userName;
 late int gender; //남 - 0, 여 - 1
 String location = '';
@@ -20,6 +19,9 @@ double? longitude;
 String? phoneNumber;
 String? snsType;
 String? snsKey;
+
+User user =
+    User(userName: '', location: '', latitude: 0.0, longitude: 0.0, gender: 0);
 
 final _nicknameController = TextEditingController();
 
@@ -60,13 +62,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: deviceWidth * 0.8,
                     child: ElevatedButton(
                       onPressed: () {
-                        print('userName: ${_nicknameController.text}');
-                        print('gender: ${user.gender}');
-                        print(
-                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
-                        print('phoneNumber: ${user.phoneNumber}');
-                        print(
-                            'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
+                        print(postSignUp(user));
+
+                        //print('http 요청');
+                        // print('userName: ${_nicknameController.text}');
+                        // print('gender: ${user.gender}');
+                        // print(
+                        //     'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
+                        // print('phoneNumber: ${user.phoneNumber}');
+                        // print(
+                        //     'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor,

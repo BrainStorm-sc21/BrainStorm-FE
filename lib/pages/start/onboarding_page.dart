@@ -17,30 +17,6 @@ class OnboardingPage extends StatelessWidget {
             height: 120,
             child: Column(
               children: [
-                // Container(
-                //   width: MediaQuery.of(context).size.width * 0.8,
-                //   child: ElevatedButton(
-                //     child: const Text(
-                //       '로그인',
-                //     ),
-                //     onPressed: () {},
-                //     style: ElevatedButton.styleFrom(
-                //       primary: ColorStyles.mainColor,
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   width: MediaQuery.of(context).size.width * 0.8,
-                //   child: TextButton(
-                //     child: const Text(
-                //       '회원가입',
-                //     ),
-                //     onPressed: () {},
-                //     style: TextButton.styleFrom(
-                //       primary: ColorStyles.mainColor,
-                //     ),
-                //   ),
-                // )
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
                   height: 50,

@@ -34,17 +34,22 @@ class _firstPostUnitState extends State<firstPostUnit> {
                       borderRadius: BorderRadius.circular(20),
                       color: ColorStyles.groupBuyColor),
                   child: Center(
-                      child: Text(widget.type,
-                          style: const TextStyle(
-                              fontSize: 11, color: Colors.purple))),
+                    child: Text(
+                      widget.type,
+                      style:
+                          const TextStyle(fontSize: 11, color: Colors.purple),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Text(widget.title,
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.black)),
+                  child: Text(
+                    widget.title,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: ColorStyles.black),
+                  ),
                 ),
               ],
             ),

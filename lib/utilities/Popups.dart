@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
@@ -66,7 +67,13 @@ class Popups {
                             text: '게시글로 이동',
                             width: double.infinity,
                             height: 35,
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DealDetailPage()));
+                            },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,
                             borderColor: ColorStyles.mainColor,
