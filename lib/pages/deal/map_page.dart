@@ -72,7 +72,7 @@ class _MapPageState extends State<MapPage> {
           captionText: post.dealName,
           width: 30,
           height: 40,
-          position: post.location,
+          position: LatLng(post.latitude, post.longitude),
           onMarkerTab: _onMarkerTap,
         ));
         setState(() {});
