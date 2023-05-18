@@ -234,7 +234,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
           Text("보관장소"),
           Spacer(),
         ]),

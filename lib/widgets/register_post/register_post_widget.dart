@@ -302,121 +302,137 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 30, bottom: 10),
-            child: Text("사진 등록"),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: _image == null
-                    ? IconButton(
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 150,
-                                color: ColorStyles.transparent,
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 80,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          border:
-                                              Border.all(color: ColorStyles.borderColor, width: 2),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20, bottom: 10),
+              child: Text(
+                "사진 등록",
+                style: TextStyle(color: ColorStyles.black),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: ColorStyles.borderColor, width: 1.0),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: _image == null
+                      ? IconButton(
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  height: 150,
+                                  color: ColorStyles.transparent,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                color: ColorStyles.borderColor,
+                                                width: 2),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  getImage(ImageSource.camera);
+                                                },
+                                                icon: const Icon(
+                                                    Icons.camera_alt_outlined),
+                                              ),
+                                              const Text("카메라"),
+                                            ],
+                                          ),
                                         ),
-                                        child: Column(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                getImage(ImageSource.camera);
-                                              },
-                                              icon: const Icon(Icons.camera_alt_outlined),
-                                            ),
-                                            const Text("카메라"),
-                                          ],
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                color: ColorStyles.borderColor,
+                                                width: 2),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  getImage(ImageSource.gallery);
+                                                },
+                                                icon: const Icon(Icons.photo),
+                                              ),
+                                              const Text("갤러리"),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        width: 80,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          border:
-                                              Border.all(color: ColorStyles.borderColor, width: 2),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                getImage(ImageSource.gallery);
-                                              },
-                                              icon: const Icon(Icons.photo),
-                                            ),
-                                            const Text("갤러리"),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        icon: const Icon(Icons.add),
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.file(
-                          File(_image!.path),
-                          fit: BoxFit.fill,
+                                );
+                              },
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.file(
+                            File(_image!.path),
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
-              ),
-              Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
-                  borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-              Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
-                  borderRadius: BorderRadius.circular(20),
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: ColorStyles.borderColor, width: 1.0),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-              ),
-              Container(
-                height: 70,
-                width: 70,
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorStyles.borderColor, width: 1.0),
-                  borderRadius: BorderRadius.circular(20),
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: ColorStyles.borderColor, width: 1.0),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: ColorStyles.borderColor, width: 1.0),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -443,14 +459,17 @@ class BottomButton extends StatelessWidget {
               fontSize: 18,
             ),
             // '취소하기' 버튼
-            RoundedOutlinedButton(
-              text: '취소하기',
-              width: double.infinity,
-              onPressed: () => Navigator.of(context).pop(),
-              foregroundColor: ColorStyles.mainColor,
-              backgroundColor: ColorStyles.white,
-              borderColor: ColorStyles.mainColor,
-              fontSize: 18,
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: RoundedOutlinedButton(
+                text: '취소하기',
+                width: double.infinity,
+                onPressed: () => Navigator.of(context).pop(),
+                foregroundColor: ColorStyles.mainColor,
+                backgroundColor: ColorStyles.white,
+                borderColor: ColorStyles.mainColor,
+                fontSize: 18,
+              ),
             ),
           ],
         ),

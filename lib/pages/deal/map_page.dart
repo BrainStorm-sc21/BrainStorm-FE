@@ -20,30 +20,37 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: NaverMap(
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(37.566570, 126.978442),
-          zoom: 17,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            NaverMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.566570, 126.978442),
+                zoom: 17,
+              ),
+              onMapCreated: onMapCreated,
+              mapType: MapType.Basic,
+              initLocationTrackingMode: _trackingMode,
+              locationButtonEnable: true,
+              indoorEnable: true,
+              onCameraIdle: _onCameraIdle,
+              onMapTap: _onMapTap,
+              onMapLongTap: _onMapLongTap,
+              onMapDoubleTap: _onMapDoubleTap,
+              onMapTwoFingerTap: _onMapTwoFingerTap,
+              maxZoom: 17,
+              minZoom: 15,
+            ),
+          ],
         ),
-        onMapCreated: onMapCreated,
-        mapType: MapType.Basic,
-        initLocationTrackingMode: _trackingMode,
-        //locationButtonEnable: true,
-        indoorEnable: true,
-        onCameraIdle: _onCameraIdle,
-        onMapTap: _onMapTap,
-        onMapLongTap: _onMapLongTap,
-        onMapDoubleTap: _onMapDoubleTap,
-        onMapTwoFingerTap: _onMapTwoFingerTap,
-        maxZoom: 17,
-        minZoom: 15,
       ),
     );
   }
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -51,7 +58,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapLongTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onLongTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onLongTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -59,7 +67,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapDoubleTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onDoubleTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onDoubleTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -67,7 +76,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTwoFingerTap(LatLng position) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTwoFingerTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text(
+          '[onTwoFingerTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
