@@ -1,14 +1,21 @@
+import 'dart:convert';
 import 'package:brainstorm_meokjang/models/food.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class OCRResultPage extends StatefulWidget {
-  final Image image;
+  final String imagePath;
+  final String imageType;
 
-  const OCRResultPage({super.key, required this.image});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -16,8 +23,9 @@ class OCRResultPage extends StatefulWidget {
 
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
+  late Map<int, Map<String, dynamic>> recommendList;
   final List<TextEditingController> _foodNameController = [];
-  late bool _isLoading;
+  late bool _isLoading = true;
   Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
     'list': {
       0: {
@@ -58,22 +66,77 @@ class _OCRResultPageState extends State<OCRResultPage> {
       },
     },
   };
+  late final FormData _imageFormData;
 
   @override
   void initState() {
     super.initState();
-    initLoading();
+    initFormData();
+    sendImageAndGetOCRResult();
     initFoods();
+    initRecommendList();
     initController();
   }
 
-  void initLoading() {
-    _isLoading = true;
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
+  void initFormData() {
+    _imageFormData = FormData.fromMap({
+      'image': MultipartFile.fromFileSync(widget.imagePath),
     });
+  }
+
+  // 이미지를 보내고, OCR 결과 및 소비기한 추천 데이터를 받음
+  void sendImageAndGetOCRResult() async {
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10)
+      ..contentType = 'multipart/form-data'; // to upload image
+
+    // setup data
+    Map<String, dynamic> data = {
+      'type': widget.imageType,
+      // 'image': _imageFormData,
+      'image': MultipartFile.fromFileSync(widget.imagePath),
+    };
+    debugPrint('$data');
+
+    try {
+      // send data
+      final res = await dio.post(
+        '/food/recommend',
+        data: data,
+      );
+
+      // handle response
+      if (res.statusCode == 200) {
+        setState(() {
+          ocrResult = res.data;
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, navigate to home & show error dialog
+    on DioError catch (err) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+        (route) => false,
+      );
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+      return;
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 
   void initFoods() {
@@ -85,6 +148,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
         expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
       ));
     }
+  }
+
+  // initState에 추가 필요
+  void initRecommendList() {
+    setState(() {
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+    });
   }
 
   void initController() {
@@ -220,15 +291,64 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
-  void saveFoodInfo() {
+  void saveFoodInfo() async {
     for (var food in foods) {
       if (food.isFoodValid() == false) return;
     }
 
-    for (var food in foods) {
-      debugPrint('${food.toJson()}');
-    }
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
 
-    // 추후 DB에 저장하는 로직 구현 필요
+    // setup data
+    final data = {
+      "userId": "1",
+      "foodList": json.encode(foods),
+    };
+
+    // json.encode(foods);
+    // List<Map<String, String>> data = [];
+    // for (var food in foods) {
+    //   Map<String, String> foodItem = food.toJson();
+    //   foodItem['userId'] = 'mirim'; // 임시로 userId 부여
+    //   data.add(foodItem);
+    // }
+    debugPrint('req data: $data');
+
+    try {
+      // save data
+      final res = await dio.post(
+        '/food/addList',
+        data: data,
+      );
+
+      // handle response
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, show error dialog
+    on DioError catch (err) {
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+      return;
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 }

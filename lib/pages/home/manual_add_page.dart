@@ -1,6 +1,10 @@
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +20,8 @@ class _ManualAddPageState extends State<ManualAddPage> {
   // Food 모델 인스턴스 생성
   late Food food;
   // 수량 입력란에 실제로 표시되는 text를 갖는 컨트롤러
-  late final TextEditingController _stockStringController = TextEditingController();
+  late final TextEditingController _stockStringController =
+      TextEditingController();
   // 수량 입력란 focus가 컨트롤러에 의해 꼬이지 않도록 focus를 고정해주는 focusNode
   late final FocusNode _stockFocusNode = FocusNode();
 
@@ -44,7 +49,8 @@ class _ManualAddPageState extends State<ManualAddPage> {
   void setName(String value) => setState(() => food.foodName = value);
   void setStorage(String value) => setState(() => food.storageWay = value);
   void setStock(num value) => setState(() => food.stock = value);
-  void setExpireDate(DateTime value, {int? index}) => setState(() => food.expireDate = value);
+  void setExpireDate(DateTime value, {int? index}) =>
+      setState(() => food.expireDate = value);
   // 수량 입력란에 stock 값이 표시되도록 set state
   void updateControllerText() =>
       setState(() => _stockStringController.text = food.stock.toString());
@@ -72,28 +78,79 @@ class _ManualAddPageState extends State<ManualAddPage> {
         delegate: SliverChildListDelegate([
           FoodName(setName: setName), // 식료품 이름 입력
           const SizedBox(height: 30), // 여백
-          FoodStorage(storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
+          FoodStorage(
+            storage: food.storageWay,
+            setStorage: setStorage,
+          ), // 식료품 보관장소 선택
           divider,
           FoodStockTextfield(
-              stock: food.stock,
-              setStock: setStock,
-              controller: _stockStringController,
-              updateControllerText: updateControllerText,
-              focusNode: _stockFocusNode), // 식료품 수량 조절
+            stock: food.stock,
+            setStock: setStock,
+            controller: _stockStringController,
+            updateControllerText: updateControllerText,
+            focusNode: _stockFocusNode,
+          ), // 식료품 수량 조절
           divider,
-          FoodExpireDate(expireDate: food.expireDate, setExpireDate: setExpireDate), // 식료품 소비기한 입력
+          FoodExpireDate(
+            expireDate: food.expireDate,
+            setExpireDate: setExpireDate,
+          ), // 식료품 소비기한 입력
         ]),
       ),
     );
   }
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
-  void saveFoodInfo() {
+  void saveFoodInfo() async {
     if (food.isFoodValid() == false) {
       return;
     }
-    debugPrint('${food.toJson()}');
-    // 추후 DB에 저장하는 로직 구현 필요
+
+    // init dio
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    // setup data
+    final data = {
+      "userId": "1",
+      "food": food.toJson(),
+    };
+    debugPrint('req data: $data');
+
+    try {
+      // save data
+      final res = await dio.post(
+        '/food/add',
+        data: data,
+      );
+
+      // handle response
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
+    }
+    // when error occured, show error dialog
+    on DioError catch (err) {
+      Popups.popSimpleDialog(
+        context,
+        title: '${err.type}',
+        body: '${err.message}',
+      );
+    } catch (err) {
+      debugPrint('$err');
+    }
   }
 }
 
@@ -116,7 +173,8 @@ class _FoodNameState extends State<FoodName> {
       child: TextFormField(
         decoration: InputDecoration(
           hintText: '식품 이름을 입력하세요',
-          contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             borderSide: BorderSide(
@@ -176,7 +234,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
+        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
         ]),
@@ -189,9 +247,12 @@ class FoodStorage extends StatelessWidget {
               text: _storages[index],
               onPressed: () => setStorage(_storages[index]),
               width: MediaQuery.of(context).size.width / 3.0 - 50,
-              backgroundColor:
-                  storage == _storages[index] ? ColorStyles.mainColor : ColorStyles.white,
-              foregroundColor: storage == _storages[index] ? ColorStyles.white : ColorStyles.black,
+              backgroundColor: storage == _storages[index]
+                  ? ColorStyles.mainColor
+                  : ColorStyles.white,
+              foregroundColor: storage == _storages[index]
+                  ? ColorStyles.white
+                  : ColorStyles.black,
               borderColor: ColorStyles.mainColor,
             );
           }),
