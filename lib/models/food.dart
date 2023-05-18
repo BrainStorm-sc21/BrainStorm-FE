@@ -1,3 +1,16 @@
+class FoodData {
+  final List<Food> data;
+
+  FoodData({required this.data});
+
+  factory FoodData.fromJson(Map<String, dynamic> json) {
+    var list = json['data'] as List;
+    List<Food> foodList = list.map((i) => Food.fromJson(i)).toList();
+
+    return FoodData(data: foodList);
+  }
+}
+
 class Food {
   late int? foodId;
   String foodName;
@@ -28,8 +41,8 @@ class Food {
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       foodId: json['foodId'],
-      foodName: json['name'],
-      storageWay: json['storage'],
+      foodName: json['foodName'],
+      storageWay: json['storageWay'],
       stock: json['stock'],
       expireDate: DateTime.parse(json['expireDate']),
     );

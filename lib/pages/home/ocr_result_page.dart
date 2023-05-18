@@ -14,8 +14,7 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage(
-      {super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -153,8 +152,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   // initState에 추가 필요
   void initRecommendList() {
     setState(() {
-      recommendList =
-          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+      recommendList = ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
     });
   }
 
@@ -227,22 +225,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
               ),
               child: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorStyles.mustardYellow,
-                      ColorStyles.transparent,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment(-0.95, 0),
-                    stops: [1, 1],
-<<<<<<< HEAD
-=======
->>>>>>> Iteration3
->>>>>>> Iteration3
-                  ),
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
                         ColorStyles.mustardYellow,
@@ -252,14 +234,47 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       end: Alignment(-0.95, 0),
                       stops: [1, 1],
                     ),
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(8.0),
-=======
->>>>>>> Iteration3
+                        topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0))),
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 30,
+                  right: 20,
+                  bottom: 10,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          child: TextField(
+                            controller: _foodNameController[index],
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              counterText: '',
+                            ),
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              foods.removeAt(index);
+                              _foodNameController.removeAt(index);
+                            });
+                          },
+                          icon: const Icon(Icons.close),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
                     FoodStorageDropdown(
                       index: index,
                       storage: foods[index].storageWay,
@@ -274,63 +289,12 @@ class _OCRResultPageState extends State<OCRResultPage> {
 >>>>>>> Iteration3
 >>>>>>> Iteration3
                     ),
-                  ),
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 30,
-                    right: 20,
-                    bottom: 10,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.75,
-                            child: TextField(
-                              controller: _foodNameController[index],
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                counterText: '',
-                              ),
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              maxLength: 20,
-                            ),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                foods.removeAt(index);
-                                _foodNameController.removeAt(index);
-                              });
-                            },
-                            icon: const Icon(Icons.close),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                          ),
-                        ],
-                      ),
-                      FoodStorageDropdown(
-                        index: index,
-                        storage: foods[index].storageWay,
-                        setStorage: setStorage,
-                      ),
-                      FoodStockButton(
-                        index: index,
-                        stock: foods[index].stock,
-                        setStock: setStock,
-                      ),
-                      FoodExpireDate(
-                        index: index,
-                        expireDate: foods[index].expireDate,
-                        setExpireDate: setExpireDate,
-                      ),
-                    ],
-                  ),
+                    FoodExpireDate(
+                      index: index,
+                      expireDate: foods[index].expireDate,
+                      setExpireDate: setExpireDate,
+                    ),
+                  ],
                 ),
 <<<<<<< HEAD
               ),

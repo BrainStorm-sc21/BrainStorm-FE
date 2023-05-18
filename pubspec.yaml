@@ -94,6 +94,9 @@ flutter:
     - assets/images/google.png
     - assets/images/kakao.png
     - assets/images/naver.png
+    - assets/images/groupMarker.png
+    - assets/images/exchangeMarker.png
+    - assets/images/shareMarker.png
     - assets/images/chatGPT.png
     - assets/images/먹장로고.png
     - assets/images/사과.png
