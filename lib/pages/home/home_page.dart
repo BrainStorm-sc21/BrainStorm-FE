@@ -5,7 +5,7 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/food/refrigerator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,20 +15,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // 식재료 리스트
   List<Food> foodList = List.empty(growable: true);
+  late FoodData foodData;
+
+  Future getServerDataWithDio() async {
+    BaseOptions options = BaseOptions(
+        baseUrl: 'http://www.meokjang.com',
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5));
+    Dio dio = Dio(options);
+    try {
+      Response resp = await dio.get("/food/1");
+
+      print("Status: ${resp.statusCode}");
+      print("Data:\n${resp.data}");
+
+      FoodData foodData = FoodData.fromJson(resp.data);
+
+      setState(() {
+        for (Food fooditem in foodData.data) {
+          foodList.add(fooditem);
+        }
+      });
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return false;
+  }
+
+  void initFoods() {
+    for (Food fooditem in foodData.data) {
+      foodList.add(fooditem);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
-    var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
-    foodList = [
-      Food(foodId: 0, foodName: "토마토", storageWay: "냉장", stock: 2, expireDate: now),
-      Food(foodId: 1, foodName: "감자", storageWay: "실온", stock: 5, expireDate: now),
-      Food(foodId: 2, foodName: "가지", storageWay: "냉동", stock: 1, expireDate: now),
-      Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
-    ];
+    getServerDataWithDio();
+    //initFoods();
   }
 
   TabBar get _tabBar => const TabBar(
@@ -81,18 +108,17 @@ class _HomePageState extends State<HomePage> {
             body: Column(children: [
               _tabBar,
               const Divider(height: 0, color: ColorStyles.lightgrey, thickness: 1.5, endIndent: 10),
-              foodList.isEmpty
-                  ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
-                  : const Expanded(
-                      child: TabBarView(
-                        children: [
-                          Refrigerator(storage: '전체'),
-                          Refrigerator(storage: '냉장'),
-                          Refrigerator(storage: '냉동'),
-                          Refrigerator(storage: '실온')
-                        ],
-                      ),
-                    )
+              Expanded(
+                  child: foodList.isEmpty
+                      ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
+                      : TabBarView(
+                          children: [
+                            Refrigerator(foodList: foodList, storage: '전체'),
+                            Refrigerator(foodList: foodList, storage: '냉장'),
+                            Refrigerator(foodList: foodList, storage: '냉동'),
+                            Refrigerator(foodList: foodList, storage: '실온')
+                          ],
+                        ))
             ]),
             floatingActionButton: floatingButtons(context)));
   }
@@ -104,6 +130,7 @@ Widget? floatingButtons(BuildContext context) {
     activeIcon: Icons.close,
     visible: true,
     curve: Curves.bounceIn,
+    iconTheme: const IconThemeData(size: 35),
     backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
     childPadding: const EdgeInsets.all(1),
     spaceBetweenChildren: 10,
