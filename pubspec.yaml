@@ -61,6 +61,7 @@ dependencies:
   flutter_screenutil: ^5.7.0
   flutter_web_auth: ^0.5.0
   image_picker: ^0.8.7+4
+  http: ^0.13.6
 
 dependency_overrides:
   intl: ^0.18.0
@@ -88,14 +89,17 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/임시온보딩화면1.png
-    - assets/images/임시온보딩화면2.png
-    - assets/images/임시온보딩화면3.png
+    - assets/images/splash.png
+    - assets/images/온보딩화면1.png
+    - assets/images/온보딩화면2.png
+    - assets/images/온보딩화면3.png
     - assets/images/google.png
     - assets/images/kakao.png
     - assets/images/naver.png
     - assets/images/chatGPT.png
     - assets/images/먹장로고.png
+    - assets/images/사과.png
+    - assets/images/감자.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
