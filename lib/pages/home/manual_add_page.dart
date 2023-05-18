@@ -114,8 +114,10 @@ class _ManualAddPageState extends State<ManualAddPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
-    Map<String, String> data = food.toJson();
-    data['userId'] = 'mirim'; // 임시로 userId 부여
+    final data = {
+      "userId": "1",
+      "food": food.toJson(),
+    };
     debugPrint('req data: $data');
 
     try {
