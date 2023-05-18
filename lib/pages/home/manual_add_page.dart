@@ -78,10 +78,14 @@ class _ManualAddPageState extends State<ManualAddPage> {
         delegate: SliverChildListDelegate([
           FoodName(setName: setName), // 식료품 이름 입력
           const SizedBox(height: 30), // 여백
+<<<<<<< HEAD
           FoodStorage(
             storage: food.storageWay,
             setStorage: setStorage,
           ), // 식료품 보관장소 선택
+=======
+          FoodStorage(storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
+>>>>>>> Iteration3
           divider,
           FoodStockTextfield(
             stock: food.stock,
