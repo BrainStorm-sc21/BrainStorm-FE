@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
