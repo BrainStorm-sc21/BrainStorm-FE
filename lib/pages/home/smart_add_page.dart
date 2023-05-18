@@ -1,4 +1,3 @@
-import 'package:brainstorm_meokjang/pages/home/take_picture_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/pages/home/submit_image_page.dart';
 import 'package:camera/camera.dart';

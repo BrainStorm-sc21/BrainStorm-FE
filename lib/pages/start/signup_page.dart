@@ -67,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: deviceWidth * 0.8,
                     child: ElevatedButton(
                       onPressed: () {
-                        print(postSignUp(user));
+                        //print(postSignUp(user));
 
                         print('http 요청');
                         print('userName: ${user.userName}');

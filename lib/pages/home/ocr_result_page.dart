@@ -14,7 +14,8 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -152,7 +153,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   // initState에 추가 필요
   void initRecommendList() {
     setState(() {
-      recommendList = ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
     });
   }
 
@@ -220,7 +222,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       stops: [1, 1],
                     ),
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0))),
+                        topLeft: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0))),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,
