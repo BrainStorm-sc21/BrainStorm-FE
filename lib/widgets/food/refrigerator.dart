@@ -67,8 +67,8 @@ class _RefrigeratorState extends State<Refrigerator> {
       itemBuilder: (context, index) {
         food = foodList[index];
         return Card(
-          key: PageStorageKey(food.foodId),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: ExpansionTile(
             title: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
