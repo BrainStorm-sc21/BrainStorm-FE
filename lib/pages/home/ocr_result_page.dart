@@ -99,6 +99,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
         data: formData,
       );
 
+      debugPrint("Status: ${res.statusCode}");
+      debugPrint("Data: ${res.data}");
+
       // handle response
       switch (res.data['status']) {
         case 200:
@@ -319,6 +322,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
         '/food/addList',
         data: data,
       );
+
+      debugPrint("Status: ${res.statusCode}");
+      debugPrint("Data: ${res.data}");
 
       // handle response
       if (!mounted) return;
