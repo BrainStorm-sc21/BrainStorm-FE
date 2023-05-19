@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
@@ -6,11 +7,13 @@ import 'package:flutter/material.dart';
 
 class DealDetailPage extends StatefulWidget {
   final String description;
+  final Deal deal;
 
   const DealDetailPage({
     super.key,
     this.description =
         '국산 햇감자 공동구매하실분 찾습니다!!\n아는 분께서 감자농사 하시는데 박스 단위로 판매하시고 있습니다.\n한 박스 사서 나누실 분 모여주세요😆',
+    required this.deal,
   });
 
   @override
@@ -33,11 +36,14 @@ class _DealDetailPageState extends State<DealDetailPage> {
               Container(
                 width: width,
                 height: height * 0.3,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: ColorStyles.black,
                   image: DecorationImage(
-                      image: AssetImage('assets/images/감자.png'),
+                      image: NetworkImage(widget.deal.dealImage),
                       fit: BoxFit.fitWidth),
+                  // image: DecorationImage(
+                  //     image: AssetImage('assets/images/감자.png'),
+                  //     fit: BoxFit.fitWidth),
                 ),
               ),
             ],
@@ -57,7 +63,9 @@ class _DealDetailPageState extends State<DealDetailPage> {
             height: height * 0.72,
             child: Column(
               children: [
-                const TopPostUnit(),
+                TopPostUnit(
+                  distance: widget.deal.distance,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, top: 15, bottom: 10),
@@ -67,9 +75,11 @@ class _DealDetailPageState extends State<DealDetailPage> {
                     width: double.infinity,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5),
-                  child: firstPostUnit(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: firstPostUnit(
+                    deal: widget.deal,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(

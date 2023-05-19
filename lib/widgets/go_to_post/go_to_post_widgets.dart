@@ -1,16 +1,17 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 class firstPostUnit extends StatefulWidget {
-  final String type;
-  final String title;
-  final String time;
+  final Deal deal;
 
-  const firstPostUnit(
-      {super.key,
-      this.type = '공구',
-      this.title = '감자 공동구매 하실 분!',
-      this.time = '1시간 전'});
+  final Map dealColors = const {
+    '공구': ColorStyles.groupBuyColor,
+    '교환': ColorStyles.exchangColor,
+    '나눔': ColorStyles.shareColor
+  };
+
+  const firstPostUnit({super.key, required this.deal});
 
   @override
   State<firstPostUnit> createState() => _firstPostUnitState();
@@ -32,19 +33,19 @@ class _firstPostUnitState extends State<firstPostUnit> {
                   height: 20,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: ColorStyles.groupBuyColor),
+                      color: widget.dealColors[widget.deal.dealType]),
                   child: Center(
                     child: Text(
-                      widget.type,
-                      style:
-                          const TextStyle(fontSize: 11, color: Colors.purple),
+                      widget.deal.dealType,
+                      style: const TextStyle(
+                          fontSize: 11, color: ColorStyles.white),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    widget.title,
+                    widget.deal.dealName,
                     style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -54,7 +55,7 @@ class _firstPostUnitState extends State<firstPostUnit> {
               ],
             ),
             Text(
-              widget.time,
+              widget.deal.dealTime,
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -65,16 +66,9 @@ class _firstPostUnitState extends State<firstPostUnit> {
 }
 
 class secondPostUnit extends StatefulWidget {
-  final String nickname;
-  final String distance;
-  final String description;
+  final Deal deal;
 
-  const secondPostUnit(
-      {super.key,
-      this.nickname = '삼식이 네끼',
-      this.distance = '300M',
-      this.description =
-          '국산 햇감자 공동구매하실분 찾습니다!!\n아는분께서 감자농사 하시는데 박스 단위로 판매하시...'});
+  const secondPostUnit({super.key, required this.deal});
 
   @override
   State<secondPostUnit> createState() => _secondPostUnitState();
@@ -90,25 +84,24 @@ class _secondPostUnitState extends State<secondPostUnit> {
           children: [
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Text(widget.nickname,
-                      style: const TextStyle(
+                const Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: Text('유저 닉네임',
+                      style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: ColorStyles.black)),
                 ),
-                Text(widget.distance,
+                Text(widget.deal.distance,
                     style: const TextStyle(
                         fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
               child: Text(
-                widget.description,
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                '거래 description',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ),
           ],

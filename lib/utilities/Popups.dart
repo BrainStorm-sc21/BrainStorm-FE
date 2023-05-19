@@ -48,7 +48,7 @@ class Popups {
     );
   }
 
-  static void goToPost(context, type) {
+  static void goToPost(context, deal) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -82,7 +82,7 @@ class Popups {
                       ),
                     ),
                   ),
-                  const firstPostUnit(),
+                  firstPostUnit(deal: deal),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: Container(
@@ -91,7 +91,9 @@ class Popups {
                       width: double.infinity,
                     ),
                   ),
-                  const secondPostUnit(),
+                  secondPostUnit(
+                    deal: deal,
+                  ),
                   const Spacer(),
                   Padding(
                     padding:
@@ -108,7 +110,7 @@ class Popups {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const DealDetailPage()));
+                                          DealDetailPage(deal: deal)));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,
