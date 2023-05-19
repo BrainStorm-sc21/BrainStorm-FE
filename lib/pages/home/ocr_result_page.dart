@@ -136,6 +136,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
       return;
     } catch (err) {
       debugPrint('$err');
+    } finally {
+      dio.close();
     }
   }
 
@@ -339,6 +341,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
       return;
     } catch (err) {
       debugPrint('$err');
+    } finally {
+      dio.close();
     }
   }
 }
