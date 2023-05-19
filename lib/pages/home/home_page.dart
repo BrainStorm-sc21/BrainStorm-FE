@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(90.0),
               child: AppBar(
-                  //centerTitle: true,
+                  centerTitle: false,
                   title: const Text("냉장고",
                       style: TextStyle(
                           height: 3,
