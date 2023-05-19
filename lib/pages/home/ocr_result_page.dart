@@ -158,14 +158,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
-  // initState에 추가 필요
-  void initRecommendList() {
-    setState(() {
-      recommendList =
-          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
-    });
-  }
-
   void initController() {
     for (int index = 0; index < foods.length; index++) {
       _foodNameController.add(TextEditingController());
