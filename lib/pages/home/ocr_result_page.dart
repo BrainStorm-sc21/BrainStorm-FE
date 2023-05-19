@@ -148,7 +148,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       },
     );
 
-    print(recommendList);
+    debugPrint('$recommendList');
   }
 
   void initFoods() {
