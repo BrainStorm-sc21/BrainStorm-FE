@@ -328,7 +328,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
 
       // handle response
       if (!mounted) return;
-      switch (res.statusCode) {
+      switch (res.data['status']) {
         case 200:
           Navigator.pushAndRemoveUntil(
             context,
