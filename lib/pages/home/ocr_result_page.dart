@@ -139,6 +139,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
+  // initState에 추가 필요
+  void initRecommendList() {
+    setState(() {
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+    });
+  }
+
   void initFoods() {
     for (var fooditem in ocrResult['list']!.values) {
       foods.add(Food(
@@ -302,19 +310,11 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
-    final data = {
+    Map<String, dynamic> data = {
       "userId": "1",
       "foodList": json.encode(foods),
     };
-
-    // json.encode(foods);
-    // List<Map<String, String>> data = [];
-    // for (var food in foods) {
-    //   Map<String, String> foodItem = food.toJson();
-    //   foodItem['userId'] = 'mirim'; // 임시로 userId 부여
-    //   data.add(foodItem);
-    // }
-    debugPrint('req data: $data');
+    debugPrint('$data');
 
     try {
       // save data
