@@ -24,9 +24,9 @@ class _DealPageState extends State<DealPage> {
   final List<String> _deals = ['공구', '교환', '나눔'];
   final Map _checkDeal = {'공구': false, '교환': false, '나눔': false};
   final List<Color> _colors = [
-    ColorStyles.groupBuyColor,
-    ColorStyles.exchangColor,
-    ColorStyles.shareColor
+    ColorStyles.groupBuyTextColor,
+    ColorStyles.exchangeTextColor,
+    ColorStyles.shareTextColor
   ];
 
   final List<String> _valueList = ['거리순', '최신순'];
@@ -49,55 +49,60 @@ class _DealPageState extends State<DealPage> {
   List<Deal> entirePosts = [
     Deal(
         userId: 1,
+        dealId: 1,
         dealName: "감자 공동구매 하실 분!",
         dealType: "공구",
         distance: "150M",
         location: "도로주소",
-        latitude: 37.566570,
-        longitude: 126.978442,
+        latitude: 37.284859,
+        longitude: 127.044508,
         dealTime: "30분전",
         dealImage:
             'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcR1M89lNmXLBltfEc5TQZJSpcqvZ36vvZyZfpP98EFh-i4Q9X8S8woN6El91b1pZ5Sw'),
     Deal(
         userId: 2,
+        dealId: 2,
         dealName: "양파 나눔해요~",
         dealType: "나눔",
         distance: "400M",
         location: "도로주소2",
-        latitude: 37.56643167934505,
-        longitude: 126.97937927193084,
+        latitude: 37.28419,
+        longitude: 127.043608,
         dealTime: "57분전",
         dealImage:
             'https://i.namu.wiki/i/qTfdtopPV7GKQ0YmjVsHxythtmlSQ35OppjcjwJgHJoLVXzx5iCZRFHaq-mXoTR5cl-j2X4SQm1xvyj2hhxBEw.webp'),
     Deal(
         userId: 3,
+        dealId: 3,
         dealName: "이천 쌀 공구하실 분 구합니다!!",
         dealType: "공구",
         distance: "1.2M",
         location: "도로주소3",
-        latitude: 37.56555925792482,
-        longitude: 126.97766593224515,
+        latitude: 37.283159,
+        longitude: 127.0446788,
         dealTime: "1시간 전",
         dealImage: 'https://www.newspeak.kr/news/photo/202209/435707_284048_3504.jpg'),
     Deal(
         userId: 4,
+        dealId: 4,
         dealName: "사과랑 바나나 교환해요",
         dealType: "교환",
         distance: "750M",
         location: "도로주소4",
-        latitude: 37.566703547317187,
-        longitude: 126.97782114579604,
+        latitude: 37.284659,
+        longitude: 127.04460887569,
         dealTime: "2시간 전",
         dealImage:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRlxKlz8H0tHG-DpyUhBOOo6wpGw_NnEYPMLDjrfVA3aSPyIdCfmzS_fzOcnj0seChhGo&usqp=CAU'),
     Deal(
         userId: 5,
+        dealId: 5,
         dealName: "이건 정말 긴 제목을 가지고 있는 게시물의 테스트를 위한 더미값입니다",
         dealType: "나눔",
         distance: "750M",
         location: "도로주소5",
-        latitude: 37.566753547317187,
-        longitude: 126.97772114579604,
+        latitude: 37.283959,
+        longitude: 127.04467148,
         dealTime: "2시간 전",
         dealImage: 'https://i.pinimg.com/originals/b0/df/95/b0df95cfc6f31293d002d4d6daac253c.jpg')
   ];
@@ -229,7 +234,6 @@ class _DealPageState extends State<DealPage> {
                     }
                   });
                 },
-                underline: Container(),
                 elevation: 2)));
   }
 
@@ -247,20 +251,25 @@ class _DealPageState extends State<DealPage> {
       closeManually: false,
       children: [
         SpeedDialChild(
-            child: const Text('나눔', style: TextStyle(color: ColorStyles.white)),
+            child: const Text('나눔',
+                style: TextStyle(color: ColorStyles.shareTextColor, fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SharingPage()));
             }),
         SpeedDialChild(
-            child: const Text('교환', style: TextStyle(color: ColorStyles.white)),
-            backgroundColor: ColorStyles.exchangColor,
+            child: const Text('교환',
+                style:
+                    TextStyle(color: ColorStyles.exchangeTextColor, fontWeight: FontWeight.w600)),
+            backgroundColor: ColorStyles.exchangeColor,
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const ExchangePage()));
             }),
         SpeedDialChild(
-            child: const Text('공구', style: TextStyle(color: ColorStyles.white)),
+            child: const Text('공구',
+                style:
+                    TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
               Navigator.push(
