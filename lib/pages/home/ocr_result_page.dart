@@ -332,6 +332,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
             (route) => false,
           );
           break;
+        case 400:
+          throw Exception(res.data['message']);
         default:
           throw Exception('Failed to send data [${res.statusCode}]');
       }
