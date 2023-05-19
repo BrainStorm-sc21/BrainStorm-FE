@@ -306,7 +306,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
   // 입력한 식료품 정보를 DB에 저장하는 함수
   void saveFoodInfo() async {
     for (var food in foods) {
-      if (food.isFoodValid() == false) return;
+      if (food.isFoodValid() == false) {
+        Popups.popSimpleDialog(
+          context,
+          title: '입력 오류',
+          body: '입력이 올바르지 않습니다.',
+        );
+        return;
+      }
     }
 
     // init dio
