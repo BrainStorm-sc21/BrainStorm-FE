@@ -26,43 +26,35 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late Map<int, Map<String, dynamic>> recommendList;
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
-  Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
-    'list': {
-      0: {
-        'food_name': '오! 감자',
-        'stock': 1,
+  Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
+    "list": {
+      "0": {
+        "foodName": "맛있는 감자",
+        "stock": 3,
       },
-      1: {
-        'food_name': '된장찌개양념',
-        'stock': 2,
+      "1": {
+        "foodName": "양파",
+        "stock": 5,
       },
-      2: {
-        'food_name': '깐양파',
-        'stock': 3,
+      "2": {
+        "foodName": "김혜자의 감자탕",
+        "stock": 1,
       },
-      3: {
-        'food_name': '오오오.. 감자',
-        'stock': 1,
-      },
-      4: {
-        'food_name': '군만둥',
-        'stock': 2,
-      },
-      5: {
-        'food_name': '청경채',
-        'stock': 3,
+      "3": {
+        "foodName": "비프 라자냐",
+        "stock": 2,
       },
     },
-    'recommend': {
-      0: {
-        '냉장': 7,
-        '냉동': 60,
-        '실온': 3,
+    "recommend": {
+      "0": {
+        "0": 3,
+        "1": 14,
+        "2": 1,
       },
-      3: {
-        '냉장': 70,
-        '냉동': 5,
-        '실온': 5,
+      "2": {
+        "0": 2,
+        "1": 60,
+        "2": 0,
       },
     },
   };
@@ -152,7 +144,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initFoods() {
     for (var fooditem in ocrResult['list']!.values) {
       foods.add(Food(
-        foodName: fooditem['food_name'],
+        foodName: fooditem['foodName'],
         stock: fooditem['stock'],
         storageWay: '냉장',
         expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
