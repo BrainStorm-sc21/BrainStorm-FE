@@ -58,22 +58,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
       },
     },
   };
-  late final FormData _imageFormData;
 
   @override
   void initState() {
     super.initState();
-    initFormData();
     sendImageAndGetOCRResult();
     initFoods();
     initRecommendList();
     initController();
-  }
-
-  void initFormData() {
-    _imageFormData = FormData.fromMap({
-      'image': MultipartFile.fromFileSync(widget.imagePath),
-    });
   }
 
   // 이미지를 보내고, OCR 결과 및 소비기한 추천 데이터를 받음
