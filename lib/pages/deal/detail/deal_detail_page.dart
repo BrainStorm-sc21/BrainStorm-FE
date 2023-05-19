@@ -114,7 +114,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
               color: ColorStyles.mainColor,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context).pop();
             },
           ),
         ),

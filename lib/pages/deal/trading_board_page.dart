@@ -52,7 +52,9 @@ class TradingBoard extends StatelessWidget {
                 child: Text(dealType,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 11, color: ColorStyles.white, fontWeight: FontWeight.w400)),
+                        fontSize: 11,
+                        color: ColorStyles.white,
+                        fontWeight: FontWeight.w400)),
               ),
               const SizedBox(width: 8),
               Column(
@@ -60,16 +62,27 @@ class TradingBoard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 270,
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Flexible(
-                          child: Text(dealName,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500, height: 1),
-                              overflow: TextOverflow.ellipsis)),
-                      Text(time,
-                          style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1)),
-                    ]),
+                    width: 300,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              flex: 8,
+                              child: Text(dealName,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1),
+                                  overflow: TextOverflow.ellipsis)),
+                          Expanded(
+                            flex: 2,
+                            child: Text(time,
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                    height: 1)),
+                          ),
+                        ]),
                   ),
                   const SizedBox(height: 6),
                   Text(
