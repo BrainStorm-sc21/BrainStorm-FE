@@ -23,7 +23,7 @@ class OCRResultPage extends StatefulWidget {
 
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
-  late Map<int, Map<String, dynamic>> recommendList;
+  late Map<int, List<int>> recommendList = {};
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
   Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
@@ -133,12 +133,20 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
-  // initState에 추가 필요
   void initRecommendList() {
-    setState(() {
-      recommendList =
-          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
-    });
+    // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+    Map<String, Map<String, dynamic>> rawRecommend = ocrResult['recommend']!;
+    rawRecommend.forEach(
+      (index, rawRecommendDays) {
+        int i = int.parse(index);
+        List<int> recommendDays = rawRecommendDays.values.toList().cast<int>();
+        setState(() {
+          recommendList[i] = recommendDays;
+        });
+      },
+    );
+
+    print(recommendList);
   }
 
   void initFoods() {
@@ -257,10 +265,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         ),
                       ],
                     ),
-                    FoodStorageDropdown(
+                    CustomFoodStorageDropdown(
                       index: index,
                       storage: foods[index].storageWay,
                       setStorage: setStorage,
+                      recommendList: recommendList.containsKey(index)
+                          ? recommendList[index]
+                          : null,
+                      recommendExpireDate: setExpireDate,
                     ),
                     FoodStockButton(
                       index: index,
@@ -336,5 +348,76 @@ class _OCRResultPageState extends State<OCRResultPage> {
     } finally {
       dio.close();
     }
+  }
+}
+
+// 기존 FoodStoragDropdown에 소비기한 추천 기능을 적용함
+class CustomFoodStorageDropdown extends StatelessWidget {
+  final String storage;
+  final int index;
+  final void Function(int index, String value) setStorage;
+
+  final List<int>? recommendList;
+  final void Function(DateTime value, {int? index}) recommendExpireDate;
+
+  CustomFoodStorageDropdown({
+    super.key,
+    required this.index,
+    required this.storage,
+    required this.setStorage,
+    required this.recommendList,
+    required this.recommendExpireDate,
+  });
+
+  final storages = ['냉장', '냉동', '실온'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text('보관방법'),
+        const Spacer(),
+        DropdownButton(
+          value: storage,
+          items: storages
+              .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ))
+              .toList(),
+          onChanged: (value) {
+            setStorage(index, value!);
+            if (recommendList != null) {
+              setRecommendedExpireDate(value);
+            }
+          },
+          icon: const Icon(Icons.arrow_drop_down_rounded),
+          iconSize: 20,
+          underline: Container(),
+          elevation: 2,
+          dropdownColor: ColorStyles.white,
+        ),
+      ],
+    );
+  }
+
+  void setRecommendedExpireDate(String value) {
+    var expireDate = DateTime.now();
+    if (value == storages[0]) {
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![0]);
+    } else if (value == storages[1]) {
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![1]);
+    } else if (value == storages[2]) {
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![2]);
+    }
+    expireDate = DateFormat('yyyy-MM-dd').parse('$expireDate');
+    recommendExpireDate(expireDate, index: index);
   }
 }
