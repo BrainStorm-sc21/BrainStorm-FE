@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 class FoodStorageDropdown extends StatelessWidget {
@@ -8,10 +8,7 @@ class FoodStorageDropdown extends StatelessWidget {
   final int index;
   final void Function(int index, String value) setStorage;
   FoodStorageDropdown(
-      {super.key,
-      required this.index,
-      required this.storage,
-      required this.setStorage});
+      {super.key, required this.index, required this.storage, required this.setStorage});
 
   @override
   Widget build(BuildContext context) {

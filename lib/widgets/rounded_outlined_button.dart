@@ -5,6 +5,7 @@ class RoundedOutlinedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double width;
   final double height;
+  final double borderwidth;
   final Color foregroundColor;
   final Color backgroundColor;
   final Color borderColor;
@@ -16,6 +17,7 @@ class RoundedOutlinedButton extends StatelessWidget {
     required this.onPressed,
     this.width = 50,
     this.height = 35,
+    this.borderwidth = 1.5,
     required this.backgroundColor,
     required this.foregroundColor,
     required this.borderColor,
@@ -42,7 +44,7 @@ class RoundedOutlinedButton extends StatelessWidget {
         side: MaterialStateProperty.all(
           BorderSide(
             color: borderColor,
-            width: 1.5,
+            width: borderwidth,
           ),
         ),
         textStyle: MaterialStateProperty.all(

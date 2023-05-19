@@ -79,9 +79,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
           FoodName(setName: setName), // 식료품 이름 입력
           const SizedBox(height: 30), // 여백
           FoodStorage(
-            storage: food.storageWay,
-            setStorage: setStorage,
-          ), // 식료품 보관장소 선택
+              storage: food.storageWay, setStorage: setStorage), // 식료품 보관장소 선택
           divider,
           FoodStockTextfield(
             stock: food.stock,
@@ -234,7 +232,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
           Text("보관장소"),
           Spacer(),
         ]),

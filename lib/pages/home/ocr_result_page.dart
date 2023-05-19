@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
@@ -75,6 +74,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     initFormData();
     sendImageAndGetOCRResult();
     initFoods();
+    initRecommendList();
     initController();
   }
 
@@ -97,8 +97,10 @@ class _OCRResultPageState extends State<OCRResultPage> {
     // setup data
     Map<String, dynamic> data = {
       'type': widget.imageType,
-      'image': _imageFormData,
+      // 'image': _imageFormData,
+      'image': MultipartFile.fromFileSync(widget.imagePath),
     };
+    debugPrint('$data');
 
     try {
       // send data
@@ -156,6 +158,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
+  // initState에 추가 필요
+  void initRecommendList() {
+    setState(() {
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+    });
+  }
+
   void initController() {
     for (int index = 0; index < foods.length; index++) {
       _foodNameController.add(TextEditingController());
@@ -210,20 +220,18 @@ class _OCRResultPageState extends State<OCRResultPage> {
               ),
               child: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorStyles.mustardYellow,
-                      ColorStyles.transparent,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment(-0.95, 0),
-                    stops: [1, 1],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                  ),
-                ),
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorStyles.mustardYellow,
+                        ColorStyles.transparent,
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment(-0.95, 0),
+                      stops: [1, 1],
+                    ),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0))),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,

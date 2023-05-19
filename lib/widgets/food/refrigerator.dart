@@ -2,12 +2,12 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class Refrigerator extends StatefulWidget {
   final String storage;
-  const Refrigerator({super.key, required this.storage});
+  final List<Food> foodList;
+  const Refrigerator({super.key, required this.foodList, required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -18,31 +18,47 @@ class _RefrigeratorState extends State<Refrigerator> {
   List<Food> foodList = List.empty(growable: true);
   List<bool> absorbBool = List.filled(100, true, growable: true);
 
+  final List<TextEditingController> _foodNameController = [];
+
+  void initFoods() {
+    for (Food fooditem in widget.foodList) {
+      if (widget.storage == "전체" || widget.storage == fooditem.storageWay) {
+        foodList.add(fooditem);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
-    var now = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
-    foodList = [
-      Food(foodId: 0, foodName: "토마토", storageWay: "냉장", stock: 2, expireDate: now),
-      Food(foodId: 1, foodName: "감자", storageWay: "실온", stock: 5, expireDate: now),
-      Food(foodId: 2, foodName: "가지", storageWay: "냉동", stock: 1, expireDate: now),
-      Food(foodId: 3, foodName: "버섯", storageWay: "냉장", stock: 4, expireDate: now),
-    ];
-
-    food = Food(
-      foodId: 1,
-      foodName: '',
-      storageWay: '냉장',
-      stock: 1,
-      expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
-    );
+    initFoods();
+    initController();
   }
 
   void setStock(int index, num value) => setState(() => foodList[index].stock = value);
   void setStorage(int index, String value) => setState(() => foodList[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
       setState(() => foodList[index!].expireDate = value);
+
+  void initController() {
+    for (int index = 0; index < foodList.length; index++) {
+      _foodNameController.add(TextEditingController());
+      _foodNameController[index].text = foodList[index].foodName;
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeController();
+    super.dispose();
+  }
+
+  void disposeController() {
+    for (var controller in _foodNameController) {
+      controller.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,34 +67,35 @@ class _RefrigeratorState extends State<Refrigerator> {
       itemBuilder: (context, index) {
         food = foodList[index];
         return Card(
-          key: PageStorageKey(food.foodId),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: ExpansionTile(
             title: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    food.foodName,
-                    style: const TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 65, 60, 60),
-                        fontWeight: FontWeight.bold),
-                  ),
+                  AbsorbPointer(
+                      absorbing: absorbBool[index],
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          child: TextField(
+                              controller: _foodNameController[index],
+                              decoration:
+                                  const InputDecoration(border: InputBorder.none, counterText: ''),
+                              style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+                              maxLength: 20))),
                   progressBars(context),
                 ],
               ),
             ),
             children: [
               AbsorbPointer(
-                absorbing: absorbBool[index],
-                child: SizedBox(
-                  width: 350,
-                  child: FoodStorageDropdown(
-                      index: index, storage: food.storageWay, setStorage: setStorage),
-                ),
-              ),
+                  absorbing: absorbBool[index],
+                  child: SizedBox(
+                      width: 350,
+                      child: FoodStorageDropdown(
+                          index: index, storage: food.storageWay, setStorage: setStorage))),
               AbsorbPointer(
                 absorbing: absorbBool[index],
                 child: SizedBox(
