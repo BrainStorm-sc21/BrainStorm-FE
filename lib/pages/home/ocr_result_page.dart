@@ -114,7 +114,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       }
     }
     // when error occured, navigate to home & show error dialog
-    on DioError catch (err) {
+    catch (err) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -124,12 +124,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
       );
       Popups.popSimpleDialog(
         context,
-        title: '${err.type}',
-        body: '${err.message}',
+        title: '에러',
+        body: '$err',
       );
-      return;
-    } catch (err) {
-      debugPrint('$err');
     } finally {
       dio.close();
     }
@@ -340,15 +337,12 @@ class _OCRResultPageState extends State<OCRResultPage> {
       }
     }
     // when error occured, show error dialog
-    on DioError catch (err) {
+    catch (err) {
       Popups.popSimpleDialog(
         context,
-        title: '${err.type}',
-        body: '${err.message}',
+        title: '에러',
+        body: '$err',
       );
-      return;
-    } catch (err) {
-      debugPrint('$err');
     } finally {
       dio.close();
     }
