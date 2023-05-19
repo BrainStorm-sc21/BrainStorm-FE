@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
@@ -22,6 +24,7 @@ class OCRResultPage extends StatefulWidget {
 
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
+  late Map<int, Map<String, dynamic>> recommendList;
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
   Map<String, Map<int, Map<String, dynamic>>> ocrResult = {
@@ -132,6 +135,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
     } catch (err) {
       debugPrint('$err');
     }
+  }
+
+  // initState에 추가 필요
+  void initRecommendList() {
+    setState(() {
+      recommendList =
+          ocrResult['recommend']!; // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
+    });
   }
 
   void initFoods() {
@@ -291,14 +302,11 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
-    // json.encode(foods);
-    List<Map<String, String>> data = [];
-    for (var food in foods) {
-      Map<String, String> foodItem = food.toJson();
-      foodItem['userId'] = 'mirim'; // 임시로 userId 부여
-      data.add(foodItem);
-    }
-    debugPrint('req data: $data');
+    Map<String, dynamic> data = {
+      "userId": "1",
+      "foodList": json.encode(foods),
+    };
+    debugPrint('$data');
 
     try {
       // save data
