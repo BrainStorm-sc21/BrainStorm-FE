@@ -100,13 +100,17 @@ class _OCRResultPageState extends State<OCRResultPage> {
       );
 
       // handle response
-      if (res.statusCode == 200) {
-        setState(() {
-          ocrResult = res.data;
-          _isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
+      switch (res.data['status']) {
+        case 200:
+          setState(() {
+            ocrResult = res.data['data'];
+            _isLoading = false;
+          });
+          break;
+        case 400:
+          throw Exception(res.data['message']);
+        default:
+          throw Exception('Failed to send data [${res.statusCode}]');
       }
     }
     // when error occured, navigate to home & show error dialog
@@ -321,16 +325,18 @@ class _OCRResultPageState extends State<OCRResultPage> {
 
       // handle response
       if (!mounted) return;
-      if (res.statusCode == 200) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-          (route) => false,
-        );
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
+      switch (res.statusCode) {
+        case 200:
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+            (route) => false,
+          );
+          break;
+        default:
+          throw Exception('Failed to send data [${res.statusCode}]');
       }
     }
     // when error occured, show error dialog
