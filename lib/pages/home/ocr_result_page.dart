@@ -84,21 +84,19 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..baseUrl = baseURI
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10)
-      ..contentType = 'multipart/form-data'; // to upload image
+      ..contentType = 'multipart/form-data'; // wrap form-data
 
     // setup data
-    Map<String, dynamic> data = {
+    final FormData formData = FormData.fromMap({
       'type': widget.imageType,
-      // 'image': _imageFormData,
       'image': MultipartFile.fromFileSync(widget.imagePath),
-    };
-    debugPrint('$data');
+    });
 
     try {
       // send data
       final res = await dio.post(
         '/food/recommend',
-        data: data,
+        data: formData,
       );
 
       // handle response
