@@ -13,7 +13,7 @@ class SmartAddPage extends StatefulWidget {
 class _SmartAddPageState extends State<SmartAddPage> {
   late List<CameraDescription> cameras;
   late CameraDescription camera;
-  bool isCameraInitialized = true;
+  bool isCameraInitialized = false;
 
   @override
   void initState() {
