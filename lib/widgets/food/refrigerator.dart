@@ -1,12 +1,10 @@
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
-import 'package:brainstorm_meokjang/providers/changeNoti.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class Refrigerator extends StatefulWidget {
@@ -53,9 +51,6 @@ class _RefrigeratorState extends State<Refrigerator> {
       } else {
         throw Exception('Failed to send data [${resp.statusCode}]');
       }
-
-      ChangeNoti noti = Provider.of<ChangeNoti>(context, listen: false);
-      noti.increase();
     } catch (e) {
       Exception(e);
     } finally {
