@@ -173,6 +173,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
+  void setFoodName(int index, String value) {
+    setState(() => foods[index].foodName = value);
+  }
+
+  void updateFoodNameControllerText(index) {
+    setState(() => _foodNameController[index].text = foods[index].foodName);
+  }
+
   void setStorage(int index, String value) {
     setState(() => foods[index].storageWay = value);
   }
@@ -243,6 +251,13 @@ class _OCRResultPageState extends State<OCRResultPage> {
                               fontWeight: FontWeight.w600,
                             ),
                             maxLength: 20,
+                            onChanged: (value) => setFoodName(index, value),
+                            onSubmitted: (value) =>
+                                updateFoodNameControllerText(index),
+                            onTapOutside: (event) {
+                              updateFoodNameControllerText(index);
+                              FocusScope.of(context).unfocus();
+                            }, // 키보드 숨김
                           ),
                         ),
                         const Spacer(),
