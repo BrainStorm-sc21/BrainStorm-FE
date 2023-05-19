@@ -302,9 +302,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
+    List<Map<String, String>> foodlist = List.empty(growable: true);
+    for (var food in foods) {
+      foodlist.add(food.toJson());
+    }
+
     Map<String, dynamic> data = {
       "userId": "1",
-      "foodList": json.encode(foods),
+      "foodList": foodlist,
     };
     debugPrint('$data');
 
