@@ -45,17 +45,10 @@ class _HomePageState extends State<HomePage> {
     return false;
   }
 
-  void initFoods() {
-    for (Food fooditem in foodData.data) {
-      foodList.add(fooditem);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     getServerDataWithDio();
-    //initFoods();
   }
 
   TabBar get _tabBar => const TabBar(
@@ -77,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               preferredSize: const Size.fromHeight(90.0),
               child: AppBar(
                   centerTitle: false,
-                  title: const Text("냉장고",
+                  title: const Text("@@님의 냉장고",
                       style: TextStyle(
                           height: 3,
                           color: Colors.white,
@@ -131,7 +124,7 @@ Widget? floatingButtons(BuildContext context) {
     visible: true,
     curve: Curves.bounceIn,
     iconTheme: const IconThemeData(size: 35),
-    backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+    backgroundColor: ColorStyles.mainColor,
     childPadding: const EdgeInsets.all(1),
     spaceBetweenChildren: 10,
     renderOverlay: false,
@@ -139,7 +132,7 @@ Widget? floatingButtons(BuildContext context) {
     children: [
       SpeedDialChild(
           child: const Icon(Icons.camera_alt, color: Colors.white),
-          backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+          backgroundColor: ColorStyles.mainColor,
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
           }),
@@ -148,7 +141,7 @@ Widget? floatingButtons(BuildContext context) {
           Icons.create,
           color: Colors.white,
         ),
-        backgroundColor: const Color.fromRGBO(28, 187, 217, 1),
+        backgroundColor: ColorStyles.mainColor,
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualAddPage()));
         },

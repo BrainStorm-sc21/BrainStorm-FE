@@ -61,7 +61,7 @@ class Popups {
           ),
           child: Container(
             width: width * 0.8,
-            height: height * 0.55,
+            height: height * 0.65,
             decoration: BoxDecoration(
               color: ColorStyles.white,
               borderRadius: BorderRadius.circular(20),
@@ -74,8 +74,7 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
+                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       child: Image.asset(
                         'assets/images/감자.png',
                         fit: BoxFit.fill,
@@ -94,7 +93,7 @@ class Popups {
                   const secondPostUnit(),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -103,11 +102,8 @@ class Popups {
                             width: double.infinity,
                             height: 35,
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DealDetailPage()));
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => const DealDetailPage()));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,
@@ -225,8 +221,8 @@ class Popups {
             },
             baseBtnStyle: ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              padding:
+                  MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
             ),
             dotsDecorator: const DotsDecorator(
               size: Size(10, 10),
