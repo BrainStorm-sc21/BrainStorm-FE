@@ -258,6 +258,7 @@ class _DealPageState extends State<DealPage> {
                     }
                   });
                 },
+                underline: Container(),
                 elevation: 2)));
   }
 
