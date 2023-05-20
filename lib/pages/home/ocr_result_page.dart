@@ -1,5 +1,5 @@
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -13,7 +13,8 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -111,7 +112,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const AppPagesContainer(),
         ),
         (route) => false,
       );
@@ -224,7 +225,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       stops: [1, 1],
                     ),
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0))),
+                        topLeft: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0))),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,
@@ -249,7 +251,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             ),
                             maxLength: 20,
                             onChanged: (value) => setFoodName(index, value),
-                            onSubmitted: (value) => updateFoodNameControllerText(index),
+                            onSubmitted: (value) =>
+                                updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
                               FocusScope.of(context).unfocus();
@@ -274,7 +277,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       storage: foods[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
+                      recommendList: recommendList.containsKey(index)
+                          ? recommendList[index]
+                          : null,
                       recommendExpireDate: setExpireDate,
                     ),
                     FoodStockButton(
@@ -346,7 +351,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) => const AppPagesContainer(),
             ),
             (route) => false,
           );
@@ -427,11 +432,14 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   void setRecommendedExpireDate(String value) {
     var expireDate = DateTime.now();
     if (value == storages[0]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![0]);
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![0]);
     } else if (value == storages[1]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![1]);
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![1]);
     } else if (value == storages[2]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![2]);
+      expireDate = DateTime(expireDate.year, expireDate.month,
+          expireDate.day + recommendList![2]);
     }
     expireDate = DateFormat('yyyy-MM-dd').parse('$expireDate');
     recommendExpireDate(expireDate, index: index);
