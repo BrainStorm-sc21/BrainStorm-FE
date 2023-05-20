@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
@@ -18,14 +19,6 @@ class _MapPageState extends State<MapPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Completer<NaverMapController> _controller = Completer();
-
-  //final List<Marker> _markers = [];
-
-  final Map markerImage = {
-    '공구': 'assets/images/groupMarker.png',
-    '교환': 'assets/images/exchangeMarker.png',
-    '나눔': 'assets/images/shareMarker.png'
-  };
 
   @override
   void initState() {
@@ -45,8 +38,7 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content:
-          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -56,8 +48,6 @@ class _MapPageState extends State<MapPage> {
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
-
-    //customM();
   }
 
   List<Marker> customM() {
@@ -65,12 +55,11 @@ class _MapPageState extends State<MapPage> {
 
     for (var post in widget.posts) {
       OverlayImage.fromAssetImage(
-        assetName: markerImage[post.dealType],
+        assetName: DealType.markerImage[post.dealType],
         devicePixelRatio: window.devicePixelRatio,
       ).then((image) {
         markers.add(Marker(
             markerId: post.dealId.toString(),
-            //markerId: DateTime.now().toIso8601String(),
             icon: image,
             captionText: post.dealName,
             width: 30,
@@ -79,7 +68,6 @@ class _MapPageState extends State<MapPage> {
             onMarkerTab: _onMarkerTap));
       });
     }
-
     return markers;
   }
 
@@ -108,22 +96,22 @@ class _MapPageState extends State<MapPage> {
     // setState(() {
     //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
     // });
-    // Popups.goToPost(context, '나눔');
-    int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
+    Popups.goToPost(context, '나눔');
+    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
 
-    for (var post in widget.posts) {
-      if (post.dealName == _markers[pos].captionText) {
-        Popups.goToPost(context, post);
-        break;
-      }
-    }
+    // for (var post in widget.posts) {
+    //   if (post.dealName == _markers[pos].captionText) {
+    //     Popups.goToPost(context, post);
+    //     break;
+    //   }
+    // }
 
-    setState(() {
-      _markers[pos].captionText = '선택됨';
-    });
-    setState(() {
-      _markers.removeWhere((m) => m.markerId == marker!.markerId);
-    });
+    // setState(() {
+    //   _markers[pos].captionText = '선택됨';
+    // });
+    // setState(() {
+    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
+    // });
   }
 
   @override
