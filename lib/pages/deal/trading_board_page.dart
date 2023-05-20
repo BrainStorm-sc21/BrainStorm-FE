@@ -1,23 +1,11 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 
 class TradingBoard extends StatelessWidget {
   const TradingBoard({super.key, required this.posts});
 
   final List<Deal> posts;
-
-  final Map dealColors = const {
-    '공구': ColorStyles.groupBuyColor,
-    '교환': ColorStyles.exchangeColor,
-    '나눔': ColorStyles.shareColor
-  };
-
-  final Map dealTextColors = const {
-    '공구': ColorStyles.groupBuyTextColor,
-    '교환': ColorStyles.exchangeTextColor,
-    '나눔': ColorStyles.shareTextColor
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +19,7 @@ class TradingBoard extends StatelessWidget {
         final distance = deal.distance;
         final dealType = deal.dealType;
         final time = deal.dealTime;
-        final imgUrl = deal.dealImage;
+        final imgUrl = deal.dealImage1;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           child: Row(
@@ -52,15 +40,15 @@ class TradingBoard extends StatelessWidget {
                 height: 20,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: dealColors[dealType],
+                  color: DealType.dealColors[dealType],
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
-                  child: Text(dealType,
+                  child: Text(DealType.dealTypeName[dealType],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 11,
-                          color: dealTextColors[dealType],
+                          color: DealType.dealTextColors[dealType],
                           fontWeight: FontWeight.w500,
                           height: 1)),
                 ),
@@ -71,7 +59,7 @@ class TradingBoard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 270,
+                    width: 250,
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       Flexible(
                           child: Text(dealName,

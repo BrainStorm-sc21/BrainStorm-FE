@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/food/refrigerator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -19,16 +20,16 @@ class _HomePageState extends State<HomePage> {
   late FoodData foodData;
 
   Future getServerDataWithDio() async {
-    BaseOptions options = BaseOptions(
-        baseUrl: 'http://www.meokjang.com',
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5));
-    Dio dio = Dio(options);
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
     try {
       Response resp = await dio.get("/food/1");
 
-      print("Status: ${resp.statusCode}");
-      print("Data:\n${resp.data}");
+      //print("Food Status: ${resp.statusCode}");
+      //print("Data:\n${resp.data}");
 
       FoodData foodData = FoodData.fromJson(resp.data);
 

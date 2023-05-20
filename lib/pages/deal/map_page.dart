@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
@@ -18,14 +19,6 @@ class _MapPageState extends State<MapPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Completer<NaverMapController> _controller = Completer();
-
-  //final List<Marker> _markers = [];
-
-  final Map markerImage = {
-    '공구': 'assets/images/groupMarker.png',
-    '교환': 'assets/images/exchangeMarker.png',
-    '나눔': 'assets/images/shareMarker.png'
-  };
 
   @override
   void initState() {
@@ -55,8 +48,6 @@ class _MapPageState extends State<MapPage> {
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
-
-    //customM();
   }
 
   List<Marker> customM() {
@@ -64,12 +55,11 @@ class _MapPageState extends State<MapPage> {
 
     for (var post in widget.posts) {
       OverlayImage.fromAssetImage(
-        assetName: markerImage[post.dealType],
+        assetName: DealType.markerImage[post.dealType],
         devicePixelRatio: window.devicePixelRatio,
       ).then((image) {
         markers.add(Marker(
             markerId: post.dealId.toString(),
-            //markerId: DateTime.now().toIso8601String(),
             icon: image,
             captionText: post.dealName,
             width: 30,
@@ -78,7 +68,6 @@ class _MapPageState extends State<MapPage> {
             onMarkerTab: _onMarkerTap));
       });
     }
-
     return markers;
   }
 
