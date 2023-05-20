@@ -23,7 +23,6 @@ class _RefrigeratorState extends State<Refrigerator> {
   final now = DateTime.now();
 
   final List<TextEditingController> _foodNameController = [];
-  //final ExpansionTileController controller = ExpansionTileController();
 
   void deleteServerDataWithDio(index) async {
     Dio dio = Dio();
@@ -45,25 +44,24 @@ class _RefrigeratorState extends State<Refrigerator> {
     }
   }
 
-  // 수정된 식료품 정보를 DB에 저장하는 함수
-  void modifyFoodInfo() async {
+  void modifyFoodInfo(index) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    // setup data
     final data = {
       "userId": "1",
-      "food": food.toJson(),
+      "food": foodList[index].toJson(),
     };
     debugPrint('req data: $data');
 
+    var modifyFoodId = foodList[index].foodId;
+
     try {
-      // save data
-      final res = await dio.post(
-        '/food/add',
+      final res = await dio.put(
+        '/food/$modifyFoodId',
         data: data,
       );
     }
@@ -209,6 +207,10 @@ class _RefrigeratorState extends State<Refrigerator> {
                             onPressed: () {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
+                                if (absorbBool[index]) {
+                                  print("확인버튼을 눌렀습니다");
+                                  modifyFoodInfo(index);
+                                }
                               });
                             },
                             child: absorbBool[index]
@@ -219,9 +221,6 @@ class _RefrigeratorState extends State<Refrigerator> {
                           OutlinedButton(
                             child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              print(foodList[index].foodName);
-                              print(foodList[index].foodId);
-                              print(index);
                               showDeleteDialog(index);
                             },
                           ),
@@ -254,11 +253,8 @@ class _RefrigeratorState extends State<Refrigerator> {
             TextButton(
               onPressed: () {
                 deleteServerDataWithDio(index);
-                Navigator.pop(context);
                 deleteFood(index);
-                for (var e in foodList) {
-                  print(e.foodName);
-                }
+                Navigator.pop(context);
               },
               child: const Text(
                 "확인",
