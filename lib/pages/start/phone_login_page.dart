@@ -46,10 +46,11 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: TextField(
-                  decoration: InputDecoration(
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: TextFormField(
+                  controller: _phoneController,
+                  decoration: const InputDecoration(
                     hintText: "휴대폰 번호(-없이 숫자만 입력)",
                   ),
                   keyboardType: TextInputType.phone,
@@ -62,11 +63,11 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       FirebaseAuth auth = FirebaseAuth.instance;
-
+                      print(_phoneController.text);
                       await auth.verifyPhoneNumber(
                         //forceResendingToken: _resendToken,
 
-                        phoneNumber: "+82010-4401-0159",
+                        phoneNumber: "+82${_phoneController.text}",
 
                         codeAutoRetrievalTimeout: (String verificationId) {},
 
@@ -138,10 +139,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: TextField(
-                  decoration: InputDecoration(
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: TextFormField(
+                  decoration: const InputDecoration(
                     hintText: "인증번호 입력",
                   ),
                   keyboardType: TextInputType.number,
@@ -168,7 +169,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor),
-                    child: const Text("인증하고 로그인하기"),
+                    child: const Text("인증하기"),
                   ),
                 ),
               )
@@ -178,28 +179,4 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       ),
     );
   }
-}
-
-TextFormField phoneNumberInput() {
-  return TextFormField(
-    controller: _phoneController,
-    autofocus: true,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return 'The input is empty.';
-      } else {
-        return null;
-      }
-    },
-    keyboardType: TextInputType.phone,
-    decoration: const InputDecoration(
-      border: OutlineInputBorder(),
-      hintText: 'Input your phone number.',
-      labelText: 'Phone Number',
-      labelStyle: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
 }

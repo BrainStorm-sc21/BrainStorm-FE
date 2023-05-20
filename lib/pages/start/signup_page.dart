@@ -5,13 +5,6 @@ import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
 
-bool valid_nickname = false;
-bool valid_gender = false;
-bool valid_address = false;
-bool valid_auth = false;
-
-late User user;
-
 final _nicknameController = TextEditingController();
 
 class SignUpPage extends StatefulWidget {
@@ -22,16 +15,37 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late User user;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    user = User(
+        userName: " ",
+        phoneNumber: " ",
+        snsType: " ",
+        snsKey: " ",
+        location: " ",
+        latitude: 0.0,
+        longitude: 0.0,
+        gender: 0);
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+  void setNickname(String value) => setState(() => user.userName = value);
+  void setGender(int value) => setState(() => user.gender = value);
+  void setAddress(String location, double latitude, double longitude) =>
+      setState(() {
+        user.location = location;
+        user.latitude = latitude;
+        user.longitude = longitude;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +67,15 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const NicknameField(),
-                    const GenderField(),
-                    const PositionField(),
+                    NicknameField(setNickname: setNickname),
+                    GenderField(setGender: setGender),
+                    PositionField(setAddress: setAddress),
                     const AuthField(),
                     SizedBox(
                         width: deviceWidth * 0.8,
                         child: ElevatedButton(
                             onPressed: () {
-                              print("회원가입 버튼 클릭!");
+                              requestSignUp(user);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: ColorStyles.mainColor,
@@ -79,7 +93,8 @@ class _SignUpPageState extends State<SignUpPage> {
 }
 
 class NicknameField extends StatefulWidget {
-  const NicknameField({super.key});
+  final void Function(String value) setNickname;
+  const NicknameField({super.key, required this.setNickname});
 
   @override
   State<NicknameField> createState() => _NicknameFieldState();
@@ -123,6 +138,7 @@ class _NicknameFieldState extends State<NicknameField> {
                     }
                     return null;
                   },
+                  onChanged: (value) => widget.setNickname(value),
                 ),
               ),
             ),
@@ -134,7 +150,8 @@ class _NicknameFieldState extends State<NicknameField> {
 }
 
 class GenderField extends StatefulWidget {
-  const GenderField({super.key});
+  final void Function(int value) setGender;
+  const GenderField({super.key, required this.setGender});
 
   @override
   State<GenderField> createState() => _GenderFieldState();
@@ -205,22 +222,23 @@ class _GenderFieldState extends State<GenderField> {
 
   void toggleSelect(value) {
     if (value == 0) {
-      user.gender = 0;
       isMan = true;
       isWoman = false;
     } else {
-      user.gender = 1;
       isMan = false;
       isWoman = true;
     }
     setState(() {
       isSelected = [isMan, isWoman];
+      widget.setGender(value);
     });
   }
 }
 
 class PositionField extends StatefulWidget {
-  const PositionField({super.key});
+  final void Function(String location, double latitude, double longitude)
+      setAddress;
+  const PositionField({super.key, required this.setAddress});
 
   @override
   State<PositionField> createState() => _PositionFieldState();
@@ -277,17 +295,12 @@ class _PositionFieldState extends State<PositionField> {
                     onPressed: () async {
                       Kpostal result = await Navigator.push(context,
                           MaterialPageRoute(builder: (_) => KpostalView()));
-                      //위치, 위도, 경도
-                      // print("위치: ${result.address}");
-                      // print("위도: ${result.latitude}");
-                      // print("경도: ${result.longitude}");
-                      user.location = result.address;
-                      user.latitude = result.latitude;
-                      user.longitude = result.longitude;
                       setState(() {
                         posText = result.address;
                         posColor = Colors.black;
                         posFontSize = 14;
+                        widget.setAddress(result.address, result.latitude!,
+                            result.longitude!);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -428,12 +441,6 @@ class _AuthFieldState extends State<AuthField> {
                   child: const Text("번호 인증"),
                 ),
               ],
-            ),
-            Container(
-              child: const Text(
-                "인증 미완료",
-                style: TextStyle(fontSize: 12),
-              ),
             ),
           ],
         ),

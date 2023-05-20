@@ -14,6 +14,7 @@ class _SharingPageState extends State<SharingPage> {
 
   void registerPost() async {
     print('나눔 게시글 등록!');
+    requestRegisterPost(deal);
   }
 
   @override
