@@ -10,8 +10,14 @@ class TradingBoard extends StatelessWidget {
 
   final Map dealColors = const {
     '공구': ColorStyles.groupBuyColor,
-    '교환': ColorStyles.exchangColor,
+    '교환': ColorStyles.exchangeColor,
     '나눔': ColorStyles.shareColor
+  };
+
+  final Map dealTextColors = const {
+    '공구': ColorStyles.groupBuyTextColor,
+    '교환': ColorStyles.exchangeTextColor,
+    '나눔': ColorStyles.shareTextColor
   };
 
   @override
@@ -39,7 +45,7 @@ class TradingBoard extends StatelessWidget {
                     imgUrl,
                     height: 60,
                     width: 60,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fill
                   ),
                 ),
                 const SizedBox(width: 8),
