@@ -55,15 +55,22 @@ class _RefrigeratorState extends State<Refrigerator> {
       "userId": "1",
       "food": foodList[index].toJson(),
     };
-    debugPrint('req data: $data');
 
     var modifyFoodId = foodList[index].foodId;
 
     try {
-      final res = await dio.put(
-        '/food/$modifyFoodId',
-        data: data,
-      );
+      final res = await dio.put('/food/$modifyFoodId', data: data);
+
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Popups.popSimpleDialog(
+          context,
+          title: foodList[index].foodName,
+          body: '값이 수정되었습니다',
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
     }
     // when error occured, show error dialog
     on DioError catch (err) {
@@ -126,7 +133,7 @@ class _RefrigeratorState extends State<Refrigerator> {
   @override
   Widget build(BuildContext context) {
     return foodList.isEmpty
-        ? const Center(child: Text("해당 냉장고엔 음식이 없어요!"))
+        ? Center(child: Text("${widget.storage}에는 음식이 없어요!"))
         : ListView.builder(
             itemCount: foodList.length,
             itemBuilder: (context, index) {
@@ -209,11 +216,6 @@ class _RefrigeratorState extends State<Refrigerator> {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
                                   modifyFoodInfo(index);
-                                  Popups.popSimpleDialog(
-                                    context,
-                                    title: foodList[index].foodName,
-                                    body: '값이 수정되었습니다',
-                                  );
                                 }
                               });
                             },
