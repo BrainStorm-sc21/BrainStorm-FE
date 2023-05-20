@@ -5,7 +5,7 @@ import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';

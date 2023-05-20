@@ -1,8 +1,20 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.dart';
 import 'package:flutter/material.dart';
 
-class GroupPurchasePage extends StatelessWidget {
+class GroupPurchasePage extends StatefulWidget {
   const GroupPurchasePage({super.key});
+
+  @override
+  State<GroupPurchasePage> createState() => _GroupPurchasePageState();
+}
+
+class _GroupPurchasePageState extends State<GroupPurchasePage> {
+  late Deal deal;
+
+  void registerPost() {
+    print('공동구매 게시글 등록!');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class GroupPurchasePage extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const BottomButton(),
+            BottomButton(registerPost: registerPost),
           ],
         ),
       ),

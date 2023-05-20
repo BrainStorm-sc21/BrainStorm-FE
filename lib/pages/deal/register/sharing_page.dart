@@ -1,8 +1,20 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.dart';
 import 'package:flutter/material.dart';
 
-class SharingPage extends StatelessWidget {
+class SharingPage extends StatefulWidget {
   const SharingPage({super.key});
+
+  @override
+  State<SharingPage> createState() => _SharingPageState();
+}
+
+class _SharingPageState extends State<SharingPage> {
+  late Deal deal;
+
+  void registerPost() async {
+    print('교환 게시글 등록!');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +56,7 @@ class SharingPage extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const BottomButton(),
+            BottomButton(registerPost: registerPost),
           ],
         ),
       ),

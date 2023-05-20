@@ -10,23 +10,7 @@ bool valid_gender = false;
 bool valid_address = false;
 bool valid_auth = false;
 
-late String userName;
-late int gender; //남 - 0, 여 - 1
-String location = '';
-double? latitude;
-double? longitude;
-
-String? phoneNumber;
-String? snsType;
-String? snsKey;
-
-User user = User(
-    userName: '먹짱 2호',
-    phoneNumber: '010-1234-1234',
-    location: '강남역',
-    latitude: 0.0,
-    longitude: 0.0,
-    gender: 0);
+late User user;
 
 final _nicknameController = TextEditingController();
 
@@ -39,6 +23,12 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
@@ -46,49 +36,54 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("회원가입"),
-        backgroundColor: ColorStyles.mainColor,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: Container(
-          child: ListView(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const NicknameField(),
-                  const GenderField(),
-                  const PositionField(),
-                  const AuthField(),
-                  SizedBox(
-                    width: deviceWidth * 0.8,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //print(postSignUp(user));
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("회원가입"),
+          backgroundColor: ColorStyles.mainColor,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Container(
+            child: ListView(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const NicknameField(),
+                    const GenderField(),
+                    const PositionField(),
+                    const AuthField(),
+                    SizedBox(
+                      width: deviceWidth * 0.8,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          //print(postSignUp(user));
 
-                        print('http 요청');
-                        print('userName: ${user.userName}');
-                        print('gender: ${user.gender}');
-                        print(
-                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
-                        print('phoneNumber: ${user.phoneNumber}');
-                        print(
-                            'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorStyles.mainColor,
+                          print('http 요청');
+                          print('userName: ${user.userName}');
+                          print('gender: ${user.gender}');
+                          print(
+                              'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
+                          print('phoneNumber: ${user.phoneNumber}');
+                          print(
+                              'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorStyles.mainColor,
+                        ),
+                        child: const Text(
+                          "회원가입하기",
+                        ),
                       ),
-                      child: const Text(
-                        "회원가입하기",
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -130,7 +125,7 @@ class _NicknameFieldState extends State<NicknameField> {
                 child: TextFormField(
                   controller: _nicknameController,
                   maxLength: 10,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     hintText: "2글자 이상 10글자 이하로 입력해주세요.",
                     hintStyle: TextStyle(fontSize: 12),

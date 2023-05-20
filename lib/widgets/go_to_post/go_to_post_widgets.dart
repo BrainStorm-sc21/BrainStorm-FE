@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 class firstPostUnit extends StatefulWidget {

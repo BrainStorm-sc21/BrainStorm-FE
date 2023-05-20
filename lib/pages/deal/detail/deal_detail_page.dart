@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';

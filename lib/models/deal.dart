@@ -1,3 +1,6 @@
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
+
 class Deal {
   late int dealId;
   int userId;
@@ -57,4 +60,16 @@ class Deal {
       dealContent: json['dealContent'],
     );
   }
+}
+
+Future<int?> registerPost(Deal deal) async {
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 5)
+    ..receiveTimeout = const Duration(seconds: 10);
+
+  final data = {"userId": "1", "deal"}
+
+  return null;
 }

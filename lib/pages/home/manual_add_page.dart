@@ -1,6 +1,6 @@
+import 'package:brainstorm_meokjang/main.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -131,7 +131,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => const MyHomePage(),
           ),
           (route) => false,
         );
@@ -234,7 +234,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
           Text("보관장소"),
           Spacer(),
         ]),
