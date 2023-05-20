@@ -24,7 +24,7 @@ class GoRecipe extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   Text('냉장고 속 식품 레시피',
                       style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
