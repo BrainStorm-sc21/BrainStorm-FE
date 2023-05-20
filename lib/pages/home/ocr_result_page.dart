@@ -220,6 +220,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
         containerColor: ColorStyles.snow,
         body: SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
+            // 식료품 리스트 아이템
             return Card(
               elevation: 3,
               shadowColor: ColorStyles.white,
@@ -230,6 +231,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                   Radius.circular(8.0),
                 ),
               ),
+              // 식료품 아이템 좌측 노란색 세로선
               child: Container(
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -249,10 +251,12 @@ class _OCRResultPageState extends State<OCRResultPage> {
                   right: 20,
                   bottom: 10,
                 ),
+                // 식료품 정보
                 child: Column(
                   children: [
                     Row(
                       children: [
+                        // 식료품 이름
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: TextField(
@@ -270,11 +274,12 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             onSubmitted: (value) => updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
-                              FocusScope.of(context).unfocus();
-                            }, // 키보드 숨김
+                              FocusScope.of(context).unfocus(); // 키보드 숨김
+                            },
                           ),
                         ),
                         const Spacer(),
+                        // 아이템 삭제 버튼
                         IconButton(
                           onPressed: () {
                             setState(() {
@@ -288,6 +293,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         ),
                       ],
                     ),
+                    // 식료품 보관 장소
                     CustomFoodStorageDropdown(
                       index: index,
                       storage: foods[index].storageWay,
@@ -295,11 +301,13 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
                       setExpireDate: setExpireDate,
                     ),
+                    // 식료품 수량
                     FoodStockButton(
                       index: index,
                       stock: foods[index].stock,
                       setStock: setStock,
                     ),
+                    // 식료품 소비 기한 (+ TIP UI)
                     FoodExpireDate(
                       index: index,
                       expireDate: foods[index].expireDate,
@@ -394,7 +402,7 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   final String storage;
   final int index;
   final void Function(int index, String value) setStorage;
-
+  // 소비기한 추천 기능을 위한 필드
   final List<DateTime>? recommendList;
   final void Function(DateTime value, {int? index}) setExpireDate;
 
