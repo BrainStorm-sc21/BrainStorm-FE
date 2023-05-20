@@ -63,21 +63,16 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: () {
                           //print(postSignUp(user));
 
-                          print('http 요청');
-                          print('userName: ${user.userName}');
-                          print('gender: ${user.gender}');
-                          print(
-                              'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
-                          print('phoneNumber: ${user.phoneNumber}');
-                          print(
-                              'snsType: ${user.snsType}, snsKey: ${user.snsKey}');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorStyles.mainColor,
-                        ),
-                        child: const Text(
-                          "회원가입하기",
-                        ),
+                        print('http 요청');
+                        print('userName: ${user.userName}');
+                        print('gender: ${user.gender}');
+                        print(
+                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
+                        print('phoneNumber: ${user.phoneNumber}');
+                        print('snsType: ${user.snsType}, snsKey: ${user.snsKey}');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorStyles.mainColor,
                       ),
                     )
                   ],
@@ -288,8 +283,8 @@ class _PositionFieldState extends State<PositionField> {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Kpostal result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => KpostalView()));
+                      Kpostal result = await Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => KpostalView()));
                       //위치, 위도, 경도
                       // print("위치: ${result.address}");
                       // print("위도: ${result.latitude}");
@@ -364,13 +359,11 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const NaverWebView()),
+                                                  builder: (context) => const NaverWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
+                                            backgroundColor: ColorStyles.mainColor,
                                           ),
                                           child: const Text("Naver로\n인증하기"),
                                         ),
@@ -386,13 +379,11 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const KakaoWebView()),
+                                                  builder: (context) => const KakaoWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
+                                            backgroundColor: ColorStyles.mainColor,
                                           ),
                                           child: const Text("Kakao로\n인증하기"),
                                         ),
@@ -431,8 +422,7 @@ class _AuthFieldState extends State<AuthField> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const PhoneLoginPage()),
+                      MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
                     );
                   },
                   style: TextButton.styleFrom(

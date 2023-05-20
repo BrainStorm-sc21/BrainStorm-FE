@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class firstPostUnit extends StatefulWidget {
   final Deal deal;
 
-  final Map dealColors = const {
+  final Map dealColors = {
     '공구': ColorStyles.groupBuyColor,
-    '교환': ColorStyles.exchangColor,
+    '교환': ColorStyles.exchangeColor,
     '나눔': ColorStyles.shareColor
   };
 
-  const firstPostUnit({super.key, required this.deal});
+  firstPostUnit({super.key, required this.deal});
 
   @override
   State<firstPostUnit> createState() => _firstPostUnitState();
@@ -36,9 +36,8 @@ class _firstPostUnitState extends State<firstPostUnit> {
                       color: widget.dealColors[widget.deal.dealType]),
                   child: Center(
                     child: Text(
-                      widget.deal.dealType,
-                      style: const TextStyle(
-                          fontSize: 11, color: ColorStyles.white),
+                      widget.deal.dealType.toString(),
+                      style: const TextStyle(fontSize: 11, color: ColorStyles.white),
                     ),
                   ),
                 ),
@@ -49,16 +48,14 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       widget.deal.dealName,
                       style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.black),
+                          fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
                     ),
                   ),
                 ),
               ],
             ),
             Text(
-              widget.deal.dealTime,
+              widget.deal.createdAt.toString(),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -91,21 +88,17 @@ class _secondPostUnitState extends State<secondPostUnit> {
                   padding: EdgeInsets.only(right: 12),
                   child: Text('삼식이 네끼',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.black)),
+                          fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
                 ),
-                Text(widget.deal.distance,
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w400)),
+                Text(widget.deal.distance.toString(),
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15),
               child: Text(
                 widget.deal.dealContent,
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ),
           ],
