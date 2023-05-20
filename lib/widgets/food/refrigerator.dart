@@ -139,8 +139,10 @@ class _RefrigeratorState extends State<Refrigerator> {
             itemBuilder: (context, index) {
               food = foodList[index];
               return Card(
+                elevation: 2.0,
                 key: PageStorageKey(_foodNameController[index]),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
                   initiallyExpanded: false,
                   title: Padding(

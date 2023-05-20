@@ -41,33 +41,50 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
-        children: const [
-          HomePage(),
-          DealPage(),
-          ChatPage(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex, // 현재 보여주는 탭
-        onTap: (newIndex) {
-          print("selected newIndex : $newIndex");
-          setCurrentIndex(newIndex); // 버튼 눌렀을 때 누른 페이지로 이동
-        },
-        selectedItemColor: ColorStyles.mainColor, // 선택된 아이콘 색상
-        unselectedItemColor: ColorStyles.iconColor, // 선택되지 않은 아이콘 색상
-        //label 숨기려면 사용하기
-        /* showSelectedLabels: false,
+        backgroundColor: ColorStyles.backgroundColor,
+        body: IndexedStack(
+          index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
+          children: const [
+            HomePage(),
+            DealPage(),
+            ChatPage(),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.fromLTRB(3, 0, 3, 7),
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(125, 221, 221, 221),
+                spreadRadius: 4,
+                blurRadius: 8,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(30)),
+            child: BottomNavigationBar(
+              currentIndex: currentIndex, // 현재 보여주는 탭
+              onTap: (newIndex) {
+                print("selected newIndex : $newIndex");
+                setCurrentIndex(newIndex); // 버튼 눌렀을 때 누른 페이지로 이동
+              },
+              selectedItemColor: ColorStyles.darkmainColor, // 선택된 아이콘 색상
+              unselectedItemColor: ColorStyles.iconColor, // 선택되지 않은 아이콘 색상
+              //label 숨기려면 사용하기
+              /* showSelectedLabels: false,
         showUnselectedLabels: false, */
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '냉장고'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_2), label: '같이먹장'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '채팅'),
-        ],
-        elevation: 3,
-      ),
-    );
+              backgroundColor: Colors.white,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: '냉장고'),
+                BottomNavigationBarItem(icon: Icon(Icons.groups_2), label: '같이먹장'),
+                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: '채팅'),
+              ],
+              elevation: 40,
+            ),
+          ),
+        ));
   }
 }
