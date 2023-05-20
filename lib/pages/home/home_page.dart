@@ -83,10 +83,7 @@ class _HomePageState extends State<HomePage> {
                           gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: <Color>[
-                                Color.fromARGB(255, 87, 214, 153),
-                                ColorStyles.mainColor
-                              ]))),
+                              colors: <Color>[ColorStyles.darkmainColor, ColorStyles.mainColor]))),
                   actions: [
                     IconButton(
                         padding: const EdgeInsets.only(top: 28, right: 30),

@@ -23,7 +23,6 @@ class _RefrigeratorState extends State<Refrigerator> {
   final now = DateTime.now();
 
   final List<TextEditingController> _foodNameController = [];
-  //final ExpansionTileController controller = ExpansionTileController();
 
   void deleteServerDataWithDio(index) async {
     Dio dio = Dio();
@@ -45,27 +44,33 @@ class _RefrigeratorState extends State<Refrigerator> {
     }
   }
 
-  // 수정된 식료품 정보를 DB에 저장하는 함수
-  void modifyFoodInfo() async {
+  void modifyFoodInfo(index) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    // setup data
     final data = {
       "userId": "1",
-      "food": food.toJson(),
+      "food": foodList[index].toJson(),
     };
-    debugPrint('req data: $data');
+
+    var modifyFoodId = foodList[index].foodId;
 
     try {
-      // save data
-      final res = await dio.post(
-        '/food/add',
-        data: data,
-      );
+      final res = await dio.put('/food/$modifyFoodId', data: data);
+
+      if (!mounted) return;
+      if (res.statusCode == 200) {
+        Popups.popSimpleDialog(
+          context,
+          title: foodList[index].foodName,
+          body: '값이 수정되었습니다',
+        );
+      } else {
+        throw Exception('Failed to send data [${res.statusCode}]');
+      }
     }
     // when error occured, show error dialog
     on DioError catch (err) {
@@ -128,14 +133,16 @@ class _RefrigeratorState extends State<Refrigerator> {
   @override
   Widget build(BuildContext context) {
     return foodList.isEmpty
-        ? const Center(child: Text("해당 냉장고엔 음식이 없어요!"))
+        ? Center(child: Text("${widget.storage}에는 음식이 없어요!"))
         : ListView.builder(
             itemCount: foodList.length,
             itemBuilder: (context, index) {
               food = foodList[index];
               return Card(
+                elevation: 2.0,
                 key: PageStorageKey(_foodNameController[index]),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
                   initiallyExpanded: false,
                   title: Padding(
@@ -209,6 +216,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                             onPressed: () {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
+                                if (absorbBool[index]) {
+                                  modifyFoodInfo(index);
+                                }
                               });
                             },
                             child: absorbBool[index]
@@ -219,9 +229,6 @@ class _RefrigeratorState extends State<Refrigerator> {
                           OutlinedButton(
                             child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              print(foodList[index].foodName);
-                              print(foodList[index].foodId);
-                              print(index);
                               showDeleteDialog(index);
                             },
                           ),
@@ -254,11 +261,8 @@ class _RefrigeratorState extends State<Refrigerator> {
             TextButton(
               onPressed: () {
                 deleteServerDataWithDio(index);
-                Navigator.pop(context);
                 deleteFood(index);
-                for (var e in foodList) {
-                  print(e.foodName);
-                }
+                Navigator.pop(context);
               },
               child: const Text(
                 "확인",
