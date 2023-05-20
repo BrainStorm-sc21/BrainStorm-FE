@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 class firstPostUnit extends StatefulWidget {
@@ -37,7 +37,8 @@ class _firstPostUnitState extends State<firstPostUnit> {
                   child: Center(
                     child: Text(
                       widget.deal.dealType.toString(),
-                      style: const TextStyle(fontSize: 11, color: ColorStyles.white),
+                      style: const TextStyle(
+                          fontSize: 11, color: ColorStyles.white),
                     ),
                   ),
                 ),
@@ -48,7 +49,9 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       widget.deal.dealName,
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black),
                     ),
                   ),
                 ),
@@ -88,17 +91,21 @@ class _secondPostUnitState extends State<secondPostUnit> {
                   padding: EdgeInsets.only(right: 12),
                   child: Text('삼식이 네끼',
                       style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black)),
                 ),
                 Text(widget.deal.distance,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15),
               child: Text(
                 widget.deal.dealContent,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ),
           ],

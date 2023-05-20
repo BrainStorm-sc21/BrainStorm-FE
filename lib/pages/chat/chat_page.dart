@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/enter_chat/enter_chat_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +32,9 @@ class ChatPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: SingleChildScrollView(
+                child: const SingleChildScrollView(
                   child: Column(
-                    children: const [
+                    children: [
                       ChatUnit(
                         unread: 4,
                       ),
