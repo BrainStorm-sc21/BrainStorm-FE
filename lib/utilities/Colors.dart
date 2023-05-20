@@ -13,6 +13,7 @@ class ColorStyles {
   static const Color groupBuyTextColor = Color.fromRGBO(94, 187, 52, 1);
   static const Color borderColor = Color.fromRGBO(89, 89, 89, 0.2);
   static const Color hintTextColor = Color.fromRGBO(149, 149, 149, 0.5);
+  static const Color tipBackgroundColor = Color.fromRGBO(253, 243, 146, 0.5);
   static const Color mustardYellow = Color.fromRGBO(237, 199, 0, 1);
   static const Color lightgrey = Color.fromARGB(255, 199, 199, 199);
   static const Color black = Colors.black;

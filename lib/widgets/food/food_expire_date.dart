@@ -7,11 +7,13 @@ class FoodExpireDate extends StatelessWidget {
   final DateTime expireDate;
   final int? index;
   final void Function(DateTime value, {int? index}) setExpireDate;
+  final bool? isRecommended;
   const FoodExpireDate({
     super.key,
     required this.expireDate,
     required this.setExpireDate,
     this.index,
+    this.isRecommended,
   });
 
 // cupertino 날짜 선택기를 하단에 모달로 띄우는 메서드
@@ -51,6 +53,8 @@ class FoodExpireDate extends StatelessWidget {
       children: [
         const Text('소비기한'),
         const Spacer(),
+        // 추천 박스가 있으면 표시
+        if (isRecommended == true) const RecommendTip() else const SizedBox(),
         // 소비기한 표시 및 선택 버튼
         TextButton(
           child: Text(
@@ -63,6 +67,40 @@ class FoodExpireDate extends StatelessWidget {
           onPressed: () async => await showDateModalPopup(context),
         ),
       ],
+    );
+  }
+}
+
+class RecommendTip extends StatelessWidget {
+  const RecommendTip({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
+      decoration: const BoxDecoration(
+        color: ColorStyles.tipBackgroundColor,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Text(
+            'TIP!',
+            style: TextStyle(
+              color: ColorStyles.mainColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            ' 추천',
+            style: TextStyle(
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

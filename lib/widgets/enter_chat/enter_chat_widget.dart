@@ -17,15 +17,15 @@ class GoRecipe extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
+          const Padding(
+            padding: EdgeInsets.only(left: 20),
             child: SizedBox(
               width: 150,
               height: 40,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   Text('냉장고 속 식품 레시피',
                       style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
