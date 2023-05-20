@@ -48,7 +48,7 @@ class Popups {
     );
   }
 
-  static void goToPost(context, type) {
+  static void goToPost(context, deal) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -74,14 +74,19 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                      child: Image.asset(
-                        'assets/images/감자.png',
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                      child: Image.network(
+                        '${deal.dealImage}',
                         fit: BoxFit.fill,
                       ),
+                      // Image.asset(
+                      //   'assets/images/감자.png',
+                      //   fit: BoxFit.fill,
+                      // ),
                     ),
                   ),
-                  const firstPostUnit(),
+                  firstPostUnit(deal: deal),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: Container(
@@ -90,10 +95,13 @@ class Popups {
                       width: double.infinity,
                     ),
                   ),
-                  const secondPostUnit(),
+                  secondPostUnit(
+                    deal: deal,
+                  ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+                    padding:
+                        const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -102,8 +110,11 @@ class Popups {
                             width: double.infinity,
                             height: 35,
                             onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => const DealDetailPage()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DealDetailPage(deal: deal)));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,

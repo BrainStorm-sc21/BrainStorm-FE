@@ -9,6 +9,7 @@ class Deal {
   double longitude;
   String dealImage;
   String dealTime;
+  String dealContent;
 
   Deal(
       {this.dealId = 0,
@@ -20,7 +21,8 @@ class Deal {
       required this.latitude,
       required this.longitude,
       required this.dealImage,
-      required this.dealTime});
+      required this.dealTime,
+      required this.dealContent});
 
   // class to json
   Map<String, dynamic> toJson() {
@@ -35,6 +37,7 @@ class Deal {
     data['longitude'] = longitude;
     data['dealImage'] = dealImage;
     data['dealTime'] = dealTime;
+    data['dealContent'] = dealContent;
     return data;
   }
 
@@ -51,6 +54,7 @@ class Deal {
       longitude: json['longitude'],
       dealImage: json['dealImage'],
       dealTime: json['dealTime'],
+      dealContent: json['dealContent'],
     );
   }
 }
