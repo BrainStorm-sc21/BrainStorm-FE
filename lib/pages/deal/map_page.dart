@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
@@ -45,7 +45,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -107,7 +108,22 @@ class _MapPageState extends State<MapPage> {
     // setState(() {
     //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
     // });
-    Popups.goToPost(context, '나눔');
+    // Popups.goToPost(context, '나눔');
+    int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
+
+    for (var post in widget.posts) {
+      if (post.dealName == _markers[pos].captionText) {
+        Popups.goToPost(context, post);
+        break;
+      }
+    }
+
+    setState(() {
+      _markers[pos].captionText = '선택됨';
+    });
+    setState(() {
+      _markers.removeWhere((m) => m.markerId == marker!.markerId);
+    });
   }
 
   @override

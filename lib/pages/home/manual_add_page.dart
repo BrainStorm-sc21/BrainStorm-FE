@@ -148,6 +148,8 @@ class _ManualAddPageState extends State<ManualAddPage> {
       );
     } catch (err) {
       debugPrint('$err');
+    } finally {
+      dio.close();
     }
   }
 }
@@ -232,7 +234,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
+        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
         ]),
