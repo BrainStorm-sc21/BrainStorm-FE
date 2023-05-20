@@ -208,8 +208,12 @@ class _RefrigeratorState extends State<Refrigerator> {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
-                                  print("확인버튼을 눌렀습니다");
                                   modifyFoodInfo(index);
+                                  Popups.popSimpleDialog(
+                                    context,
+                                    title: foodList[index].foodName,
+                                    body: '값이 수정되었습니다',
+                                  );
                                 }
                               });
                             },
