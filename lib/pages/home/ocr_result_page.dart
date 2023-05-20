@@ -21,7 +21,7 @@ class OCRResultPage extends StatefulWidget {
 
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
-  late Map<int, List<int>> recommendList = {};
+  late Map<int, List<DateTime>> recommendList = {};
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
   Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
@@ -131,7 +131,17 @@ class _OCRResultPageState extends State<OCRResultPage> {
     rawRecommend.forEach(
       (index, rawRecommendDays) {
         int i = int.parse(index);
-        List<int> recommendDays = rawRecommendDays.values.toList().cast<int>();
+
+        List<DateTime> recommendDays = List.empty(growable: true);
+        for (var day in rawRecommendDays.values.toList().cast<int>()) {
+          var expireDate = DateTime.now();
+          expireDate = DateTime(
+            expireDate.year,
+            expireDate.month,
+            expireDate.day + day,
+          );
+          recommendDays.add(expireDate);
+        }
         setState(() {
           recommendList[i] = recommendDays;
         });
@@ -188,7 +198,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void setExpireDate(DateTime value, {int? index}) {
-    setState(() => foods[index!].expireDate = value);
+    DateTime formattedValue = DateFormat('yyyy-MM-dd').parse('$value');
+    setState(() => foods[index!].expireDate = formattedValue);
   }
 
   @override
@@ -275,7 +286,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       storage: foods[index].storageWay,
                       setStorage: setStorage,
                       recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
-                      recommendExpireDate: setExpireDate,
+                      setExpireDate: setExpireDate,
                     ),
                     FoodStockButton(
                       index: index,
@@ -376,8 +387,8 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   final int index;
   final void Function(int index, String value) setStorage;
 
-  final List<int>? recommendList;
-  final void Function(DateTime value, {int? index}) recommendExpireDate;
+  final List<DateTime>? recommendList;
+  final void Function(DateTime value, {int? index}) setExpireDate;
 
   CustomFoodStorageDropdown({
     super.key,
@@ -385,7 +396,7 @@ class CustomFoodStorageDropdown extends StatelessWidget {
     required this.storage,
     required this.setStorage,
     required this.recommendList,
-    required this.recommendExpireDate,
+    required this.setExpireDate,
   });
 
   final storages = ['냉장', '냉동', '실온'];
@@ -425,15 +436,12 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   }
 
   void setRecommendedExpireDate(String value) {
-    var expireDate = DateTime.now();
     if (value == storages[0]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![0]);
+      setExpireDate(recommendList![0], index: index);
     } else if (value == storages[1]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![1]);
+      setExpireDate(recommendList![1], index: index);
     } else if (value == storages[2]) {
-      expireDate = DateTime(expireDate.year, expireDate.month, expireDate.day + recommendList![2]);
+      setExpireDate(recommendList![2], index: index);
     }
-    expireDate = DateFormat('yyyy-MM-dd').parse('$expireDate');
-    recommendExpireDate(expireDate, index: index);
   }
 }
