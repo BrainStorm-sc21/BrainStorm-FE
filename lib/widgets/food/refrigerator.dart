@@ -10,7 +10,8 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 class Refrigerator extends StatefulWidget {
   final String storage;
   final List<Food> foodList;
-  const Refrigerator({super.key, required this.foodList, required this.storage});
+  const Refrigerator(
+      {super.key, required this.foodList, required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -82,15 +83,17 @@ class _RefrigeratorState extends State<Refrigerator> {
     });
   }
 
-  void setStock(int index, num value) => setState(() => foodList[index].stock = value);
-  void setStorage(int index, String value) => setState(() => foodList[index].storageWay = value);
+  void setStock(int index, num value) =>
+      setState(() => foodList[index].stock = value);
+  void setStorage(int index, String value) =>
+      setState(() => foodList[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
       setState(() => foodList[index!].expireDate = value);
 
   @override
   void dispose() {
-    disposeController();
     super.dispose();
+    disposeController();
   }
 
   void disposeController() {
@@ -151,12 +154,15 @@ class _RefrigeratorState extends State<Refrigerator> {
                   child: SizedBox(
                       width: 350,
                       child: FoodStorageDropdown(
-                          index: index, storage: food.storageWay, setStorage: setStorage))),
+                          index: index,
+                          storage: food.storageWay,
+                          setStorage: setStorage))),
               AbsorbPointer(
                 absorbing: absorbBool[index],
                 child: SizedBox(
                   width: 350,
-                  child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
+                  child: FoodStockButton(
+                      index: index, stock: food.stock, setStock: setStock),
                 ),
               ),
               AbsorbPointer(
@@ -164,7 +170,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                 child: SizedBox(
                   width: 350,
                   child: FoodExpireDate(
-                      index: index, expireDate: food.expireDate, setExpireDate: setExpireDate),
+                      index: index,
+                      expireDate: food.expireDate,
+                      setExpireDate: setExpireDate),
                 ),
               ),
               SizedBox(
@@ -181,12 +189,15 @@ class _RefrigeratorState extends State<Refrigerator> {
                         });
                       },
                       child: absorbBool[index]
-                          ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
-                          : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
+                          ? const Text('수정',
+                              style: TextStyle(color: ColorStyles.mainColor))
+                          : const Text('확인',
+                              style: TextStyle(color: ColorStyles.mainColor)),
                     ),
                     const SizedBox(width: 10),
                     OutlinedButton(
-                      child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
+                      child: const Text('삭제',
+                          style: TextStyle(color: ColorStyles.mainColor)),
                       onPressed: () {
                         print(foodList[index].foodName);
                         print(foodList[index].foodId);

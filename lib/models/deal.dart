@@ -57,6 +57,7 @@ class Deal {
     data['dealImage3'] = dealImage3;
     data['dealImage4'] = dealImage4;
     data['dealTime'] = dealTime;
+    data['dealContent'] = dealContent;
     return data;
   }
 

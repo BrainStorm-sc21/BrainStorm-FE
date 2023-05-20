@@ -6,7 +6,6 @@ import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -299,12 +298,6 @@ class _DealPageState extends State<DealPage> {
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const GroupPurchasePage()));
-            }),
-        SpeedDialChild(
-            child: const Text('게시글'),
-            backgroundColor: ColorStyles.mainColor,
-            onTap: () {
-              Popups.goToPost(context, '나눔');
             }),
         SpeedDialChild(
             child: const Text('회_임시'),

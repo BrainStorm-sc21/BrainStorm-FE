@@ -97,6 +97,21 @@ class _MapPageState extends State<MapPage> {
     //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
     // });
     Popups.goToPost(context, '나눔');
+    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
+
+    // for (var post in widget.posts) {
+    //   if (post.dealName == _markers[pos].captionText) {
+    //     Popups.goToPost(context, post);
+    //     break;
+    //   }
+    // }
+
+    // setState(() {
+    //   _markers[pos].captionText = '선택됨';
+    // });
+    // setState(() {
+    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
+    // });
   }
 
   @override
