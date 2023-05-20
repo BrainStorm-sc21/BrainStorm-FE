@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -45,7 +45,7 @@ class _RefrigeratorState extends State<Refrigerator> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => const AppPagesContainer(),
           ),
           (route) => false,
         );
@@ -110,7 +110,8 @@ class _RefrigeratorState extends State<Refrigerator> {
         food = foodList[index];
         return Card(
           //key: PageStorageKey(food.foodId),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: ExpansionTile(
             title: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
@@ -126,8 +127,8 @@ class _RefrigeratorState extends State<Refrigerator> {
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: TextField(
                               controller: _foodNameController[index],
-                              decoration:
-                                  const InputDecoration(border: InputBorder.none, counterText: ''),
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none, counterText: ''),
                               style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w600,

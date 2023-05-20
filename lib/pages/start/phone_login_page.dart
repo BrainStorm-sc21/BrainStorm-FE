@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +42,9 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                 "서비스 이용을 위해 \n번호를 입력해주세요.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w500, color: ColorStyles.mainColor),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: ColorStyles.mainColor),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 50),
@@ -68,7 +70,8 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 
                         codeAutoRetrievalTimeout: (String verificationId) {},
 
-                        verificationCompleted: (PhoneAuthCredential credential) async {
+                        verificationCompleted:
+                            (PhoneAuthCredential credential) async {
                           await auth.signInWithCredential(credential);
                         },
 
@@ -77,17 +80,20 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                           setState(() {});
                         },
 
-                        codeSent: (String verificationId, int? forceResendingToken) async {
+                        codeSent: (String verificationId,
+                            int? forceResendingToken) async {
                           setState(() {});
                         },
                       );
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const PhoneAuthPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const PhoneAuthPage()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: ColorStyles.mainColor),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorStyles.mainColor),
                     child: const Text("인증 문자 받기"),
                   ),
                 ),
@@ -128,7 +134,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                 "인증번호가 \n문자로 전송되었습니다.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w500, color: ColorStyles.mainColor),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: ColorStyles.mainColor),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 50),
@@ -147,15 +155,19 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     onPressed: () async {
                       FirebaseAuth auth = FirebaseAuth.instance;
 
-                      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                          verificationId: _verificationId, smsCode: _smsCodeController.text);
+                      PhoneAuthCredential credential =
+                          PhoneAuthProvider.credential(
+                              verificationId: _verificationId,
+                              smsCode: _smsCodeController.text);
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => const AppPagesContainer()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: ColorStyles.mainColor),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorStyles.mainColor),
                     child: const Text("인증하고 로그인하기"),
                   ),
                 ),
