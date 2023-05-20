@@ -76,10 +76,14 @@ class Popups {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20)),
-                      child: Image.asset(
-                        'assets/images/감자.png',
+                      child: Image.network(
+                        '${deal.dealImage}',
                         fit: BoxFit.fill,
                       ),
+                      // Image.asset(
+                      //   'assets/images/감자.png',
+                      //   fit: BoxFit.fill,
+                      // ),
                     ),
                   ),
                   firstPostUnit(deal: deal),

@@ -6,13 +6,10 @@ import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class DealDetailPage extends StatefulWidget {
-  final String description;
   final Deal deal;
 
   const DealDetailPage({
     super.key,
-    this.description =
-        '국산 햇감자 공동구매하실분 찾습니다!!\n아는 분께서 감자농사 하시는데 박스 단위로 판매하시고 있습니다.\n한 박스 사서 나누실 분 모여주세요😆',
     required this.deal,
   });
 
@@ -93,7 +90,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Text(widget.description),
+                      child: Text(widget.deal.dealContent),
                     ),
                   ),
                 ),

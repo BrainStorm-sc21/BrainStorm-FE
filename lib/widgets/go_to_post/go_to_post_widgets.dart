@@ -44,12 +44,15 @@ class _firstPostUnitState extends State<firstPostUnit> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    widget.deal.dealName,
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: ColorStyles.black),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.46,
+                    child: Text(
+                      widget.deal.dealName,
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black),
+                    ),
                   ),
                 ),
               ],
@@ -86,7 +89,7 @@ class _secondPostUnitState extends State<secondPostUnit> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(right: 12),
-                  child: Text('유저 닉네임',
+                  child: Text('삼식이 네끼',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -97,11 +100,12 @@ class _secondPostUnitState extends State<secondPostUnit> {
                         fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 15),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
               child: Text(
-                '거래 description',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                widget.deal.dealContent,
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ),
           ],

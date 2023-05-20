@@ -113,6 +113,7 @@ class TradingBoard extends StatelessWidget {
                                 deal: posts[index],
                               )));
                   print('$dealName 클릭!');
+                  print('${posts[index].dealContent} 클릭!!');
                 },
                 child: const Text(' ')),
           ),
