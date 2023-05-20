@@ -5,7 +5,7 @@ import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -254,7 +254,7 @@ class _DealPageState extends State<DealPage> {
                     if (_selectedValue == '거리순') {
                       posts.sort((a, b) => a.distance.compareTo(b.distance));
                     } else if (_selectedValue == '최신순') {
-                      posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
+                      //posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
                     }
                   });
                 },

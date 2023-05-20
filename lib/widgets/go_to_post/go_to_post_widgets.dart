@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 class firstPostUnit extends StatefulWidget {
@@ -55,7 +55,7 @@ class _firstPostUnitState extends State<firstPostUnit> {
               ],
             ),
             Text(
-              widget.deal.dealTime,
+              widget.deal.createdAt.toString(),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -90,7 +90,7 @@ class _secondPostUnitState extends State<secondPostUnit> {
                       style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
                 ),
-                Text(widget.deal.distance,
+                Text(widget.deal.distance.toString(),
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),

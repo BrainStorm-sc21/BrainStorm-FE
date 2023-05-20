@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 class TopPostUnit extends StatefulWidget {
@@ -29,16 +29,13 @@ class _TopPostUnitState extends State<TopPostUnit> {
             Text(
               widget.nickname,
               style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: ColorStyles.black),
+                  fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Text(
                 widget.distance,
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ),
           ],
