@@ -23,4 +23,6 @@ class ColorStyles {
   static Color errorRed = Colors.redAccent.shade700;
   static Color snow = Colors.grey.shade50;
   static Color lightGrey = Colors.grey.shade200;
+  static Color expireRedColor = Colors.redAccent.shade400;
+  static Color expireOrangeColor = Colors.yellowAccent.shade700;
 }

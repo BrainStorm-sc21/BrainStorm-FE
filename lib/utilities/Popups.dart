@@ -200,12 +200,12 @@ class Popups {
               ),
               GuidePage(
                 title: '영수증',
-                imagePath: 'assets/images/크롭가이드_영수증.png',
+                imagePath: 'assets/images/crop_guide_document.png',
                 body: '영수증을 빳빳하게 편 다음\n글자가 잘 보이도록 촬영하고\n상품 목록 전체를 포함하여 잘라주세요',
               ),
               GuidePage(
                 title: '온라인 구매 내역',
-                imagePath: 'assets/images/크롭가이드_마켓컬리주문내역.png',
+                imagePath: 'assets/images/crop_guide_general_kurly.png',
                 body: '온라인 구매 내역을 캡처한 후\n사진을 제외한 상품 목록을\n구분선에 맞추어 잘라주세요',
               ),
             ],
@@ -232,8 +232,8 @@ class Popups {
             },
             baseBtnStyle: ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              padding:
+                  MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
             ),
             dotsDecorator: const DotsDecorator(
               size: Size(10, 10),
