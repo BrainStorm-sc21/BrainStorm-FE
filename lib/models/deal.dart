@@ -17,14 +17,14 @@ class Deal {
   int dealType;
   String dealName;
   String dealContent;
-  String distance;
+  int distance;
   double latitude;
   double longitude;
   String dealImage1;
   String dealImage2;
   String dealImage3;
   String dealImage4;
-  String dealTime;
+  DateTime createdAt;
 
   Deal(
       {this.dealId = 0,
@@ -39,7 +39,7 @@ class Deal {
       this.dealImage2 = '',
       this.dealImage3 = '',
       this.dealImage4 = '',
-      required this.dealTime});
+      required this.createdAt});
 
   // class to json
   Map<String, dynamic> toJson() {
@@ -56,7 +56,7 @@ class Deal {
     data['dealImage2'] = dealImage2;
     data['dealImage3'] = dealImage3;
     data['dealImage4'] = dealImage4;
-    data['dealTime'] = dealTime;
+    data['createdAt'] = createdAt;
     data['dealContent'] = dealContent;
     return data;
   }
@@ -76,7 +76,7 @@ class Deal {
       dealImage2: json['dealImage2'],
       dealImage3: json['dealImage3'],
       dealImage4: json['dealImage4'],
-      dealTime: json['dealTime'],
+      createdAt: json['createdAt'],
     );
   }
 }

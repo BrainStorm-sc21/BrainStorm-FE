@@ -28,14 +28,10 @@ class GoRecipe extends StatelessWidget {
                 children: [
                   Text('냉장고 속 식품 레시피',
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.white)),
+                          fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
                   Text('지금 확인하기',
                       style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.white)),
+                          fontSize: 13, fontWeight: FontWeight.w400, color: ColorStyles.white)),
                 ],
               ),
             ),
@@ -139,9 +135,7 @@ class _ChatUnitState extends State<ChatUnit> {
                   Text(
                     widget.time,
                     style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        color: ColorStyles.textColor),
+                        fontSize: 11, fontWeight: FontWeight.w400, color: ColorStyles.textColor),
                   ),
                   widget.unread != 0
                       ? Container(
@@ -154,8 +148,7 @@ class _ChatUnitState extends State<ChatUnit> {
                           child: Center(
                             child: Text(
                               '${widget.unread}',
-                              style: const TextStyle(
-                                  fontSize: 12, color: ColorStyles.white),
+                              style: const TextStyle(fontSize: 12, color: ColorStyles.white),
                             ),
                           ),
                         )

@@ -61,7 +61,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
             child: Column(
               children: [
                 TopPostUnit(
-                  distance: widget.deal.distance,
+                  distance: widget.deal.distance.toString(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(

@@ -264,10 +264,11 @@ class _DealPageState extends State<DealPage> {
                     if (_selectedValue == '거리순') {
                       posts.sort((a, b) => a.distance.compareTo(b.distance));
                     } else if (_selectedValue == '최신순') {
-                      posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
+                      //posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
                     }
                   });
                 },
+                underline: Container(),
                 elevation: 2)));
   }
 

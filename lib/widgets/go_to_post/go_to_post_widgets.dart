@@ -58,7 +58,7 @@ class _firstPostUnitState extends State<firstPostUnit> {
               ],
             ),
             Text(
-              widget.deal.dealTime,
+              widget.deal.createdAt.toString(),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -95,9 +95,8 @@ class _secondPostUnitState extends State<secondPostUnit> {
                           fontWeight: FontWeight.w600,
                           color: ColorStyles.black)),
                 ),
-                Text(widget.deal.distance,
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w400)),
+                Text(widget.deal.distance.toString(),
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
               ],
             ),
             Padding(
