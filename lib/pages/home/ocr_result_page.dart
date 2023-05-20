@@ -304,6 +304,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       expireDate: foods[index].expireDate,
                       setExpireDate: setExpireDate,
+                      isRecommended: recommendList.containsKey(index) ? true : false,
                     ),
                   ],
                 ),
