@@ -436,12 +436,11 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   }
 
   void setRecommendedExpireDate(String value) {
-    if (value == storages[0]) {
-      setExpireDate(recommendList![0], index: index);
-    } else if (value == storages[1]) {
-      setExpireDate(recommendList![1], index: index);
-    } else if (value == storages[2]) {
-      setExpireDate(recommendList![2], index: index);
+    for (var i = 0; i < storages.length; i++) {
+      if (value == storages[i]) {
+        setExpireDate(recommendList![i], index: index);
+        break;
+      }
     }
   }
 }
