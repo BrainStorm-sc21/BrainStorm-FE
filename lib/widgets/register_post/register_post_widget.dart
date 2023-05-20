@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +57,8 @@ class TopBar extends StatelessWidget {
 }
 
 class TitleInput extends StatelessWidget {
-  const TitleInput({super.key});
+  final void Function(String value) setTitle;
+  const TitleInput({super.key, required this.setTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +89,7 @@ class TitleInput extends StatelessWidget {
                   borderSide: const BorderSide(color: ColorStyles.borderColor),
                 ),
               ),
+              onChanged: (value) => setTitle(value),
             ),
           ],
         ),
@@ -98,7 +99,8 @@ class TitleInput extends StatelessWidget {
 }
 
 class DescriptionInput extends StatelessWidget {
-  const DescriptionInput({super.key});
+  final void Function(String value) setContent;
+  const DescriptionInput({super.key, required this.setContent});
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +140,7 @@ class DescriptionInput extends StatelessWidget {
                     ),
                   ),
                 ),
+                onChanged: (value) => setContent(value),
               ),
             ),
           ],
@@ -148,7 +151,8 @@ class DescriptionInput extends StatelessWidget {
 }
 
 class PhotoBoxInput extends StatefulWidget {
-  const PhotoBoxInput({super.key});
+  final void Function(String value) setImages;
+  const PhotoBoxInput({super.key, required this.setImages});
 
   @override
   State<PhotoBoxInput> createState() => _PhotoBoxInputState();
@@ -156,6 +160,8 @@ class PhotoBoxInput extends StatefulWidget {
 
 class _PhotoBoxInputState extends State<PhotoBoxInput> {
   final checkImageList = [false, false, false, false];
+
+  void setImage(String value) => setState(() => widget.setImages(value));
 
   @override
   Widget build(BuildContext context) {
@@ -174,11 +180,11 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                PhotoboxUnit(),
-                PhotoboxUnit(),
-                PhotoboxUnit(),
-                PhotoboxUnit(),
+              children: [
+                PhotoboxUnit(setImage: setImage),
+                PhotoboxUnit(setImage: setImage),
+                PhotoboxUnit(setImage: setImage),
+                PhotoboxUnit(setImage: setImage),
               ],
             ),
           ],
@@ -189,7 +195,8 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
 }
 
 class PhotoboxUnit extends StatefulWidget {
-  const PhotoboxUnit({super.key});
+  final void Function(String value) setImage;
+  const PhotoboxUnit({super.key, required this.setImage});
 
   @override
   State<PhotoboxUnit> createState() => _PhotoboxUnitState();
@@ -204,8 +211,7 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
     if (pickedFile != null) {
       setState(() {
         _image = XFile(pickedFile.path);
-
-        print(_image.hashCode);
+        widget.setImage(_image!.path);
       });
     }
   }
@@ -310,7 +316,7 @@ class BottomButton extends StatelessWidget {
             RoundedOutlinedButton(
               text: '등록하기',
               width: double.infinity,
-              onPressed: () => registerPost,
+              onPressed: registerPost,
               foregroundColor: ColorStyles.white,
               backgroundColor: ColorStyles.mainColor,
               borderColor: ColorStyles.mainColor,

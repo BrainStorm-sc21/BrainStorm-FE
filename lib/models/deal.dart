@@ -1,3 +1,7 @@
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
 class DealData {
   final List<Deal> data;
 
@@ -44,20 +48,19 @@ class Deal {
   // class to json
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['dealId'] = dealId;
+    //data['dealId'] = dealId;
     data['userId'] = userId;
     data['dealType'] = dealType;
     data['dealName'] = dealName;
     data['dealContent'] = dealContent;
-    data['distance'] = distance;
-    data['latitude'] = latitude;
-    data['longitude'] = longitude;
+    //data['distance'] = distance;
+    //data['latitude'] = latitude;
+    //data['longitude'] = longitude;
     data['dealImage1'] = dealImage1;
     data['dealImage2'] = dealImage2;
     data['dealImage3'] = dealImage3;
     data['dealImage4'] = dealImage4;
-    data['createdAt'] = createdAt;
-    data['dealContent'] = dealContent;
+    //data['createdAt'] = createdAt;
     return data;
   }
 
@@ -81,14 +84,37 @@ class Deal {
   }
 }
 
-Future<int?> registerPost(Deal deal) async {
+Future<int?> requestRegisterPost(Deal deal) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
     ..connectTimeout = const Duration(seconds: 5)
     ..receiveTimeout = const Duration(seconds: 10);
 
-  final data = {"userId": "1", "deal"}
+  final data = deal.toJson();
+  debugPrint('req data: $data');
 
+  try {
+    final res = await dio.post(
+      '/deal',
+      data: data,
+    );
+
+    if (res.statusCode == 200) {
+      print("게시글 등록 성공!!");
+    } else {
+      throw Exception('Failed to send data [${res.statusCode}]');
+    }
+  } on DioError {
+    // Popups.popSimpleDialog(
+    //   context,
+    //   title: '${err.type}',
+    //   body: '${err.message}',
+    // );
+  } catch (err) {
+    debugPrint('$err');
+  } finally {
+    dio.close();
+  }
   return null;
 }

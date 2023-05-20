@@ -14,7 +14,26 @@ class _GroupPurchasePageState extends State<GroupPurchasePage> {
 
   void registerPost() {
     print('공동구매 게시글 등록!');
+    requestRegisterPost(deal);
   }
+
+  @override
+  void initState() {
+    super.initState();
+    deal = Deal(
+        userId: 1,
+        dealType: 0,
+        dealName: '',
+        dealContent: '',
+        distance: 0,
+        latitude: 0.0,
+        longitude: 0.0,
+        createdAt: DateTime.now());
+  }
+
+  void setTitle(String value) => setState(() => deal.dealName = value);
+  void setContent(String value) => setState(() => deal.dealContent = value);
+  void setImages(String value) => setState(() => deal.dealImage1 = value);
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +55,19 @@ class _GroupPurchasePageState extends State<GroupPurchasePage> {
               height: MediaQuery.of(context).size.height * 0.6,
               child: SingleChildScrollView(
                 child: Column(
-                  children: const [
-                    TitleInput(),
+                  children: [
+                    TitleInput(setTitle: setTitle),
                     // Padding(
                     //   padding: EdgeInsets.only(top: 20),
                     //   child: NumOfPeopleInput(),
                     // ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: DescriptionInput(),
+                      padding: const EdgeInsets.only(top: 20),
+                      child: DescriptionInput(setContent: setContent),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: PhotoBoxInput(),
+                      padding: const EdgeInsets.only(top: 20),
+                      child: PhotoBoxInput(setImages: setImages),
                     )
                   ],
                 ),
