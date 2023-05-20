@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
@@ -74,8 +74,7 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
+                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       child: Image.network(
                         '${deal.dealImage}',
                         fit: BoxFit.fill,
@@ -100,8 +99,7 @@ class Popups {
                   ),
                   const Spacer(),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -113,8 +111,7 @@ class Popups {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          DealDetailPage(deal: deal)));
+                                      builder: (context) => DealDetailPage(deal: deal)));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,

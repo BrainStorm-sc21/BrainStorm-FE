@@ -19,7 +19,7 @@ class TradingBoard extends StatelessWidget {
         final dealName = deal.dealName;
         final distance = deal.distance;
         final dealType = deal.dealType;
-        final time = deal.dealTime;
+        final time = deal.createdAt;
         final imgUrl = deal.dealImage1;
         return Stack(children: [
           Padding(
@@ -63,13 +63,13 @@ class TradingBoard extends StatelessWidget {
                                   style: const TextStyle(
                                       fontSize: 16, fontWeight: FontWeight.w500, height: 1),
                                   overflow: TextOverflow.ellipsis)),
-                          Text(time,
+                          Text(time.toString(),
                               style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1)),
                         ]),
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        distance,
+                        distance.toString(),
                         style: const TextStyle(fontSize: 13, color: Colors.grey),
                       ),
                     ],
