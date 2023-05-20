@@ -7,10 +7,14 @@ class FoodStockButton extends StatelessWidget {
   final int index;
 
   const FoodStockButton(
-      {super.key,
-      required this.index,
-      required this.stock,
-      required this.setStock});
+      {super.key, required this.index, required this.stock, required this.setStock});
+
+  num convertInteger(stock) {
+    if (stock == 1 || stock >= 2) {
+      stock = stock.ceil();
+    }
+    return stock;
+  }
 
   void decreaseStock() {
     if (stock <= StockRange.minStock) return;
@@ -68,7 +72,7 @@ class FoodStockButton extends StatelessWidget {
           SizedBox(
             width: 30,
             child: Text(
-              '$stock',
+              convertInteger(stock).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 15),
             ),

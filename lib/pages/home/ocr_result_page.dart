@@ -22,7 +22,7 @@ class OCRResultPage extends StatefulWidget {
 
 class _OCRResultPageState extends State<OCRResultPage> {
   List<Food> foods = List.empty(growable: true);
-  late Map<int, List<int>> recommendList = {};
+  late Map<int, List<DateTime>> recommendList = {};
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
   Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
@@ -62,8 +62,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
-    initFoods();
     initRecommendList();
+    initFoods();
     initController();
   }
 
@@ -132,7 +132,17 @@ class _OCRResultPageState extends State<OCRResultPage> {
     rawRecommend.forEach(
       (index, rawRecommendDays) {
         int i = int.parse(index);
-        List<int> recommendDays = rawRecommendDays.values.toList().cast<int>();
+
+        List<DateTime> recommendDays = List.empty(growable: true);
+        for (var day in rawRecommendDays.values.toList().cast<int>()) {
+          var expireDate = DateTime.now();
+          expireDate = DateTime(
+            expireDate.year,
+            expireDate.month,
+            expireDate.day + day,
+          );
+          recommendDays.add(expireDate);
+        }
         setState(() {
           recommendList[i] = recommendDays;
         });
@@ -143,14 +153,21 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initFoods() {
-    for (var fooditem in ocrResult['list']!.values) {
-      foods.add(Food(
-        foodName: fooditem['foodName'],
-        stock: fooditem['stock'],
-        storageWay: '냉장',
-        expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
-      ));
-    }
+    ocrResult['list']!.forEach(
+      (key, foodItem) {
+        int index = int.parse(key);
+        foods.add(
+          Food(
+            foodName: foodItem['foodName'],
+            stock: foodItem['stock'],
+            storageWay: '냉장',
+            expireDate: recommendList[index] != null
+                ? DateFormat('yyyy-MM-dd').parse('${recommendList[index]![0]}')
+                : DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
+          ),
+        );
+      },
+    );
   }
 
   void initController() {
@@ -189,7 +206,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void setExpireDate(DateTime value, {int? index}) {
-    setState(() => foods[index!].expireDate = value);
+    DateTime formattedValue = DateFormat('yyyy-MM-dd').parse('$value');
+    setState(() => foods[index!].expireDate = formattedValue);
   }
 
   @override
@@ -203,6 +221,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
         containerColor: ColorStyles.snow,
         body: SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
+            // 식료품 리스트 아이템
             return Card(
               elevation: 3,
               shadowColor: ColorStyles.white,
@@ -213,30 +232,35 @@ class _OCRResultPageState extends State<OCRResultPage> {
                   Radius.circular(8.0),
                 ),
               ),
+              // 식료품 아이템 좌측 노란색 세로선
               child: Container(
                 decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        ColorStyles.mustardYellow,
-                        ColorStyles.transparent,
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment(-0.95, 0),
-                      stops: [1, 1],
-                    ),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        bottomLeft: Radius.circular(8.0))),
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorStyles.mustardYellow,
+                      ColorStyles.transparent,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment(-0.95, 0),
+                    stops: [1, 1],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0),
+                  ),
+                ),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,
                   right: 20,
                   bottom: 10,
                 ),
+                // 식료품 정보
                 child: Column(
                   children: [
                     Row(
                       children: [
+                        // 식료품 이름
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: TextField(
@@ -255,11 +279,12 @@ class _OCRResultPageState extends State<OCRResultPage> {
                                 updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
-                              FocusScope.of(context).unfocus();
-                            }, // 키보드 숨김
+                              FocusScope.of(context).unfocus(); // 키보드 숨김
+                            },
                           ),
                         ),
                         const Spacer(),
+                        // 아이템 삭제 버튼
                         IconButton(
                           onPressed: () {
                             setState(() {
@@ -273,24 +298,26 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         ),
                       ],
                     ),
+                    // 식료품 보관 장소
                     CustomFoodStorageDropdown(
                       index: index,
                       storage: foods[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendList.containsKey(index)
-                          ? recommendList[index]
-                          : null,
-                      recommendExpireDate: setExpireDate,
+                      recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
+                      setExpireDate: setExpireDate,
                     ),
+                    // 식료품 수량
                     FoodStockButton(
                       index: index,
                       stock: foods[index].stock,
                       setStock: setStock,
                     ),
+                    // 식료품 소비 기한 (+ TIP UI)
                     FoodExpireDate(
                       index: index,
                       expireDate: foods[index].expireDate,
                       setExpireDate: setExpireDate,
+                      isRecommended: recommendList.containsKey(index) ? true : false,
                     ),
                   ],
                 ),
@@ -380,9 +407,9 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   final String storage;
   final int index;
   final void Function(int index, String value) setStorage;
-
-  final List<int>? recommendList;
-  final void Function(DateTime value, {int? index}) recommendExpireDate;
+  // 소비기한 추천 기능을 위한 필드
+  final List<DateTime>? recommendList;
+  final void Function(DateTime value, {int? index}) setExpireDate;
 
   CustomFoodStorageDropdown({
     super.key,
@@ -390,7 +417,7 @@ class CustomFoodStorageDropdown extends StatelessWidget {
     required this.storage,
     required this.setStorage,
     required this.recommendList,
-    required this.recommendExpireDate,
+    required this.setExpireDate,
   });
 
   final storages = ['냉장', '냉동', '실온'];
@@ -430,18 +457,11 @@ class CustomFoodStorageDropdown extends StatelessWidget {
   }
 
   void setRecommendedExpireDate(String value) {
-    var expireDate = DateTime.now();
-    if (value == storages[0]) {
-      expireDate = DateTime(expireDate.year, expireDate.month,
-          expireDate.day + recommendList![0]);
-    } else if (value == storages[1]) {
-      expireDate = DateTime(expireDate.year, expireDate.month,
-          expireDate.day + recommendList![1]);
-    } else if (value == storages[2]) {
-      expireDate = DateTime(expireDate.year, expireDate.month,
-          expireDate.day + recommendList![2]);
+    for (var i = 0; i < storages.length; i++) {
+      if (value == storages[i]) {
+        setExpireDate(recommendList![i], index: index);
+        break;
+      }
     }
-    expireDate = DateFormat('yyyy-MM-dd').parse('$expireDate');
-    recommendExpireDate(expireDate, index: index);
   }
 }

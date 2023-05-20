@@ -16,7 +16,7 @@ class DealData {
 }
 
 class Deal {
-  late int dealId;
+  late int? dealId;
   int userId;
   int dealType;
   String dealName;
@@ -75,10 +75,10 @@ class Deal {
       distance: json['distance'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      dealImage1: json['dealImage1'],
-      dealImage2: json['dealImage2'],
-      dealImage3: json['dealImage3'],
-      dealImage4: json['dealImage4'],
+      dealImage1: json['image1'],
+      dealImage2: json['image2'],
+      dealImage3: json['image3'],
+      dealImage4: json['image4'],
       createdAt: json['createdAt'],
     );
   }
