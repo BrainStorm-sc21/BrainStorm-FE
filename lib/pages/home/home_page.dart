@@ -28,9 +28,6 @@ class _HomePageState extends State<HomePage> {
     try {
       Response resp = await dio.get("/food/1");
 
-      //print("Food Status: ${resp.statusCode}");
-      //print("Data:\n${resp.data}");
-
       FoodData foodData = FoodData.fromJson(resp.data);
 
       setState(() {
@@ -53,19 +50,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   TabBar get _tabBar => const TabBar(
-          padding: EdgeInsets.only(top: 10),
-          isScrollable: false,
-          indicatorColor: ColorStyles.mainColor,
-          indicatorWeight: 4,
-          labelColor: ColorStyles.mainColor,
-          unselectedLabelColor: ColorStyles.textColor,
-          labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          tabs: [
-            Tab(text: "전체"),
-            Tab(text: "냉장"),
-            Tab(text: "냉동"),
-            Tab(text: "실온")
-          ]);
+      padding: EdgeInsets.only(top: 10),
+      isScrollable: false,
+      indicatorColor: ColorStyles.mainColor,
+      indicatorWeight: 4,
+      labelColor: ColorStyles.mainColor,
+      unselectedLabelColor: ColorStyles.textColor,
+      labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      tabs: [Tab(text: "전체"), Tab(text: "냉장"), Tab(text: "냉동"), Tab(text: "실온")]);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +79,7 @@ class _HomePageState extends State<HomePage> {
                   flexibleSpace: Container(
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15)),
+                              bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
                           gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -99,8 +90,7 @@ class _HomePageState extends State<HomePage> {
                   actions: [
                     IconButton(
                         padding: const EdgeInsets.only(top: 28, right: 30),
-                        icon: const Icon(Icons.notifications,
-                            color: Colors.white, size: 30),
+                        icon: const Icon(Icons.notifications, color: Colors.white, size: 30),
                         onPressed: () {
                           print("우측 상단 검색 아이콘 클릭 됨");
                         })
@@ -108,11 +98,7 @@ class _HomePageState extends State<HomePage> {
             ),
             body: Column(children: [
               _tabBar,
-              const Divider(
-                  height: 0,
-                  color: ColorStyles.lightgrey,
-                  thickness: 1.5,
-                  endIndent: 10),
+              const Divider(height: 0, color: ColorStyles.lightgrey, thickness: 1.5, endIndent: 10),
               Expanded(
                   child: foodList.isEmpty
                       ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
@@ -146,8 +132,7 @@ Widget? floatingButtons(BuildContext context) {
           child: const Icon(Icons.camera_alt, color: Colors.white),
           backgroundColor: ColorStyles.mainColor,
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartAddPage()));
           }),
       SpeedDialChild(
         child: const Icon(
@@ -156,8 +141,7 @@ Widget? floatingButtons(BuildContext context) {
         ),
         backgroundColor: ColorStyles.mainColor,
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ManualAddPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualAddPage()));
         },
       )
     ],
