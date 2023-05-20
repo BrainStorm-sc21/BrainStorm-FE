@@ -61,8 +61,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
-    initFoods();
     initRecommendList();
+    initFoods();
     initController();
   }
 
@@ -152,14 +152,21 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initFoods() {
-    for (var fooditem in ocrResult['list']!.values) {
-      foods.add(Food(
-        foodName: fooditem['foodName'],
-        stock: fooditem['stock'],
-        storageWay: '냉장',
-        expireDate: DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
-      ));
-    }
+    ocrResult['list']!.forEach(
+      (key, foodItem) {
+        int index = int.parse(key);
+        foods.add(
+          Food(
+            foodName: foodItem['foodName'],
+            stock: foodItem['stock'],
+            storageWay: '냉장',
+            expireDate: recommendList[index] != null
+                ? DateFormat('yyyy-MM-dd').parse('${recommendList[index]![0]}')
+                : DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
+          ),
+        );
+      },
+    );
   }
 
   void initController() {
