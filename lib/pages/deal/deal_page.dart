@@ -6,7 +6,10 @@ import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -20,124 +23,135 @@ class DealPage extends StatefulWidget {
 class _DealPageState extends State<DealPage> {
   bool isDealPage = true;
 
-  final List<String> _deals = ['공구', '교환', '나눔'];
-  final Map _checkDeal = {'공구': false, '교환': false, '나눔': false};
-  final List<Color> _colors = [
-    ColorStyles.groupBuyColor,
-    ColorStyles.exchangColor,
-    ColorStyles.shareColor
-  ];
-
+  final List<bool> _checkDeal = [false, false, false];
   final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
 
-  void setDeal(String dealTypeName) => setState(() {
-        _checkDeal[dealTypeName] = !_checkDeal[dealTypeName];
-        if (_checkDeal.containsValue(true)) {
-          posts = entirePosts
-              .where((deal) => _checkDeal[deal.dealType] == true)
-              .toList();
+  void setDeal(int dealType) => setState(() {
+        _checkDeal[dealType] = !_checkDeal[dealType];
+        if (_checkDeal.contains(true)) {
+          posts = dealData.data.where((deal) => _checkDeal[deal.dealType] == true).toList();
         } else {
-          posts = entirePosts;
+          posts = dealData.data;
         }
       });
   void setSearch() => setState(() {});
-  void setdropdown(String selectedValue, String value) =>
-      setState(() => selectedValue = value);
+  void setdropdown(String selectedValue, String value) => setState(() => selectedValue = value);
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  late Deal deal;
-  List<Deal> entirePosts = [
-    Deal(
-        userId: 1,
-        dealName: "감자 공동구매 하실 분!",
-        dealType: "공구",
-        distance: "150M",
-        location: "도로주소",
-        latitude: 37.566570,
-        longitude: 126.978442,
-        dealTime: "30분전",
-        dealContent:
-            "국산 햇감자 공동구매하실 분 찾습니다!!\n아는 분께서 감자농사 하시는데 박스 단위로 판매하시고 있습니다. 한 박스 사서 나누실 분 모여주세요",
-        dealImage:
-            'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcR1M89lNmXLBltfEc5TQZJSpcqvZ36vvZyZfpP98EFh-i4Q9X8S8woN6El91b1pZ5Sw'),
-    Deal(
-        userId: 2,
-        dealName: "양파 나눔해요~",
-        dealType: "나눔",
-        distance: "400M",
-        location: "도로주소2",
-        latitude: 37.56643167934505,
-        longitude: 126.97937927193084,
-        dealTime: "57분전",
-        dealContent:
-            "어제 양파를 두 묶음 샀는데, 생각보다 양이 너무 많아서 나눔해요~~\n캡디수업 마치고 팔달관 앞에서 나눔합니다!",
-        dealImage:
-            'https://i.namu.wiki/i/qTfdtopPV7GKQ0YmjVsHxythtmlSQ35OppjcjwJgHJoLVXzx5iCZRFHaq-mXoTR5cl-j2X4SQm1xvyj2hhxBEw.webp'),
-    Deal(
-        userId: 3,
-        dealName: "이천 쌀 공구하실 분 구합니다!!",
-        dealType: "공구",
-        distance: "1.2M",
-        location: "도로주소3",
-        latitude: 37.56555925792482,
-        longitude: 126.97766593224515,
-        dealTime: "1시간 전",
-        dealContent:
-            "이천 쌀이 그렇게 맛있다던데, 같이 공구하실 분 있을까요?\n쿠팡에서 두 포대 묶음으로 싸게 파는 것 같은데 관심있으면 연락주세요😃",
-        dealImage:
-            'https://www.newspeak.kr/news/photo/202209/435707_284048_3504.jpg'),
-    Deal(
-        userId: 4,
-        dealName: "사과랑 바나나 교환해요",
-        dealType: "교환",
-        distance: "750M",
-        location: "도로주소4",
-        latitude: 37.566703547317187,
-        longitude: 126.97782114579604,
-        dealTime: "2시간 전",
-        dealContent:
-            "사과가 생각보다 많이 남는데, 혹시 바나나가 남는 분 중에 교환하실 분 있으실까요??\n 문경 사과라 당도가 아주 높습니다!!",
-        dealImage:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRlxKlz8H0tHG-DpyUhBOOo6wpGw_NnEYPMLDjrfVA3aSPyIdCfmzS_fzOcnj0seChhGo&usqp=CAU'),
-    Deal(
-        userId: 5,
-        dealName: "이건 정말 긴 제목을 가지고 있는 게시물의 테스트를 위한 더미값입니다",
-        dealType: "나눔",
-        distance: "750M",
-        location: "도로주소5",
-        latitude: 37.566753547317187,
-        longitude: 126.97772114579604,
-        dealTime: "2시간 전",
-        dealContent: "이건 정말 긴 제목을 가지고 있는 게시물의 컨텐츠입니다.",
-        dealImage:
-            'https://i.pinimg.com/originals/b0/df/95/b0df95cfc6f31293d002d4d6daac253c.jpg')
-  ];
-
   List<Deal> posts = List.empty(growable: true);
+  late DealData dealData;
 
-  void initDeals() {
-    for (var deal in entirePosts) {
-      posts.add(Deal(
-          userId: deal.userId,
-          dealName: deal.dealName,
-          dealType: deal.dealType,
-          distance: deal.distance,
-          location: deal.location,
-          latitude: deal.latitude,
-          longitude: deal.longitude,
-          dealTime: deal.dealTime,
-          dealImage: deal.dealImage,
-          dealContent: deal.dealContent));
+  Future getServerDealDataWithDio() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+    try {
+      Response resp = await dio.get("/deal/1/around");
+
+      print("Deal Status: ${resp.statusCode}");
+      print("Data:\n${resp.data}");
+
+      DealData dealData = DealData.fromJson(resp.data);
+
+      setState(() {
+        for (Deal dealitem in dealData.data) {
+          posts.add(dealitem);
+        }
+      });
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
     }
+    return false;
   }
+
+  // void initDeals() {
+  //   for (var deal in entirePosts) {
+  //     posts.add(Deal(
+  //         userId: deal.userId,
+  //         dealName: deal.dealName,
+  //         dealType: deal.dealType,
+  //         distance: deal.distance,
+  //         dealContent: deal.dealContent,
+  //         latitude: deal.latitude,
+  //         longitude: deal.longitude,
+  //         dealTime: deal.dealTime,
+  //         dealImage1: deal.dealImage1));
+  //   }
+  // }
+
+  // List<Deal> entirePosts = [
+  //   Deal(
+  //       userId: 1,
+  //       dealId: 1,
+  //       dealName: "감자 공동구매 하실 분!",
+  //       dealType: "공구",
+  //       dealContent: "내용0",
+  //       distance: "150M",
+  //       latitude: 37.284859,
+  //       longitude: 127.044508,
+  //       dealTime: "30분전",
+  //       dealImage1:
+  //           'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcR1M89lNmXLBltfEc5TQZJSpcqvZ36vvZyZfpP98EFh-i4Q9X8S8woN6El91b1pZ5Sw'),
+  //   Deal(
+  //       userId: 2,
+  //       dealId: 2,
+  //       dealName: "양파 나눔해요~",
+  //       dealType: "나눔",
+  //       distance: "400M",
+  //       dealContent: "내용1",
+  //       latitude: 37.28419,
+  //       longitude: 127.043608,
+  //       dealTime: "57분전",
+  //       dealImage1:
+  //           'https://i.namu.wiki/i/qTfdtopPV7GKQ0YmjVsHxythtmlSQ35OppjcjwJgHJoLVXzx5iCZRFHaq-mXoTR5cl-j2X4SQm1xvyj2hhxBEw.webp'),
+  //   Deal(
+  //       userId: 3,
+  //       dealId: 3,
+  //       dealName: "이천 쌀 공구하실 분 구합니다!!",
+  //       dealType: "공구",
+  //       distance: "1.2M",
+  //       dealContent: "내용2",
+  //       latitude: 37.283159,
+  //       longitude: 127.0446788,
+  //       dealTime: "1시간 전",
+  //       dealImage1: 'https://www.newspeak.kr/news/photo/202209/435707_284048_3504.jpg'),
+  //   Deal(
+  //       userId: 4,
+  //       dealId: 4,
+  //       dealName: "사과랑 바나나 교환해요",
+  //       dealType: "교환",
+  //       distance: "750M",
+  //       dealContent: "내용3",
+  //       latitude: 37.284659,
+  //       longitude: 127.04460887569,
+  //       dealTime: "2시간 전",
+  //       dealImage1:
+  //           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRlxKlz8H0tHG-DpyUhBOOo6wpGw_NnEYPMLDjrfVA3aSPyIdCfmzS_fzOcnj0seChhGo&usqp=CAU'),
+  //   Deal(
+  //       userId: 5,
+  //       dealId: 5,
+  //       dealName: "이건 정말 긴 제목을 가지고 있는 게시물의 테스트를 위한 더미값입니다",
+  //       dealType: "나눔",
+  //       distance: "750M",
+  //       dealContent: "내용4",
+  //       latitude: 37.283959,
+  //       longitude: 127.04467148,
+  //       dealTime: "2시간 전",
+  //       dealImage1: 'https://i.pinimg.com/originals/b0/df/95/b0df95cfc6f31293d002d4d6daac253c.jpg')
+  // ];
 
   @override
   void initState() {
     super.initState();
+    getServerDealDataWithDio();
 
-    initDeals();
+    //initDeals();
   }
 
   @override
@@ -185,16 +199,15 @@ class _DealPageState extends State<DealPage> {
                             padding: const EdgeInsets.only(right: 5),
                             child: RoundedOutlinedButton(
                               height: 30,
-                              text: _deals[index],
+                              text: DealType.dealTypeName[index],
                               fontSize: 15,
-                              onPressed: () => setDeal(_deals[index]),
-                              backgroundColor: _checkDeal[_deals[index]]
-                                  ? _colors[index]
+                              onPressed: () => setDeal(index),
+                              backgroundColor: _checkDeal[index]
+                                  ? DealType.dealTextColors[index]
                                   : ColorStyles.white,
-                              foregroundColor: _checkDeal[_deals[index]]
-                                  ? ColorStyles.white
-                                  : ColorStyles.black,
-                              borderColor: _colors[index],
+                              foregroundColor:
+                                  _checkDeal[index] ? ColorStyles.white : ColorStyles.black,
+                              borderColor: DealType.dealTextColors[index],
                               borderwidth: 2,
                             ));
                       }),
@@ -209,10 +222,8 @@ class _DealPageState extends State<DealPage> {
                           });
                         },
                         child: isDealPage
-                            ? const Icon(Icons.map,
-                                color: ColorStyles.mainColor)
-                            : const Icon(Icons.format_list_bulleted,
-                                color: ColorStyles.mainColor)),
+                            ? const Icon(Icons.map, color: ColorStyles.mainColor)
+                            : const Icon(Icons.format_list_bulleted, color: ColorStyles.mainColor)),
                   ],
                 )),
           ],
@@ -227,18 +238,14 @@ class _DealPageState extends State<DealPage> {
             height: 27,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40.0),
-                border: Border.all(
-                    color: ColorStyles.black,
-                    style: BorderStyle.solid,
-                    width: 0.7)),
+                border: Border.all(color: ColorStyles.black, style: BorderStyle.solid, width: 0.7)),
             child: DropdownButton(
                 value: _selectedValue,
                 items: _valueList
                     .map((e) => DropdownMenuItem(
                           value: e,
                           child: Text(e,
-                              style: const TextStyle(
-                                  fontSize: 14, color: ColorStyles.textColor)),
+                              style: const TextStyle(fontSize: 14, color: ColorStyles.textColor)),
                         ))
                     .toList(),
                 onChanged: (value) {
@@ -247,7 +254,7 @@ class _DealPageState extends State<DealPage> {
                     if (_selectedValue == '거리순') {
                       posts.sort((a, b) => a.distance.compareTo(b.distance));
                     } else if (_selectedValue == '최신순') {
-                      posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
+                      //posts.sort((a, b) => a.dealTime.compareTo(b.dealTime));
                     }
                   });
                 },
@@ -269,38 +276,36 @@ class _DealPageState extends State<DealPage> {
       closeManually: false,
       children: [
         SpeedDialChild(
-            child: const Text('나눔', style: TextStyle(color: ColorStyles.white)),
+            child: const Text('나눔',
+                style: TextStyle(color: ColorStyles.shareTextColor, fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SharingPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SharingPage()));
             }),
         SpeedDialChild(
-            child: const Text('교환', style: TextStyle(color: ColorStyles.white)),
-            backgroundColor: ColorStyles.exchangColor,
+            child: const Text('교환',
+                style:
+                    TextStyle(color: ColorStyles.exchangeTextColor, fontWeight: FontWeight.w600)),
+            backgroundColor: ColorStyles.exchangeColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ExchangePage()));
+                  context, MaterialPageRoute(builder: (context) => const ExchangePage()));
             }),
         SpeedDialChild(
-            child: const Text('공구', style: TextStyle(color: ColorStyles.white)),
+            child: const Text('공구',
+                style:
+                    TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const GroupPurchasePage()));
+                  context, MaterialPageRoute(builder: (context) => const GroupPurchasePage()));
             }),
         SpeedDialChild(
             child: const Text('회_임시'),
             backgroundColor: ColorStyles.mainColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const OnboardingPage()));
+                  context, MaterialPageRoute(builder: (context) => const OnboardingPage()));
             }),
       ],
     );

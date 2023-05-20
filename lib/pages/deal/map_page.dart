@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
@@ -19,14 +20,6 @@ class _MapPageState extends State<MapPage> {
 
   Completer<NaverMapController> _controller = Completer();
 
-  final List<Marker> _markers = [];
-
-  final Map markerImage = {
-    '공구': 'assets/images/groupMarker.png',
-    '교환': 'assets/images/exchangeMarker.png',
-    '나눔': 'assets/images/shareMarker.png'
-  };
-
   @override
   void initState() {
     super.initState();
@@ -34,21 +27,18 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            _naverMap(),
-          ],
-        ),
+    return Scaffold(
+      body: Column(
+        children: [
+          _naverMap(),
+        ],
       ),
     );
   }
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content:
-          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -58,81 +48,70 @@ class _MapPageState extends State<MapPage> {
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
-
-    customM(widget.posts);
   }
 
-  void customM(List<Deal> posts) {
-    for (var post in posts) {
+  List<Marker> customM() {
+    final List<Marker> markers = [];
+
+    for (var post in widget.posts) {
       OverlayImage.fromAssetImage(
-        assetName: markerImage[post.dealType],
+        assetName: DealType.markerImage[post.dealType],
         devicePixelRatio: window.devicePixelRatio,
       ).then((image) {
-        _markers.add(Marker(
-          markerId: DateTime.now().toIso8601String(),
-          icon: image,
-          captionText: post.dealName,
-          width: 30,
-          height: 40,
-          position: LatLng(post.latitude, post.longitude),
-          onMarkerTab: _onMarkerTap,
-        ));
-        setState(() {});
+        markers.add(Marker(
+            markerId: post.dealId.toString(),
+            icon: image,
+            captionText: post.dealName,
+            width: 30,
+            height: 40,
+            position: LatLng(post.latitude, post.longitude),
+            onMarkerTab: _onMarkerTap));
       });
     }
+    return markers;
   }
 
   _naverMap() {
     return Expanded(
-        child: NaverMap(
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(37.566570, 126.978442),
-        zoom: 17,
+      child: NaverMap(
+        initialCameraPosition:
+            const CameraPosition(target: LatLng(37.284159, 127.044608), zoom: 17),
+        zoomGestureEnable: true,
+        onMapCreated: onMapCreated,
+        mapType: MapType.Basic,
+        indoorEnable: true,
+        markers: customM(),
+        onMapTap: _onMapTap,
+        maxZoom: 17,
+        minZoom: 15,
       ),
-      zoomGestureEnable: true,
-      onMapCreated: onMapCreated,
-      mapType: MapType.Basic,
-      indoorEnable: true,
-      markers: _markers,
-      onMapTap: _onMapTap,
-      maxZoom: 17,
-      minZoom: 15,
-    ));
+    );
   }
 
-  // void _onMapTap(LatLng latLng) {
-  //   OverlayImage.fromAssetImage(
-  //     assetName: "assets/images/exchangeMarker.png",
-  //     devicePixelRatio: window.devicePixelRatio,
-  //   ).then((image) {
-  //     _markers.add(Marker(
-  //       markerId: DateTime.now().toIso8601String(),
-  //       icon: image,
-  //       width: 30,
-  //       height: 40,
-  //       position: latLng,
-  //       onMarkerTab: _onMarkerTap,
-  //     ));
-  //     setState(() {});
-  //   });
-  // }
-
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
-    int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
+    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
+    // setState(() {
+    //   _markers[pos].captionText = '선택됨';
+    // });
+    // setState(() {
+    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
+    // });
+    Popups.goToPost(context, '나눔');
+    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
 
-    for (var post in widget.posts) {
-      if (post.dealName == _markers[pos].captionText) {
-        Popups.goToPost(context, post);
-        break;
-      }
-    }
+    // for (var post in widget.posts) {
+    //   if (post.dealName == _markers[pos].captionText) {
+    //     Popups.goToPost(context, post);
+    //     break;
+    //   }
+    // }
 
-    setState(() {
-      _markers[pos].captionText = '선택됨';
-    });
-    setState(() {
-      _markers.removeWhere((m) => m.markerId == marker!.markerId);
-    });
+    // setState(() {
+    //   _markers[pos].captionText = '선택됨';
+    // });
+    // setState(() {
+    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
+    // });
   }
 
   @override

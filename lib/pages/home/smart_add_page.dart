@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/pages/home/submit_image_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';

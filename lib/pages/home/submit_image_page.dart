@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';

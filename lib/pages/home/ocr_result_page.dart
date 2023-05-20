@@ -1,8 +1,7 @@
-import 'dart:convert';
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -113,7 +112,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const AppPagesContainer(),
         ),
         (route) => false,
       );
@@ -352,7 +351,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) => const AppPagesContainer(),
             ),
             (route) => false,
           );
