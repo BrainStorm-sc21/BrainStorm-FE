@@ -18,7 +18,6 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   //final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // final List<Marker> markers = [];
   Completer<NaverMapController> _controller = Completer();
 
   @override
@@ -94,21 +93,7 @@ class _MapPageState extends State<MapPage> {
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
-    // setState(() {
-    //   _markers[pos].captionText = '선택됨';
-    // });
-    // setState(() {
-    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
-    // });
     Popups.goToPost(context, widget.posts[pos]);
-    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
-
-    // for (var post in widget.posts) {
-    //   if (post.dealName == _markers[pos].captionText) {
-    //     Popups.goToPost(context, post);
-    //     break;
-    //   }
-    // }
   }
 
   @override
