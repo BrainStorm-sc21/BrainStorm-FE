@@ -76,7 +76,7 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: _pickedFile!.path,
       compressFormat: ImageCompressFormat.png,
-      compressQuality: 100,
+      compressQuality: 80,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: '',
