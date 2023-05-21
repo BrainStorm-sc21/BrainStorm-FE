@@ -4,8 +4,25 @@ class DealData {
   DealData({required this.data});
 
   factory DealData.fromJson(Map<String, dynamic> json) {
+    String imageBaseURL =
+        'https://objectstorage.ap-chuncheon-1.oraclecloud.com/p/mOKCBwWiKyiyIkbN0aqY5KV5_K2-OzTt4V7feFotQqm3epdOyNO0VUJdtMUsv3Jq/n/axzkif4tbwyu/b/file-bucket/o/';
     var list = json['data'] as List;
     List<Deal> dealList = list.map((i) => Deal.fromJson(i)).toList();
+
+    for (Deal deals in dealList) {
+      if (deals.dealImage1 != Null) {
+        deals.dealImage1 = '$imageBaseURL${deals.dealImage1}';
+      }
+      if (deals.dealImage2 != Null) {
+        deals.dealImage2 = '$imageBaseURL${deals.dealImage2}';
+      }
+      if (deals.dealImage3 != Null) {
+        deals.dealImage3 = '$imageBaseURL${deals.dealImage3}';
+      }
+      if (deals.dealImage4 != Null) {
+        deals.dealImage4 = '$imageBaseURL${deals.dealImage4}';
+      }
+    }
 
     return DealData(data: dealList);
   }
@@ -21,9 +38,9 @@ class Deal {
   double latitude;
   double longitude;
   String dealImage1;
-  String dealImage2;
-  String dealImage3;
-  String dealImage4;
+  String? dealImage2;
+  String? dealImage3;
+  String? dealImage4;
   DateTime createdAt;
 
   Deal(
@@ -56,7 +73,7 @@ class Deal {
     data['image2'] = dealImage2;
     data['image3'] = dealImage3;
     data['image4'] = dealImage4;
-    data['createdAt'] = createdAt;
+    data['createdAt'] = createdAt.toString();
     return data;
   }
 
@@ -75,7 +92,7 @@ class Deal {
       dealImage2: json['image2'],
       dealImage3: json['image3'],
       dealImage4: json['image4'],
-      createdAt: json['createdAt'],
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }
