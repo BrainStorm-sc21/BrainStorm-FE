@@ -23,7 +23,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late bool _isLoading = true;
   late List<Map<String, dynamic>> ocrListValues = List.empty(growable: true);
   late Map<String, Map<String, dynamic>> ocrRecommendValues = {};
-  List<Food> foods = List.empty(growable: true);
+  List<Food> foodList = List.empty(growable: true);
   late Map<int, List<DateTime>> recommendList = {};
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
@@ -177,16 +177,16 @@ class _OCRResultPageState extends State<OCRResultPage> {
       );
 
       setState(() {
-        foods.add(food);
+        foodList.add(food);
       });
     }
     initController();
   }
 
   void initController() {
-    for (int index = 0; index < foods.length; index++) {
+    for (int index = 0; index < foodList.length; index++) {
       _foodNameController.add(TextEditingController());
-      _foodNameController[index].text = foods[index].foodName;
+      _foodNameController[index].text = foodList[index].foodName;
     }
   }
 
@@ -203,24 +203,24 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void setFoodName(int index, String value) {
-    setState(() => foods[index].foodName = value);
+    setState(() => foodList[index].foodName = value);
   }
 
   void updateFoodNameControllerText(index) {
-    setState(() => _foodNameController[index].text = foods[index].foodName);
+    setState(() => _foodNameController[index].text = foodList[index].foodName);
   }
 
   void setStorage(int index, String value) {
-    setState(() => foods[index].storageWay = value);
+    setState(() => foodList[index].storageWay = value);
   }
 
   void setStock(int index, num value) {
-    setState(() => foods[index].stock = value);
+    setState(() => foodList[index].stock = value);
   }
 
   void setExpireDate(DateTime value, {int? index}) {
     DateTime formattedValue = DateFormat('yyyy-MM-dd').parse('$value');
-    setState(() => foods[index!].expireDate = formattedValue);
+    setState(() => foodList[index!].expireDate = formattedValue);
   }
 
   @override
@@ -300,7 +300,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              foods.removeAt(index);
+                              foodList.removeAt(index);
                               _foodNameController.removeAt(index);
                             });
                           },
@@ -313,7 +313,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     // 식료품 보관 장소
                     CustomFoodStorageDropdown(
                       index: index,
-                      storage: foods[index].storageWay,
+                      storage: foodList[index].storageWay,
                       setStorage: setStorage,
                       recommendList: recommendExist && recommendList.containsKey(index)
                           ? recommendList[index]
@@ -323,13 +323,13 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     // 식료품 수량
                     FoodStockButton(
                       index: index,
-                      stock: foods[index].stock,
+                      stock: foodList[index].stock,
                       setStock: setStock,
                     ),
                     // 식료품 소비 기한 (+ TIP UI)
                     FoodExpireDate(
                       index: index,
-                      expireDate: foods[index].expireDate,
+                      expireDate: foodList[index].expireDate,
                       setExpireDate: setExpireDate,
                       isRecommended:
                           recommendExist && recommendList.containsKey(index) ? true : false,
@@ -338,7 +338,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                 ),
               ),
             );
-          }, childCount: foods.length),
+          }, childCount: foodList.length),
         ),
       );
     }
@@ -346,7 +346,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
   void saveFoodInfo() async {
-    for (var food in foods) {
+    for (var food in foodList) {
       if (food.isFoodValid() == false) {
         Popups.popSimpleDialog(
           context,
@@ -365,14 +365,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
-    List<Map<String, String>> foodlist = List.empty(growable: true);
-    for (var food in foods) {
-      foodlist.add(food.toJson());
+    List<Map<String, String>> encodedFoodList = List.empty(growable: true);
+    for (var food in foodList) {
+      encodedFoodList.add(food.toJson());
     }
 
     Map<String, dynamic> data = {
       "userId": "1",
-      "foodList": foodlist,
+      "foodList": encodedFoodList,
     };
     debugPrint('$data');
 
