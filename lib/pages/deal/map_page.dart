@@ -16,9 +16,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  //final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<Marker> markers = [];
+  // final List<Marker> markers = [];
   Completer<NaverMapController> _controller = Completer();
 
   @override
@@ -49,24 +49,29 @@ class _MapPageState extends State<MapPage> {
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
+    customM();
   }
 
   List<Marker> customM() {
-    for (var post in widget.posts) {
-      OverlayImage.fromAssetImage(
-        assetName: DealType.markerImage[post.dealType],
-        devicePixelRatio: window.devicePixelRatio,
-      ).then((image) {
-        markers.add(Marker(
-            markerId: post.dealId.toString(),
-            icon: image,
-            captionText: post.dealName,
-            width: 30,
-            height: 40,
-            position: LatLng(post.latitude, post.longitude),
-            onMarkerTab: _onMarkerTap));
-      });
-    }
+    final List<Marker> markers = [];
+
+    setState(() {
+      for (var post in widget.posts) {
+        OverlayImage.fromAssetImage(
+          assetName: DealType.markerImage[post.dealType],
+          devicePixelRatio: window.devicePixelRatio,
+        ).then((image) {
+          markers.add(Marker(
+              markerId: post.dealName.toString(),
+              icon: image,
+              captionText: post.dealName,
+              width: 30,
+              height: 40,
+              position: LatLng(post.latitude, post.longitude),
+              onMarkerTab: _onMarkerTap));
+        });
+      }
+    });
     return markers;
   }
 
