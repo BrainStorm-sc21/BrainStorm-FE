@@ -13,8 +13,7 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage(
-      {super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -276,8 +275,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             ),
                             maxLength: 20,
                             onChanged: (value) => setFoodName(index, value),
-                            onSubmitted: (value) =>
-                                updateFoodNameControllerText(index),
+                            onSubmitted: (value) => updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
                               FocusScope.of(context).unfocus(); // 키보드 숨김
