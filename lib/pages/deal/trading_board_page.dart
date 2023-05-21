@@ -35,7 +35,7 @@ class TradingBoard extends StatelessWidget {
       itemBuilder: (context, index) {
         deal = posts[index];
         final dealName = deal.dealName;
-        final distance = deal.distance;
+        final distance = deal.distance.round();
         final dealType = deal.dealType;
         final time = countHour(deal.createdAt);
         final imgUrl = deal.dealImage1;
@@ -74,7 +74,7 @@ class TradingBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        width: 250,
+                        width: MediaQuery.of(context).size.width * 0.65,
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           Flexible(
                               child: Text(dealName,
@@ -86,7 +86,7 @@ class TradingBoard extends StatelessWidget {
                         ]),
                       ),
                       const SizedBox(height: 6),
-                      Text(distance.toString(),
+                      Text('${distance}M',
                           style: const TextStyle(fontSize: 13, color: Colors.grey)),
                     ],
                   ),

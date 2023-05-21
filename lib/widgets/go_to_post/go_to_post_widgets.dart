@@ -3,16 +3,29 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 
+String countHour(DateTime givenDate) {
+  DateTime currentDate = DateTime.now();
+
+  Duration difference = currentDate.difference(givenDate);
+  int minutesDifference = difference.inMinutes;
+  int hoursDifference = difference.inHours;
+  int daysDifference = difference.inDays;
+
+  if (daysDifference >= 1) {
+    return '$daysDifference일 전';
+  } else if (hoursDifference >= 1) {
+    return '$hoursDifference시간 전';
+  } else if (minutesDifference == 0) {
+    return '방금 전';
+  } else {
+    return '$minutesDifference분 전';
+  }
+}
+
 class firstPostUnit extends StatefulWidget {
   final Deal deal;
 
-  final Map dealColors = {
-    '공구': ColorStyles.groupBuyColor,
-    '교환': ColorStyles.exchangeColor,
-    '나눔': ColorStyles.shareColor
-  };
-
-  firstPostUnit({super.key, required this.deal});
+  const firstPostUnit({super.key, required this.deal});
 
   @override
   State<firstPostUnit> createState() => _firstPostUnitState();
@@ -59,7 +72,7 @@ class _firstPostUnitState extends State<firstPostUnit> {
               ],
             ),
             Text(
-              widget.deal.createdAt.toString().substring(0, 10),
+              countHour(widget.deal.createdAt),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -96,7 +109,7 @@ class _secondPostUnitState extends State<secondPostUnit> {
                       style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
                 ),
-                Text(widget.deal.distance.toString(),
+                Text('${widget.deal.distance}M',
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
               ],
             ),

@@ -34,7 +34,7 @@ class Deal {
   int dealType;
   String dealName;
   String dealContent;
-  int distance;
+  double distance;
   double latitude;
   double longitude;
   String dealImage1;
@@ -85,7 +85,7 @@ class Deal {
       dealType: json['dealType'],
       dealName: json['dealName'],
       dealContent: json['dealContent'],
-      distance: json['distance'],
+      distance: json['distance'].round(),
       latitude: json['latitude'],
       longitude: json['longitude'],
       dealImage1: json['image1'],

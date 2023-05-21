@@ -46,7 +46,6 @@ class _DealPageState extends State<DealPage> {
       });
 
   void setSearch(text) => setState(() {
-        print("검색버튼클릭");
         if (text == Null) {
           posts = entirePosts;
         } else {
@@ -76,7 +75,7 @@ class _DealPageState extends State<DealPage> {
         userId: 2,
         dealId: 1,
         dealName: "양파 나눔해요~",
-        dealType: 1,
+        dealType: 2,
         distance: 400,
         dealContent: "양파 나눔 내용",
         latitude: 37.2840,
@@ -91,8 +90,8 @@ class _DealPageState extends State<DealPage> {
         dealType: 0,
         distance: 1200,
         dealContent: "이천 쌀 공구 내용",
-        latitude: 37.284049,
-        longitude: 127.041648,
+        latitude: 37.284246805225834,
+        longitude: 127.04386542721113,
         createdAt: DateTime.parse('2023-05-20T10:01:20.551705'),
         dealImage1: 'https://www.newspeak.kr/news/photo/202209/435707_284048_3504.jpg'),
     Deal(
@@ -102,8 +101,8 @@ class _DealPageState extends State<DealPage> {
         dealType: 1,
         distance: 750,
         dealContent: "사과 바나나 교환 내용",
-        latitude: 37.289361,
-        longitude: 127.044601,
+        latitude: 37.2839597,
+        longitude: 127.044598,
         createdAt: DateTime.parse('2023-05-18T11:58:20.551705'),
         dealImage1:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRlxKlz8H0tHG-DpyUhBOOo6wpGw_NnEYPMLDjrfVA3aSPyIdCfmzS_fzOcnj0seChhGo&usqp=CAU'),
