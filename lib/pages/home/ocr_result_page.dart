@@ -20,51 +20,36 @@ class OCRResultPage extends StatefulWidget {
 }
 
 class _OCRResultPageState extends State<OCRResultPage> {
+  late bool _isLoading = true;
+  late List<Map<String, dynamic>> ocrListValues = List.empty(growable: true);
+  late Map<String, Map<String, dynamic>> ocrRecommendValues = {};
   List<Food> foods = List.empty(growable: true);
   late Map<int, List<DateTime>> recommendList = {};
+  bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
-  late bool _isLoading = true;
-  Map<String, Map<String, Map<String, dynamic>>> ocrResult = {};
-  /*
-    "list": {
-      "0": {
-        "foodName": "맛있는 감자",
-        "stock": 3,
-      },
-      "1": {
-        "foodName": "양파",
-        "stock": 5,
-      },
-      "2": {
-        "foodName": "김혜자의 감자탕",
-        "stock": 1,
-      },
-      "3": {
-        "foodName": "비프 라자냐",
-        "stock": 2,
-      },
-    },
-    "recommend": {
-      "0": {
-        "0": 3,
-        "1": 14,
-        "2": 1,
-      },
-      "2": {
-        "0": 2,
-        "1": 60,
-        "2": 0,
-      },
-    },
-   */
 
   @override
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
-    initRecommendList();
-    initFoods();
-    initController();
+  }
+
+  // json list parsing
+  List<Map<String, dynamic>> fromListJson(Map<String, dynamic> json) {
+    List<Map<String, dynamic>> result = List.empty(growable: true);
+    json.forEach((key, value) {
+      result.add(value);
+    });
+    return result;
+  }
+
+  // json recommend parsing
+  Map<String, Map<String, dynamic>> fromRecommendJson(Map<String, dynamic> json) {
+    Map<String, Map<String, dynamic>> result = {};
+    json.forEach((key, value) {
+      result[key] = value;
+    });
+    return result;
   }
 
   // 이미지를 보내고, OCR 결과 및 소비기한 추천 데이터를 받음
@@ -96,10 +81,19 @@ class _OCRResultPageState extends State<OCRResultPage> {
       // handle response
       switch (res.data['status']) {
         case 200:
+          if (res.data['data']['recommend'] != null) {
+            setState(() {
+              ocrRecommendValues = fromRecommendJson(res.data['data']['recommend']);
+              recommendExist = true;
+            });
+          }
           setState(() {
-            ocrResult = res.data['data'];
+            ocrListValues = fromListJson(res.data['data']['list']);
             _isLoading = false;
           });
+
+          initRecommendList();
+          initFoods();
           break;
         case 400:
           throw Exception(res.data['message']);
@@ -109,6 +103,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
     // when error occured, navigate to home & show error dialog
     catch (err) {
+      debugPrint('$err');
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -127,24 +122,23 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initRecommendList() {
-    // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
-    Map<String, Map<String, dynamic>> rawRecommend = ocrResult['recommend']!;
-    rawRecommend.forEach(
-      (index, rawRecommendDays) {
-        int i = int.parse(index);
+    if (recommendExist == false) return;
 
+    ocrRecommendValues.forEach(
+      (key, rawRecommendDays) {
+        int index = int.parse(key);
         List<DateTime> recommendDays = List.empty(growable: true);
         for (var day in rawRecommendDays.values.toList().cast<int>()) {
-          var expireDate = DateTime.now();
+          DateTime expireDate = DateTime.now();
           expireDate = DateTime(
             expireDate.year,
             expireDate.month,
             expireDate.day + day,
           );
-          recommendDays.add(expireDate);
+          recommendDays.add(DateFormat('yyyy-MM-dd').parse('$expireDate'));
         }
         setState(() {
-          recommendList[i] = recommendDays;
+          recommendList[index] = recommendDays;
         });
       },
     );
@@ -153,21 +147,38 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initFoods() {
-    ocrResult['list']!.forEach(
-      (key, foodItem) {
-        int index = int.parse(key);
-        foods.add(
-          Food(
-            foodName: foodItem['foodName'],
-            stock: foodItem['stock'],
-            storageWay: '냉장',
-            expireDate: recommendList[index] != null
-                ? DateFormat('yyyy-MM-dd').parse('${recommendList[index]![0]}')
-                : DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
-          ),
-        );
-      },
-    );
+    int index = 0;
+    for (Map<String, dynamic> value in ocrListValues) {
+      List<DateTime> days = List.empty(growable: true);
+      List<String> storageList = ['냉장', '냉동', '실온'];
+      String storageWay = '냉장';
+      DateTime expireDate = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
+      if (recommendList.containsKey(index)) {
+        days = recommendList[index]!;
+        for (int i = 0; i < days.length; i++) {
+          DateTime day = days[i];
+          if (day.difference(expireDate) != Duration.zero) {
+            expireDate = day;
+            storageWay = storageList[i];
+            break;
+          }
+        }
+      }
+
+      Food food = Food(
+        foodName: value['foodName'] as String,
+        stock: value['stock'] as num,
+        storageWay: storageWay,
+        expireDate: expireDate,
+      );
+
+      setState(() {
+        foods.add(food);
+      });
+
+      index++;
+    }
+    initController();
   }
 
   void initController() {
@@ -302,7 +313,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       storage: foods[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
+                      recommendList: recommendExist && recommendList.containsKey(index)
+                          ? recommendList[index]
+                          : null,
                       setExpireDate: setExpireDate,
                     ),
                     // 식료품 수량
@@ -316,7 +329,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       expireDate: foods[index].expireDate,
                       setExpireDate: setExpireDate,
-                      isRecommended: recommendList.containsKey(index) ? true : false,
+                      isRecommended:
+                          recommendExist && recommendList.containsKey(index) ? true : false,
                     ),
                   ],
                 ),
