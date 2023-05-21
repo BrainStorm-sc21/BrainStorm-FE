@@ -121,6 +121,10 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
+// 추천 소비기한이 있는 보관 장소를 띄우는 데 쓰임
+// index: {recommendDay_냉장, recommendDay_냉동, recommendDay_실온}
+  Map<int, List<int>> recommendNumberMap = {};
+
   void initRecommendList() {
     if (recommendExist == false) return;
 
@@ -128,14 +132,15 @@ class _OCRResultPageState extends State<OCRResultPage> {
       (key, rawRecommendDays) {
         int index = int.parse(key);
         List<DateTime> recommendDays = List.empty(growable: true);
-        for (var day in rawRecommendDays.values.toList().cast<int>()) {
+        recommendNumberMap[index] = rawRecommendDays.values.toList().cast<int>();
+        for (var day in recommendNumberMap[index]!) {
           DateTime expireDate = DateTime.now();
           expireDate = DateTime(
             expireDate.year,
             expireDate.month,
             expireDate.day + day,
           );
-          recommendDays.add(DateFormat('yyyy-MM-dd').parse('$expireDate'));
+          recommendDays.add(expireDate);
         }
         setState(() {
           recommendList[index] = recommendDays;
@@ -147,36 +152,33 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initFoods() {
-    int index = 0;
-    for (Map<String, dynamic> value in ocrListValues) {
-      List<DateTime> days = List.empty(growable: true);
-      List<String> storageList = ['냉장', '냉동', '실온'];
+    List<String> storageList = ['냉장', '냉동', '실온'];
+    for (int i = 0; i < ocrListValues.length; i++) {
       String storageWay = '냉장';
-      DateTime expireDate = DateFormat('yyyy-MM-dd').parse('${DateTime.now()}');
-      if (recommendList.containsKey(index)) {
-        days = recommendList[index]!;
-        for (int i = 0; i < days.length; i++) {
-          DateTime day = days[i];
-          if (day.difference(expireDate) != Duration.zero) {
-            expireDate = day;
-            storageWay = storageList[i];
+      DateTime expireDate = DateTime.now();
+      if (recommendNumberMap.containsKey(i)) {
+        for (int j = 0; j < recommendNumberMap[i]!.length; j++) {
+          int day = recommendNumberMap[i]![j];
+          if (day > 0) {
+            expireDate = recommendList[i]![j];
+            storageWay = storageList[j];
             break;
           }
         }
       }
 
+      Map<String, dynamic> value = ocrListValues[i];
+
       Food food = Food(
         foodName: value['foodName'] as String,
         stock: value['stock'] as num,
         storageWay: storageWay,
-        expireDate: expireDate,
+        expireDate: DateFormat('yyyy-MM-dd').parse('$expireDate'),
       );
 
       setState(() {
         foods.add(food);
       });
-
-      index++;
     }
     initController();
   }
