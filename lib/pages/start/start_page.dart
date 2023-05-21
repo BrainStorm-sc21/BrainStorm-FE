@@ -26,7 +26,7 @@ class StartPage extends StatelessWidget {
                   width: 250,
                   height: 250,
                   child: Image.asset(
-                    'assets/images/온보딩화면2.png',
+                    'assets/images/onboarding2.png',
                   ),
                 ),
                 // Padding(

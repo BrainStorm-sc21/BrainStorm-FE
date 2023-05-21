@@ -36,7 +36,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 decoration: BoxDecoration(
                   color: ColorStyles.black,
                   image: DecorationImage(
-                      image: NetworkImage(widget.deal.dealImage1),
+                      image: NetworkImage(widget.deal.dealImage1!),
                       fit: BoxFit.fitWidth),
                   // image: DecorationImage(
                   //     image: AssetImage('assets/images/감자.png'),
