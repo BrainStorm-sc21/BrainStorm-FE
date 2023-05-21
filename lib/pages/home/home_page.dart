@@ -30,6 +30,8 @@ class _HomePageState extends State<HomePage> {
 
       FoodData foodData = FoodData.fromJson(resp.data);
 
+      print("Food Status: ${resp.statusCode}");
+
       setState(() {
         for (Food fooditem in foodData.data) {
           foodList.add(fooditem);
