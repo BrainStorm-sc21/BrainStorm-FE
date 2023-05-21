@@ -76,7 +76,7 @@ class Popups {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       child: Image.network(
-                        '${deal.dealImage}',
+                        '${deal.dealImage1}',
                         fit: BoxFit.fill,
                       ),
                       // Image.asset(
