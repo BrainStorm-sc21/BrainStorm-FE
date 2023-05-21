@@ -123,7 +123,7 @@ class _DealPageState extends State<DealPage> {
                               height: 30,
                               text: DealType.dealTypeName[index],
                               fontSize: 15,
-                              onPressed: () => setDeal(index),
+                              onPressed: () => dealData.data.isEmpty ? {} : setDeal(index),
                               backgroundColor: _checkDeal[index]
                                   ? DealType.dealTextColors[index]
                                   : ColorStyles.white,
