@@ -62,8 +62,8 @@ void requestSignUp(User user) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10);
+    ..connectTimeout = const Duration(seconds: 15)
+    ..receiveTimeout = const Duration(seconds: 15);
 
   final data = user.toJson();
   debugPrint('req data: $data');
@@ -74,9 +74,9 @@ void requestSignUp(User user) async {
       data: data,
     );
 
-    if (res.statusCode == 200) {
+    if (res.data['status'] == 200) {
       print('회원가입 성공!!');
-    } else {
+    } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
       throw Exception('Failed to send data [${res.statusCode}]');
     }

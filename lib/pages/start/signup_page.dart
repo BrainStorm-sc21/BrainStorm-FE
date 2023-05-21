@@ -1,11 +1,9 @@
 import 'package:brainstorm_meokjang/models/user.dart';
-import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
+import 'package:brainstorm_meokjang/pages/start/phone_signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
-
-final _nicknameController = TextEditingController();
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -23,11 +21,11 @@ class _SignUpPageState extends State<SignUpPage> {
     super.initState();
 
     user = User(
-        userName: " ",
-        phoneNumber: " ",
-        snsType: " ",
-        snsKey: " ",
-        location: " ",
+        userName: "",
+        phoneNumber: "01012344321",
+        snsType: null,
+        snsKey: null,
+        location: "",
         latitude: 0.0,
         longitude: 0.0,
         gender: 0);
@@ -46,6 +44,8 @@ class _SignUpPageState extends State<SignUpPage> {
         user.latitude = latitude;
         user.longitude = longitude;
       });
+  void sendPhoneNumber(String phoneNumber) =>
+      setState(() => user.phoneNumber = phoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     NicknameField(setNickname: setNickname),
                     GenderField(setGender: setGender),
                     PositionField(setAddress: setAddress),
-                    const AuthField(),
+                    AuthField(sendPhoneNumber: sendPhoneNumber),
                     SizedBox(
                         width: deviceWidth * 0.8,
                         child: ElevatedButton(
@@ -101,6 +101,15 @@ class NicknameField extends StatefulWidget {
 }
 
 class _NicknameFieldState extends State<NicknameField> {
+  final TextEditingController _nicknameController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nicknameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -322,13 +331,19 @@ class _PositionFieldState extends State<PositionField> {
 }
 
 class AuthField extends StatefulWidget {
-  const AuthField({super.key});
+  final void Function(String phoneNumber) sendPhoneNumber;
+  const AuthField({super.key, required this.sendPhoneNumber});
 
   @override
   State<AuthField> createState() => _AuthFieldState();
 }
 
 class _AuthFieldState extends State<AuthField> {
+  String? phoneNumber;
+
+  void setPhoneNumber(String phoneNumber) =>
+      setState(() => phoneNumber = phoneNumber);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -428,12 +443,15 @@ class _AuthFieldState extends State<AuthField> {
                   child: const Text("sns 인증"),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    String phoneNumber = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PhoneLoginPage()),
+                          builder: (context) => PhoneAuthForSignUpPage()),
                     );
+                    setState(() {
+                      widget.sendPhoneNumber(phoneNumber);
+                    });
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: ColorStyles.mainColor,

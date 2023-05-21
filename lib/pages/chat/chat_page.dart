@@ -32,9 +32,9 @@ class ChatPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: const SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
-                    children: [
+                    children: const [
                       ChatUnit(
                         unread: 4,
                       ),
@@ -53,35 +53,35 @@ class ChatPage extends StatelessWidget {
                         unread: 0,
                       ),
                       ChatUnit(
-                        imgUrl: 'assets/images/먹장로고.png',
+                        imgUrl: 'assets/images/logo.png',
                         name: '먹짱 4호',
                         content: '다음에 계란 사실 때 연락주세요☺️',
                         time: '어제',
                         unread: 1,
                       ),
                       ChatUnit(
-                        imgUrl: 'assets/images/먹장로고.png',
+                        imgUrl: 'assets/images/logo.png',
                         name: '먹짱 5호',
                         content: '다음에 계란 사실 때 연락주세요☺️',
                         time: '어제',
                         unread: 1,
                       ),
                       ChatUnit(
-                        imgUrl: 'assets/images/먹장로고.png',
+                        imgUrl: 'assets/images/logo.png',
                         name: '먹짱 6호',
                         content: '다음에 계란 사실 때 연락주세요☺️',
                         time: '어제',
                         unread: 1,
                       ),
                       ChatUnit(
-                        imgUrl: 'assets/images/먹장로고.png',
+                        imgUrl: 'assets/images/logo.png',
                         name: '먹짱 7호',
                         content: '다음에 계란 사실 때 연락주세요☺️',
                         time: '어제',
                         unread: 1,
                       ),
                       ChatUnit(
-                        imgUrl: 'assets/images/먹장로고.png',
+                        imgUrl: 'assets/images/logo.png',
                         name: '먹짱 8호',
                         content: '다음에 계란 사실 때 연락주세요☺️',
                         time: '어제',

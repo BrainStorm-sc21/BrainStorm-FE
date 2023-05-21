@@ -1,4 +1,3 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,10 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-final _key = GlobalKey<FormState>();
 final TextEditingController _phoneController = TextEditingController();
 final TextEditingController _smsCodeController = TextEditingController();
-const bool _codeSent = false;
-late String _verificationId;
 
+//로그인 시, 번호 인증 페이지입니다.
 class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
 
@@ -22,6 +19,10 @@ class PhoneLoginPage extends StatefulWidget {
 }
 
 class _PhoneLoginPageState extends State<PhoneLoginPage> {
+  final _key = GlobalKey<FormState>();
+  final bool _codeSent = false;
+  late String _verificationId;
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -90,7 +91,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const PhoneAuthPage()),
+                            builder: (context) => PhoneAuthPage(
+                                  phoneNumber: _phoneController.text,
+                                  verificationId: _verificationId,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -108,7 +112,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 }
 
 class PhoneAuthPage extends StatefulWidget {
-  const PhoneAuthPage({super.key});
+  final String phoneNumber;
+  late String verificationId;
+  PhoneAuthPage(
+      {super.key, required this.phoneNumber, required this.verificationId});
 
   @override
   State<PhoneAuthPage> createState() => _PhoneAuthPageState();
@@ -142,6 +149,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 50),
                 child: TextFormField(
+                  controller: _smsCodeController,
                   decoration: const InputDecoration(
                     hintText: "인증번호 입력",
                   ),
@@ -158,14 +166,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
                       PhoneAuthCredential credential =
                           PhoneAuthProvider.credential(
-                              verificationId: _verificationId,
+                              verificationId: widget.verificationId,
                               smsCode: _smsCodeController.text);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AppPagesContainer()),
-                      );
+                      await auth
+                          .signInWithCredential(credential)
+                          .then((value) => print(value));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor),
