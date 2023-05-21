@@ -11,10 +11,7 @@ class ChatPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           '채팅',
-          style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: ColorStyles.mainColor),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: ColorStyles.mainColor),
         ),
         backgroundColor: ColorStyles.white,
         elevation: 0,
@@ -32,9 +29,9 @@ class ChatPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: const SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
-                    children: [
+                    children: const [
                       ChatUnit(
                         unread: 4,
                       ),

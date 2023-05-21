@@ -5,7 +5,7 @@ class ColorStyles {
   static const Color darkmainColor = Color.fromRGBO(87, 214, 153, 1);
   static const Color subColor = Color.fromRGBO(28, 187, 217, 1);
   static const Color textColor = Color.fromRGBO(89, 89, 89, 1);
-  static const Color iconColor = Color.fromRGBO(185, 185, 185, 1);
+  static const Color iconColor = Color.fromRGBO(150, 150, 150, 1);
   static const Color shareColor = Color.fromRGBO(246, 211, 189, 1);
   static const Color exchangeColor = Color.fromRGBO(214, 237, 239, 1);
   static const Color groupBuyColor = Color.fromRGBO(223, 240, 215, 1);

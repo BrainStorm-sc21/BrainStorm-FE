@@ -1,7 +1,7 @@
 import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 
 // for switching bottom tab in app page container
@@ -51,11 +51,11 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
           ],
         ),
         bottomNavigationBar: Container(
-          padding: const EdgeInsets.fromLTRB(3, 0, 3, 7),
+          padding: const EdgeInsets.fromLTRB(5, 0, 5, 7),
           decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(125, 221, 221, 221),
+                color: Color.fromARGB(255, 221, 221, 221),
                 spreadRadius: 4,
                 blurRadius: 8,
                 offset: Offset(0, 3), // changes position of shadow
@@ -82,7 +82,6 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
                 BottomNavigationBarItem(icon: Icon(Icons.groups_2), label: '같이먹장'),
                 BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: '채팅'),
               ],
-              elevation: 40,
             ),
           ),
         ));
