@@ -96,7 +96,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           initFoods();
           break;
         case 400:
-          throw Exception(res.data['message']);
+          throw Exception(res.data['message'] + '\n사진 또는 사진 유형이 올바르지 않습니다.');
         default:
           throw Exception('Failed to send data [${res.statusCode}]');
       }
