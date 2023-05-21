@@ -13,7 +13,6 @@ class _ExchangePageState extends State<ExchangePage> {
   late Deal deal;
 
   void registerPost() async {
-    print("이거 버튼 클릭 되나요??");
     requestRegisterPost(deal);
   }
 
@@ -33,7 +32,14 @@ class _ExchangePageState extends State<ExchangePage> {
 
   void setTitle(String value) => setState(() => deal.dealName = value);
   void setContent(String value) => setState(() => deal.dealContent = value);
-  void setImages(String value) => setState(() => deal.dealImage1 = value);
+  void setImages(
+          String? image1, String? image2, String? image3, String? image4) =>
+      setState(() {
+        deal.dealImage1 = image1;
+        deal.dealImage2 = image2;
+        deal.dealImage3 = image3;
+        deal.dealImage4 = image4;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,9 @@ class _ExchangePageState extends State<ExchangePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
-                      child: PhotoBoxInput(setImages: setImages),
+                      child: PhotoBoxInput(
+                        setImages: setImages,
+                      ),
                     ),
                   ],
                 ),

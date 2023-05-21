@@ -151,7 +151,8 @@ class DescriptionInput extends StatelessWidget {
 }
 
 class PhotoBoxInput extends StatefulWidget {
-  final void Function(String value) setImages;
+  final void Function(
+      String? image1, String? image2, String? image3, String? image4) setImages;
   const PhotoBoxInput({super.key, required this.setImages});
 
   @override
@@ -159,9 +160,12 @@ class PhotoBoxInput extends StatefulWidget {
 }
 
 class _PhotoBoxInputState extends State<PhotoBoxInput> {
-  final checkImageList = [false, false, false, false];
+  late List<String?> images = [null, null, null, null];
 
-  void setImage(String value) => setState(() => widget.setImages(value));
+  void setImage(int idx, String image) => setState(() {
+        images[idx] = image;
+        widget.setImages(images[0], images[1], images[2], images[3]);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -181,10 +185,10 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                PhotoboxUnit(setImage: setImage),
-                PhotoboxUnit(setImage: setImage),
-                PhotoboxUnit(setImage: setImage),
-                PhotoboxUnit(setImage: setImage),
+                PhotoboxUnit(index: 0, setImage: setImage),
+                PhotoboxUnit(index: 1, setImage: setImage),
+                PhotoboxUnit(index: 2, setImage: setImage),
+                PhotoboxUnit(index: 3, setImage: setImage),
               ],
             ),
           ],
@@ -195,8 +199,9 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
 }
 
 class PhotoboxUnit extends StatefulWidget {
-  final void Function(String value) setImage;
-  const PhotoboxUnit({super.key, required this.setImage});
+  final int index;
+  final void Function(int idx, String image) setImage;
+  const PhotoboxUnit({super.key, required this.index, required this.setImage});
 
   @override
   State<PhotoboxUnit> createState() => _PhotoboxUnitState();
@@ -211,7 +216,7 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
     if (pickedFile != null) {
       setState(() {
         _image = XFile(pickedFile.path);
-        widget.setImage(_image!.path);
+        widget.setImage(widget.index, _image!.path);
       });
     }
   }

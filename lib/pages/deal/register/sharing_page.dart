@@ -13,7 +13,6 @@ class _SharingPageState extends State<SharingPage> {
   late Deal deal;
 
   void registerPost() async {
-    print('나눔 게시글 등록!');
     requestRegisterPost(deal);
   }
 
@@ -33,7 +32,14 @@ class _SharingPageState extends State<SharingPage> {
 
   void setTitle(String value) => setState(() => deal.dealName = value);
   void setContent(String value) => setState(() => deal.dealContent = value);
-  void setImages(String value) => setState(() => deal.dealImage1 = value);
+  void setImages(
+          String? image1, String? image2, String? image3, String? image4) =>
+      setState(() {
+        deal.dealImage1 = image1;
+        deal.dealImage2 = image2;
+        deal.dealImage3 = image3;
+        deal.dealImage4 = image4;
+      });
 
   @override
   Widget build(BuildContext context) {
