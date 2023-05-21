@@ -25,7 +25,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late Map<int, List<DateTime>> recommendList = {};
   final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
-  Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
+  Map<String, Map<String, Map<String, dynamic>>> ocrResult = {};
+  /*
     "list": {
       "0": {
         "foodName": "맛있는 감자",
@@ -56,7 +57,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
         "2": 0,
       },
     },
-  };
+   */
 
   @override
   void initState() {
