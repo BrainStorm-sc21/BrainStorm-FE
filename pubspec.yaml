@@ -37,16 +37,13 @@ dependencies:
   camera:
   path_provider:
   path:
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   introduction_screen: ^3.1.7
   google_fonts: ^4.0.3
   intro_screen_onboarding_flutter: ^1.0.0
   flutter_native_splash: ^2.2.19
   kpostal: ^0.5.1
-  dio: ^5.1.1
+  dio: ^5.1.2
   url_launcher: ^6.1.10
   webview_flutter: ^4.2.0
   get: ^4.6.5
@@ -55,6 +52,18 @@ dependencies:
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
   logger: ^1.3.0
+  intl: ^0.17.0
+  naver_map_plugin:
+    git: https://github.com/LBSTECH/naver_map_plugin.git
+  flutter_screenutil: ^5.7.0
+  flutter_web_auth: ^0.5.0
+  image_picker: ^0.8.7+4
+  http: ^0.13.6
+  image_cropper: ^3.0.3
+  shared_preferences: ^2.1.1
+  percent_indicator: ^4.2.3
+
+dependency_overrides:
   intl: ^0.18.0
 
 dev_dependencies:
@@ -80,14 +89,30 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-      - assets/images/임시온보딩화면1.png
-      - assets/images/임시온보딩화면2.png
-      - assets/images/임시온보딩화면3.png
-      - assets/images/google.png
-      - assets/images/kakao.png
-      - assets/images/naver.png
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+    - assets/images/splash.png
+    - assets/images/onboarding1.png
+    - assets/images/onboarding2.png
+    - assets/images/onboarding3.png
+    - assets/images/google.png
+    - assets/images/kakao.png
+    - assets/images/naver.png
+
+    - assets/images/groupMarker.png
+    - assets/images/exchangeMarker.png
+    - assets/images/shareMarker.png
+
+    - assets/images/chatGPT.png
+
+    - assets/images/logo.png
+    - assets/images/completeSignUp.png
+
+    - assets/images/apple.png
+    - assets/images/potato.png
+
+    # 스마트등록 에셋
+    - assets/images/smart_add_loading.png
+    - assets/images/crop_guide_document.png
+    - assets/images/crop_guide_general_kurly.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

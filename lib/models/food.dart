@@ -1,26 +1,39 @@
+class FoodData {
+  final List<Food> data;
+
+  FoodData({required this.data});
+
+  factory FoodData.fromJson(Map<String, dynamic> json) {
+    var list = json['data'] as List;
+    List<Food> foodList = list.map((i) => Food.fromJson(i)).toList();
+
+    return FoodData(data: foodList);
+  }
+}
+
 class Food {
-  int foodId;
-  String name;
-  String storage;
+  late int? foodId;
+  String foodName;
+  String storageWay;
   num stock;
   DateTime expireDate;
 
   Food({
-    required this.foodId,
-    required this.name,
-    required this.storage,
+    this.foodId,
+    required this.foodName,
+    required this.storageWay,
     required this.stock,
     required this.expireDate,
   });
 
   // class to json
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['foodId'] = foodId;
-    data['name'] = name;
-    data['storage'] = storage;
-    data['stock'] = stock;
-    data['expireDate'] = expireDate;
+  Map<String, String> toJson() {
+    final Map<String, String> data = <String, String>{};
+    // if (foodId != null) data['foodId'] = foodId.toString();
+    data['foodName'] = foodName;
+    data['stock'] = stock.toString();
+    data['expireDate'] = expireDate.toString().substring(0, 10);
+    data['storageWay'] = storageWay;
     return data;
   }
 
@@ -28,8 +41,8 @@ class Food {
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       foodId: json['foodId'],
-      name: json['name'],
-      storage: json['storage'],
+      foodName: json['foodName'],
+      storageWay: json['storageWay'],
       stock: json['stock'],
       expireDate: DateTime.parse(json['expireDate']),
     );
@@ -37,9 +50,9 @@ class Food {
 
   // validate food information
   bool isFoodValid() {
-    if (name.trim().isEmpty || name.startsWith(' ')) {
+    if (foodName.trim().isEmpty || foodName.startsWith(' ')) {
       return false;
-    } else if (name.trim().isEmpty || name.startsWith(' ')) {
+    } else if (foodName.trim().isEmpty || foodName.startsWith(' ')) {
       return false;
     } else if (stock <= 0) {
       return false;

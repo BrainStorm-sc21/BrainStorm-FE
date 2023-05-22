@@ -5,10 +5,12 @@ class RoundedOutlinedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double width;
   final double height;
+  final double borderwidth;
   final Color foregroundColor;
   final Color backgroundColor;
   final Color borderColor;
   final double fontSize;
+  final double radius;
 
   const RoundedOutlinedButton({
     super.key,
@@ -16,29 +18,40 @@ class RoundedOutlinedButton extends StatelessWidget {
     required this.onPressed,
     this.width = 50,
     this.height = 35,
+    this.borderwidth = 1.5,
     required this.backgroundColor,
     required this.foregroundColor,
     required this.borderColor,
     this.fontSize = 16,
+    this.radius = 50,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        minimumSize: Size(width, height),
-        foregroundColor: foregroundColor,
-        backgroundColor: backgroundColor,
+      style: ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: MaterialStateProperty.all(Size(width, height)),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         alignment: Alignment.center,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(radius),
+            ),
+          ),
         ),
-        side: BorderSide(
-          color: borderColor,
-          width: 1.5,
+        side: MaterialStateProperty.all(
+          BorderSide(
+            color: borderColor,
+            width: borderwidth,
+          ),
         ),
-        textStyle: TextStyle(fontSize: fontSize),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(fontSize: fontSize),
+        ),
       ),
       child: Text(text),
     );

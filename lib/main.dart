@@ -1,20 +1,46 @@
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/firebase_options.dart';
-import 'package:brainstorm_meokjang/pages/onboarding_page.dart';
-import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
+import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const JWTestApp());
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    runApp(const MyApp());
+  } catch (e) {
+    debugPrint('$e');
+  }
 }
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  dynamic userId;
+  late bool isMeokjangUser = false;
+
+  void checkMeokjangUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isMeokjangUser = prefs.getBool('isUser') ?? false;
+  }
+
+  @override
+  void initState() {
+    checkMeokjangUser();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,95 +57,24 @@ void main() async {
       ],
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(color: ColorStyles.textColor),
+          titleMedium: TextStyle(color: ColorStyles.textColor),
+          titleSmall: TextStyle(color: ColorStyles.textColor),
+          headlineLarge: TextStyle(color: ColorStyles.textColor),
+          headlineMedium: TextStyle(color: ColorStyles.textColor),
+          headlineSmall: TextStyle(color: ColorStyles.textColor),
+          bodyLarge: TextStyle(color: ColorStyles.textColor),
+          bodyMedium: TextStyle(color: ColorStyles.textColor),
+          bodySmall: TextStyle(color: ColorStyles.textColor),
+        ),
+        dividerColor: ColorStyles.lightGrey,
+        primaryColor: ColorStyles.mainColor,
+        iconTheme: const IconThemeData(
+          color: ColorStyles.iconColor,
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-//   final String title;
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   int currentIndex = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: IndexedStack(
-//         index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
-//         children: [
-//           HomePage(),
-//           DealPage(),
-//           ChatPage(),
-//         ],
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: currentIndex, // 현재 보여주는 탭
-//         onTap: (newIndex) {
-//           print("selected newIndex : $newIndex");
-//           // 버튼 눌렀을 때 누른 페이지로 이동
-//           setState(() {
-//             currentIndex = newIndex;
-//           });
-//         },
-//         selectedItemColor: Colors.green, // 선택된 아이콘 색상
-//         unselectedItemColor: Colors.grey, // 선택되지 않은 아이콘 색상
-//         //label 숨기려면 사용하기
-//         /* showSelectedLabels: false,
-//         showUnselectedLabels: false, */
-//         backgroundColor: Colors.white,
-//         items: [
-//           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-//           BottomNavigationBarItem(icon: Icon(Icons.person_2), label: 'deal'),
-//           BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'chat'),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class JWTestApp extends StatelessWidget {
-  const JWTestApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
-        children: const [
-          HomePage(),
-          DealPage(),
-          ChatPage(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex, // 현재 보여주는 탭
-        onTap: (newIndex) {
-          print("selected newIndex : $newIndex");
-          // 버튼 눌렀을 때 누른 페이지로 이동
-          setState(() {
-            currentIndex = newIndex;
-          });
-        },
-        selectedItemColor: Colors.green, // 선택된 아이콘 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이콘 색상
-        //label 숨기려면 사용하기
-        /* showSelectedLabels: false,
-        showUnselectedLabels: false, */
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_2), label: 'deal'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'chat'),
-        ],
-      ),
+      home: isMeokjangUser ? const AppPagesContainer() : const OnboardingPage(),
     );
   }
 }
