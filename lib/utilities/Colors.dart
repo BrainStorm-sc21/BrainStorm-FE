@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class ColorStyles {
   static const Color mainColor = Color.fromRGBO(151, 215, 121, 1);
+  static const Color lightmainColor = Color.fromRGBO(177, 225, 154, 1);
   static const Color darkmainColor = Color.fromRGBO(87, 214, 153, 1);
   static const Color subColor = Color.fromRGBO(28, 187, 217, 1);
   static const Color textColor = Color.fromRGBO(89, 89, 89, 1);
-  static const Color iconColor = Color.fromRGBO(185, 185, 185, 1);
+  static const Color iconColor = Color.fromRGBO(150, 150, 150, 1);
   static const Color shareColor = Color.fromRGBO(246, 211, 189, 1);
   static const Color exchangeColor = Color.fromRGBO(214, 237, 239, 1);
   static const Color groupBuyColor = Color.fromRGBO(223, 240, 215, 1);
@@ -26,6 +27,6 @@ class ColorStyles {
   static Color errorRed = Colors.redAccent.shade700;
   static Color snow = Colors.grey.shade50;
   static Color lightGrey = Colors.grey.shade200;
-  static Color expireRedColor = Colors.redAccent.shade400;
-  static Color expireOrangeColor = Colors.yellowAccent.shade700;
+  static const Color expireRedColor = Color.fromRGBO(255, 23, 68, 1);
+  static const Color expireOrangeColor = Color.fromRGBO(255, 214, 0, 1);
 }

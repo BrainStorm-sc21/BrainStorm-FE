@@ -3,9 +3,9 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class Refrigerator extends StatefulWidget {
   final String storage;
@@ -118,6 +118,16 @@ class _RefrigeratorState extends State<Refrigerator> {
         _foodNameController.removeAt(index);
       });
 
+  int dayCount(day) {
+    if (day >= 7) {
+      return 7;
+    } else if (day <= 0) {
+      return 0;
+    } else {
+      return day;
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -177,7 +187,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                                         : ColorStyles.errorRed))
                           ],
                         ),
-                        progressBars(context, food.expireDate.difference(now).inDays)
+                        CustomProgressBar(
+                            maxPercent: 7,
+                            currentPercent: 7 - dayCount(food.expireDate.difference(now).inDays))
                       ],
                     ),
                   ),
@@ -274,36 +286,4 @@ class _RefrigeratorState extends State<Refrigerator> {
       },
     );
   }
-}
-
-Widget progressBars(BuildContext context, day) {
-  int dayCount() {
-    if (day >= 7) {
-      return 7;
-    } else if (day <= 0) {
-      return 0;
-    } else {
-      return day;
-    }
-  }
-
-  return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: StepProgressIndicator(
-        totalSteps: 7,
-        currentStep: 7 - dayCount(),
-        size: 10,
-        padding: 0,
-        roundedEdges: const Radius.circular(10),
-        selectedGradientColor: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [ColorStyles.expireRedColor, ColorStyles.expireOrangeColor],
-        ),
-        unselectedGradientColor: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [ColorStyles.hintTextColor, ColorStyles.hintTextColor],
-        ),
-      ));
 }
