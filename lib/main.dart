@@ -1,6 +1,4 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/firebase_options.dart';
-import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +72,7 @@ class _MyAppState extends State<MyApp> {
           color: ColorStyles.iconColor,
         ),
       ),
-      home: isMeokjangUser ? const AppPagesContainer() : const OnboardingPage(),
+      //home: isMeokjangUser ? const AppPagesContainer() : const OnboardingPage(),
     );
   }
 }
