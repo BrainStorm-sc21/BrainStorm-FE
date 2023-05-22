@@ -121,10 +121,18 @@ void requestRegisterPost(Deal deal) async {
     'dealType': deal.dealType,
     'dealName': deal.dealName,
     'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
+    'image1': deal.dealImage1 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage1!),
+    'image2': deal.dealImage2 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage2!),
+    'image3': deal.dealImage3 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage3!),
+    'image4': deal.dealImage4 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage4!),
   });
 
   try {

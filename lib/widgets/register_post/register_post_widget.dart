@@ -321,10 +321,7 @@ class BottomButton extends StatelessWidget {
             RoundedOutlinedButton(
               text: '등록하기',
               width: double.infinity,
-              onPressed: () {
-                registerPost;
-                Navigator.pop(context);
-              },
+              onPressed: registerPost,
               foregroundColor: ColorStyles.white,
               backgroundColor: ColorStyles.mainColor,
               borderColor: ColorStyles.mainColor,
