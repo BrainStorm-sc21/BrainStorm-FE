@@ -62,7 +62,7 @@ class ChatUnit extends StatefulWidget {
 
   const ChatUnit({
     super.key,
-    this.imgUrl = 'assets/images/먹장로고.png',
+    this.imgUrl = 'assets/images/logo.png',
     this.name = '먹짱 1호',
     this.content = '혹시 감자도 파시나요?',
     this.time = '오후 1:36',
