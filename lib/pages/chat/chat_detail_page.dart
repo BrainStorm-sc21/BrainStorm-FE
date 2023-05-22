@@ -3,7 +3,13 @@ import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class ChatDetailPage extends StatelessWidget {
-  const ChatDetailPage({super.key});
+  final String nickname;
+  final String content;
+  const ChatDetailPage({
+    super.key,
+    required this.nickname,
+    required this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +29,9 @@ class ChatDetailPage extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(),
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 ),
-                const Text(
-                  '닉네임',
-                  style: TextStyle(
+                Text(
+                  nickname,
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
                     color: ColorStyles.black,

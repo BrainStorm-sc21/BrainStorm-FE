@@ -10,6 +10,7 @@ class RoundedOutlinedButton extends StatelessWidget {
   final Color backgroundColor;
   final Color borderColor;
   final double fontSize;
+  final double radius;
 
   const RoundedOutlinedButton({
     super.key,
@@ -22,6 +23,7 @@ class RoundedOutlinedButton extends StatelessWidget {
     required this.foregroundColor,
     required this.borderColor,
     this.fontSize = 16,
+    this.radius = 50,
   });
 
   @override
@@ -35,9 +37,9 @@ class RoundedOutlinedButton extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all(backgroundColor),
         alignment: Alignment.center,
         shape: MaterialStateProperty.all(
-          const RoundedRectangleBorder(
+          RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(50),
+              Radius.circular(radius),
             ),
           ),
         ),
