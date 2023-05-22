@@ -113,17 +113,26 @@ void requestRegisterPost(Deal deal) async {
   dio.options
     ..baseUrl = baseURI
     ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10);
+    ..receiveTimeout = const Duration(seconds: 10)
+    ..contentType = 'multipart/form-data';
 
   final FormData formData = FormData.fromMap({
     'userId': deal.userId,
-    'deaType': deal.dealType,
+    'dealType': deal.dealType,
     'dealName': deal.dealName,
     'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
+    'image1': deal.dealImage1 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage1!),
+    'image2': deal.dealImage2 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage2!),
+    'image3': deal.dealImage3 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage3!),
+    'image4': deal.dealImage4 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage4!),
   });
 
   try {
@@ -142,6 +151,29 @@ void requestRegisterPost(Deal deal) async {
     } else {
       throw Exception('Failed to send data [${res.statusCode}]');
     }
+  } catch (err) {
+    debugPrint('$err');
+  } finally {
+    dio.close();
+  }
+
+  seeTheAllDeal();
+}
+
+void seeTheAllDeal() async {
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 5)
+    ..receiveTimeout = const Duration(seconds: 10);
+
+  try {
+    final res = await dio.get(
+      '/deal/3/around',
+    );
+
+    debugPrint('req data: ${res.data}');
+    debugPrint('req statusCode: ${res.statusCode}');
   } catch (err) {
     debugPrint('$err');
   } finally {

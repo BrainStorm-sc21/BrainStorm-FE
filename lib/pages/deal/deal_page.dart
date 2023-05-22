@@ -3,7 +3,6 @@ import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
-import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -234,13 +233,6 @@ class _DealPageState extends State<DealPage> {
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const GroupPurchasePage()));
-            }),
-        SpeedDialChild(
-            child: const Text('회_임시'),
-            backgroundColor: ColorStyles.mainColor,
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const OnboardingPage()));
             }),
       ],
     );

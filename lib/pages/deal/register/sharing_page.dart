@@ -16,6 +16,20 @@ class _SharingPageState extends State<SharingPage> {
     requestRegisterPost(deal);
   }
 
+  @override
+  void initState() {
+    super.initState();
+    deal = Deal(
+        userId: 3,
+        dealType: 2,
+        dealName: '',
+        dealContent: '',
+        distance: 0,
+        latitude: 0.0,
+        longitude: 0.0,
+        createdAt: DateTime.now());
+  }
+
   void setTitle(String value) => setState(() => deal.dealName = value);
   void setContent(String value) => setState(() => deal.dealContent = value);
   void setImages(String? image1, String? image2, String? image3, String? image4) => setState(() {

@@ -18,6 +18,34 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Food> foodList = List.empty(growable: true);
   late FoodData foodData;
+  late int userId = 3;
+  //late User user;
+
+  // void getUserId() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   userId = prefs.getInt('userId')!;
+  // }
+
+  // Future getUserDataWithDio() async {
+  //   Dio dio = Dio();
+  //   dio.options
+  //     ..baseUrl = baseURI
+  //     ..connectTimeout = const Duration(seconds: 5)
+  //     ..receiveTimeout = const Duration(seconds: 10);
+  //   try {
+  //     Response resp = await dio.get("/users/$userId");
+
+  //     debugPrint(resp.data);
+  //     user = User.fromJson(resp.data);
+
+  //     setState(() {});
+  //   } catch (e) {
+  //     Exception(e);
+  //   } finally {
+  //     dio.close();
+  //   }
+  //   return false;
+  // }
 
   Future getServerDataWithDio() async {
     Dio dio = Dio();
@@ -26,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
     try {
-      Response resp = await dio.get("/food/1");
+      Response resp = await dio.get("/food/$userId");
 
       FoodData foodData = FoodData.fromJson(resp.data);
 
@@ -48,8 +76,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
     getServerDataWithDio();
+    super.initState();
   }
 
   TabBar get _tabBar => const TabBar(
@@ -76,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               preferredSize: const Size.fromHeight(90.0),
               child: AppBar(
                   centerTitle: false,
-                  title: const Text("@@님의 냉장고",
+                  title: const Text("먹장3호님의 냉장고",
                       style: TextStyle(
                           height: 3,
                           color: Colors.white,

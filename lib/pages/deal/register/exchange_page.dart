@@ -20,10 +20,14 @@ class _ExchangePageState extends State<ExchangePage> {
   void initState() {
     super.initState();
     deal = Deal(
-        userId: 1,
+        userId: 3,
         dealType: 1,
         dealName: '',
         dealContent: '',
+        dealImage1: null,
+        dealImage2: null,
+        dealImage3: null,
+        dealImage4: null,
         distance: 0,
         latitude: 0.0,
         longitude: 0.0,
