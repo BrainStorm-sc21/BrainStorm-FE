@@ -13,58 +13,43 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage(
-      {super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
 }
 
 class _OCRResultPageState extends State<OCRResultPage> {
-  List<Food> foods = List.empty(growable: true);
-  late Map<int, List<DateTime>> recommendList = {};
-  final List<TextEditingController> _foodNameController = [];
   late bool _isLoading = true;
-  Map<String, Map<String, Map<String, dynamic>>> ocrResult = {
-    "list": {
-      "0": {
-        "foodName": "맛있는 감자",
-        "stock": 3,
-      },
-      "1": {
-        "foodName": "양파",
-        "stock": 5,
-      },
-      "2": {
-        "foodName": "김혜자의 감자탕",
-        "stock": 1,
-      },
-      "3": {
-        "foodName": "비프 라자냐",
-        "stock": 2,
-      },
-    },
-    "recommend": {
-      "0": {
-        "0": 3,
-        "1": 14,
-        "2": 1,
-      },
-      "2": {
-        "0": 2,
-        "1": 60,
-        "2": 0,
-      },
-    },
-  };
+  late List<Map<String, dynamic>> ocrListValues = List.empty(growable: true);
+  late Map<String, Map<String, dynamic>> ocrRecommendValues = {};
+  List<Food> foodList = List.empty(growable: true);
+  late Map<int, List<DateTime>> recommendList = {};
+  bool recommendExist = false;
+  final List<TextEditingController> _foodNameController = [];
 
   @override
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
-    initRecommendList();
-    initFoods();
-    initController();
+  }
+
+  // json list parsing
+  List<Map<String, dynamic>> fromListJson(Map<String, dynamic> json) {
+    List<Map<String, dynamic>> result = List.empty(growable: true);
+    json.forEach((key, value) {
+      result.add(value);
+    });
+    return result;
+  }
+
+  // json recommend parsing
+  Map<String, Map<String, dynamic>> fromRecommendJson(Map<String, dynamic> json) {
+    Map<String, Map<String, dynamic>> result = {};
+    json.forEach((key, value) {
+      result[key] = value;
+    });
+    return result;
   }
 
   // 이미지를 보내고, OCR 결과 및 소비기한 추천 데이터를 받음
@@ -96,19 +81,29 @@ class _OCRResultPageState extends State<OCRResultPage> {
       // handle response
       switch (res.data['status']) {
         case 200:
+          if (res.data['data']['recommend'] != null) {
+            setState(() {
+              ocrRecommendValues = fromRecommendJson(res.data['data']['recommend']);
+              recommendExist = true;
+            });
+          }
           setState(() {
-            ocrResult = res.data['data'];
+            ocrListValues = fromListJson(res.data['data']['list']);
             _isLoading = false;
           });
+
+          initRecommendList();
+          initFoods();
           break;
         case 400:
-          throw Exception(res.data['message']);
+          throw Exception(res.data['message'] + '\n사진 또는 사진 유형이 올바르지 않습니다.');
         default:
           throw Exception('Failed to send data [${res.statusCode}]');
       }
     }
     // when error occured, navigate to home & show error dialog
     catch (err) {
+      debugPrint('$err');
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -126,16 +121,20 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
   }
 
-  void initRecommendList() {
-    // 만약 recommend 데이터가 없으면 어떻게 되는지 여쭤보기
-    Map<String, Map<String, dynamic>> rawRecommend = ocrResult['recommend']!;
-    rawRecommend.forEach(
-      (index, rawRecommendDays) {
-        int i = int.parse(index);
+// 추천 소비기한이 있는 보관 장소를 띄우는 데 쓰임
+// index: {recommendDay_냉장, recommendDay_냉동, recommendDay_실온}
+  Map<int, List<int>> recommendNumberMap = {};
 
+  void initRecommendList() {
+    if (recommendExist == false) return;
+
+    ocrRecommendValues.forEach(
+      (key, rawRecommendDays) {
+        int index = int.parse(key);
         List<DateTime> recommendDays = List.empty(growable: true);
-        for (var day in rawRecommendDays.values.toList().cast<int>()) {
-          var expireDate = DateTime.now();
+        recommendNumberMap[index] = rawRecommendDays.values.toList().cast<int>();
+        for (var day in recommendNumberMap[index]!) {
+          DateTime expireDate = DateTime.now();
           expireDate = DateTime(
             expireDate.year,
             expireDate.month,
@@ -144,7 +143,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           recommendDays.add(expireDate);
         }
         setState(() {
-          recommendList[i] = recommendDays;
+          recommendList[index] = recommendDays;
         });
       },
     );
@@ -153,27 +152,41 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void initFoods() {
-    ocrResult['list']!.forEach(
-      (key, foodItem) {
-        int index = int.parse(key);
-        foods.add(
-          Food(
-            foodName: foodItem['foodName'],
-            stock: foodItem['stock'],
-            storageWay: '냉장',
-            expireDate: recommendList[index] != null
-                ? DateFormat('yyyy-MM-dd').parse('${recommendList[index]![0]}')
-                : DateFormat('yyyy-MM-dd').parse('${DateTime.now()}'),
-          ),
-        );
-      },
-    );
+    List<String> storageList = ['냉장', '냉동', '실온'];
+    for (int i = 0; i < ocrListValues.length; i++) {
+      String storageWay = '냉장';
+      DateTime expireDate = DateTime.now();
+      if (recommendNumberMap.containsKey(i)) {
+        for (int j = 0; j < recommendNumberMap[i]!.length; j++) {
+          int day = recommendNumberMap[i]![j];
+          if (day > 0) {
+            expireDate = recommendList[i]![j];
+            storageWay = storageList[j];
+            break;
+          }
+        }
+      }
+
+      Map<String, dynamic> value = ocrListValues[i];
+
+      Food food = Food(
+        foodName: value['foodName'] as String,
+        stock: value['stock'] as num,
+        storageWay: storageWay,
+        expireDate: DateFormat('yyyy-MM-dd').parse('$expireDate'),
+      );
+
+      setState(() {
+        foodList.add(food);
+      });
+    }
+    initController();
   }
 
   void initController() {
-    for (int index = 0; index < foods.length; index++) {
+    for (int index = 0; index < foodList.length; index++) {
       _foodNameController.add(TextEditingController());
-      _foodNameController[index].text = foods[index].foodName;
+      _foodNameController[index].text = foodList[index].foodName;
     }
   }
 
@@ -190,24 +203,24 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   void setFoodName(int index, String value) {
-    setState(() => foods[index].foodName = value);
+    setState(() => foodList[index].foodName = value);
   }
 
   void updateFoodNameControllerText(index) {
-    setState(() => _foodNameController[index].text = foods[index].foodName);
+    setState(() => _foodNameController[index].text = foodList[index].foodName);
   }
 
   void setStorage(int index, String value) {
-    setState(() => foods[index].storageWay = value);
+    setState(() => foodList[index].storageWay = value);
   }
 
   void setStock(int index, num value) {
-    setState(() => foods[index].stock = value);
+    setState(() => foodList[index].stock = value);
   }
 
   void setExpireDate(DateTime value, {int? index}) {
     DateTime formattedValue = DateFormat('yyyy-MM-dd').parse('$value');
-    setState(() => foods[index!].expireDate = formattedValue);
+    setState(() => foodList[index!].expireDate = formattedValue);
   }
 
   @override
@@ -275,8 +288,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             ),
                             maxLength: 20,
                             onChanged: (value) => setFoodName(index, value),
-                            onSubmitted: (value) =>
-                                updateFoodNameControllerText(index),
+                            onSubmitted: (value) => updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
                               FocusScope.of(context).unfocus(); // 키보드 숨김
@@ -288,7 +300,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              foods.removeAt(index);
+                              foodList.removeAt(index);
                               _foodNameController.removeAt(index);
                             });
                           },
@@ -301,29 +313,32 @@ class _OCRResultPageState extends State<OCRResultPage> {
                     // 식료품 보관 장소
                     CustomFoodStorageDropdown(
                       index: index,
-                      storage: foods[index].storageWay,
+                      storage: foodList[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendList.containsKey(index) ? recommendList[index] : null,
+                      recommendList: recommendExist && recommendList.containsKey(index)
+                          ? recommendList[index]
+                          : null,
                       setExpireDate: setExpireDate,
                     ),
                     // 식료품 수량
                     FoodStockButton(
                       index: index,
-                      stock: foods[index].stock,
+                      stock: foodList[index].stock,
                       setStock: setStock,
                     ),
                     // 식료품 소비 기한 (+ TIP UI)
                     FoodExpireDate(
                       index: index,
-                      expireDate: foods[index].expireDate,
+                      expireDate: foodList[index].expireDate,
                       setExpireDate: setExpireDate,
-                      isRecommended: recommendList.containsKey(index) ? true : false,
+                      isRecommended:
+                          recommendExist && recommendList.containsKey(index) ? true : false,
                     ),
                   ],
                 ),
               ),
             );
-          }, childCount: foods.length),
+          }, childCount: foodList.length),
         ),
       );
     }
@@ -331,7 +346,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
 
   // 입력한 식료품 정보를 DB에 저장하는 함수
   void saveFoodInfo() async {
-    for (var food in foods) {
+    for (var food in foodList) {
       if (food.isFoodValid() == false) {
         Popups.popSimpleDialog(
           context,
@@ -350,14 +365,14 @@ class _OCRResultPageState extends State<OCRResultPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     // setup data
-    List<Map<String, String>> foodlist = List.empty(growable: true);
-    for (var food in foods) {
-      foodlist.add(food.toJson());
+    List<Map<String, String>> encodedFoodList = List.empty(growable: true);
+    for (var food in foodList) {
+      encodedFoodList.add(food.toJson());
     }
 
     Map<String, dynamic> data = {
       "userId": "1",
-      "foodList": foodlist,
+      "foodList": encodedFoodList,
     };
     debugPrint('$data');
 
