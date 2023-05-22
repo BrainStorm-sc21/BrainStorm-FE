@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +57,8 @@ class TopBar extends StatelessWidget {
 }
 
 class TitleInput extends StatelessWidget {
-  const TitleInput({super.key});
+  final void Function(String value) setTitle;
+  const TitleInput({super.key, required this.setTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -89,143 +89,7 @@ class TitleInput extends StatelessWidget {
                   borderSide: const BorderSide(color: ColorStyles.borderColor),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ExpirationDateInput extends StatefulWidget {
-  const ExpirationDateInput({super.key});
-
-  @override
-  State<ExpirationDateInput> createState() => _ExpirationDateInputState();
-}
-
-class _ExpirationDateInputState extends State<ExpirationDateInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                "남은 소비기한",
-                style: TextStyle(
-                  color: ColorStyles.black,
-                ),
-              ),
-            ),
-            // FoodExpireDate(
-            //     expireDate: DateTime.now(), setExpireDate: DateTime.now()),
-            Row(
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: TextFormField(
-                    style: const TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                      hintText: '2023-05-26',
-                      hintStyle: const TextStyle(
-                          fontSize: 14, color: ColorStyles.hintTextColor),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(
-                          color: ColorStyles.borderColor,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(
-                          color: ColorStyles.borderColor,
-                          width: 1.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.calendar_month_outlined),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NumOfPeopleInput extends StatefulWidget {
-  const NumOfPeopleInput({super.key});
-
-  @override
-  State<NumOfPeopleInput> createState() => _NumOfPeopleInputState();
-}
-
-class _NumOfPeopleInputState extends State<NumOfPeopleInput> {
-  final _values = ['선택', '2명', '3명', '4명', '5명', '6명', '7명', '8명', '9명', '10명'];
-  String _selectedValue = '선택';
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                "인원 수",
-                style: TextStyle(color: ColorStyles.black),
-              ),
-            ),
-            SizedBox(
-              width: 120,
-              height: 55,
-              child: DropdownButtonFormField(
-                value: _selectedValue,
-                items: _values
-                    .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(
-                            e,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedValue = value!;
-                  });
-                },
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                      color: ColorStyles.borderColor,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                      color: ColorStyles.borderColor,
-                    ),
-                  ),
-                ),
-              ),
+              onChanged: (value) => setTitle(value),
             ),
           ],
         ),
@@ -235,7 +99,8 @@ class _NumOfPeopleInputState extends State<NumOfPeopleInput> {
 }
 
 class DescriptionInput extends StatelessWidget {
-  const DescriptionInput({super.key});
+  final void Function(String value) setContent;
+  const DescriptionInput({super.key, required this.setContent});
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +140,7 @@ class DescriptionInput extends StatelessWidget {
                     ),
                   ),
                 ),
+                onChanged: (value) => setContent(value),
               ),
             ),
           ],
@@ -285,26 +151,21 @@ class DescriptionInput extends StatelessWidget {
 }
 
 class PhotoBoxInput extends StatefulWidget {
-  const PhotoBoxInput({super.key});
+  final void Function(
+      String? image1, String? image2, String? image3, String? image4) setImages;
+  const PhotoBoxInput({super.key, required this.setImages});
 
   @override
   State<PhotoBoxInput> createState() => _PhotoBoxInputState();
 }
 
 class _PhotoBoxInputState extends State<PhotoBoxInput> {
-  XFile? _image;
-  final ImagePicker picker = ImagePicker();
+  late List<String?> images = [null, null, null, null];
 
-  Future getImage(ImageSource imageSource) async {
-    final XFile? pickedFile = await picker.pickImage(source: imageSource);
-    if (pickedFile != null) {
-      setState(() {
-        _image = XFile(pickedFile.path);
-
-        print(_image.hashCode);
+  void setImage(int idx, String image) => setState(() {
+        images[idx] = image;
+        widget.setImages(images[0], images[1], images[2], images[3]);
       });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -324,117 +185,10 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  height: 70,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: ColorStyles.borderColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: _image == null
-                      ? IconButton(
-                          onPressed: () {
-                            showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  height: 150,
-                                  color: ColorStyles.transparent,
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                color: ColorStyles.borderColor,
-                                                width: 2),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  getImage(ImageSource.camera);
-                                                },
-                                                icon: const Icon(
-                                                    Icons.camera_alt_outlined),
-                                              ),
-                                              const Text("카메라"),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                color: ColorStyles.borderColor,
-                                                width: 2),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  getImage(ImageSource.gallery);
-                                                },
-                                                icon: const Icon(Icons.photo),
-                                              ),
-                                              const Text("갤러리"),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(Icons.add),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.file(
-                            File(_image!.path),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                ),
-                Container(
-                  height: 70,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: ColorStyles.borderColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: ColorStyles.borderColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: ColorStyles.borderColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
+                PhotoboxUnit(index: 0, setImage: setImage),
+                PhotoboxUnit(index: 1, setImage: setImage),
+                PhotoboxUnit(index: 2, setImage: setImage),
+                PhotoboxUnit(index: 3, setImage: setImage),
               ],
             ),
           ],
@@ -444,8 +198,117 @@ class _PhotoBoxInputState extends State<PhotoBoxInput> {
   }
 }
 
+class PhotoboxUnit extends StatefulWidget {
+  final int index;
+  final void Function(int idx, String image) setImage;
+  const PhotoboxUnit({super.key, required this.index, required this.setImage});
+
+  @override
+  State<PhotoboxUnit> createState() => _PhotoboxUnitState();
+}
+
+class _PhotoboxUnitState extends State<PhotoboxUnit> {
+  XFile? _image;
+  final ImagePicker picker = ImagePicker();
+
+  Future getImage(ImageSource imageSource) async {
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path);
+        widget.setImage(widget.index, _image!.path);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      width: 70,
+      decoration: BoxDecoration(
+        border: Border.all(color: ColorStyles.borderColor, width: 1.0),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: _image == null
+          ? IconButton(
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 150,
+                      color: ColorStyles.transparent,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: ColorStyles.borderColor, width: 2),
+                              ),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      getImage(ImageSource.camera);
+                                    },
+                                    icon: const Icon(Icons.camera_alt_outlined),
+                                  ),
+                                  const Text("카메라"),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: ColorStyles.borderColor, width: 2),
+                              ),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      getImage(ImageSource.gallery);
+                                    },
+                                    icon: const Icon(Icons.photo),
+                                  ),
+                                  const Text("갤러리"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.add),
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.file(
+                File(_image!.path),
+                fit: BoxFit.fill,
+              ),
+            ),
+    );
+  }
+}
+
 class BottomButton extends StatelessWidget {
-  const BottomButton({super.key});
+  final VoidCallback registerPost;
+  const BottomButton({
+    super.key,
+    required this.registerPost,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -458,13 +321,7 @@ class BottomButton extends StatelessWidget {
             RoundedOutlinedButton(
               text: '등록하기',
               width: double.infinity,
-              onPressed: () => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const AppPagesContainer(index: AppPagesNumber.deal),
-                  ),
-                  (route) => false),
+              onPressed: registerPost,
               foregroundColor: ColorStyles.white,
               backgroundColor: ColorStyles.mainColor,
               borderColor: ColorStyles.mainColor,

@@ -1,34 +1,9 @@
 import 'package:brainstorm_meokjang/models/user.dart';
-import 'package:brainstorm_meokjang/pages/start/phone_login_page.dart';
+import 'package:brainstorm_meokjang/pages/start/phone_signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
-
-bool valid_nickname = false;
-bool valid_gender = false;
-bool valid_address = false;
-bool valid_auth = false;
-
-late String userName;
-late int gender; //남 - 0, 여 - 1
-String location = '';
-double? latitude;
-double? longitude;
-
-String? phoneNumber;
-String? snsType;
-String? snsKey;
-
-User user = User(
-    userName: '먹짱 2호',
-    phoneNumber: '010-1234-1234',
-    location: '강남역',
-    latitude: 0.0,
-    longitude: 0.0,
-    gender: 0);
-
-final _nicknameController = TextEditingController();
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -38,56 +13,78 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    user = User(
+        userName: "",
+        phoneNumber: "01012344321",
+        snsType: null,
+        snsKey: null,
+        location: "",
+        latitude: 0.0,
+        longitude: 0.0,
+        gender: 0);
+  }
+
   @override
   void dispose() {
     super.dispose();
   }
 
+  void setNickname(String value) => setState(() => user.userName = value);
+  void setGender(int value) => setState(() => user.gender = value);
+  void setAddress(String location, double latitude, double longitude) =>
+      setState(() {
+        user.location = location;
+        user.latitude = latitude;
+        user.longitude = longitude;
+      });
+  void sendPhoneNumber(String phoneNumber) =>
+      setState(() => user.phoneNumber = phoneNumber);
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("회원가입"),
-        backgroundColor: ColorStyles.mainColor,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: Container(
-          child: ListView(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const NicknameField(),
-                  const GenderField(),
-                  const PositionField(),
-                  const AuthField(),
-                  SizedBox(
-                    width: deviceWidth * 0.8,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //print(postSignUp(user));
-
-                        print('http 요청');
-                        print('userName: ${user.userName}');
-                        print('gender: ${user.gender}');
-                        print(
-                            'location: ${user.location}, latitude: ${user.latitude}, longitude: ${user.longitude}');
-                        print('phoneNumber: ${user.phoneNumber}');
-                        print('snsType: ${user.snsType}, snsKey: ${user.snsKey}');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorStyles.mainColor,
-                      ),
-                      child: const Text(
-                        "회원가입하기",
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("회원가입"),
+          backgroundColor: ColorStyles.mainColor,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Container(
+            child: ListView(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    NicknameField(setNickname: setNickname),
+                    GenderField(setGender: setGender),
+                    PositionField(setAddress: setAddress),
+                    AuthField(sendPhoneNumber: sendPhoneNumber),
+                    SizedBox(
+                        width: deviceWidth * 0.8,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              requestSignUp(user);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ColorStyles.mainColor,
+                            ),
+                            child: const Text("회원가입하기"))),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -96,13 +93,23 @@ class _SignUpPageState extends State<SignUpPage> {
 }
 
 class NicknameField extends StatefulWidget {
-  const NicknameField({super.key});
+  final void Function(String value) setNickname;
+  const NicknameField({super.key, required this.setNickname});
 
   @override
   State<NicknameField> createState() => _NicknameFieldState();
 }
 
 class _NicknameFieldState extends State<NicknameField> {
+  final TextEditingController _nicknameController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nicknameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -129,7 +136,7 @@ class _NicknameFieldState extends State<NicknameField> {
                 child: TextFormField(
                   controller: _nicknameController,
                   maxLength: 10,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     hintText: "2글자 이상 10글자 이하로 입력해주세요.",
                     hintStyle: TextStyle(fontSize: 12),
@@ -140,6 +147,7 @@ class _NicknameFieldState extends State<NicknameField> {
                     }
                     return null;
                   },
+                  onChanged: (value) => widget.setNickname(value),
                 ),
               ),
             ),
@@ -151,7 +159,8 @@ class _NicknameFieldState extends State<NicknameField> {
 }
 
 class GenderField extends StatefulWidget {
-  const GenderField({super.key});
+  final void Function(int value) setGender;
+  const GenderField({super.key, required this.setGender});
 
   @override
   State<GenderField> createState() => _GenderFieldState();
@@ -222,22 +231,23 @@ class _GenderFieldState extends State<GenderField> {
 
   void toggleSelect(value) {
     if (value == 0) {
-      user.gender = 0;
       isMan = true;
       isWoman = false;
     } else {
-      user.gender = 1;
       isMan = false;
       isWoman = true;
     }
     setState(() {
       isSelected = [isMan, isWoman];
+      widget.setGender(value);
     });
   }
 }
 
 class PositionField extends StatefulWidget {
-  const PositionField({super.key});
+  final void Function(String location, double latitude, double longitude)
+      setAddress;
+  const PositionField({super.key, required this.setAddress});
 
   @override
   State<PositionField> createState() => _PositionFieldState();
@@ -292,19 +302,14 @@ class _PositionFieldState extends State<PositionField> {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Kpostal result = await Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => KpostalView()));
-                      //위치, 위도, 경도
-                      // print("위치: ${result.address}");
-                      // print("위도: ${result.latitude}");
-                      // print("경도: ${result.longitude}");
-                      user.location = result.address;
-                      user.latitude = result.latitude;
-                      user.longitude = result.longitude;
+                      Kpostal result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => KpostalView()));
                       setState(() {
                         posText = result.address;
                         posColor = Colors.black;
                         posFontSize = 14;
+                        widget.setAddress(result.address, result.latitude!,
+                            result.longitude!);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -326,13 +331,19 @@ class _PositionFieldState extends State<PositionField> {
 }
 
 class AuthField extends StatefulWidget {
-  const AuthField({super.key});
+  final void Function(String phoneNumber) sendPhoneNumber;
+  const AuthField({super.key, required this.sendPhoneNumber});
 
   @override
   State<AuthField> createState() => _AuthFieldState();
 }
 
 class _AuthFieldState extends State<AuthField> {
+  String? phoneNumber;
+
+  void setPhoneNumber(String phoneNumber) =>
+      setState(() => phoneNumber = phoneNumber);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -368,11 +379,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const NaverWebView()),
+                                                  builder: (context) =>
+                                                      const NaverWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Naver로\n인증하기"),
                                         ),
@@ -388,11 +401,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const KakaoWebView()),
+                                                  builder: (context) =>
+                                                      const KakaoWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Kakao로\n인증하기"),
                                         ),
@@ -428,11 +443,15 @@ class _AuthFieldState extends State<AuthField> {
                   child: const Text("sns 인증"),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    String phoneNumber = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PhoneLoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => PhoneAuthForSignUpPage()),
                     );
+                    setState(() {
+                      widget.sendPhoneNumber(phoneNumber);
+                    });
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: ColorStyles.mainColor,
@@ -440,12 +459,6 @@ class _AuthFieldState extends State<AuthField> {
                   child: const Text("번호 인증"),
                 ),
               ],
-            ),
-            Container(
-              child: const Text(
-                "인증 미완료",
-                style: TextStyle(fontSize: 12),
-              ),
             ),
           ],
         ),

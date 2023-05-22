@@ -1,4 +1,3 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,10 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-final _key = GlobalKey<FormState>();
 final TextEditingController _phoneController = TextEditingController();
 final TextEditingController _smsCodeController = TextEditingController();
-const bool _codeSent = false;
-late String _verificationId;
 
+//로그인 시, 번호 인증 페이지입니다.
 class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
 
@@ -22,6 +19,10 @@ class PhoneLoginPage extends StatefulWidget {
 }
 
 class _PhoneLoginPageState extends State<PhoneLoginPage> {
+  final _key = GlobalKey<FormState>();
+  final bool _codeSent = false;
+  late String _verificationId;
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -46,10 +47,11 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: TextField(
-                  decoration: InputDecoration(
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: TextFormField(
+                  controller: _phoneController,
+                  decoration: const InputDecoration(
                     hintText: "휴대폰 번호(-없이 숫자만 입력)",
                   ),
                   keyboardType: TextInputType.phone,
@@ -62,11 +64,11 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       FirebaseAuth auth = FirebaseAuth.instance;
-
+                      print(_phoneController.text);
                       await auth.verifyPhoneNumber(
                         //forceResendingToken: _resendToken,
 
-                        phoneNumber: "+82010-4401-0159",
+                        phoneNumber: "+82${_phoneController.text}",
 
                         codeAutoRetrievalTimeout: (String verificationId) {},
 
@@ -89,7 +91,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const PhoneAuthPage()),
+                            builder: (context) => PhoneAuthPage(
+                                  phoneNumber: _phoneController.text,
+                                  verificationId: _verificationId,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -107,7 +112,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 }
 
 class PhoneAuthPage extends StatefulWidget {
-  const PhoneAuthPage({super.key});
+  final String phoneNumber;
+  late String verificationId;
+  PhoneAuthPage(
+      {super.key, required this.phoneNumber, required this.verificationId});
 
   @override
   State<PhoneAuthPage> createState() => _PhoneAuthPageState();
@@ -138,10 +146,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     fontWeight: FontWeight.w500,
                     color: ColorStyles.mainColor),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: TextField(
-                  decoration: InputDecoration(
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: TextFormField(
+                  controller: _smsCodeController,
+                  decoration: const InputDecoration(
                     hintText: "인증번호 입력",
                   ),
                   keyboardType: TextInputType.number,
@@ -157,18 +166,15 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
                       PhoneAuthCredential credential =
                           PhoneAuthProvider.credential(
-                              verificationId: _verificationId,
+                              verificationId: widget.verificationId,
                               smsCode: _smsCodeController.text);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AppPagesContainer()),
-                      );
+                      await auth
+                          .signInWithCredential(credential)
+                          .then((value) => print(value));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor),
-                    child: const Text("인증하고 로그인하기"),
+                    child: const Text("인증하기"),
                   ),
                 ),
               )
@@ -178,28 +184,4 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       ),
     );
   }
-}
-
-TextFormField phoneNumberInput() {
-  return TextFormField(
-    controller: _phoneController,
-    autofocus: true,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return 'The input is empty.';
-      } else {
-        return null;
-      }
-    },
-    keyboardType: TextInputType.phone,
-    decoration: const InputDecoration(
-      border: OutlineInputBorder(),
-      hintText: 'Input your phone number.',
-      labelText: 'Phone Number',
-      labelStyle: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
 }

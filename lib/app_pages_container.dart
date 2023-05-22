@@ -79,8 +79,10 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               backgroundColor: Colors.white,
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: '냉장고'),
-                BottomNavigationBarItem(icon: Icon(Icons.groups_2), label: '같이먹장'),
-                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: '채팅'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.groups_2), label: '같이먹장'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.chat_bubble), label: '채팅'),
               ],
             ),
           ),
