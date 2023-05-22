@@ -1,7 +1,6 @@
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -61,7 +60,6 @@ class User {
 }
 
 void requestSignUp(User user) async {
-  const storage = FlutterSecureStorage();
   dynamic userId;
   Dio dio = Dio();
   dio.options
