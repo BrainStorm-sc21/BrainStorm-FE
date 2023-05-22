@@ -16,7 +16,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  //final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Completer<NaverMapController> _controller = Completer();
 
@@ -48,26 +48,29 @@ class _MapPageState extends State<MapPage> {
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
+    customM();
   }
 
   List<Marker> customM() {
     final List<Marker> markers = [];
 
-    for (var post in widget.posts) {
-      OverlayImage.fromAssetImage(
-        assetName: DealType.markerImage[post.dealType],
-        devicePixelRatio: window.devicePixelRatio,
-      ).then((image) {
-        markers.add(Marker(
-            markerId: post.dealId.toString(),
-            icon: image,
-            captionText: post.dealName,
-            width: 30,
-            height: 40,
-            position: LatLng(post.latitude, post.longitude),
-            onMarkerTab: _onMarkerTap));
-      });
-    }
+    setState(() {
+      for (var post in widget.posts) {
+        OverlayImage.fromAssetImage(
+          assetName: DealType.markerImage[post.dealType],
+          devicePixelRatio: window.devicePixelRatio,
+        ).then((image) {
+          markers.add(Marker(
+              markerId: post.dealName.toString(),
+              icon: image,
+              captionText: post.dealName,
+              width: 30,
+              height: 40,
+              position: LatLng(post.latitude, post.longitude),
+              onMarkerTab: _onMarkerTap));
+        });
+      }
+    });
     return markers;
   }
 
@@ -75,43 +78,22 @@ class _MapPageState extends State<MapPage> {
     return Expanded(
       child: NaverMap(
         initialCameraPosition:
-            const CameraPosition(target: LatLng(37.284159, 127.044608), zoom: 17),
+            const CameraPosition(target: LatLng(37.286828, 127.0577689), zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
         indoorEnable: true,
         markers: customM(),
         onMapTap: _onMapTap,
-        maxZoom: 17,
-        minZoom: 15,
+        maxZoom: 18,
+        minZoom: 13,
       ),
     );
   }
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
-    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
-    // setState(() {
-    //   _markers[pos].captionText = '선택됨';
-    // });
-    // setState(() {
-    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
-    // });
-    Popups.goToPost(context, '나눔');
-    // int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
-
-    // for (var post in widget.posts) {
-    //   if (post.dealName == _markers[pos].captionText) {
-    //     Popups.goToPost(context, post);
-    //     break;
-    //   }
-    // }
-
-    // setState(() {
-    //   _markers[pos].captionText = '선택됨';
-    // });
-    // setState(() {
-    //   _markers.removeWhere((m) => m.markerId == marker!.markerId);
-    // });
+    int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
+    Popups.goToPost(context, widget.posts[pos]);
   }
 
   @override

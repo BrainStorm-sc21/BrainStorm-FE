@@ -60,7 +60,7 @@ class CustomSearchBar extends StatelessWidget {
               color: ColorStyles.mainColor,
               size: 30,
             ),
-            onTap: () => onTap,
+            onTap: () => onTap(),
           ),
         ),
       ),

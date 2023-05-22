@@ -8,29 +8,49 @@ class TradingBoard extends StatelessWidget {
 
   final List<Deal> posts;
 
+  String countHour(DateTime givenDate) {
+    DateTime currentDate = DateTime.now();
+
+    Duration difference = currentDate.difference(givenDate);
+    int minutesDifference = difference.inMinutes;
+    int hoursDifference = difference.inHours;
+    int daysDifference = difference.inDays;
+
+    if (daysDifference >= 1) {
+      return '$daysDifference일 전';
+    } else if (hoursDifference >= 1) {
+      return '$hoursDifference시간 전';
+    } else if (minutesDifference == 0) {
+      return '방금 전';
+    } else {
+      return '$minutesDifference분 전';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Deal deal;
-
     return ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
         deal = posts[index];
         final dealName = deal.dealName;
-        final distance = deal.distance;
+        final distance = deal.distance.round();
         final dealType = deal.dealType;
-        final time = deal.createdAt;
+        final time = countHour(deal.createdAt);
         final imgUrl = deal.dealImage1;
-        return Stack(children: [
-          Padding(
+        return InkWell(
+          child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(imgUrl!,
-                        height: 60, width: 60, fit: BoxFit.fill),
+                    child: imgUrl != null
+                        ? Image.network(imgUrl, height: 60, width: 60, fit: BoxFit.fill)
+                        : Image.asset('assets/images/logo.png',
+                            height: 60, width: 60, fit: BoxFit.fill),
                   ),
                   const SizedBox(width: 8),
                   Container(
@@ -57,56 +77,29 @@ class TradingBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        width: 250,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                  child: Text(dealName,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1),
-                                      overflow: TextOverflow.ellipsis)),
-                              Text(time.toString(),
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Flexible(
+                              child: Text(dealName,
                                   style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                      height: 1)),
-                            ]),
+                                      fontSize: 16, fontWeight: FontWeight.w500, height: 1),
+                                  overflow: TextOverflow.ellipsis)),
+                          Text(time,
+                              style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1)),
+                        ]),
                       ),
                       const SizedBox(height: 6),
-                      Text(
-                        distance.toString(),
-                        style:
-                            const TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
+                      Text('${distance}M',
+                          style: const TextStyle(fontSize: 13, color: Colors.grey)),
                     ],
                   ),
                 ],
               )),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.0),
-                    foregroundColor: Colors.white.withOpacity(0.0)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DealDetailPage(
-                                deal: posts[index],
-                              )));
-                  print('$dealName 클릭!');
-                  print('${posts[index].dealContent} 클릭!!');
-                },
-                child: const Text(' ')),
-          ),
-        ]);
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => DealDetailPage(deal: posts[index])));
+          },
+        );
       },
     );
   }

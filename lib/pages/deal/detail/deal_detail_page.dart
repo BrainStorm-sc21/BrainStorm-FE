@@ -35,12 +35,11 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 height: height * 0.3,
                 decoration: BoxDecoration(
                   color: ColorStyles.black,
-                  image: DecorationImage(
-                      image: NetworkImage(widget.deal.dealImage1!),
-                      fit: BoxFit.fitWidth),
-                  // image: DecorationImage(
-                  //     image: AssetImage('assets/images/감자.png'),
-                  //     fit: BoxFit.fitWidth),
+                  image: widget.deal.dealImage1 != null
+                      ? DecorationImage(
+                          image: NetworkImage(widget.deal.dealImage1 ?? ''), fit: BoxFit.fitWidth)
+                      : const DecorationImage(
+                          image: AssetImage('assets/images/logo.png'), fit: BoxFit.fitWidth),
                 ),
               ),
             ],
@@ -61,11 +60,10 @@ class _DealDetailPageState extends State<DealDetailPage> {
             child: Column(
               children: [
                 TopPostUnit(
-                  distance: widget.deal.distance.toString(),
+                  distance: '${widget.deal.distance.round()}m',
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 15, bottom: 10),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10),
                   child: Container(
                     color: Colors.grey[350],
                     height: 0.5,
@@ -79,8 +77,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, left: 20, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
                   child: Container(
                     width: double.infinity,
                     height: 170,
@@ -96,8 +93,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
                   child: RoundedOutlinedButton(
                     onPressed: () {},
                     text: '채팅하기',

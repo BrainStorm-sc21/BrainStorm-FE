@@ -1,17 +1,31 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
+
+String countHour(DateTime givenDate) {
+  DateTime currentDate = DateTime.now();
+
+  Duration difference = currentDate.difference(givenDate);
+  int minutesDifference = difference.inMinutes;
+  int hoursDifference = difference.inHours;
+  int daysDifference = difference.inDays;
+
+  if (daysDifference >= 1) {
+    return '$daysDifference일 전';
+  } else if (hoursDifference >= 1) {
+    return '$hoursDifference시간 전';
+  } else if (minutesDifference == 0) {
+    return '방금 전';
+  } else {
+    return '$minutesDifference분 전';
+  }
+}
 
 class firstPostUnit extends StatefulWidget {
   final Deal deal;
 
-  final Map dealColors = {
-    '공구': ColorStyles.groupBuyColor,
-    '교환': ColorStyles.exchangeColor,
-    '나눔': ColorStyles.shareColor
-  };
-
-  firstPostUnit({super.key, required this.deal});
+  const firstPostUnit({super.key, required this.deal});
 
   @override
   State<firstPostUnit> createState() => _firstPostUnitState();
@@ -32,33 +46,33 @@ class _firstPostUnitState extends State<firstPostUnit> {
                   width: 37,
                   height: 20,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: widget.dealColors[widget.deal.dealType]),
+                    borderRadius: BorderRadius.circular(20),
+                    color: DealType.dealColors[widget.deal.dealType],
+                  ),
                   child: Center(
                     child: Text(
-                      widget.deal.dealType.toString(),
-                      style: const TextStyle(
-                          fontSize: 11, color: ColorStyles.white),
+                      DealType.dealTypeName[widget.deal.dealType],
+                      style: TextStyle(
+                          fontSize: 11, color: DealType.dealTextColors[widget.deal.dealType]),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.46,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
                       widget.deal.dealName,
                       style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.black),
+                          fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
               ],
             ),
             Text(
-              widget.deal.createdAt.toString(),
+              countHour(widget.deal.createdAt),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ],
@@ -83,30 +97,37 @@ class _secondPostUnitState extends State<secondPostUnit> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
+        padding: const EdgeInsets.all(1),
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(
                   padding: EdgeInsets.only(right: 12),
-                  child: Text('삼식이 네끼',
+                  child: Text('게시물 작성자 닉네임',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.black)),
+                          fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
                 ),
-                Text(widget.deal.distance.toString(),
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
+                Text('${widget.deal.distance.round()}M',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Text(
-                widget.deal.dealContent,
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-              ),
-            ),
+                padding: const EdgeInsets.only(top: 15),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.13,
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 5,
+                    text: TextSpan(
+                      text: widget.deal.dealContent,
+                      style: const TextStyle(
+                          color: ColorStyles.black, fontSize: 13, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                )),
           ],
         ),
       ),

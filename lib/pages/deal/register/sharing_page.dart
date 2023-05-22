@@ -32,9 +32,7 @@ class _SharingPageState extends State<SharingPage> {
 
   void setTitle(String value) => setState(() => deal.dealName = value);
   void setContent(String value) => setState(() => deal.dealContent = value);
-  void setImages(
-          String? image1, String? image2, String? image3, String? image4) =>
-      setState(() {
+  void setImages(String? image1, String? image2, String? image3, String? image4) => setState(() {
         deal.dealImage1 = image1;
         deal.dealImage2 = image2;
         deal.dealImage3 = image3;
