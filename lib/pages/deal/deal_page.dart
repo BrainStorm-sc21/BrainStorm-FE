@@ -38,7 +38,6 @@ class _DealPageState extends State<DealPage> {
 
   void setSearch(text) => setState(() {
         if (text == '') {
-          print("텍스트 비어있음");
           posts = entirePosts;
         } else {
           posts =
@@ -72,7 +71,6 @@ class _DealPageState extends State<DealPage> {
         entirePosts = dealData.data;
       });
     } catch (e) {
-      print("deal exception error");
       Exception(e);
     } finally {
       dio.close();
@@ -84,23 +82,6 @@ class _DealPageState extends State<DealPage> {
   void initState() {
     super.initState();
     getServerDealDataWithDio();
-    //initDeals();
-  }
-
-  void initDeals() {
-    for (var deal in entirePosts) {
-      posts.add(Deal(
-          dealId: deal.dealId,
-          userId: deal.userId,
-          dealName: deal.dealName,
-          dealType: deal.dealType,
-          distance: deal.distance,
-          dealContent: deal.dealContent,
-          latitude: deal.latitude,
-          longitude: deal.longitude,
-          createdAt: deal.createdAt,
-          dealImage1: deal.dealImage1));
-    }
   }
 
   @override
@@ -131,7 +112,7 @@ class _DealPageState extends State<DealPage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             CustomSearchBar(
-              onTap: () => setSearch(_textEditingController),
+              onTap: () => setSearch(_textEditingController.text),
               fillColor: ColorStyles.translucent,
               borderColor: ColorStyles.black,
               textEditingController: _textEditingController,

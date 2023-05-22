@@ -18,8 +18,8 @@ class GoRecipe extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
             child: SizedBox(
               width: 150,
               child: Column(
