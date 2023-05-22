@@ -371,7 +371,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
 
     Map<String, dynamic> data = {
-      "userId": "1",
+      "userId": "3",
       "foodList": encodedFoodList,
     };
     debugPrint('$data');

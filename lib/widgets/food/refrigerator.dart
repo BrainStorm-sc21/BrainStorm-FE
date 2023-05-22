@@ -52,7 +52,7 @@ class _RefrigeratorState extends State<Refrigerator> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
-      "userId": "1",
+      "userId": "3",
       "food": foodList[index].toJson(),
     };
 
