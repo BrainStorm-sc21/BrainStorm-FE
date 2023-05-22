@@ -41,14 +41,12 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void setNickname(String value) => setState(() => user.userName = value);
   void setGender(int value) => setState(() => user.gender = value);
-  void setAddress(String location, double latitude, double longitude) =>
-      setState(() {
+  void setAddress(String location, double latitude, double longitude) => setState(() {
         user.location = location;
         user.latitude = latitude;
         user.longitude = longitude;
       });
-  void sendPhoneNumber(String phoneNumber) =>
-      setState(() => user.phoneNumber = phoneNumber);
+  void sendPhoneNumber(String phoneNumber) => setState(() => user.phoneNumber = phoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +79,14 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: ElevatedButton(
                               onPressed: () {
                                 requestSignUp(user);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const CompleteSignUpImage()));
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CompleteSignUpImage(),
+                                  ),
+                                  (route) => false,
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ColorStyles.mainColor,
@@ -256,8 +257,7 @@ class _GenderFieldState extends State<GenderField> {
 }
 
 class PositionField extends StatefulWidget {
-  final void Function(String location, double latitude, double longitude)
-      setAddress;
+  final void Function(String location, double latitude, double longitude) setAddress;
   const PositionField({super.key, required this.setAddress});
 
   @override
@@ -313,14 +313,13 @@ class _PositionFieldState extends State<PositionField> {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Kpostal result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => KpostalView()));
+                      Kpostal result = await Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => KpostalView()));
                       setState(() {
                         posText = result.address;
                         posColor = Colors.black;
                         posFontSize = 14;
-                        widget.setAddress(result.address, result.latitude!,
-                            result.longitude!);
+                        widget.setAddress(result.address, result.latitude!, result.longitude!);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -352,8 +351,7 @@ class AuthField extends StatefulWidget {
 class _AuthFieldState extends State<AuthField> {
   String? phoneNumber;
 
-  void setPhoneNumber(String phoneNumber) =>
-      setState(() => phoneNumber = phoneNumber);
+  void setPhoneNumber(String phoneNumber) => setState(() => phoneNumber = phoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -390,13 +388,11 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const NaverWebView()),
+                                                  builder: (context) => const NaverWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
+                                            backgroundColor: ColorStyles.mainColor,
                                           ),
                                           child: const Text("Naver로\n인증하기"),
                                         ),
@@ -412,13 +408,11 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const KakaoWebView()),
+                                                  builder: (context) => const KakaoWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
+                                            backgroundColor: ColorStyles.mainColor,
                                           ),
                                           child: const Text("Kakao로\n인증하기"),
                                         ),
@@ -457,8 +451,7 @@ class _AuthFieldState extends State<AuthField> {
                   onPressed: () async {
                     String phoneNumber = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PhoneAuthForSignUpPage()),
+                      MaterialPageRoute(builder: (context) => PhoneAuthForSignUpPage()),
                     );
                     setState(() {
                       widget.sendPhoneNumber(phoneNumber);
@@ -490,8 +483,13 @@ class _CompleteSignUpImageState extends State<CompleteSignUpImage> {
   void initState() {
     super.initState();
     Timer(const Duration(milliseconds: 1500), () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const AppPagesContainer()));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AppPagesContainer(),
+        ),
+        (route) => false,
+      );
     });
   }
 
