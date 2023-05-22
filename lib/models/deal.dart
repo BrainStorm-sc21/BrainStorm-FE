@@ -37,7 +37,7 @@ class DealData {
 }
 
 class Deal {
-  int dealId;
+  int? dealId;
   int userId;
   int dealType;
   String dealName;
@@ -52,7 +52,7 @@ class Deal {
   DateTime createdAt;
 
   Deal(
-      {required this.dealId,
+      {this.dealId = 0,
       required this.userId,
       required this.dealType,
       required this.dealName,
