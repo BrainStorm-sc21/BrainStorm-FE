@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class Deal {
   }
 }
 
-void requestRegisterPost(Deal deal) async {
+void requestRegisterPost(Deal deal, context) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -121,18 +122,10 @@ void requestRegisterPost(Deal deal) async {
     'dealType': deal.dealType,
     'dealName': deal.dealName,
     'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage4!),
+    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
+    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
+    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
+    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
   });
 
   try {
@@ -146,6 +139,13 @@ void requestRegisterPost(Deal deal) async {
 
     if (res.data['status'] == 200) {
       print("게시글 등록 성공!!");
+      // Navigator.pop(context);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const AppPagesContainer(index: AppPagesNumber.deal),
+        ),
+      );
     } else if (res.data['status'] == 400) {
       throw Exception(res.data['message']);
     } else {

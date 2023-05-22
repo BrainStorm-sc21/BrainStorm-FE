@@ -13,7 +13,7 @@ class _SharingPageState extends State<SharingPage> {
   late Deal deal;
 
   void registerPost() async {
-    requestRegisterPost(deal);
+    requestRegisterPost(deal, context);
   }
 
   @override
