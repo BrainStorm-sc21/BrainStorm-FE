@@ -78,7 +78,7 @@ class _MapPageState extends State<MapPage> {
     return Expanded(
       child: NaverMap(
         initialCameraPosition:
-            const CameraPosition(target: LatLng(37.284159, 127.044608), zoom: 17),
+            const CameraPosition(target: LatLng(37.286828, 127.0577689), zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,

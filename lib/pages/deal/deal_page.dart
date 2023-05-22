@@ -27,15 +27,6 @@ class _DealPageState extends State<DealPage> {
   final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
 
-  // void setDeal(int dealType) => setState(() {
-  //       _checkDeal[dealType] = !_checkDeal[dealType];
-  //       if (_checkDeal.contains(true)) {
-  //         posts = dealData.data.where((deal) => _checkDeal[deal.dealType] == true).toList();
-  //       } else {
-  //         posts = dealData.data;
-  //       }
-  //     });
-
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
         if (_checkDeal.contains(true)) {
@@ -46,82 +37,20 @@ class _DealPageState extends State<DealPage> {
       });
 
   void setSearch(text) => setState(() {
-        if (text == Null) {
+        if (text == '') {
+          print("텍스트 비어있음");
           posts = entirePosts;
         } else {
-          posts = entirePosts
-              .where((deal) => deal.dealName.contains(_textEditingController.text))
-              .toList();
+          posts =
+              posts.where((deal) => deal.dealName.contains(_textEditingController.text)).toList();
         }
       });
   void setdropdown(String selectedValue, String value) => setState(() => selectedValue = value);
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  List<Deal> entirePosts = [
-    Deal(
-        userId: 1,
-        dealId: 0,
-        dealName: "감자 공동구매 하실 분!",
-        dealType: 0,
-        distance: 150,
-        dealContent: "~~",
-        latitude: 37.284159,
-        longitude: 127.044608,
-        createdAt: DateTime.parse('2023-05-21T11:58:20.551705'),
-        dealImage1:
-            'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcR1M89lNmXLBltfEc5TQZJSpcqvZ36vvZyZfpP98EFh-i4Q9X8S8woN6El91b1pZ5Sw'),
-    Deal(
-        userId: 2,
-        dealId: 1,
-        dealName: "양파 나눔해요~",
-        dealType: 2,
-        distance: 400,
-        dealContent: "양파 나눔 내용",
-        latitude: 37.2840,
-        longitude: 127.044607,
-        createdAt: DateTime.parse('2023-05-21 11:22:50.030315'),
-        dealImage1:
-            'https://i.namu.wiki/i/qTfdtopPV7GKQ0YmjVsHxythtmlSQ35OppjcjwJgHJoLVXzx5iCZRFHaq-mXoTR5cl-j2X4SQm1xvyj2hhxBEw.webp'),
-    Deal(
-        userId: 3,
-        dealId: 2,
-        dealName: "이천 쌀 공구하실 분 구합니다!!",
-        dealType: 0,
-        distance: 1200,
-        dealContent: "이천 쌀 공구 내용",
-        latitude: 37.284246805225834,
-        longitude: 127.04386542721113,
-        createdAt: DateTime.parse('2023-05-20T10:01:20.551705'),
-        dealImage1: 'https://www.newspeak.kr/news/photo/202209/435707_284048_3504.jpg'),
-    Deal(
-        userId: 4,
-        dealId: 3,
-        dealName: "사과랑 바나나 교환해요",
-        dealType: 1,
-        distance: 750,
-        dealContent: "사과 바나나 교환 내용",
-        latitude: 37.2839597,
-        longitude: 127.044598,
-        createdAt: DateTime.parse('2023-05-18T11:58:20.551705'),
-        dealImage1:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRlxKlz8H0tHG-DpyUhBOOo6wpGw_NnEYPMLDjrfVA3aSPyIdCfmzS_fzOcnj0seChhGo&usqp=CAU'),
-    Deal(
-        userId: 5,
-        dealId: 4,
-        dealName: "이건 정말 긴 제목을 가지고 있는 게시물의 테스트를 위한 더미값입니다",
-        dealType: 2,
-        distance: 900,
-        dealContent:
-            "이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.이건 정말 긴 내용을 가지고 있는 게시물의 테스트를 위한 더미값입니다.",
-        latitude: 37.2839598,
-        longitude: 127.044599,
-        createdAt: DateTime.parse('2023-05-19T11:58:20.551705'),
-        dealImage1: 'https://i.pinimg.com/originals/b0/df/95/b0df95cfc6f31293d002d4d6daac253c.jpg')
-  ];
-
   List<Deal> posts = List.empty(growable: true);
-  late DealData dealData;
+  List<Deal> entirePosts = List.empty(growable: true);
 
   Future getServerDealDataWithDio() async {
     Dio dio = Dio();
@@ -130,19 +59,20 @@ class _DealPageState extends State<DealPage> {
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
     try {
-      Response resp = await dio.get("/deal/1/around");
+      Response resp = await dio.get("/deal/3/around");
 
       print("Deal Status: ${resp.statusCode}");
-      print("Data:\n${resp.data}");
 
-      // DealData dealData = DealData.fromJson(resp.data);
+      DealData dealData = DealData.fromJson(resp.data);
 
-      // setState(() {
-      //   for (Deal dealitem in dealData.data) {
-      //     posts.add(dealitem);
-      //   }
-      // });
+      setState(() {
+        for (Deal dealitem in dealData.data) {
+          posts.add(dealitem);
+        }
+        entirePosts = dealData.data;
+      });
     } catch (e) {
+      print("deal exception error");
       Exception(e);
     } finally {
       dio.close();
@@ -154,12 +84,13 @@ class _DealPageState extends State<DealPage> {
   void initState() {
     super.initState();
     getServerDealDataWithDio();
-    initDeals();
+    //initDeals();
   }
 
   void initDeals() {
     for (var deal in entirePosts) {
       posts.add(Deal(
+          dealId: deal.dealId,
           userId: deal.userId,
           dealName: deal.dealName,
           dealType: deal.dealType,
@@ -221,7 +152,7 @@ class _DealPageState extends State<DealPage> {
                               fontSize: 15,
                               onPressed: () =>
                                   //dealData.data.isEmpty ? print("값 없음") : setDeal(index),
-                                  entirePosts.isEmpty ? print("값 없음") : setDeal(index),
+                                  setDeal(index),
                               backgroundColor: _checkDeal[index]
                                   ? DealType.dealTextColors[index]
                                   : ColorStyles.white,

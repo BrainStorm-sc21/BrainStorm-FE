@@ -47,7 +47,10 @@ class TradingBoard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(imgUrl, height: 60, width: 60, fit: BoxFit.fill),
+                    child: imgUrl != null
+                        ? Image.network(imgUrl, height: 60, width: 60, fit: BoxFit.fill)
+                        : Image.asset('assets/images/logo.png',
+                            height: 60, width: 60, fit: BoxFit.fill),
                   ),
                   const SizedBox(width: 8),
                   Container(

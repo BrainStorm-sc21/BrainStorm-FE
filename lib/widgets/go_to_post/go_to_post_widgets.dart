@@ -109,7 +109,7 @@ class _secondPostUnitState extends State<secondPostUnit> {
                       style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
                 ),
-                Text('${widget.deal.distance}M',
+                Text('${widget.deal.distance.round()}M',
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
               ],
             ),

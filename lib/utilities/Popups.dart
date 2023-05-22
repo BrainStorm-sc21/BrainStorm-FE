@@ -75,10 +75,9 @@ class Popups {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                      child: Image.network(
-                        '${deal.dealImage1}',
-                        fit: BoxFit.fill,
-                      ),
+                      child: deal.dealImage1 != null
+                          ? Image.network(deal.dealImage1, fit: BoxFit.fill)
+                          : Image.asset('assets/images/logo.png', fit: BoxFit.fill),
                       // Image.asset(
                       //   'assets/images/감자.png',
                       //   fit: BoxFit.fill,
