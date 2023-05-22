@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/start/phone_signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -22,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     user = User(
         userName: "",
-        phoneNumber: "01012344321",
+        phoneNumber: "01012340159",
         snsType: null,
         snsKey: null,
         location: "",
@@ -70,17 +73,25 @@ class _SignUpPageState extends State<SignUpPage> {
                     NicknameField(setNickname: setNickname),
                     GenderField(setGender: setGender),
                     PositionField(setAddress: setAddress),
-                    AuthField(sendPhoneNumber: sendPhoneNumber),
-                    SizedBox(
-                        width: deviceWidth * 0.8,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              requestSignUp(user);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorStyles.mainColor,
-                            ),
-                            child: const Text("회원가입하기"))),
+                    //AuthField(sendPhoneNumber: sendPhoneNumber),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: SizedBox(
+                          width: deviceWidth * 0.8,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                requestSignUp(user);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CompleteSignUpImage()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorStyles.mainColor,
+                              ),
+                              child: const Text("회원가입하기"))),
+                    ),
                   ],
                 )
               ],
@@ -463,6 +474,36 @@ class _AuthFieldState extends State<AuthField> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CompleteSignUpImage extends StatefulWidget {
+  const CompleteSignUpImage({super.key});
+
+  @override
+  State<CompleteSignUpImage> createState() => _CompleteSignUpImageState();
+}
+
+class _CompleteSignUpImageState extends State<CompleteSignUpImage> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(milliseconds: 1500), () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AppPagesContainer()));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('assets/images/completeSignUp.png'),
+      )),
     );
   }
 }

@@ -20,7 +20,7 @@ class _GroupPurchasePageState extends State<GroupPurchasePage> {
   void initState() {
     super.initState();
     deal = Deal(
-        userId: 1,
+        userId: 3,
         dealType: 0,
         dealName: '',
         dealContent: '',

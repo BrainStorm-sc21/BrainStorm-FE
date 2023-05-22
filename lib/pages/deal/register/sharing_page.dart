@@ -20,7 +20,7 @@ class _SharingPageState extends State<SharingPage> {
   void initState() {
     super.initState();
     deal = Deal(
-        userId: 1,
+        userId: 3,
         dealType: 2,
         dealName: '',
         dealContent: '',

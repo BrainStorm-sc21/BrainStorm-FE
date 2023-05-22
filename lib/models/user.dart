@@ -1,6 +1,8 @@
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
   late int? userId;
@@ -59,6 +61,8 @@ class User {
 }
 
 void requestSignUp(User user) async {
+  const storage = FlutterSecureStorage();
+  dynamic userId;
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -75,7 +79,9 @@ void requestSignUp(User user) async {
     );
 
     if (res.data['status'] == 200) {
-      print('회원가입 성공!!');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('userId', res.data['data']['userId']);
+      prefs.setBool('isUser', true);
     } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
       throw Exception('Failed to send data [${res.statusCode}]');
