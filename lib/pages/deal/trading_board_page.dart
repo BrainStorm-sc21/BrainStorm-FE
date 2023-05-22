@@ -29,7 +29,8 @@ class TradingBoard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(imgUrl, height: 60, width: 60, fit: BoxFit.fill),
+                    child: Image.network(imgUrl!,
+                        height: 60, width: 60, fit: BoxFit.fill),
                   ),
                   const SizedBox(width: 8),
                   Container(
@@ -57,20 +58,28 @@ class TradingBoard extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: 250,
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Flexible(
-                              child: Text(dealName,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                  child: Text(dealName,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1),
+                                      overflow: TextOverflow.ellipsis)),
+                              Text(time.toString(),
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w500, height: 1),
-                                  overflow: TextOverflow.ellipsis)),
-                          Text(time.toString(),
-                              style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1)),
-                        ]),
+                                      fontSize: 13,
+                                      color: Colors.grey,
+                                      height: 1)),
+                            ]),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         distance.toString(),
-                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 13, color: Colors.grey),
                       ),
                     ],
                   ),

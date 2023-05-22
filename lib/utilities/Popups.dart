@@ -7,13 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Popups {
-  // static void checkSignUp(context, type) {
-  //   showDialog(context: context, builder: (context) {
-  //     return Dialog(
-  //       shape: ,
-  //     )
-  //   });
-  // }
   static void popSimpleDialog(
     context, {
     required title,
@@ -47,6 +40,14 @@ class Popups {
       },
     );
   }
+
+  // static void checkSignUp(context, type) {
+  //   showDialog(context: context, builder: (context) {
+  //     return Dialog(
+  //       shape: ,
+  //     )
+  //   });
+  // }
 
   static void goToPost(context, deal) {
     double width = MediaQuery.of(context).size.width;
@@ -229,8 +230,8 @@ class Popups {
             },
             baseBtnStyle: ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
             ),
             dotsDecorator: const DotsDecorator(
               size: Size(10, 10),

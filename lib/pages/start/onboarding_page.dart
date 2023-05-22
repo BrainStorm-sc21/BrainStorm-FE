@@ -49,7 +49,7 @@ class OnboardingPage extends StatelessWidget {
               body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/온보딩화면1.png',
+                  'assets/images/onboarding1.png',
                 ),
               ),
               decoration: getPageDecoration(),
@@ -59,7 +59,7 @@ class OnboardingPage extends StatelessWidget {
               body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/온보딩화면2.png',
+                  'assets/images/onboarding2.png',
                 ),
               ),
               decoration: getPageDecoration(),
@@ -69,7 +69,7 @@ class OnboardingPage extends StatelessWidget {
               body: "",
               image: Center(
                 child: Image.asset(
-                  'assets/images/온보딩화면3.png',
+                  'assets/images/onboarding3.png',
                 ),
               ),
               decoration: getPageDecoration(),

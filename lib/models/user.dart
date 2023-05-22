@@ -1,76 +1,89 @@
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
 class User {
-  //int userId;
+  late int? userId;
   String userName;
   String? phoneNumber;
   String? snsType;
   String? snsKey;
   String location;
-  double? latitude;
-  double? longitude;
-  int gender;
-  //Float reliability;
-  // DateTime? stopUntil;
-  // DateTime createdAt;
+  double latitude;
+  double longitude;
+  int? gender;
+  double? reliability;
+  DateTime? stopUntil;
+  DateTime? createdAt;
 
   User({
+    this.userId,
     required this.userName,
-    required this.phoneNumber,
+    this.phoneNumber,
+    this.snsType,
+    this.snsKey,
     required this.location,
     required this.latitude,
     required this.longitude,
-    required this.gender,
+    this.gender,
+    this.reliability,
+    this.stopUntil,
   });
 
-  // factory User.fromJson(Map<String, dynamic> json) {
-  //   return User(
-  //     userName: json["userName"],
-  //     location: json["location"],
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-  //   );
-  // }
+    data['userName'] = userName;
+    data['phoneNumber'] = phoneNumber;
+    data['snsType'] = snsType;
+    data['snsKey'] = snsKey;
+    data['location'] = location;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['gender'] = gender;
+
+    return data;
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      userId: json['data']['userId'],
+      userName: json['data']['userName'],
+      location: json['data']['location'],
+      longitude: json['data']['longitude'],
+      latitude: json['data']['latitude'],
+      reliability: json['data']['reliability'],
+      stopUntil: json['data']['stopUntil'],
+    );
+  }
 }
 
-// Future<int?> postSignUp(User user) async {
-//   print('통신 시작');
-//   Dio dio = Dio();
+void requestSignUp(User user) async {
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 15)
+    ..receiveTimeout = const Duration(seconds: 15);
 
-//   dio.options.baseUrl = 'www.meokjang.com';
+  final data = user.toJson();
+  debugPrint('req data: $data');
 
-//   //final response = await dio.post('\users', data: {});
+  try {
+    final res = await dio.post(
+      '/users/create',
+      data: data,
+    );
 
-//   // response = await dio.post(
-//   //   'www.meokjang.com/users',
-//   //   queryParameters: {
-//   //     "userName": '먹짱2호',
-//   //     "phoneNumber": '010-1234-1234',
-//   //     "snsType": null,
-//   //     "snsKey": null,
-//   //     "location": '서울 강남구 강남대로',
-//   //     "latitude": user.latitude,
-//   //     "longitude": user.longitude,
-//   //     "gender": user.gender,
-//   //   },
-//   // );
-
-//   // final uri = Uri.https('', '/users');
-//   // var response = await http.post(
-//   //   uri,
-//   //   body: convert.jsonEncode({
-//   //     "userName": user.userName,
-//   //     "phoneNumber": user.phoneNumber,
-//   //     "snsType": user.snsType,
-//   //     "snsKey": user.snsKey,
-//   //     "location": user.location,
-//   //     "latitude": user.latitude,
-//   //     "longitude": user.longitude,
-//   //     "gender": user.gender,
-//   //   }),
-//   // );
-
-//   // var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-//   // var responseStatus = jsonResponse['status'];
-
-//   print('통신 끝');
-
-//   return response.statusCode;
-// }
+    if (res.data['status'] == 200) {
+      print('회원가입 성공!!');
+    } else if (res.data['status'] == 400) {
+      print('회원가입 실패!!');
+      throw Exception('Failed to send data [${res.statusCode}]');
+    }
+  } catch (err) {
+    debugPrint('$err');
+  } finally {
+    dio.close();
+  }
+  return null;
+}

@@ -77,7 +77,8 @@ class AddFoodLayout extends StatelessWidget {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPaddingSize),
+                padding:
+                    EdgeInsets.symmetric(horizontal: horizontalPaddingSize),
                 sliver: body,
               ),
               SliverFillRemaining(
@@ -85,7 +86,8 @@ class AddFoodLayout extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: horizontalPaddingSize),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 10, horizontal: horizontalPaddingSize),
                     child: SizedBox(
                       height: 78, // button 35 + sizedbox 8 + button 35
                       child: Column(
