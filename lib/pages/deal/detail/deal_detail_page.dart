@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
@@ -95,7 +96,14 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
                   child: RoundedOutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ChatDetailPage(
+                          nickname: 'userId',
+                          content: '',
+                        ),
+                      ),
+                    ),
                     text: '채팅하기',
                     width: double.infinity,
                     height: 40,
