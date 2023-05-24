@@ -96,7 +96,7 @@ flutter:
     - assets/images/google.png
     - assets/images/kakao.png
     - assets/images/naver.png
-
+    # 마커이미지
     - assets/images/groupMarker.png
     - assets/images/exchangeMarker.png
     - assets/images/shareMarker.png
@@ -108,6 +108,8 @@ flutter:
 
     - assets/images/apple.png
     - assets/images/potato.png
+    # 마이페이지
+    - assets/images/inverted_triangle1.png
 
     # 스마트등록 에셋
     - assets/images/smart_add_loading.png
