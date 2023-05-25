@@ -110,6 +110,7 @@ flutter:
     - assets/images/potato.png
     # 마이페이지
     - assets/images/inverted_triangle1.png
+    - assets/images/myPagebackground.png
 
     # 스마트등록 에셋
     - assets/images/smart_add_loading.png
