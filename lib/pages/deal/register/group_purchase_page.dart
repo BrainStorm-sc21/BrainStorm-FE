@@ -3,7 +3,11 @@ import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.d
 import 'package:flutter/material.dart';
 
 class GroupPurchasePage extends StatefulWidget {
-  const GroupPurchasePage({super.key});
+  final int userId;
+  const GroupPurchasePage({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<GroupPurchasePage> createState() => _GroupPurchasePageState();
@@ -13,14 +17,14 @@ class _GroupPurchasePageState extends State<GroupPurchasePage> {
   late Deal deal;
 
   void registerPost() {
-    requestRegisterPost(deal, context);
+    requestRegisterPost(widget.userId, deal, context);
   }
 
   @override
   void initState() {
     super.initState();
     deal = Deal(
-        userId: 3,
+        userId: widget.userId,
         dealType: 0,
         dealName: '',
         dealContent: '',
@@ -32,7 +36,9 @@ class _GroupPurchasePageState extends State<GroupPurchasePage> {
 
   void setTitle(String value) => setState(() => deal.dealName = value);
   void setContent(String value) => setState(() => deal.dealContent = value);
-  void setImages(String? image1, String? image2, String? image3, String? image4) => setState(() {
+  void setImages(
+          String? image1, String? image2, String? image3, String? image4) =>
+      setState(() {
         deal.dealImage1 = image1;
         deal.dealImage2 = image2;
         deal.dealImage3 = image3;

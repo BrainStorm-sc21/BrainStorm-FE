@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/food.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -9,7 +10,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:dio/dio.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  int userId;
+  HomePage({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,43 +23,47 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Food> foodList = List.empty(growable: true);
   late FoodData foodData;
-  late int userId = 3;
-  //late User user;
+  late String userName = '';
 
-  // void getUserId() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   userId = prefs.getInt('userId')!;
-  // }
-
-  // Future getUserDataWithDio() async {
-  //   Dio dio = Dio();
-  //   dio.options
-  //     ..baseUrl = baseURI
-  //     ..connectTimeout = const Duration(seconds: 5)
-  //     ..receiveTimeout = const Duration(seconds: 10);
-  //   try {
-  //     Response resp = await dio.get("/users/$userId");
-
-  //     debugPrint(resp.data);
-  //     user = User.fromJson(resp.data);
-
-  //     setState(() {});
-  //   } catch (e) {
-  //     Exception(e);
-  //   } finally {
-  //     dio.close();
-  //   }
-  //   return false;
-  // }
-
-  Future getServerDataWithDio() async {
+  Future getUserName() async {
     Dio dio = Dio();
+
     dio.options
       ..baseUrl = baseURI
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
     try {
-      Response resp = await dio.get("/food/$userId");
+      Response resp = await dio.get("/users/${widget.userId}");
+
+      User user = User.fromJson(resp.data);
+
+      if (resp.data['status'] == 200) {
+        print('회원 불러오기 성공!!');
+        print(resp.data);
+        setState(() {
+          userName = user.userName;
+        });
+      } else if (resp.data['status'] == 400) {
+        print('회원 불러오기 실패!!');
+        throw Exception('Failed to send data [${resp.statusCode}]');
+      }
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return false;
+  }
+
+  Future getServerDataWithDio() async {
+    Dio dio = Dio();
+
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+    try {
+      Response resp = await dio.get("/food/${widget.userId}");
 
       FoodData foodData = FoodData.fromJson(resp.data);
 
@@ -76,8 +85,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getServerDataWithDio();
     super.initState();
+    getUserName();
+    getServerDataWithDio();
   }
 
   TabBar get _tabBar => const TabBar(
@@ -104,8 +114,8 @@ class _HomePageState extends State<HomePage> {
               preferredSize: const Size.fromHeight(90.0),
               child: AppBar(
                   centerTitle: false,
-                  title: const Text("먹장3호님의 냉장고",
-                      style: TextStyle(
+                  title: Text("$userName님의 냉장고",
+                      style: const TextStyle(
                           height: 3,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -146,18 +156,30 @@ class _HomePageState extends State<HomePage> {
                       ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
                       : TabBarView(
                           children: [
-                            Refrigerator(foodList: foodList, storage: '전체'),
-                            Refrigerator(foodList: foodList, storage: '냉장'),
-                            Refrigerator(foodList: foodList, storage: '냉동'),
-                            Refrigerator(foodList: foodList, storage: '실온')
+                            Refrigerator(
+                                userId: widget.userId,
+                                foodList: foodList,
+                                storage: '전체'),
+                            Refrigerator(
+                                userId: widget.userId,
+                                foodList: foodList,
+                                storage: '냉장'),
+                            Refrigerator(
+                                userId: widget.userId,
+                                foodList: foodList,
+                                storage: '냉동'),
+                            Refrigerator(
+                                userId: widget.userId,
+                                foodList: foodList,
+                                storage: '실온')
                           ],
                         ))
             ]),
-            floatingActionButton: floatingButtons(context)));
+            floatingActionButton: floatingButtons(context, widget.userId)));
   }
 }
 
-Widget? floatingButtons(BuildContext context) {
+Widget? floatingButtons(BuildContext context, int userId) {
   return SpeedDial(
     icon: Icons.add,
     activeIcon: Icons.close,
@@ -174,8 +196,12 @@ Widget? floatingButtons(BuildContext context) {
           child: const Icon(Icons.camera_alt, color: Colors.white),
           backgroundColor: ColorStyles.mainColor,
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SmartAddPage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SmartAddPage(
+                          userId: userId,
+                        )));
           }),
       SpeedDialChild(
         child: const Icon(
@@ -184,8 +210,10 @@ Widget? floatingButtons(BuildContext context) {
         ),
         backgroundColor: ColorStyles.mainColor,
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ManualAddPage()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ManualAddPage(userId: userId)));
         },
       )
     ],

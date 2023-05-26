@@ -109,7 +109,7 @@ class Deal {
   }
 }
 
-void requestRegisterPost(Deal deal, context) async {
+void requestRegisterPost(int userId, Deal deal, context) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -122,10 +122,18 @@ void requestRegisterPost(Deal deal, context) async {
     'dealType': deal.dealType,
     'dealName': deal.dealName,
     'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
+    'image1': deal.dealImage1 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage1!),
+    'image2': deal.dealImage2 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage2!),
+    'image3': deal.dealImage3 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage3!),
+    'image4': deal.dealImage4 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage4!),
   });
 
   try {
@@ -143,7 +151,8 @@ void requestRegisterPost(Deal deal, context) async {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(index: AppPagesNumber.deal),
+          builder: (context) =>
+              AppPagesContainer(index: AppPagesNumber.deal, userId: userId),
         ),
       );
     } else if (res.data['status'] == 400) {
