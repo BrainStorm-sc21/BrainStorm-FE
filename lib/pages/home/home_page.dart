@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         for (Food fooditem in foodData.data) {
           foodList.add(fooditem);
         }
+        foodList.sort((a, b) => a.expireDate.compareTo(b.expireDate));
       });
     } catch (e) {
       Exception(e);
