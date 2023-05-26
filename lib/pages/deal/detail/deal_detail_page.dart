@@ -55,20 +55,23 @@ class _DealDetailPageState extends State<DealDetailPage> {
           height: height,
           child: Column(
             children: [
-              SizedBox(
+              Container(
                 width: width,
                 height: height * 0.3,
-                child: PageView.builder(
-                  controller: PageController(initialPage: 0),
-                  itemCount: imageList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        child: Image.network(
-                      imageList[index],
-                      fit: BoxFit.fill,
-                    ));
-                  },
-                ),
+                color: Colors.grey[300],
+                child: (imageList.isEmpty)
+                    ? null
+                    : PageView.builder(
+                        controller: PageController(initialPage: 0),
+                        itemCount: imageList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                              child: Image.network(
+                            imageList[index],
+                            fit: BoxFit.fill,
+                          ));
+                        },
+                      ),
               ),
               // Container(
               //   width: width,
@@ -98,7 +101,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   topRight: Radius.circular(20),
                 )),
             width: width,
-            height: height * 0.72,
+            height: (imageList.isEmpty) ? height * 0.87 : height * 0.72,
             child: Column(
               children: [
                 TopPostUnit(
@@ -158,19 +161,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 )
               ],
             ),
-          ),
-        ),
-        Positioned(
-          top: 20,
-          left: 20,
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: ColorStyles.mainColor,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
           ),
         ),
       ]),
