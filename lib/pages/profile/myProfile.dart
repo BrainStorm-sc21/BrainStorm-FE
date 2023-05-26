@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+  bool isClickedText = false;
   final TextEditingController _nickNameController = TextEditingController();
+  final FocusNode _textFocus = FocusNode();
 
   List<String> dealInfo = ["거래 내역", "받은 후기", "보낸 후기", "관심 거래"];
   List<String> settings = ["알림 설정", "사용자 설정", "기타"];
@@ -43,6 +46,13 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _nickNameController.dispose();
+    _textFocus.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: CustomScrollView(
@@ -63,17 +73,29 @@ class _MyProfileState extends State<MyProfile> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextField(
-                                controller: _nickNameController,
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none, counterText: ''),
-                                style: const TextStyle(
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                    color: ColorStyles.white,
-                                    overflow: TextOverflow.ellipsis),
-                                maxLength: 20),
+                            child: AbsorbPointer(
+                              absorbing: isClickedText,
+                              child: TextField(
+                                  controller: _nickNameController,
+                                  focusNode: _textFocus,
+                                  onSubmitted: (value) {
+                                    Popups.popSimpleDialog(context,
+                                        title: _nickNameController.text,
+                                        body: "닉네임이 성공적으로 변경되었어요!");
+                                    setState(() {
+                                      isClickedText = true;
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none, counterText: ''),
+                                  style: const TextStyle(
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1,
+                                      color: ColorStyles.white,
+                                      overflow: TextOverflow.ellipsis),
+                                  maxLength: 20),
+                            ),
                           ),
                           IconButton(
                               onPressed: () {},
@@ -92,7 +114,12 @@ class _MyProfileState extends State<MyProfile> {
                           backgroundColor: ColorStyles.lightmainColor,
                           borderColor: ColorStyles.lightmainColor,
                           foregroundColor: ColorStyles.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              isClickedText = isClickedText ? false : true;
+                            });
+                            _textFocus.requestFocus();
+                          },
                           fontSize: 13,
                           text: "닉네임 수정 >"),
                     ),
