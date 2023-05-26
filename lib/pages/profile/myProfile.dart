@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
+import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class MyProfile extends StatefulWidget {
@@ -11,6 +12,8 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+  final TextEditingController _nickNameController = TextEditingController();
+
   List<String> dealInfo = ["거래 내역", "받은 후기", "보낸 후기", "관심 거래"];
   List<String> settings = ["알림 설정", "사용자 설정", "기타"];
   List<List<String>> settingNames = [
@@ -18,6 +21,7 @@ class _MyProfileState extends State<MyProfile> {
     ["계정 / 정보 관리", "차단 사용자 관리", "게시글 미노출 사용자 관리", "기타 설정"],
     ["공지사항", "언어 설정", "버전 정보", "로그아웃", "회원 탈퇴"]
   ];
+
   Map<String, dynamic> settingDetails = {
     "알림 및 소리": const ChatPage(),
     "방해금지 시간 설정": const ChatPage(),
@@ -33,30 +37,64 @@ class _MyProfileState extends State<MyProfile> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    _nickNameController.text = "먹짱";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            // shape: const RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(50), bottomRight: Radius.circular(50))),
-            elevation: 0,
             backgroundColor: ColorStyles.mainColor,
-            expandedHeight: MediaQuery.of(context).size.height * 0.43,
+            expandedHeight: MediaQuery.of(context).size.height * 0.46,
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
-                        "먹짱",
-                        style: TextStyle(
-                            color: ColorStyles.white, fontSize: 30, fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: TextField(
+                                controller: _nickNameController,
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none, counterText: ''),
+                                style: const TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1,
+                                    color: ColorStyles.white,
+                                    overflow: TextOverflow.ellipsis),
+                                maxLength: 20),
+                          ),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.notifications,
+                                color: ColorStyles.white,
+                                size: 35,
+                              )),
+                        ],
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: RoundedOutlinedButton(
+                          height: 23,
+                          backgroundColor: ColorStyles.lightmainColor,
+                          borderColor: ColorStyles.lightmainColor,
+                          foregroundColor: ColorStyles.white,
+                          onPressed: () {},
+                          fontSize: 13,
+                          text: "닉네임 수정 >"),
                     ),
                     const Text(
                       "내 신뢰도",
@@ -66,11 +104,12 @@ class _MyProfileState extends State<MyProfile> {
                     Column(
                       children: [
                         Container(
-                          alignment: const FractionalOffset(43 / 50, 1 - 43 / 50),
+                          alignment: const FractionalOffset(43 / 100, 1 - 43 / 100),
                           child: FractionallySizedBox(
                             child: Column(
                               children: [
-                                const Text("4.3", style: TextStyle(color: ColorStyles.lightYellow)),
+                                const Text("43",
+                                    style: TextStyle(color: ColorStyles.lightYellow, fontSize: 15)),
                                 const SizedBox(height: 3),
                                 Image.asset('assets/images/inverted_triangle1.png'),
                               ],
@@ -80,7 +119,7 @@ class _MyProfileState extends State<MyProfile> {
                         const CustomProgressBar(
                           paddingHorizontal: 5,
                           currentPercent: 43,
-                          maxPercent: 50,
+                          maxPercent: 100,
                           lineHeight: 12,
                           firstColor: ColorStyles.lightYellow,
                           secondColor: ColorStyles.lightYellow,
@@ -91,7 +130,7 @@ class _MyProfileState extends State<MyProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: List<Widget>.generate(4, (index) {
                           return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              padding: const EdgeInsets.only(top: 20),
                               child: Container(
                                   width: 85,
                                   height: 70,
