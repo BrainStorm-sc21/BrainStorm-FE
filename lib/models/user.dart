@@ -92,7 +92,7 @@ Map<String, String> toJsonSNS(String snsType, String snsKey) {
   return data;
 }
 
-void requestSignUp(User user) async {
+Future<int> requestSignUp(User user) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -115,6 +115,7 @@ void requestSignUp(User user) async {
       prefs.setInt('userId', res.data['data']['userId']);
       prefs.setBool('isMeokjangUser', true);
       setUserInfo(user);
+      return res.data['data']['userId'];
     } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
       throw Exception('Failed to send data [${res.statusCode}]');
@@ -124,7 +125,7 @@ void requestSignUp(User user) async {
   } finally {
     dio.close();
   }
-  return null;
+  return -1;
 }
 
 void requestLogin(String? phoneNumber, String? snsType, String? snsKey,

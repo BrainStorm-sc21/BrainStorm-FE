@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     user = User(
         userName: "",
-        phoneNumber: '01093831738',
+        phoneNumber: '01093831727',
         snsType: null,
         snsKey: null,
         location: "",
@@ -77,14 +77,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                         width: deviceWidth * 0.8,
                         child: ElevatedButton(
-                            onPressed: () {
-                              requestSignUp(user);
+                            onPressed: () async {
+                              int userId = await requestSignUp(user);
 
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const CompleteSignUpImage(),
+                                      CompleteSignUpImage(userId: userId),
                                 ),
                                 (route) => false,
                               );
@@ -480,7 +480,11 @@ class _AuthFieldState extends State<AuthField> {
 }
 
 class CompleteSignUpImage extends StatefulWidget {
-  const CompleteSignUpImage({super.key});
+  final int userId;
+  const CompleteSignUpImage({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<CompleteSignUpImage> createState() => _CompleteSignUpImageState();
@@ -494,7 +498,7 @@ class _CompleteSignUpImageState extends State<CompleteSignUpImage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(userId: null),
+          builder: (context) => AppPagesContainer(userId: widget.userId),
         ),
         (route) => false,
       );
