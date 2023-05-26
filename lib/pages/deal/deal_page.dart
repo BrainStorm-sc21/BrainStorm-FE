@@ -186,7 +186,6 @@ class _DealPageState extends State<DealPage> {
                   posts.sort((a, b) => a.distance.compareTo(b.distance));
                 } else if (_selectedValue == '최신순') {
                   posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-                  posts.reversed;
                 }
               });
             },
