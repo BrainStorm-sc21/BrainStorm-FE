@@ -155,9 +155,9 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
 
     if (res.data['status'] == 200) {
       print('로그인 성공!!');
-      //SharedPreferences prefs = await SharedPreferences.getInstance();
-      // prefs.setInt('userId', res.data['data']['userId']);
-      // prefs.setBool('isMeokjangUser', true);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('userId', res.data['data']['userId']);
+      prefs.setBool('isMeokjangUser', true);
       //setUserInfo(user);
       Navigator.pushAndRemoveUntil(
           context,

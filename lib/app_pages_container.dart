@@ -27,7 +27,6 @@ class AppPagesContainer extends StatefulWidget {
 
 class _AppPagesContainerState extends State<AppPagesContainer> {
   int currentIndex = 0;
-  // late String userName;
 
   // Future<void> getUserInfo() async {
   //   setState(() {
@@ -43,7 +42,6 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
     //getUserInfo();
 
     print('유저아이디: ${widget.userId}');
-    //print('유저닉네임: ${userName}');
   }
 
   Future<void> setCurrentIndex(newIndex) async {

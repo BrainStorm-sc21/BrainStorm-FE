@@ -19,6 +19,30 @@ class DealDetailPage extends StatefulWidget {
 }
 
 class _DealDetailPageState extends State<DealDetailPage> {
+  List<String> imageList = [];
+
+  void setImageList() {
+    if (widget.deal.dealImage1 != null) {
+      imageList.add(widget.deal.dealImage1!);
+    }
+    if (widget.deal.dealImage2 != null) {
+      imageList.add(widget.deal.dealImage2!);
+    }
+    if (widget.deal.dealImage3 != null) {
+      imageList.add(widget.deal.dealImage3!);
+    }
+    if (widget.deal.dealImage4 != null) {
+      imageList.add(widget.deal.dealImage4!);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setImageList();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -31,18 +55,35 @@ class _DealDetailPageState extends State<DealDetailPage> {
           height: height,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: width,
                 height: height * 0.3,
-                decoration: BoxDecoration(
-                  color: ColorStyles.black,
-                  image: widget.deal.dealImage1 != null
-                      ? DecorationImage(
-                          image: NetworkImage(widget.deal.dealImage1 ?? ''), fit: BoxFit.fitWidth)
-                      : const DecorationImage(
-                          image: AssetImage('assets/images/logo.png'), fit: BoxFit.fitWidth),
+                child: PageView.builder(
+                  controller: PageController(initialPage: 0),
+                  itemCount: imageList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        child: Image.network(
+                      imageList[index],
+                      fit: BoxFit.fill,
+                    ));
+                  },
                 ),
               ),
+              // Container(
+              //   width: width,
+              //   height: height * 0.3,
+              //   decoration: BoxDecoration(
+              //     color: ColorStyles.black,
+              //     image: widget.deal.dealImage1 != null
+              //         ? DecorationImage(
+              //             image: NetworkImage(widget.deal.dealImage1 ?? ''),
+              //             fit: BoxFit.fitWidth)
+              //         : const DecorationImage(
+              //             image: AssetImage('assets/images/logo.png'),
+              //             fit: BoxFit.fitWidth),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -64,7 +105,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   distance: '${widget.deal.distance.round()}m',
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10),
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 15, bottom: 10),
                   child: Container(
                     color: Colors.grey[350],
                     height: 0.5,
@@ -78,7 +120,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 20, right: 20, bottom: 20),
                   child: Container(
                     width: double.infinity,
                     height: 170,
@@ -94,7 +137,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 40),
                   child: RoundedOutlinedButton(
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
