@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,8 @@ class User {
   double longitude;
   int? gender;
   double? reliability;
-  DateTime? stopUntil;
-  DateTime? createdAt;
+  String? stopUntil;
+  String? createdAt;
 
   User({
     this.userId,
@@ -31,7 +32,7 @@ class User {
     this.stopUntil,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJsonForSignUp() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     data['userName'] = userName;
@@ -42,6 +43,21 @@ class User {
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     data['gender'] = gender;
+
+    return data;
+  }
+
+  Map<String, dynamic> toJsonForLogin() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    if (phoneNumber != null) {
+      data['phoneNumber'] = phoneNumber;
+    }
+
+    if (snsType != null) {
+      data['snsType'] = snsType;
+      data['snsKey'] = snsKey;
+    }
 
     return data;
   }
@@ -59,15 +75,31 @@ class User {
   }
 }
 
+Map<String, String> toJsonPhoneNumber(String phoneNumber) {
+  final Map<String, String> data = <String, String>{};
+
+  data['phoneNumber'] = phoneNumber;
+
+  return data;
+}
+
+Map<String, String> toJsonSNS(String snsType, String snsKey) {
+  final Map<String, String> data = <String, String>{};
+
+  data['snsType'] = snsType;
+  data['snsKey'] = snsKey;
+
+  return data;
+}
+
 void requestSignUp(User user) async {
-  dynamic userId;
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 15)
+    ..connectTimeout = const Duration(seconds: 10)
     ..receiveTimeout = const Duration(seconds: 15);
 
-  final data = user.toJson();
+  final data = user.toJsonForSignUp();
   debugPrint('req data: $data');
 
   try {
@@ -77,9 +109,12 @@ void requestSignUp(User user) async {
     );
 
     if (res.data['status'] == 200) {
+      print('회원가입 성공!!');
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      print("유저아이디: ${res.data['data']['userId']}");
       prefs.setInt('userId', res.data['data']['userId']);
-      prefs.setBool('isUser', true);
+      prefs.setBool('isMeokjangUser', true);
+      setUserInfo(user);
     } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
       throw Exception('Failed to send data [${res.statusCode}]');
@@ -90,4 +125,65 @@ void requestSignUp(User user) async {
     dio.close();
   }
   return null;
+}
+
+void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
+    BuildContext context) async {
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 10)
+    ..receiveTimeout = const Duration(seconds: 15);
+
+  final Map<String, String>? data;
+
+  if (phoneNumber != null) {
+    data = toJsonPhoneNumber(phoneNumber);
+  } else if (snsType != null && snsKey != null) {
+    data = toJsonSNS(snsType, snsKey);
+  } else {
+    data = null;
+  }
+
+  debugPrint('req data: $data');
+
+  try {
+    final res = await dio.post(
+      '/users/login',
+      data: data,
+    );
+
+    if (res.data['status'] == 200) {
+      print('로그인 성공!!');
+      //SharedPreferences prefs = await SharedPreferences.getInstance();
+      // prefs.setInt('userId', res.data['data']['userId']);
+      // prefs.setBool('isMeokjangUser', true);
+      //setUserInfo(user);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AppPagesContainer(userId: res.data['data']['userId'])),
+          (route) => false);
+    } else if (res.data['status'] == 401) {
+      print('로그인 실패!!');
+      throw Exception('Failed to send data [${res.statusCode}]');
+    }
+  } catch (err) {
+    debugPrint('$err');
+  } finally {
+    dio.close();
+  }
+  return null;
+}
+
+void setUserInfo(User user) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  prefs.setString('userName', user.userName);
+  prefs.setString('location', user.location);
+  prefs.setDouble('latitude', user.latitude);
+  prefs.setDouble('longitude', user.longitude);
+  prefs.setDouble('reliability', user.reliability!);
+  prefs.setString('stopUntil', user.stopUntil!);
 }
