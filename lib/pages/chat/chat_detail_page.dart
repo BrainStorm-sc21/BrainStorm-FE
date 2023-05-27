@@ -103,7 +103,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   itemBuilder: (context, index) {
                     return ChatBubble(
                       message: messages[index].text,
-                      isByMe: messages[index].isSentByMe ? true : false,
+                      isSentByMe: messages[index].isSentByMe ? true : false,
                     );
                   },
                 );
@@ -179,23 +179,23 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
 class ChatBubble extends StatelessWidget {
   final String message;
-  final bool isByMe;
+  final bool isSentByMe;
   const ChatBubble({
     super.key,
     required this.message,
-    required this.isByMe,
+    required this.isSentByMe,
   });
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: isByMe ? Alignment.topRight : Alignment.topLeft,
+      alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         margin: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: isByMe ? ColorStyles.groupBuyColor : ColorStyles.lightGrey,
-          borderRadius: isByMe
+          color: isSentByMe ? ColorStyles.groupBuyColor : ColorStyles.lightGrey,
+          borderRadius: isSentByMe
               ? const BorderRadius.only(
                   topLeft: Radius.circular(16.0),
                   topRight: Radius.circular(16.0),
@@ -212,7 +212,7 @@ class ChatBubble extends StatelessWidget {
         child: Text(
           message,
           style: TextStyle(
-            color: isByMe ? ColorStyles.chatTextColor : ColorStyles.textColor,
+            color: isSentByMe ? ColorStyles.chatTextColor : ColorStyles.textColor,
             fontWeight: FontWeight.w600,
           ),
         ),
