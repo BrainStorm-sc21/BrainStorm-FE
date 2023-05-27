@@ -13,7 +13,8 @@ class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
 
-  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage(
+      {super.key, required this.imagePath, required this.imageType});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -27,6 +28,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late Map<int, List<DateTime>> recommendList = {};
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
+  late int userId;
 
   @override
   void initState() {
@@ -44,7 +46,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   // json recommend parsing
-  Map<String, Map<String, dynamic>> fromRecommendJson(Map<String, dynamic> json) {
+  Map<String, Map<String, dynamic>> fromRecommendJson(
+      Map<String, dynamic> json) {
     Map<String, Map<String, dynamic>> result = {};
     json.forEach((key, value) {
       result[key] = value;
@@ -83,7 +86,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
         case 200:
           if (res.data['data']['recommend'] != null) {
             setState(() {
-              ocrRecommendValues = fromRecommendJson(res.data['data']['recommend']);
+              ocrRecommendValues =
+                  fromRecommendJson(res.data['data']['recommend']);
               recommendExist = true;
             });
           }
@@ -107,7 +111,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(),
+          builder: (context) => const AppPagesContainer(userId: null),
         ),
         (route) => false,
       );
@@ -132,7 +136,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
       (key, rawRecommendDays) {
         int index = int.parse(key);
         List<DateTime> recommendDays = List.empty(growable: true);
-        recommendNumberMap[index] = rawRecommendDays.values.toList().cast<int>();
+        recommendNumberMap[index] =
+            rawRecommendDays.values.toList().cast<int>();
         for (var day in recommendNumberMap[index]!) {
           DateTime expireDate = DateTime.now();
           expireDate = DateTime(
@@ -288,7 +293,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             ),
                             maxLength: 20,
                             onChanged: (value) => setFoodName(index, value),
-                            onSubmitted: (value) => updateFoodNameControllerText(index),
+                            onSubmitted: (value) =>
+                                updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
                               FocusScope.of(context).unfocus(); // 키보드 숨김
@@ -315,9 +321,10 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       storage: foodList[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendExist && recommendList.containsKey(index)
-                          ? recommendList[index]
-                          : null,
+                      recommendList:
+                          recommendExist && recommendList.containsKey(index)
+                              ? recommendList[index]
+                              : null,
                       setExpireDate: setExpireDate,
                     ),
                     // 식료품 수량
@@ -332,7 +339,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       expireDate: foodList[index].expireDate,
                       setExpireDate: setExpireDate,
                       isRecommended:
-                          recommendExist && recommendList.containsKey(index) ? true : false,
+                          recommendExist && recommendList.containsKey(index)
+                              ? true
+                              : false,
                     ),
                   ],
                 ),
@@ -371,7 +380,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
 
     Map<String, dynamic> data = {
-      "userId": "3",
+      "userId": userId,
       "foodList": encodedFoodList,
     };
     debugPrint('$data');
@@ -393,7 +402,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const AppPagesContainer(),
+              builder: (context) => const AppPagesContainer(userId: null),
             ),
             (route) => false,
           );

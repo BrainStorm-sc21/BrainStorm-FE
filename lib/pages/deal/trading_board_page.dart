@@ -48,7 +48,8 @@ class TradingBoard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: imgUrl != null
-                        ? Image.network(imgUrl, height: 60, width: 60, fit: BoxFit.fill)
+                        ? Image.network(imgUrl,
+                            height: 60, width: 60, fit: BoxFit.fill)
                         : Image.asset('assets/images/logo.png',
                             height: 60, width: 60, fit: BoxFit.fill),
                   ),
@@ -77,27 +78,37 @@ class TradingBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.65,
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Flexible(
-                              child: Text(dealName,
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                  child: Text(dealName,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1),
+                                      overflow: TextOverflow.ellipsis)),
+                              Text(time,
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w500, height: 1),
-                                  overflow: TextOverflow.ellipsis)),
-                          Text(time,
-                              style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1)),
-                        ]),
+                                      fontSize: 13,
+                                      color: Colors.grey,
+                                      height: 1)),
+                            ]),
                       ),
                       const SizedBox(height: 6),
                       Text('${distance}M',
-                          style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                          style: const TextStyle(
+                              fontSize: 13, color: Colors.grey)),
                     ],
                   ),
                 ],
               )),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DealDetailPage(deal: posts[index])));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DealDetailPage(deal: posts[index])));
           },
         );
       },

@@ -14,8 +14,10 @@ class AppPagesNumber {
 
 class AppPagesContainer extends StatefulWidget {
   final int? index;
+  final int? userId;
   const AppPagesContainer({
     super.key,
+    required this.userId,
     this.index = AppPagesNumber.home,
   });
 
@@ -26,13 +28,23 @@ class AppPagesContainer extends StatefulWidget {
 class _AppPagesContainerState extends State<AppPagesContainer> {
   int currentIndex = 0;
 
+  // Future<void> getUserInfo() async {
+  //   setState(() {
+  //     userName = SharedData.getString('userName');
+  //   });
+
+  //   await setCurrentIndex(widget.index);
+  // }
+
   @override
   void initState() {
     super.initState();
-    setCurrentIndex(widget.index);
+    //getUserInfo();
+
+    print('유저아이디: ${widget.userId}');
   }
 
-  void setCurrentIndex(newIndex) {
+  Future<void> setCurrentIndex(newIndex) async {
     setState(() {
       currentIndex = newIndex;
     });
@@ -44,10 +56,10 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
         backgroundColor: ColorStyles.backgroundColor,
         body: IndexedStack(
           index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
-          children: const [
-            HomePage(),
-            DealPage(),
-            ChatPage(),
+          children: [
+            HomePage(userId: widget.userId!),
+            DealPage(userId: widget.userId!),
+            ChatPage(userId: widget.userId!),
           ],
         ),
         bottomNavigationBar: Container(
