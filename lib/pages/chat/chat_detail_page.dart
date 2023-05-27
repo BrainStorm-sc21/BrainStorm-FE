@@ -121,9 +121,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         maxLines: 3,
                         decoration: const InputDecoration(
                           hintText: '메시지를 입력하세요',
-                          hintStyle: TextStyle(
-                              // color: ColorStyles.textColor,
-                              ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             vertical: 8.0,
