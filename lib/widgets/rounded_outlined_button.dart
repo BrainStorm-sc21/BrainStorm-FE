@@ -50,7 +50,7 @@ class RoundedOutlinedButton extends StatelessWidget {
           ),
         ),
         textStyle: MaterialStateProperty.all(
-          TextStyle(fontSize: fontSize),
+          TextStyle(fontSize: fontSize, height: 1),
         ),
       ),
       child: Text(text),
