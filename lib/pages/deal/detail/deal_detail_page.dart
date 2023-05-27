@@ -1,17 +1,21 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class DealDetailPage extends StatefulWidget {
+  final int userId;
   final Deal deal;
   final bool isMine;
 
   const DealDetailPage({
     super.key,
+    required this.userId,
     required this.deal,
     required this.isMine,
   });
@@ -35,6 +39,32 @@ class _DealDetailPageState extends State<DealDetailPage> {
     }
     if (widget.deal.dealImage4 != null) {
       imageList.add(widget.deal.dealImage4!);
+    }
+  }
+
+  void deleteDeal(int dealId) async {
+    print('deleteDeal 호출');
+    print('dealId: $dealId');
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    try {
+      final resp = await dio.delete("/deal/$dealId");
+      print("Delete Status: ${resp.statusCode}");
+
+      if (resp.data['status'] == 200) {
+        print('삭제 성공!');
+      } else {
+        print('??');
+      }
+    } catch (e) {
+      Exception(e);
+      print(e);
+    } finally {
+      dio.close();
     }
   }
 
@@ -146,7 +176,9 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 width: double.infinity,
                                 height: 40,
                                 text: '삭제하기',
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDeleteDealDialog();
+                                },
                                 backgroundColor: ColorStyles.white,
                                 foregroundColor: ColorStyles.mainColor,
                                 borderColor: ColorStyles.mainColor)
@@ -179,5 +211,44 @@ class _DealDetailPageState extends State<DealDetailPage> {
         ),
       ]),
     );
+  }
+
+  //Regrigerator의 다이얼로그를 활용
+  void showDeleteDealDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("정말로 삭제하시겠습니까?"),
+            actions: [
+              // 취소 버튼
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("취소"),
+              ),
+              // 확인 버튼
+              TextButton(
+                onPressed: () {
+                  deleteDeal(widget.deal.dealId!);
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => AppPagesContainer(
+                  //         index: AppPagesNumber.deal, userId: widget.userId),
+                  //   ),
+                  //   (route) => false,
+                  // );
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "확인",
+                  style: TextStyle(color: Colors.pink),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

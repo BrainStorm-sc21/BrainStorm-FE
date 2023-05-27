@@ -111,6 +111,7 @@ class TradingBoard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => DealDetailPage(
+                          userId: userId,
                           deal: posts[index],
                           isMine: isMine,
                         )));

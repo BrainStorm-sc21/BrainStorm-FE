@@ -96,7 +96,7 @@ class _MapPageState extends State<MapPage> {
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
     bool isMine = (widget.posts[pos].userId == widget.userId) ? true : false;
-    Popups.goToPost(context, widget.posts[pos], isMine);
+    Popups.goToPost(context, widget.userId, widget.posts[pos], isMine);
   }
 
   @override

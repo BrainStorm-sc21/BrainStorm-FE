@@ -149,11 +149,13 @@ void requestRegisterPost(int userId, Deal deal, context) async {
       print("게시글 등록 성공!!");
       // Navigator.pop(context);
 
-      Navigator.of(context).push(
+      Navigator.pushAndRemoveUntil(
+        context,
         MaterialPageRoute(
           builder: (context) =>
               AppPagesContainer(index: AppPagesNumber.deal, userId: userId),
         ),
+        (route) => false,
       );
     } else if (res.data['status'] == 400) {
       throw Exception(res.data['message']);

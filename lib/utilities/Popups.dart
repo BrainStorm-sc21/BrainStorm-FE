@@ -49,7 +49,7 @@ class Popups {
   //   });
   // }
 
-  static void goToPost(context, deal, isMine) {
+  static void goToPost(context, userId, deal, isMine) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -115,6 +115,7 @@ class Popups {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => DealDetailPage(
+                                            userId: userId,
                                             deal: deal,
                                             isMine: isMine,
                                           )));
