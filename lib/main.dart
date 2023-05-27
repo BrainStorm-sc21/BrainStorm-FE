@@ -50,35 +50,35 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ko', 'KR'),
-        Locale('en', ''),
-      ],
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(color: ColorStyles.textColor),
-          titleMedium: TextStyle(color: ColorStyles.textColor),
-          titleSmall: TextStyle(color: ColorStyles.textColor),
-          headlineLarge: TextStyle(color: ColorStyles.textColor),
-          headlineMedium: TextStyle(color: ColorStyles.textColor),
-          headlineSmall: TextStyle(color: ColorStyles.textColor),
-          bodyLarge: TextStyle(color: ColorStyles.textColor),
-          bodyMedium: TextStyle(color: ColorStyles.textColor),
-          bodySmall: TextStyle(color: ColorStyles.textColor),
+        // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ko', 'KR'),
+          Locale('en', ''),
+        ],
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          textTheme: const TextTheme(
+            titleLarge: TextStyle(color: ColorStyles.textColor),
+            titleMedium: TextStyle(color: ColorStyles.textColor),
+            titleSmall: TextStyle(color: ColorStyles.textColor),
+            headlineLarge: TextStyle(color: ColorStyles.textColor),
+            headlineMedium: TextStyle(color: ColorStyles.textColor),
+            headlineSmall: TextStyle(color: ColorStyles.textColor),
+            bodyLarge: TextStyle(color: ColorStyles.textColor),
+            bodyMedium: TextStyle(color: ColorStyles.textColor),
+            bodySmall: TextStyle(color: ColorStyles.textColor),
+          ),
+          dividerColor: ColorStyles.lightGrey,
+          primaryColor: ColorStyles.mainColor,
+          iconTheme: const IconThemeData(
+            color: ColorStyles.iconColor,
+          ),
         ),
-        dividerColor: ColorStyles.lightGrey,
-        primaryColor: ColorStyles.mainColor,
-        iconTheme: const IconThemeData(
-          color: ColorStyles.iconColor,
-        ),
-      ),
       home: isMeokjangUser
           ? AppPagesContainer(userId: userId)
           : const OnboardingPage(),
