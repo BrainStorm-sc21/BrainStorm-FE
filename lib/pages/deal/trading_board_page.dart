@@ -4,7 +4,8 @@ import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
 
 class TradingBoard extends StatelessWidget {
-  const TradingBoard({super.key, required this.posts});
+  final int userId;
+  const TradingBoard({super.key, required this.posts, required this.userId});
 
   final List<Deal> posts;
 
@@ -105,10 +106,14 @@ class TradingBoard extends StatelessWidget {
                 ],
               )),
           onTap: () {
+            bool isMine = (posts[index].userId == userId) ? true : false;
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DealDetailPage(deal: posts[index])));
+                    builder: (context) => DealDetailPage(
+                          deal: posts[index],
+                          isMine: isMine,
+                        )));
           },
         );
       },

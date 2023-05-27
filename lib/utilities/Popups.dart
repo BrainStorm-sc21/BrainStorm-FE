@@ -49,7 +49,7 @@ class Popups {
   //   });
   // }
 
-  static void goToPost(context, deal) {
+  static void goToPost(context, deal, isMine) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -75,10 +75,12 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                       child: deal.dealImage1 != null
                           ? Image.network(deal.dealImage1, fit: BoxFit.fill)
-                          : Image.asset('assets/images/logo.png', fit: BoxFit.fill),
+                          : Image.asset('assets/images/logo.png',
+                              fit: BoxFit.fill),
                       // Image.asset(
                       //   'assets/images/감자.png',
                       //   fit: BoxFit.fill,
@@ -99,7 +101,8 @@ class Popups {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -111,7 +114,10 @@ class Popups {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DealDetailPage(deal: deal)));
+                                      builder: (context) => DealDetailPage(
+                                            deal: deal,
+                                            isMine: isMine,
+                                          )));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,

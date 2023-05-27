@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.posts});
+  const MapPage({super.key, required this.posts, required this.userId});
   final List<Deal> posts;
+  final int userId;
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -38,7 +39,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -77,8 +79,8 @@ class _MapPageState extends State<MapPage> {
   _naverMap() {
     return Expanded(
       child: NaverMap(
-        initialCameraPosition:
-            const CameraPosition(target: LatLng(37.286828, 127.0577689), zoom: 17),
+        initialCameraPosition: const CameraPosition(
+            target: LatLng(37.286828, 127.0577689), zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
@@ -93,7 +95,8 @@ class _MapPageState extends State<MapPage> {
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
-    Popups.goToPost(context, widget.posts[pos]);
+    bool isMine = (widget.posts[pos].userId == widget.userId) ? true : false;
+    Popups.goToPost(context, widget.posts[pos], isMine);
   }
 
   @override

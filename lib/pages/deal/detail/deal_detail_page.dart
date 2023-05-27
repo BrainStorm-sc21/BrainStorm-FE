@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
@@ -7,10 +8,12 @@ import 'package:flutter/material.dart';
 
 class DealDetailPage extends StatefulWidget {
   final Deal deal;
+  final bool isMine;
 
   const DealDetailPage({
     super.key,
     required this.deal,
+    required this.isMine,
   });
 
   @override
@@ -124,51 +127,52 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   ),
                 ),
                 const Spacer(),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 40),
-                  child: Column(
-                    children: [
-                      RoundedOutlinedButton(
+                (widget.isMine)
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 40),
+                        child: Column(
+                          children: [
+                            RoundedOutlinedButton(
+                                width: double.infinity,
+                                height: 40,
+                                text: '수정하기',
+                                onPressed: () {},
+                                backgroundColor: ColorStyles.mainColor,
+                                foregroundColor: ColorStyles.white,
+                                borderColor: ColorStyles.mainColor),
+                            const SizedBox(height: 10),
+                            RoundedOutlinedButton(
+                                width: double.infinity,
+                                height: 40,
+                                text: '삭제하기',
+                                onPressed: () {},
+                                backgroundColor: ColorStyles.white,
+                                foregroundColor: ColorStyles.mainColor,
+                                borderColor: ColorStyles.mainColor)
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 40),
+                        child: RoundedOutlinedButton(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ChatDetailPage(
+                                nickname: 'userId',
+                                content: '',
+                              ),
+                            ),
+                          ),
+                          text: '채팅하기',
                           width: double.infinity,
                           height: 40,
-                          text: '수정하기',
-                          onPressed: () {},
                           backgroundColor: ColorStyles.mainColor,
                           foregroundColor: ColorStyles.white,
-                          borderColor: ColorStyles.mainColor),
-                      const SizedBox(height: 10),
-                      RoundedOutlinedButton(
-                          width: double.infinity,
-                          height: 40,
-                          text: '삭제하기',
-                          onPressed: () {},
-                          backgroundColor: ColorStyles.white,
-                          foregroundColor: ColorStyles.mainColor,
-                          borderColor: ColorStyles.mainColor)
-                    ],
-                  ),
-                ),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.only(left: 20, right: 20, bottom: 40),
-                //   child: RoundedOutlinedButton(
-                //     onPressed: () => Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (context) => const ChatDetailPage(
-                //           nickname: 'userId',
-                //           content: '',
-                //         ),
-                //       ),
-                //     ),
-                //     text: '채팅하기',
-                //     width: double.infinity,
-                //     height: 40,
-                //     backgroundColor: ColorStyles.mainColor,
-                //     foregroundColor: ColorStyles.white,
-                //     borderColor: ColorStyles.mainColor,
-                //   ),
-                // )
+                          borderColor: ColorStyles.mainColor,
+                        ),
+                      )
               ],
             ),
           ),

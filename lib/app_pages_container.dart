@@ -29,18 +29,9 @@ class AppPagesContainer extends StatefulWidget {
 class _AppPagesContainerState extends State<AppPagesContainer> {
   int currentIndex = 0;
 
-  // Future<void> getUserInfo() async {
-  //   setState(() {
-  //     userName = SharedData.getString('userName');
-  //   });
-
-  //   await setCurrentIndex(widget.index);
-  // }
-
   @override
   void initState() {
     super.initState();
-    //getUserInfo();
 
     print('유저아이디: ${widget.userId}');
   }
@@ -61,7 +52,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
             HomePage(userId: widget.userId!),
             DealPage(userId: widget.userId!),
             ChatPage(userId: widget.userId!),
-            MyProfile(),
+            const MyProfile(),
           ],
         ),
         bottomNavigationBar: Container(
@@ -93,9 +84,12 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               backgroundColor: Colors.white,
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: '냉장고'),
-                BottomNavigationBarItem(icon: Icon(Icons.groups_2), label: '같이먹장'),
-                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: '채팅'),
-                BottomNavigationBarItem(icon: Icon(Icons.person_2), label: '마이페이지'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.groups_2), label: '같이먹장'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.chat_bubble), label: '채팅'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_2), label: '마이페이지'),
               ],
             ),
           ),

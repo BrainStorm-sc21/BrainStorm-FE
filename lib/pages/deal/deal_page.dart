@@ -29,7 +29,6 @@ class _DealPageState extends State<DealPage> {
   final List<bool> _checkDeal = [false, false, false];
   final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
-  late int userId;
 
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
@@ -108,11 +107,17 @@ class _DealPageState extends State<DealPage> {
                             ? const Center(
                                 child: Text('주변 같이먹장이 없습니다!'),
                               )
-                            : TradingBoard(posts: posts)),
+                            : TradingBoard(
+                                posts: posts,
+                                userId: widget.userId,
+                              )),
                   ],
                 )
               : Stack(children: [
-                  MapPage(posts: posts),
+                  MapPage(
+                    posts: posts,
+                    userId: widget.userId,
+                  ),
                   _searchLayout(),
                 ])),
       floatingActionButton: _registerDealButton(),
