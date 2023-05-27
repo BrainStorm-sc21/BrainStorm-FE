@@ -1,4 +1,4 @@
-import 'package:brainstorm_meokjang/models/message.dart';
+import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -23,15 +23,45 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client = IOWebSocketChannel.connect(
     Uri.parse('wss://echo.websocket.events'),
   );
-  List<Message> messages = [
-    Message(text: '창을 열고 세상 모든 슬픔들에게', date: DateTime.now(), isSentByMe: false),
-    Message(text: '손짓을 하던 밤', date: DateTime.now(), isSentByMe: false),
-    Message(text: '나의 기쁨', date: DateTime.now(), isSentByMe: false),
-    Message(text: '나의 노래 되어 날아가', date: DateTime.now(), isSentByMe: true),
-    Message(text: '거리를 나뒹구는', date: DateTime.now(), isSentByMe: true),
-    Message(text: '쉬운 마음 되어라', date: DateTime.now(), isSentByMe: false),
-  ];
   final int userId = 2; // 임시 유저 아이디
+  List<Message> messages = [
+    Message(
+      type: "TALK",
+      sender: 1,
+      message: '창을 열고 세상 모든 슬픔들에게',
+      date: DateTime.now(),
+    ),
+    Message(
+      type: "TALK",
+      sender: 1,
+      message: '손짓을 하던 밤',
+      date: DateTime.now(),
+    ),
+    Message(
+      type: "TALK",
+      sender: 1,
+      message: '나의 기쁨',
+      date: DateTime.now(),
+    ),
+    Message(
+      type: "TALK",
+      sender: 2,
+      message: '나의 노래 되어 날아가',
+      date: DateTime.now(),
+    ),
+    Message(
+      type: "TALK",
+      sender: 2,
+      message: '거리를 나뒹구는',
+      date: DateTime.now(),
+    ),
+    Message(
+      type: "TALK",
+      sender: 1,
+      message: '쉬운 마음 되어라',
+      date: DateTime.now(),
+    ),
+  ];
 
   @override
   void initState() {
@@ -95,9 +125,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   if (snapshot.data != null) {
                     messages.add(
                       Message(
-                        text: snapshot.data,
+                        type: "TALK",
+                        sender: userId,
+                        message: snapshot.data,
                         date: DateTime.now(),
-                        isSentByMe: true,
                       ),
                     );
                     debugPrint('${DateTime.now()}, ${snapshot.data}');
@@ -107,8 +138,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(
-                        message: messages[index].text,
-                        isSentByMe: messages[index].isSentByMe ? true : false,
+                        message: messages[index].message,
+                        isSentByMe: messages[index].sender == userId ? true : false,
                       );
                     },
                   );
