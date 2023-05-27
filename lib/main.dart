@@ -79,12 +79,6 @@ class _MyAppState extends State<MyApp> {
             color: ColorStyles.iconColor,
           ),
         ),
-        dividerColor: ColorStyles.lightGrey,
-        primaryColor: ColorStyles.mainColor,
-        iconTheme: const IconThemeData(
-          color: ColorStyles.iconColor,
-        ),
-      ),
       home: isMeokjangUser
           ? AppPagesContainer(userId: userId)
           : const OnboardingPage(),
