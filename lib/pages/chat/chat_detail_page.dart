@@ -80,14 +80,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           StreamBuilder(
             stream: _client.stream,
             builder: (context, snapshot) {
-              return Container(
-                color: ColorStyles.lightgrey,
-                child: Text(
-                  snapshot.hasData ? '${snapshot.data}' : '',
-                  style: const TextStyle(
-                    color: ColorStyles.black,
-                  ),
-                ),
+              return ChatBubble(
+                message: snapshot.hasData ? '${snapshot.data}' : '',
+                isByMe: false,
               );
             },
           ),
@@ -156,6 +151,34 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  final String message;
+  final bool isByMe;
+  const ChatBubble({
+    super.key,
+    required this.message,
+    required this.isByMe,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      margin: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: ColorStyles.lightGrey,
+        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+      ),
+      child: Text(
+        message,
+        style: const TextStyle(
+          color: ColorStyles.black,
+        ),
       ),
     );
   }
