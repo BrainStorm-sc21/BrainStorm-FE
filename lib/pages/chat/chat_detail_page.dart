@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/message.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client = IOWebSocketChannel.connect(
     Uri.parse('wss://echo.websocket.events'),
   );
+  List<Message> messages = [
+    Message(text: '창을 열고 세상 모든 슬픔들에게', date: DateTime.now(), isSentByMe: false),
+    Message(text: '손짓을 하던 밤', date: DateTime.now(), isSentByMe: false),
+    Message(text: '나의 기쁨', date: DateTime.now(), isSentByMe: false),
+    Message(text: '나의 노래 되어 날아가', date: DateTime.now(), isSentByMe: true),
+    Message(text: '거리를 나뒹구는', date: DateTime.now(), isSentByMe: true),
+    Message(text: '쉬운 마음 되어라', date: DateTime.now(), isSentByMe: false),
+  ];
+  final int userId = 2; // 임시 유저 아이디
 
   @override
   void initState() {
@@ -40,6 +50,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     if (_controller.text.trim().isNotEmpty) {
       _client.sink.add(_controller.text);
       _controller.clear();
+
+      messages.add(
+        Message(text: _controller.text, date: DateTime.now(), isSentByMe: true),
+      );
+      debugPrint('${DateTime.now()}, ${_controller.text}');
     }
   }
 
@@ -82,9 +97,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             StreamBuilder(
               stream: _client.stream,
               builder: (context, snapshot) {
-                return ChatBubble(
-                  message: snapshot.hasData ? '${snapshot.data}' : '',
-                  isByMe: false,
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    return ChatBubble(
+                      message: messages[index].text,
+                      isByMe: messages[index].isSentByMe ? true : false,
+                    );
+                  },
                 );
               },
             ),
