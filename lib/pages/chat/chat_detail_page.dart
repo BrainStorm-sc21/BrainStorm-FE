@@ -1,6 +1,5 @@
 import 'package:brainstorm_meokjang/models/message.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
-import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -125,31 +124,43 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   children: [
                     // 메시지 입력 창
                     Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        minLines: 1,
-                        maxLines: 3,
-                        decoration: const InputDecoration(
-                          hintText: '메시지를 입력하세요',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 12.0,
+                      child: Container(
+                        margin: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: ColorStyles.lightGrey,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(25.0),
                           ),
                         ),
-                        onTapOutside: (event) => FocusScope.of(context).unfocus(), // 키보드 숨김,
+                        child: TextField(
+                          controller: _controller,
+                          minLines: 1,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                            hintText: '메시지를 입력하세요',
+                            hintStyle: TextStyle(
+                              color: ColorStyles.iconColor,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 4.0,
+                              horizontal: 18.0,
+                            ),
+                          ),
+                          onTapOutside: (event) => FocusScope.of(context).unfocus(), // 키보드 숨김,
+                        ),
                       ),
                     ),
                     // 전송 버튼
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: RoundedOutlinedButton(
-                        text: '전송',
-                        onPressed: sendMessage,
-                        backgroundColor: ColorStyles.mainColor,
-                        foregroundColor: ColorStyles.white,
-                        borderColor: ColorStyles.mainColor,
-                        radius: 5,
+                      child: InkWell(
+                        onTap: sendMessage,
+                        child: const Icon(
+                          Icons.send_rounded,
+                          color: ColorStyles.mainColor,
+                          size: 35,
+                        ),
                       ),
                     ),
                   ],
