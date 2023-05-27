@@ -29,4 +29,5 @@ class ColorStyles {
   static Color lightGrey = Colors.grey.shade200;
   static const Color expireRedColor = Color.fromRGBO(255, 23, 68, 1);
   static const Color expireOrangeColor = Color.fromRGBO(255, 214, 0, 1);
+  static const Color chatTextColor = Color.fromRGBO(106, 139, 96, 1);
 }

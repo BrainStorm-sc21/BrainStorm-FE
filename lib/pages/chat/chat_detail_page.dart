@@ -191,7 +191,7 @@ class ChatBubble extends StatelessWidget {
         child: Text(
           message,
           style: TextStyle(
-            color: isByMe ? const Color.fromARGB(255, 106, 139, 96) : ColorStyles.textColor,
+            color: isByMe ? ColorStyles.chatTextColor : ColorStyles.textColor,
             fontWeight: FontWeight.w600,
           ),
         ),
