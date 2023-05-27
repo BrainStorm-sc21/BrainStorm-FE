@@ -10,7 +10,11 @@ import 'package:intl/intl.dart';
 
 // 수동 추가 화면
 class ManualAddPage extends StatefulWidget {
-  const ManualAddPage({Key? key}) : super(key: key);
+  final int userId;
+  const ManualAddPage({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   State<ManualAddPage> createState() => _ManualAddPageState();
@@ -113,7 +117,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
 
     // setup data
     final data = {
-      "userId": "3",
+      "userId": widget.userId,
       "food": food.toJson(),
     };
     debugPrint('req data: $data');
@@ -131,7 +135,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const AppPagesContainer(),
+            builder: (context) => AppPagesContainer(userId: widget.userId),
           ),
           (route) => false,
         );

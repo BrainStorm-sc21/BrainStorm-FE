@@ -109,7 +109,7 @@ class Deal {
   }
 }
 
-void requestRegisterPost(Deal deal, context) async {
+void requestRegisterPost(int userId, Deal deal, context) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -122,10 +122,18 @@ void requestRegisterPost(Deal deal, context) async {
     'dealType': deal.dealType,
     'dealName': deal.dealName,
     'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
+    'image1': deal.dealImage1 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage1!),
+    'image2': deal.dealImage2 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage2!),
+    'image3': deal.dealImage3 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage3!),
+    'image4': deal.dealImage4 == null
+        ? null
+        : MultipartFile.fromFileSync(deal.dealImage4!),
   });
 
   try {
@@ -143,7 +151,8 @@ void requestRegisterPost(Deal deal, context) async {
 
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(index: AppPagesNumber.deal),
+          builder: (context) =>
+              AppPagesContainer(index: AppPagesNumber.deal, userId: userId),
         ),
       );
     } else if (res.data['status'] == 400) {
@@ -156,27 +165,25 @@ void requestRegisterPost(Deal deal, context) async {
   } finally {
     dio.close();
   }
-
-  seeTheAllDeal();
 }
 
-void seeTheAllDeal() async {
-  Dio dio = Dio();
-  dio.options
-    ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10);
+// void seeTheAllDeal() async {
+//   Dio dio = Dio();
+//   dio.options
+//     ..baseUrl = baseURI
+//     ..connectTimeout = const Duration(seconds: 5)
+//     ..receiveTimeout = const Duration(seconds: 10);
 
-  try {
-    final res = await dio.get(
-      '/deal/3/around',
-    );
+//   try {
+//     final res = await dio.get(
+//       '/deal/3/around',
+//     );
 
-    debugPrint('req data: ${res.data}');
-    debugPrint('req statusCode: ${res.statusCode}');
-  } catch (err) {
-    debugPrint('$err');
-  } finally {
-    dio.close();
-  }
-}
+//     debugPrint('req data: ${res.data}');
+//     debugPrint('req statusCode: ${res.statusCode}');
+//   } catch (err) {
+//     debugPrint('$err');
+//   } finally {
+//     dio.close();
+//   }
+// }
