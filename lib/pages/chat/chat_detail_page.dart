@@ -74,80 +74,83 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          // 채팅 기록
-          StreamBuilder(
-            stream: _client.stream,
-            builder: (context, snapshot) {
-              return ChatBubble(
-                message: snapshot.hasData ? '${snapshot.data}' : '',
-                isByMe: false,
-              );
-            },
-          ),
-          // 하단 바
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              color: ColorStyles.white,
-              child: TextFieldTapRegion(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // 사진 첨부 버튼
-                    IconButton(
-                      onPressed: () {},
-                      icon: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: const BoxDecoration(
-                          color: ColorStyles.mainColor,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.0),
+      body: Container(
+        color: ColorStyles.white,
+        child: Stack(
+          children: [
+            // 채팅 기록
+            StreamBuilder(
+              stream: _client.stream,
+              builder: (context, snapshot) {
+                return ChatBubble(
+                  message: snapshot.hasData ? '${snapshot.data}' : '',
+                  isByMe: false,
+                );
+              },
+            ),
+            // 하단 바
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                color: ColorStyles.white,
+                child: TextFieldTapRegion(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // 사진 첨부 버튼
+                      IconButton(
+                        onPressed: () {},
+                        icon: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: const BoxDecoration(
+                            color: ColorStyles.mainColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: ColorStyles.white,
                           ),
                         ),
-                        child: const Icon(
-                          Icons.add,
-                          color: ColorStyles.white,
-                        ),
                       ),
-                    ),
-                    // 메시지 입력 창
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        minLines: 1,
-                        maxLines: 3,
-                        decoration: const InputDecoration(
-                          hintText: '메시지를 입력하세요',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 12.0,
+                      // 메시지 입력 창
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          minLines: 1,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                            hintText: '메시지를 입력하세요',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
                           ),
+                          onTapOutside: (event) => FocusScope.of(context).unfocus(), // 키보드 숨김,
                         ),
-                        onTapOutside: (event) => FocusScope.of(context).unfocus(), // 키보드 숨김,
                       ),
-                    ),
-                    // 전송 버튼
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: RoundedOutlinedButton(
-                        text: '전송',
-                        onPressed: sendMessage,
-                        backgroundColor: ColorStyles.mainColor,
-                        foregroundColor: ColorStyles.white,
-                        borderColor: ColorStyles.mainColor,
-                        radius: 5,
+                      // 전송 버튼
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RoundedOutlinedButton(
+                          text: '전송',
+                          onPressed: sendMessage,
+                          backgroundColor: ColorStyles.mainColor,
+                          foregroundColor: ColorStyles.white,
+                          borderColor: ColorStyles.mainColor,
+                          radius: 5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
