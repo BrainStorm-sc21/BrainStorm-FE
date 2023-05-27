@@ -1,5 +1,10 @@
+enum MessageType {
+  ENTER,
+  TALK,
+}
+
 class Message {
-  final String type;
+  final MessageType type;
   final int sender; //userId
   final String message;
   final DateTime date;

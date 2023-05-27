@@ -26,37 +26,37 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final int userId = 2; // 임시 유저 아이디
   List<Message> messages = [
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 1,
       message: '창을 열고 세상 모든 슬픔들에게',
       date: DateTime.now(),
     ),
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 1,
       message: '손짓을 하던 밤',
       date: DateTime.now(),
     ),
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 1,
       message: '나의 기쁨',
       date: DateTime.now(),
     ),
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 2,
       message: '나의 노래 되어 날아가',
       date: DateTime.now(),
     ),
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 2,
       message: '거리를 나뒹구는',
       date: DateTime.now(),
     ),
     Message(
-      type: "TALK",
+      type: MessageType.TALK,
       sender: 1,
       message: '쉬운 마음 되어라',
       date: DateTime.now(),
@@ -136,7 +136,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   if (snapshot.data != null) {
                     messages.add(
                       Message(
-                        type: "TALK",
+                        type: MessageType.TALK,
                         sender: userId,
                         message: snapshot.data,
                         date: DateTime.now(),
