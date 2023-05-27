@@ -1,5 +1,4 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
@@ -73,20 +72,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
                         },
                       ),
               ),
-              // Container(
-              //   width: width,
-              //   height: height * 0.3,
-              //   decoration: BoxDecoration(
-              //     color: ColorStyles.black,
-              //     image: widget.deal.dealImage1 != null
-              //         ? DecorationImage(
-              //             image: NetworkImage(widget.deal.dealImage1 ?? ''),
-              //             fit: BoxFit.fitWidth)
-              //         : const DecorationImage(
-              //             image: AssetImage('assets/images/logo.png'),
-              //             fit: BoxFit.fitWidth),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -142,23 +127,48 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 20, right: 20, bottom: 40),
-                  child: RoundedOutlinedButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ChatDetailPage(
-                          nickname: 'userId',
-                          content: '',
-                        ),
-                      ),
-                    ),
-                    text: '채팅하기',
-                    width: double.infinity,
-                    height: 40,
-                    backgroundColor: ColorStyles.mainColor,
-                    foregroundColor: ColorStyles.white,
-                    borderColor: ColorStyles.mainColor,
+                  child: Column(
+                    children: [
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '수정하기',
+                          onPressed: () {},
+                          backgroundColor: ColorStyles.mainColor,
+                          foregroundColor: ColorStyles.white,
+                          borderColor: ColorStyles.mainColor),
+                      const SizedBox(height: 10),
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '삭제하기',
+                          onPressed: () {},
+                          backgroundColor: ColorStyles.white,
+                          foregroundColor: ColorStyles.mainColor,
+                          borderColor: ColorStyles.mainColor)
+                    ],
                   ),
-                )
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                //   child: RoundedOutlinedButton(
+                //     onPressed: () => Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (context) => const ChatDetailPage(
+                //           nickname: 'userId',
+                //           content: '',
+                //         ),
+                //       ),
+                //     ),
+                //     text: '채팅하기',
+                //     width: double.infinity,
+                //     height: 40,
+                //     backgroundColor: ColorStyles.mainColor,
+                //     foregroundColor: ColorStyles.white,
+                //     borderColor: ColorStyles.mainColor,
+                //   ),
+                // )
               ],
             ),
           ),
