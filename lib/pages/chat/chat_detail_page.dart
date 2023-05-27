@@ -66,6 +66,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
+    listen();
   }
 
   @override
@@ -80,6 +81,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       _client.sink.add(_controller.text);
       _controller.clear();
     }
+  }
+
+  void listen() {
+    _client.stream.listen((message) {
+      // 상대방에게 받은 message를 가공해서 list에 추가
+      debugPrint('$message');
+      setState(() {
+        messages.add(message);
+      });
+    });
   }
 
   @override
