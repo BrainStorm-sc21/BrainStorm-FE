@@ -123,24 +123,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // 사진 첨부 버튼
-                    IconButton(
-                      onPressed: () {},
-                      icon: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: const BoxDecoration(
-                          color: ColorStyles.mainColor,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.0),
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: ColorStyles.white,
-                        ),
-                      ),
-                    ),
                     // 메시지 입력 창
                     Expanded(
                       child: TextField(
