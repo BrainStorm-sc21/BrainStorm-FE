@@ -33,7 +33,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    openChatHistoryFile();
+    _readJson();
     // listen();
   }
 
@@ -61,16 +61,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
-  void openChatHistoryFile() async {
-    var roomName = 'RoomTest';
+  Future<String> get _directoryPath async {
     final Directory directory = await getApplicationDocumentsDirectory();
-    debugPrint('directory path: ${directory.path}');
-    setState(() {
-      historyFile = File('${directory.path}/$roomName.json');
-    });
-    if (historyFile.existsSync()) {
-      readChatHistoryFile();
-    }
+    return directory.path;
+  }
+
+  Future<File> get _chatHistoryFile async {
+    final String path = await _directoryPath;
+    var fileName = 'RoomId';
+    return File('$path/$fileName.json');
   }
 
   void writeChatHistoryFile() async {
@@ -79,10 +78,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     await historyFile.writeAsString(jsonString);
   }
 
-  void readChatHistoryFile() async {
-    String fileContents = await historyFile.readAsString();
-    List<dynamic> decodedList = jsonDecode(fileContents);
-    for (Map<String, dynamic> jsonMessage in decodedList) {
+  void _readJson() async {
+    historyFile = await _chatHistoryFile;
+    if (historyFile.existsSync() == false) {
+      return;
+    }
+
+    String jsonString = await historyFile.readAsString();
+    List<dynamic> jsonList = jsonDecode(jsonString);
+    for (Map<String, dynamic> jsonMessage in jsonList) {
       Message message = Message.fromJson(jsonMessage);
       messages.add(message);
     }
