@@ -79,8 +79,8 @@ class _MyAppState extends State<MyApp> {
           color: ColorStyles.iconColor,
         ),
       ),
-      //home: AppPagesContainer(userId: 3)
-      home: isMeokjangUser ? AppPagesContainer(userId: userId) : const OnboardingPage(),
+      home: const AppPagesContainer(userId: 3)
+      //home: isMeokjangUser ? AppPagesContainer(userId: userId) : const OnboardingPage(),
     );
   }
 }
