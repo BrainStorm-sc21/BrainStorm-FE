@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
@@ -134,7 +135,9 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                           ),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context,MaterialPageRoute(builder: (context) => const PushList()));
+                              },
                               icon: const Icon(
                                 Icons.notifications,
                                 color: ColorStyles.white,

@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
+import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/food/refrigerator.dart';
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(top: 28, right: 30),
                         icon: const Icon(Icons.notifications, color: Colors.white, size: 30),
                         onPressed: () {
-                          print("우측 상단 검색 아이콘 클릭 됨");
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => const PushList()));
                         })
                   ]),
             ),
