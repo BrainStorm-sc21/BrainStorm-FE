@@ -48,7 +48,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   void sendMessage() {
     if (_controller.text.trim().isNotEmpty) {
-      _client.sink.add(_controller.text);
+      Message message = Message(
+        type: MessageType.TALK,
+        roomId: _roomId,
+        sender: userId,
+        message: _controller.text,
+      );
+      _client.sink.add(message);
       _controller.clear();
     }
   }
@@ -163,15 +169,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 stream: _client.stream,
                 builder: (context, snapshot) {
                   if (snapshot.data != null) {
-                    messages.add(
-                      Message(
-                        type: MessageType.TALK,
-                        sender: userId,
-                        message: snapshot.data,
-                        date: DateTime.now(),
-                      ),
-                    );
-                    debugPrint('${DateTime.now()}, ${snapshot.data}');
+                    messages.add(snapshot.data);
+                    debugPrint('snpashot.data: ${snapshot.data}');
                   }
                   return ListView.builder(
                     shrinkWrap: true,
