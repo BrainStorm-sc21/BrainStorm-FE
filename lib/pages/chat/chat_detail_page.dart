@@ -101,7 +101,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       debugPrint('req statusCode: ${res.statusCode}');
 
       if (res.statusCode == 200) {
-        _roomId = res.data['roomId'];
+        setState(() {
+          _roomId = res.data['roomId'];
+        });
       } else {
         throw Exception('Failed to create chat room [${res.statusCode}]');
       }
