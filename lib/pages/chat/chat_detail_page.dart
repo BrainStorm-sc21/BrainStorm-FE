@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -24,49 +27,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     Uri.parse('wss://echo.websocket.events'),
   );
   final int userId = 2; // 임시 유저 아이디
-  List<Message> messages = [
-    Message(
-      type: MessageType.TALK,
-      sender: 1,
-      message: '창을 열고 세상 모든 슬픔들에게',
-      date: DateTime.now(),
-    ),
-    Message(
-      type: MessageType.TALK,
-      sender: 1,
-      message: '손짓을 하던 밤',
-      date: DateTime.now(),
-    ),
-    Message(
-      type: MessageType.TALK,
-      sender: 1,
-      message: '나의 기쁨',
-      date: DateTime.now(),
-    ),
-    Message(
-      type: MessageType.TALK,
-      sender: 2,
-      message: '나의 노래 되어 날아가',
-      date: DateTime.now(),
-    ),
-    Message(
-      type: MessageType.TALK,
-      sender: 2,
-      message: '거리를 나뒹구는',
-      date: DateTime.now(),
-    ),
-    Message(
-      type: MessageType.TALK,
-      sender: 1,
-      message: '쉬운 마음 되어라',
-      date: DateTime.now(),
-    ),
-  ];
+  List<Message> messages = List.empty(growable: true);
+  late final File historyFile;
 
   @override
   void initState() {
     super.initState();
-    listen();
+    openChatHistoryFile();
+    // listen();
   }
 
   @override
@@ -91,6 +59,33 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         messages.add(message);
       });
     });
+  }
+
+  void openChatHistoryFile() async {
+    var roomName = 'RoomTest';
+    final Directory directory = await getApplicationDocumentsDirectory();
+    debugPrint('directory path: ${directory.path}');
+    setState(() {
+      historyFile = File('${directory.path}/$roomName.json');
+    });
+    if (historyFile.existsSync()) {
+      readChatHistoryFile();
+    }
+  }
+
+  void writeChatHistoryFile() async {
+    final jsonStringList = messages.map((message) => jsonEncode(message)).toList();
+    final jsonString = '[${jsonStringList.join(',\n')}]';
+    await historyFile.writeAsString(jsonString);
+  }
+
+  void readChatHistoryFile() async {
+    String fileContents = await historyFile.readAsString();
+    List<dynamic> decodedList = jsonDecode(fileContents);
+    for (Map<String, dynamic> jsonMessage in decodedList) {
+      Message message = Message.fromJson(jsonMessage);
+      messages.add(message);
+    }
   }
 
   @override
@@ -118,6 +113,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     fontWeight: FontWeight.w600,
                     color: ColorStyles.black,
                   ),
+                ),
+                TextButton(
+                  onPressed: writeChatHistoryFile,
+                  child: const Text('파일 쓰기 버튼'),
                 ),
               ],
             ),
