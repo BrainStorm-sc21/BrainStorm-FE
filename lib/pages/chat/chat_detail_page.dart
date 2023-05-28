@@ -36,7 +36,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    _readJson();
+    _initializeFile();
     // listen();
   }
 
@@ -75,6 +75,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return File('$path/$fileName.json');
   }
 
+  void _initializeFile() async {
+    historyFile = await _chatHistoryFile;
+    if (historyFile.existsSync()) {
+      _readJson();
+    } else {
+      _createChatRoom();
+    }
+  }
+
   void _createChatRoom() async {
     Dio dio = Dio();
     dio.options
@@ -110,11 +119,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   void _readJson() async {
-    historyFile = await _chatHistoryFile;
-    if (historyFile.existsSync() == false) {
-      return;
-    }
-
     String jsonString = await historyFile.readAsString();
     List<dynamic> jsonList = jsonDecode(jsonString);
     for (Map<String, dynamic> jsonMessage in jsonList) {
