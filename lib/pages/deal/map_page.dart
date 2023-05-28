@@ -1,27 +1,61 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.posts});
+  const MapPage({super.key, required this.posts, required this.userId});
   final List<Deal> posts;
+  final int userId;
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  //final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Completer<NaverMapController> _controller = Completer();
+  LatLng myPosition = const LatLng(37.286828, 127.0577689);
+
+  Future getMyLocation() async {
+    Dio dio = Dio();
+
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+    try {
+      Response resp = await dio.get("/users/${widget.userId}");
+
+      User user = User.fromJson(resp.data);
+
+      if (resp.data['status'] == 200) {
+        print('회원 불러오기 성공!!');
+        print(resp.data);
+        setState(() {
+          myPosition = LatLng(user.latitude, user.longitude);
+        });
+      } else if (resp.data['status'] == 400) {
+        print('회원 불러오기 실패!!');
+        throw Exception('Failed to send data [${resp.statusCode}]');
+      }
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return false;
+  }
 
   @override
   void initState() {
+    getMyLocation();
     super.initState();
   }
 
@@ -58,7 +92,7 @@ class _MapPageState extends State<MapPage> {
       for (var post in widget.posts) {
         OverlayImage.fromAssetImage(
           assetName: DealType.markerImage[post.dealType],
-          devicePixelRatio: window.devicePixelRatio,
+          //devicePixelRatio: window.devicePixelRatio,
         ).then((image) {
           markers.add(Marker(
               markerId: post.dealName.toString(),
@@ -78,7 +112,7 @@ class _MapPageState extends State<MapPage> {
     return Expanded(
       child: NaverMap(
         initialCameraPosition:
-            const CameraPosition(target: LatLng(37.286828, 127.0577689), zoom: 17),
+            CameraPosition(target: myPosition, zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,

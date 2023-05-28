@@ -112,7 +112,7 @@ class _DealPageState extends State<DealPage> {
                   ],
                 )
               : Stack(children: [
-                  MapPage(posts: posts),
+                  MapPage(userId: widget.userId, posts: posts),
                   _searchLayout(),
                 ])),
       floatingActionButton: _registerDealButton(),
