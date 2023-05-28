@@ -46,17 +46,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     super.dispose();
   }
 
-  void sendMessage() {
-    if (_controller.text.trim().isNotEmpty) {
-      Message message = Message(
-        type: MessageType.TALK,
-        roomId: _roomId,
-        sender: userId,
-        message: _controller.text,
-      );
-      _client.sink.add(message);
-      _controller.clear();
-    }
+  bool get isTextInputEmpty {
+    return _controller.text.trim().isEmpty;
+  }
+
+  void sendMessage(MessageType type, String message) {
+    Message data = Message(
+      type: type,
+      roomId: _roomId,
+      sender: userId,
+      message: message,
+    );
+    _client.sink.add(jsonEncode(data));
+    _controller.clear();
   }
 
   Future<String> get _directoryPath async {
@@ -169,8 +171,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 stream: _client.stream,
                 builder: (context, snapshot) {
                   if (snapshot.data != null) {
-                    messages.add(snapshot.data);
                     debugPrint('snpashot.data: ${snapshot.data}');
+                    Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
+                    messages.add(Message.fromJson(jsonData));
                   }
                   return ListView.builder(
                     shrinkWrap: true,
@@ -225,7 +228,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: InkWell(
-                        onTap: sendMessage,
+                        onTap: () {
+                          if (isTextInputEmpty == false) {
+                            sendMessage(MessageType.TALK, _controller.text);
+                          }
+                        },
                         child: const Icon(
                           Icons.send_rounded,
                           color: ColorStyles.mainColor,
