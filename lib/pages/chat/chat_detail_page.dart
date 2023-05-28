@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
@@ -29,6 +31,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final int userId = 2; // 임시 유저 아이디
   List<Message> messages = List.empty(growable: true);
   late final File historyFile;
+  late final String _roomId;
 
   @override
   void initState() {
@@ -70,6 +73,34 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     final String path = await _directoryPath;
     var fileName = 'RoomId';
     return File('$path/$fileName.json');
+  }
+
+  void _createChatRoom() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    String roomName = 'RoomTest'; // 임시 roomName
+    try {
+      final res = await dio.post(
+        '/chat?name=$roomName',
+      );
+
+      debugPrint('req data: ${res.data}');
+      debugPrint('req statusCode: ${res.statusCode}');
+
+      if (res.statusCode == 200) {
+        _roomId = res.data['roomId'];
+      } else {
+        throw Exception('Failed to create chat room [${res.statusCode}]');
+      }
+    } catch (err) {
+      debugPrint('$err');
+    } finally {
+      dio.close();
+    }
   }
 
   void _writeJson() async {
