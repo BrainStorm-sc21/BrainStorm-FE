@@ -72,9 +72,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return File('$path/$fileName.json');
   }
 
-  void writeChatHistoryFile() async {
-    final jsonStringList = messages.map((message) => jsonEncode(message)).toList();
-    final jsonString = '[${jsonStringList.join(',\n')}]';
+  void _writeJson() async {
+    final List<String> jsonStringList = messages.map((message) => jsonEncode(message)).toList();
+    final String jsonString = '[${jsonStringList.join(',\n')}]';
     await historyFile.writeAsString(jsonString);
   }
 
@@ -119,7 +119,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: writeChatHistoryFile,
+                  onPressed: _writeJson,
                   child: const Text('파일 쓰기 버튼'),
                 ),
               ],
