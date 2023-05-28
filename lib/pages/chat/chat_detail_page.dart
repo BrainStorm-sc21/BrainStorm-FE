@@ -101,6 +101,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         setState(() {
           _roomId = res.data['roomId'];
         });
+        sendMessage(MessageType.ENTER, "");
       } else {
         throw Exception('Failed to create chat room [${res.statusCode}]');
       }
