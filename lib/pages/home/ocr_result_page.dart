@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -399,6 +400,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       if (!mounted) return;
       switch (res.data['status']) {
         case 200:
+          showToast('식료품이 등록되었습니다');
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

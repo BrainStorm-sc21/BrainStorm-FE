@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +133,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
       // handle response
       if (!mounted) return;
       if (res.statusCode == 200) {
+        showToast('식료품이 등록되었습니다');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -238,7 +240,7 @@ class FoodStorage extends StatelessWidget {
     return Column(
       children: [
         // "보관장소" title
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: const [
+        const Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text("보관장소"),
           Spacer(),
         ]),

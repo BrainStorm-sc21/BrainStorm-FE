@@ -7,6 +7,7 @@ void showToast(String message) {
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.CENTER,
     textColor: ColorStyles.mainColor,
+    backgroundColor: ColorStyles.white,
     fontSize: 16,
   );
 }
