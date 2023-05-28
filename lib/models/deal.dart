@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -109,7 +110,7 @@ class Deal {
   }
 }
 
-void requestRegisterPost(int userId, Deal deal, context) async {
+void requestRegisterPost(int userId, Deal deal, BuildContext context) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
@@ -149,6 +150,9 @@ void requestRegisterPost(int userId, Deal deal, context) async {
       print("게시글 등록 성공!!");
       // Navigator.pop(context);
 
+      if (!context.mounted) return;
+
+      showToast('게시글이 등록되었습니다');
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -168,24 +172,3 @@ void requestRegisterPost(int userId, Deal deal, context) async {
     dio.close();
   }
 }
-
-// void seeTheAllDeal() async {
-//   Dio dio = Dio();
-//   dio.options
-//     ..baseUrl = baseURI
-//     ..connectTimeout = const Duration(seconds: 5)
-//     ..receiveTimeout = const Duration(seconds: 10);
-
-//   try {
-//     final res = await dio.get(
-//       '/deal/3/around',
-//     );
-
-//     debugPrint('req data: ${res.data}');
-//     debugPrint('req statusCode: ${res.statusCode}');
-//   } catch (err) {
-//     debugPrint('$err');
-//   } finally {
-//     dio.close();
-//   }
-// }
