@@ -6,6 +6,7 @@ import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
@@ -273,6 +274,15 @@ class _DealPageState extends State<DealPage> {
                   MaterialPageRoute(
                       builder: (context) =>
                           GroupPurchasePage(userId: widget.userId)));
+            }),
+        SpeedDialChild(
+            child: const Text('후기창 UI',
+                style: TextStyle(
+                    color: ColorStyles.groupBuyTextColor,
+                    fontWeight: FontWeight.w600)),
+            backgroundColor: ColorStyles.cream,
+            onTap: () {
+              Popups.showReview(context);
             }),
       ],
     );

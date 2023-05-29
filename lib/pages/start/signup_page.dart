@@ -513,6 +513,7 @@ class _CompleteSignUpImageState extends State<CompleteSignUpImage> {
       decoration: const BoxDecoration(
           image: DecorationImage(
         image: AssetImage('assets/images/completeSignUp.png'),
+        fit: BoxFit.fill,
       )),
     );
   }

@@ -160,12 +160,15 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
       prefs.setInt('userId', res.data['data']['userId']);
       prefs.setBool('isMeokjangUser', true);
       //setUserInfo(user);
+      if (!context.mounted) return;
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   AppPagesContainer(userId: res.data['data']['userId'])),
           (route) => false);
+      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPagesContainer(userId: res.data['data']['userId'])),);
     } else if (res.data['status'] == 401) {
       print('로그인 실패!!');
       throw Exception('Failed to send data [${res.statusCode}]');

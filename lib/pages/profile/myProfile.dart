@@ -1,4 +1,3 @@
-import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
@@ -26,17 +25,17 @@ class _MyProfileState extends State<MyProfile> {
   ];
 
   Map<String, dynamic> settingDetails = {
-    "알림 및 소리": const ChatPage(),
-    "방해금지 시간 설정": const ChatPage(),
-    "계정 / 정보 관리": const ChatPage(),
-    "차단 사용자 관리": const ChatPage(),
-    "게시글 미노출 사용자 관리": const ChatPage(),
-    "기타 설정": const ChatPage(),
-    "공지사항": const ChatPage(),
-    "언어 설정": const ChatPage(),
-    "버전 정보": const ChatPage(),
-    "로그아웃": const ChatPage(),
-    "회원 탈퇴": const ChatPage()
+    "알림 및 소리": ' ',
+    "방해금지 시간 설정": ' ',
+    "계정 / 정보 관리": ' ',
+    "차단 사용자 관리": ' ',
+    "게시글 미노출 사용자 관리": ' ',
+    "기타 설정": ' ',
+    "공지사항": ' ',
+    "언어 설정": ' ',
+    "버전 정보": ' ',
+    "로그아웃": ' ',
+    "회원 탈퇴": ' '
   };
 
   @override
@@ -87,7 +86,8 @@ class _MyProfileState extends State<MyProfile> {
                                     });
                                   },
                                   decoration: const InputDecoration(
-                                      border: InputBorder.none, counterText: ''),
+                                      border: InputBorder.none,
+                                      counterText: ''),
                                   style: const TextStyle(
                                       fontSize: 30.0,
                                       fontWeight: FontWeight.bold,
@@ -126,19 +126,25 @@ class _MyProfileState extends State<MyProfile> {
                     const Text(
                       "내 신뢰도",
                       style: TextStyle(
-                          color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          color: ColorStyles.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
                     ),
                     Column(
                       children: [
                         Container(
-                          alignment: const FractionalOffset(43 / 100, 1 - 43 / 100),
+                          alignment:
+                              const FractionalOffset(43 / 100, 1 - 43 / 100),
                           child: FractionallySizedBox(
                             child: Column(
                               children: [
                                 const Text("43",
-                                    style: TextStyle(color: ColorStyles.lightYellow, fontSize: 15)),
+                                    style: TextStyle(
+                                        color: ColorStyles.lightYellow,
+                                        fontSize: 15)),
                                 const SizedBox(height: 3),
-                                Image.asset('assets/images/inverted_triangle1.png'),
+                                Image.asset(
+                                    'assets/images/inverted_triangle1.png'),
                               ],
                             ),
                           ),
@@ -176,7 +182,9 @@ class _MyProfileState extends State<MyProfile> {
                                       ),
                                       const Text(
                                         '10',
-                                        style: TextStyle(color: ColorStyles.white, fontSize: 18),
+                                        style: TextStyle(
+                                            color: ColorStyles.white,
+                                            fontSize: 18),
                                       )
                                     ],
                                   )));
@@ -212,11 +220,14 @@ class _MyProfileState extends State<MyProfile> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: const [
                             BoxShadow(
-                                color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
+                                color: ColorStyles.shadowColor,
+                                spreadRadius: 5,
+                                blurRadius: 4),
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -227,19 +238,22 @@ class _MyProfileState extends State<MyProfile> {
                                       fontWeight: FontWeight.w800)),
                               const SizedBox(height: 8),
                               Column(
-                                  children: List<Widget>.generate(settingNames[index].length, (i) {
+                                  children: List<Widget>.generate(
+                                      settingNames[index].length, (i) {
                                 return SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
                                           alignment: Alignment.centerLeft,
-                                          padding: const EdgeInsets.only(left: 0)),
+                                          padding:
+                                              const EdgeInsets.only(left: 0)),
                                       onPressed: () {
                                         print("알림 및 소리 눌림");
                                       },
                                       child: Text(
                                         settingNames[index][i],
-                                        style: const TextStyle(color: ColorStyles.textColor),
+                                        style: const TextStyle(
+                                            color: ColorStyles.textColor),
                                       ),
                                     ));
                               }))

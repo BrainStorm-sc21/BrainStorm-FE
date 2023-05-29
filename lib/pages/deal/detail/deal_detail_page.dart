@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -232,15 +233,15 @@ class _DealDetailPageState extends State<DealDetailPage> {
               TextButton(
                 onPressed: () {
                   deleteDeal(widget.deal.dealId!);
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => AppPagesContainer(
-                  //         index: AppPagesNumber.deal, userId: widget.userId),
-                  //   ),
-                  //   (route) => false,
-                  // );
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppPagesContainer(
+                          index: AppPagesNumber.deal, userId: widget.userId),
+                    ),
+                    (route) => false,
+                  );
+                  //Navigator.pop(context);
                 },
                 child: const Text(
                   "확인",
