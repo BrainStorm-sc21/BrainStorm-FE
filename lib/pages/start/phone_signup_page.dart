@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 //회원가입 시 번호 인증 페이지 입니다.
 class PhoneAuthForSignUpPage extends StatefulWidget {
-  late double isHiddenAuthInput = 1; //0.0이 보이지 않음, 1.0이 보임
-  late double isHiddenAuthButton = 1;
+  late double isHiddenAuthInput = 0; //0.0이 보이지 않음, 1.0이 보임
+  late double isHiddenAuthButton = 0;
   PhoneAuthForSignUpPage({super.key});
 
   @override
@@ -85,8 +85,11 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                             setState(() {
                               _verificationId = verificationId;
                               _resendToken = resendToken;
+                              widget.isHiddenAuthButton = 1;
+                              widget.isHiddenAuthInput = 1;
                             });
                           },
+                          timeout: const Duration(seconds: 60),
                         );
                       },
                       style: TextButton.styleFrom(
