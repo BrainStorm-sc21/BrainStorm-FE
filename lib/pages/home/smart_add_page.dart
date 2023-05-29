@@ -4,7 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class SmartAddPage extends StatefulWidget {
-  const SmartAddPage({super.key});
+  final int userId;
+  const SmartAddPage({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<SmartAddPage> createState() => _SmartAddPageState();

@@ -1,5 +1,7 @@
 import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/firebase_options.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,19 +28,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  dynamic userId;
-  late bool isMeokjangUser = false;
+  late User user;
+  late bool isMeokjangUser;
+  late int userId;
 
   void checkMeokjangUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isMeokjangUser = prefs.getBool('isUser') ?? false;
+
+    setState(() {
+      isMeokjangUser = prefs.getBool('isMeokjangUser') ?? false;
+      userId = prefs.getInt('userId') ?? -1;
+    });
   }
 
   @override
   void initState() {
-    checkMeokjangUser();
-
     super.initState();
+    checkMeokjangUser();
   }
 
   @override
@@ -73,7 +79,8 @@ class _MyAppState extends State<MyApp> {
           color: ColorStyles.iconColor,
         ),
       ),
-      home: const AppPagesContainer(),
+      //home: AppPagesContainer(userId: 3)
+      home: isMeokjangUser ? AppPagesContainer(userId: userId) : const OnboardingPage(),
     );
   }
 }
