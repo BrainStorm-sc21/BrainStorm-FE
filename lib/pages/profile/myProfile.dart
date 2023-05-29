@@ -1,11 +1,18 @@
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({super.key});
+  int userId;
+  MyProfile({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -16,7 +23,7 @@ class _MyProfileState extends State<MyProfile> {
   final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _textFocus = FocusNode();
 
-  List<String> dealInfo = ["거래 내역", "받은 후기", "보낸 후기", "관심 거래"];
+  List<String> dealInfo = ["거래 내역", "받은 후기", "보낸 후기", "등록 거래"];
   List<String> settings = ["알림 설정", "사용자 설정", "기타"];
   List<List<String>> settingNames = [
     ["알림 및 소리", "방해금지 시간 설정"],
@@ -25,23 +32,53 @@ class _MyProfileState extends State<MyProfile> {
   ];
 
   Map<String, dynamic> settingDetails = {
-    "알림 및 소리": ' ',
-    "방해금지 시간 설정": ' ',
-    "계정 / 정보 관리": ' ',
-    "차단 사용자 관리": ' ',
-    "게시글 미노출 사용자 관리": ' ',
-    "기타 설정": ' ',
-    "공지사항": ' ',
-    "언어 설정": ' ',
-    "버전 정보": ' ',
-    "로그아웃": ' ',
-    "회원 탈퇴": ' '
+    "알림 및 소리": '',
+    "방해금지 시간 설정": '',
+    "계정 / 정보 관리": '',
+    "차단 사용자 관리": '',
+    "게시글 미노출 사용자 관리": '',
+    "기타 설정": '',
+    "공지사항": '',
+    "언어 설정": '',
+    "버전 정보": '',
+    "로그아웃": '',
+    "회원 탈퇴": '',
   };
+
+  Future getUserName() async {
+    Dio dio = Dio();
+
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+    try {
+      Response resp = await dio.get("/users/${widget.userId}");
+
+      User user = User.fromJson(resp.data);
+
+      if (resp.data['status'] == 200) {
+        print('회원 불러오기 성공!!');
+        print(resp.data);
+        setState(() {
+          _nickNameController.text = user.userName;
+        });
+      } else if (resp.data['status'] == 400) {
+        print('회원 불러오기 실패!!');
+        throw Exception('Failed to send data [${resp.statusCode}]');
+      }
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return false;
+  }
 
   @override
   void initState() {
+    getUserName();
     super.initState();
-    _nickNameController.text = "먹짱";
   }
 
   @override

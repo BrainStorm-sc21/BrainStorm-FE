@@ -32,7 +32,6 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
   @override
   void initState() {
     super.initState();
-
     print('유저아이디: ${widget.userId}');
   }
 
@@ -52,7 +51,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
             HomePage(userId: widget.userId!),
             DealPage(userId: widget.userId!),
             ChatPage(userId: widget.userId!),
-            const MyProfile(),
+            MyProfile(userId: widget.userId!),
           ],
         ),
         bottomNavigationBar: Container(
@@ -66,7 +65,6 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
                 offset: Offset(0, 3), // changes position of shadow
               ),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -78,6 +76,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               },
               selectedItemColor: ColorStyles.darkmainColor, // 선택된 아이콘 색상
               unselectedItemColor: ColorStyles.iconColor, // 선택되지 않은 아이콘 색상
+              type: BottomNavigationBarType.fixed,
               //label 숨기려면 사용하기
               /* showSelectedLabels: false,
         showUnselectedLabels: false, */
