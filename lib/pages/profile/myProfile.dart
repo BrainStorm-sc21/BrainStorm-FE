@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
@@ -207,23 +208,44 @@ class _MyProfileState extends State<MyProfile> {
                                   decoration: BoxDecoration(
                                       color: ColorStyles.lightmainColor,
                                       borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        dealInfo[index],
-                                        style: const TextStyle(
-                                            color: ColorStyles.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      const Text(
-                                        '10',
-                                        style: TextStyle(
-                                            color: ColorStyles.white,
-                                            fontSize: 18),
-                                      )
-                                    ],
+                                  child: TextButton(
+                                    onPressed: () {
+                                      print('버튼 클릭!');
+                                      switch (index) {
+                                        case 0:
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DealHistoryPage(
+                                                      userId: widget.userId,
+                                                    )),
+                                          );
+                                          return;
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                      }
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          dealInfo[index],
+                                          style: const TextStyle(
+                                              color: ColorStyles.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const Text(
+                                          '10',
+                                          style: TextStyle(
+                                              color: ColorStyles.white,
+                                              fontSize: 18),
+                                        )
+                                      ],
+                                    ),
                                   )));
                         }))
                   ],
