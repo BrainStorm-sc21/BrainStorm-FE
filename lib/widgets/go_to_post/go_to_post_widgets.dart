@@ -53,7 +53,8 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       DealType.dealTypeName[widget.deal.dealType],
                       style: TextStyle(
-                          fontSize: 11, color: DealType.dealTextColors[widget.deal.dealType]),
+                          fontSize: 11,
+                          color: DealType.dealTextColors[widget.deal.dealType]),
                     ),
                   ),
                 ),
@@ -64,7 +65,9 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       widget.deal.dealName,
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -105,12 +108,15 @@ class _secondPostUnitState extends State<secondPostUnit> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(right: 12),
-                  child: Text('게시물 작성자 닉네임',
+                  child: Text('삼식이 네끼',
                       style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black)),
                 ),
-                Text('${widget.deal.distance.round()}M',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
+                Text('${widget.deal.distance?.round()}M',
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
               ],
             ),
             Padding(
@@ -124,7 +130,9 @@ class _secondPostUnitState extends State<secondPostUnit> {
                     text: TextSpan(
                       text: widget.deal.dealContent,
                       style: const TextStyle(
-                          color: ColorStyles.black, fontSize: 13, fontWeight: FontWeight.w400),
+                          color: ColorStyles.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 )),

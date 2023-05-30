@@ -6,7 +6,6 @@ import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
@@ -70,8 +69,11 @@ class _DealPageState extends State<DealPage> {
       Response resp = await dio.get("/deal/${widget.userId}/around");
 
       print("Deal Status: ${resp.statusCode}");
+      print("My Deal Data: ${resp.data}");
 
       DealData dealData = DealData.fromJson(resp.data);
+
+      print('딜 데이터: ${dealData.data}');
 
       setState(() {
         for (Deal dealitem in dealData.data) {
@@ -95,33 +97,38 @@ class _DealPageState extends State<DealPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: isDealPage
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SafeArea(
+            child: isDealPage
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _searchLayout(),
+                      _dealDropDown(),
+                      Expanded(
+                          child: (posts.isEmpty)
+                              ? const Center(
+                                  child: Text('주변 같이먹장이 없습니다!'),
+                                )
+                              : TradingBoard(
+                                  posts: posts,
+                                  userId: widget.userId,
+                                )),
+                    ],
+                  )
+                : Stack(children: [
+                    MapPage(
+                      posts: posts,
+                      userId: widget.userId,
+                    ),
                     _searchLayout(),
-                    _dealDropDown(),
-                    Expanded(
-                        child: (posts.isEmpty)
-                            ? const Center(
-                                child: Text('주변 같이먹장이 없습니다!'),
-                              )
-                            : TradingBoard(
-                                posts: posts,
-                                userId: widget.userId,
-                              )),
-                  ],
-                )
-              : Stack(children: [
-                  MapPage(
-                    posts: posts,
-                    userId: widget.userId,
-                  ),
-                  _searchLayout(),
-                ])),
-      floatingActionButton: _registerDealButton(),
+                  ])),
+        floatingActionButton: _registerDealButton(),
+      ),
     );
   }
 
@@ -211,7 +218,7 @@ class _DealPageState extends State<DealPage> {
               setState(() {
                 _selectedValue = value!;
                 if (_selectedValue == '거리순') {
-                  posts.sort((a, b) => a.distance.compareTo(b.distance));
+                  posts.sort((a, b) => a.distance!.compareTo(b.distance!));
                 } else if (_selectedValue == '최신순') {
                   posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
                 }
@@ -275,15 +282,15 @@ class _DealPageState extends State<DealPage> {
                       builder: (context) =>
                           GroupPurchasePage(userId: widget.userId)));
             }),
-        SpeedDialChild(
-            child: const Text('후기창 UI',
-                style: TextStyle(
-                    color: ColorStyles.groupBuyTextColor,
-                    fontWeight: FontWeight.w600)),
-            backgroundColor: ColorStyles.cream,
-            onTap: () {
-              Popups.showReview(context);
-            }),
+        // SpeedDialChild(
+        //     child: const Text('후기창 UI',
+        //         style: TextStyle(
+        //             color: ColorStyles.groupBuyTextColor,
+        //             fontWeight: FontWeight.w600)),
+        //     backgroundColor: ColorStyles.cream,
+        //     onTap: () {
+        //       Popups.showReview(context);
+        //     }),
       ],
     );
   }

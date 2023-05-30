@@ -386,7 +386,6 @@ class _AuthFieldState extends State<AuthField> {
 
   void setPhoneNumber(String phoneNumber) => setState(() {
         phoneNumber = phoneNumber;
-        isCompleteAuth = true;
       });
 
   @override

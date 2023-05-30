@@ -71,6 +71,8 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
 
                           codeAutoRetrievalTimeout: (String verificationId) {},
 
+                          timeout: const Duration(seconds: 60),
+
                           verificationCompleted:
                               (PhoneAuthCredential credential) async {
                             await auth.signInWithCredential(credential);
@@ -89,7 +91,6 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                               widget.isHiddenAuthInput = 1;
                             });
                           },
-                          timeout: const Duration(seconds: 60),
                         );
                       },
                       style: TextButton.styleFrom(
