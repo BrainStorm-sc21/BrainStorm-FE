@@ -14,7 +14,7 @@ class AppPagesNumber {
 }
 
 class AppPagesContainer extends StatefulWidget {
-  final int? index;
+  final int index;
   final int? userId;
   const AppPagesContainer({
     super.key,
@@ -32,6 +32,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
   @override
   void initState() {
     super.initState();
+    setCurrentIndex(widget.index);
     print('유저아이디: ${widget.userId}');
   }
 

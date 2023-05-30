@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
@@ -124,7 +125,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
             child: Column(
               children: [
                 TopPostUnit(
-                  distance: '${widget.deal.distance.round()}m',
+                  distance: '${widget.deal.distance?.round()}m',
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -192,9 +193,10 @@ class _DealDetailPageState extends State<DealDetailPage> {
                         child: RoundedOutlinedButton(
                           onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const ChatDetailPage(
+                              builder: (context) => ChatDetailPage(
                                 nickname: 'userId',
                                 content: '',
+                                deal: widget.deal,
                               ),
                             ),
                           ),
@@ -233,6 +235,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
               TextButton(
                 onPressed: () {
                   deleteDeal(widget.deal.dealId!);
+                  showToast('게시글이 삭제되었습니다');
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

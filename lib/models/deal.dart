@@ -44,7 +44,7 @@ class Deal {
   int dealType;
   String dealName;
   String dealContent;
-  double distance;
+  double? distance;
   double latitude;
   double longitude;
   String? dealImage1;
