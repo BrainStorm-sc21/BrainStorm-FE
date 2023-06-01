@@ -23,7 +23,7 @@
 <br/>
 
 ## 🛠 Skills
-Flutter, Dart, GitHub, Git
+<img src="https://img.shields.io/badge/flutter-02569B?style=flat&logo=flutter&logoColor=white"> <img src="https://img.shields.io/badge/dart-0175C2?style=flat&logo=Dart&logoColor=white"/> <img src="https://img.shields.io/badge/firebase-FFCA28?style=flat&logo=firebase&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white">
 
 <br/>
 
