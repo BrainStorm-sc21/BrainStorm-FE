@@ -13,7 +13,7 @@
 
 <br/>
 
-## BrainStrom Frontend Member
+## BrainStorm Frontend Member
 |이름|기여 분야|연락처|
 |:---:|---|:---:|
 |이미림|식료품 직접/스마트 등록, 채팅|uraflower@ajou.ac.kr|
