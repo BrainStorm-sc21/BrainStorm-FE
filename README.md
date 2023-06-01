@@ -11,15 +11,48 @@
   - 채팅으로 상세 거래 내용을 결정하고 거래를 진행합니다.
   - 거래 후기 시스템으로 신뢰성 있는 거래 문화를 만듭니다.
 
-#
+<br/>
 
-# BrainStrom Frontend Member
+## BrainStrom Frontend Member
 |이름|기여 분야|연락처|
 |:---:|---|:---:|
 |이미림|식료품 직접/스마트 등록, 채팅|uraflower@ajou.ac.kr|
 |이중원|회원가입 및 로그인, 거래 ... |wnddnjs823@ajou.ac.kr|
 |조민주|식료품 목록 화면, 거래..., 마이페이지|pida6716@ajou.ac.kr|
 
-#
+<br/>
+
+## 🛠 Skills
+Flutter, Dart, GitHub, Git
+
+<br/>
+
+## 사용 프레임워크
+
+|Framework |Ver.|Description|
+|------|---|---|
+|step_progress_indicator|1.0.2|bar indicator made of a series of selected and unselected steps.|
+|path_provider|2.0.15|find commonly used locations on the filesystem|
+|cupertino_icons|1.0.2|asset repo containing the default set of icon assets|
+|introduction_screen|3.1.7|Introduction Screen allows to have a screen on an app's first launch|
+|google_fonts|4.0.3|use fonts from google|
+|flutter_native_splash|2.2.19|customize this native splash screen background color and splash image|
+|kpostal|0.5.1|search for Korean postal addresses using Kakao postcode service.|
+|dio|5.1.2|A powerful HTTP client for Dart/Flutter|
+|url_launcher|6.1.10|launching a URL|
+|webview_flutter|4.2.0|provide a WebView widget|
+|firebase_core|2.13.0|use the Firebase Core API|
+|firebase_auth|4.6.1|use the Firebase Authentication API|
+|logger|1.3.0|use and extensible logger which prints beautiful logs|
+|image_picker|0.8.7+4|pick images from the image library|
+|image_cropper|3.0.3|supports cropping images|
+|http|0.13.6|Future-based library for making HTTP requests|
+|shared_preferences|2.1.1|wrap platform-specific persistent storage for simple data|
+|percent_indicator|4.2.3|make circular and Linear percent indicators|
+|web_socket_channel|2.4.0|provides StreamChannel wrappers for WebSocket connections|
+|fluttertoast|8.2.2|make two kinds of toast messages one which requires BuildContext other with No BuildContext|
+
 
 ## [코딩 컨벤션](https://github.com/BrainStorm-sc21/BrainStorm-FE/wiki/Convention)
+
+
