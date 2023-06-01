@@ -52,6 +52,42 @@ Flutter, Dart, GitHub, Git
 |web_socket_channel|2.4.0|provides StreamChannel wrappers for WebSocket connections|
 |fluttertoast|8.2.2|make two kinds of toast messages one which requires BuildContext other with No BuildContext|
 
+<br/>
+
+## 주요 디렉토리 구조
+```bash
+lib
+├─models
+├─pages
+│  ├─chat
+│  ├─deal
+│  │  ├─detail
+│  │  └─register
+│  ├─home
+│  ├─profile
+│  └─start
+├─providers
+├─utilities
+└─widgets
+    ├─deal_detail
+    ├─enter_chat
+    ├─food
+    ├─go_to_post
+    └─register_post
+``` 
+
+- `lib/models`는 다음 기능에 관한 모델을 포함합니다: `사용자`, `식료품`, `거래 게시글`, `채팅`.
+- `lib/pages`는 프로젝트의 각 화면들을 모아놓은 곳입니다.
+- `lib/pages/chat`는 채팅 기능을 위한 화면을 모아놓은 곳입니다.
+- `lib/pages/deal`는 식료품 공유 시스템을 위한 화면을 모아놓은 곳입니다.
+- `lib/pages/home`는 식료품 재고 관리를 위한 화면을 모아놓은 곳입니다.
+- `lib/pages/profile`는 사용자 정보 조회 및 관리를 위한 화면을 모아놓은 곳입니다.
+- `lib/pages/start`는 회원가입 및 로그인을 위한 화면을 모아놓은 곳입니다.
+- `lib/providers`에서 푸시 알림에 필요한 상태 관리를 합니다.
+- `lib/utilities`는 개발에 필요한 유틸리티성 파일들을 모아놓은 곳입니다.
+- `lib/widgets`는 재사용되는 위젯들을 모아놓은 곳입니다.
+
+<br/>
 
 ## [코딩 컨벤션](https://github.com/BrainStorm-sc21/BrainStorm-FE/wiki/Convention)
 
