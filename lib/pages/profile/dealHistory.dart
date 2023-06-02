@@ -16,7 +16,7 @@ class DealHistoryPage extends StatefulWidget {
 }
 
 class _DealHistoryPageState extends State<DealHistoryPage> {
-  late List<Deal> myPosts = [];
+  late List<Deal> myPosts = List.empty(growable: true);
 
   Future getServerMyDealDataWithDio() async {
     Dio dio = Dio();
@@ -217,4 +217,38 @@ class _MyPostUnitState extends State<MyPostUnit> {
       ),
     );
   }
+}
+
+// 거래 완료 다이얼로그
+void showCompleteDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        title: const Text("거래 완료로 변경하시겠습니까?"),
+        actions: [
+          // 취소 버튼
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("취소"),
+          ),
+          // 확인 버튼
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "확인",
+              style: TextStyle(color: Colors.pink),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
