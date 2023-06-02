@@ -41,14 +41,6 @@ class Popups {
     );
   }
 
-  // static void checkSignUp(context, type) {
-  //   showDialog(context: context, builder: (context) {
-  //     return Dialog(
-  //       shape: ,
-  //     )
-  //   });
-  // }
-
   static void goToPost(context, deal) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -79,10 +71,6 @@ class Popups {
                       child: deal.dealImage1 != null
                           ? Image.network(deal.dealImage1, fit: BoxFit.fill)
                           : Image.asset('assets/images/logo.png', fit: BoxFit.fill),
-                      // Image.asset(
-                      //   'assets/images/감자.png',
-                      //   fit: BoxFit.fill,
-                      // ),
                     ),
                   ),
                   firstPostUnit(deal: deal),
@@ -229,8 +217,8 @@ class Popups {
             },
             baseBtnStyle: ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              padding:
+                  MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
             ),
             dotsDecorator: const DotsDecorator(
               size: Size(10, 10),
