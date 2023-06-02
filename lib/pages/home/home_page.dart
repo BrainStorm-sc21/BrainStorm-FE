@@ -115,8 +115,8 @@ class _HomePageState extends State<HomePage> {
               preferredSize: const Size.fromHeight(90.0),
               child: AppBar(
                   centerTitle: false,
-                  title: const Text("먹짱6님의 냉장고",
-                      style: TextStyle(
+                  title: Text("$userName님의 냉장고",
+                      style: const TextStyle(
                           height: 3,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

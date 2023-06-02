@@ -203,7 +203,7 @@ class Popups {
   }
 
   // 스마트 등록에서 이미지 submit 시 이미지 유형을 선택
-  static void selectImageType(context, croppedFile) {
+  static void selectImageType(context, croppedFile, int userId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -221,6 +221,7 @@ class Popups {
                     builder: (context) => OCRResultPage(
                       imagePath: croppedFile!.path,
                       imageType: 'document',
+                      userId: userId,
                     ),
                   ),
                 );
@@ -235,6 +236,7 @@ class Popups {
                     builder: (context) => OCRResultPage(
                       imagePath: croppedFile!.path,
                       imageType: 'general',
+                      userId: userId,
                     ),
                   ),
                 );

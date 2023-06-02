@@ -34,7 +34,10 @@ class _SmartAddPageState extends State<SmartAddPage> {
   @override
   Widget build(BuildContext context) {
     if (isCameraInitialized) {
-      return SubmitImagePage(camera: camera);
+      return SubmitImagePage(
+        camera: camera,
+        userId: widget.userId,
+      );
     } else {
       return Container(
         color: ColorStyles.mainColor,

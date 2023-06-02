@@ -13,9 +13,13 @@ import 'package:intl/intl.dart';
 class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
+  final int userId;
 
   const OCRResultPage(
-      {super.key, required this.imagePath, required this.imageType});
+      {super.key,
+      required this.imagePath,
+      required this.imageType,
+      required this.userId});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -29,7 +33,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late Map<int, List<DateTime>> recommendList = {};
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
-  late int userId = 7;
 
   @override
   void initState() {
@@ -381,7 +384,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
 
     Map<String, dynamic> data = {
-      "userId": userId,
+      "userId": widget.userId,
       "foodList": encodedFoodList,
     };
     debugPrint('$data');
