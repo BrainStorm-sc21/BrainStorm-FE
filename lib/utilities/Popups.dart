@@ -48,8 +48,76 @@ class Popups {
   //     )
   //   });
   // }
+  static void showReview(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: 250,
+              height: 300,
+              decoration: BoxDecoration(
+                color: ColorStyles.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    '거래 후기',
+                    style: TextStyle(
+                        color: ColorStyles.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const StarPointUnit(),
+                  SizedBox(
+                    width: 230,
+                    height: 130,
+                    child: TextFormField(
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        hintText: '거래에 대한 간단한 후기를 남겨주세요!',
+                        hintStyle: const TextStyle(
+                            fontSize: 12, color: ColorStyles.hintTextColor),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(
+                            color: ColorStyles.borderColor,
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(
+                            color: ColorStyles.borderColor,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  RoundedOutlinedButton(
+                      width: 230,
+                      height: 28,
+                      text: '보내기',
+                      onPressed: () {},
+                      backgroundColor: ColorStyles.mainColor,
+                      foregroundColor: ColorStyles.white,
+                      borderColor: ColorStyles.mainColor),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
-  static void goToPost(context, deal) {
+  static void goToPost(context, userId, deal, isMine) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -75,14 +143,12 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                       child: deal.dealImage1 != null
                           ? Image.network(deal.dealImage1, fit: BoxFit.fill)
-                          : Image.asset('assets/images/logo.png', fit: BoxFit.fill),
-                      // Image.asset(
-                      //   'assets/images/감자.png',
-                      //   fit: BoxFit.fill,
-                      // ),
+                          : Image.asset('assets/images/logo.png',
+                              fit: BoxFit.fill),
                     ),
                   ),
                   firstPostUnit(deal: deal),
@@ -99,7 +165,8 @@ class Popups {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -111,7 +178,11 @@ class Popups {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DealDetailPage(deal: deal)));
+                                      builder: (context) => DealDetailPage(
+                                            userId: userId,
+                                            deal: deal,
+                                            isMine: isMine,
+                                          )));
                             },
                             foregroundColor: ColorStyles.white,
                             backgroundColor: ColorStyles.mainColor,
@@ -307,5 +378,97 @@ class GuidePage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class StarPointUnit extends StatefulWidget {
+  const StarPointUnit({super.key});
+
+  @override
+  State<StarPointUnit> createState() => _StarPointUnitState();
+}
+
+class _StarPointUnitState extends State<StarPointUnit> {
+  List<bool> isHighlight = [false, false, false, false, false];
+
+  void setHighlight(idx) {
+    // setState(() {
+    //   int tmp = 0;
+    //   for (bool ele in isHighlight) {
+    //     ele = (tmp <= idx);
+    //     print('isHighlight[$tmp] = $ele');
+    //     tmp += 1;
+    //   }
+    // });
+    switch (idx) {
+      case 0:
+        setState(() {
+          isHighlight[0] = true;
+          isHighlight[1] = false;
+          isHighlight[2] = false;
+          isHighlight[3] = false;
+          isHighlight[4] = false;
+        });
+        return;
+      case 1:
+        setState(() {
+          isHighlight[0] = true;
+          isHighlight[1] = true;
+          isHighlight[2] = false;
+          isHighlight[3] = false;
+          isHighlight[4] = false;
+        });
+        return;
+      case 2:
+        setState(() {
+          isHighlight[0] = true;
+          isHighlight[1] = true;
+          isHighlight[2] = true;
+          isHighlight[3] = false;
+          isHighlight[4] = false;
+        });
+        return;
+      case 3:
+        setState(() {
+          isHighlight[0] = true;
+          isHighlight[1] = true;
+          isHighlight[2] = true;
+          isHighlight[3] = true;
+          isHighlight[4] = false;
+        });
+        return;
+      case 4:
+        setState(() {
+          isHighlight[0] = true;
+          isHighlight[1] = true;
+          isHighlight[2] = true;
+          isHighlight[3] = true;
+          isHighlight[4] = true;
+        });
+        return;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 70,
+        width: 250,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (BuildContext context, int index) {
+            return IconButton(
+              color: (isHighlight[index])
+                  ? ColorStyles.mainColor
+                  : ColorStyles.grey,
+              onPressed: () {
+                print('클릭한 인덱스: $index');
+                setHighlight(index);
+              },
+              icon: const Icon(Icons.star),
+            );
+          },
+        ));
   }
 }

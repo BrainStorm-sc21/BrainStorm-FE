@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
@@ -123,7 +124,8 @@ class _MyProfileState extends State<MyProfile> {
                                     });
                                   },
                                   decoration: const InputDecoration(
-                                      border: InputBorder.none, counterText: ''),
+                                      border: InputBorder.none,
+                                      counterText: ''),
                                   style: const TextStyle(
                                       fontSize: 30.0,
                                       fontWeight: FontWeight.bold,
@@ -162,19 +164,25 @@ class _MyProfileState extends State<MyProfile> {
                     const Text(
                       "내 신뢰도",
                       style: TextStyle(
-                          color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          color: ColorStyles.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
                     ),
                     Column(
                       children: [
                         Container(
-                          alignment: const FractionalOffset(43 / 100, 1 - 43 / 100),
+                          alignment:
+                              const FractionalOffset(43 / 100, 1 - 43 / 100),
                           child: FractionallySizedBox(
                             child: Column(
                               children: [
                                 const Text("43",
-                                    style: TextStyle(color: ColorStyles.lightYellow, fontSize: 15)),
+                                    style: TextStyle(
+                                        color: ColorStyles.lightYellow,
+                                        fontSize: 15)),
                                 const SizedBox(height: 3),
-                                Image.asset('assets/images/inverted_triangle1.png'),
+                                Image.asset(
+                                    'assets/images/inverted_triangle1.png'),
                               ],
                             ),
                           ),
@@ -200,21 +208,44 @@ class _MyProfileState extends State<MyProfile> {
                                   decoration: BoxDecoration(
                                       color: ColorStyles.lightmainColor,
                                       borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        dealInfo[index],
-                                        style: const TextStyle(
-                                            color: ColorStyles.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      const Text(
-                                        '10',
-                                        style: TextStyle(color: ColorStyles.white, fontSize: 18),
-                                      )
-                                    ],
+                                  child: TextButton(
+                                    onPressed: () {
+                                      print('버튼 클릭!');
+                                      switch (index) {
+                                        case 0:
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DealHistoryPage(
+                                                      userId: widget.userId,
+                                                    )),
+                                          );
+                                          return;
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                      }
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          dealInfo[index],
+                                          style: const TextStyle(
+                                              color: ColorStyles.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const Text(
+                                          '10',
+                                          style: TextStyle(
+                                              color: ColorStyles.white,
+                                              fontSize: 18),
+                                        )
+                                      ],
+                                    ),
                                   )));
                         }))
                   ],
@@ -248,11 +279,14 @@ class _MyProfileState extends State<MyProfile> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: const [
                             BoxShadow(
-                                color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
+                                color: ColorStyles.shadowColor,
+                                spreadRadius: 5,
+                                blurRadius: 4),
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -263,19 +297,22 @@ class _MyProfileState extends State<MyProfile> {
                                       fontWeight: FontWeight.w800)),
                               const SizedBox(height: 8),
                               Column(
-                                  children: List<Widget>.generate(settingNames[index].length, (i) {
+                                  children: List<Widget>.generate(
+                                      settingNames[index].length, (i) {
                                 return SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
                                           alignment: Alignment.centerLeft,
-                                          padding: const EdgeInsets.only(left: 0)),
+                                          padding:
+                                              const EdgeInsets.only(left: 0)),
                                       onPressed: () {
                                         print("알림 및 소리 눌림");
                                       },
                                       child: Text(
                                         settingNames[index][i],
-                                        style: const TextStyle(color: ColorStyles.textColor),
+                                        style: const TextStyle(
+                                            color: ColorStyles.textColor),
                                       ),
                                     ));
                               }))
