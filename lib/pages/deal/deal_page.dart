@@ -69,7 +69,7 @@ class _DealPageState extends State<DealPage> {
       Response resp = await dio.get("/deal/${widget.userId}/around");
 
       print("Deal Status: ${resp.statusCode}");
-      print("My Deal Data: ${resp.data}");
+      print("Deal Data: ${resp.data}");
 
       DealData dealData = DealData.fromJson(resp.data);
 
