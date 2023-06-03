@@ -24,7 +24,6 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     phoneNumber = "";
   }
@@ -68,13 +67,10 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                           //forceResendingToken: _resendToken,
 
                           phoneNumber: "+82${_phoneEditingController.text}",
-
                           codeAutoRetrievalTimeout: (String verificationId) {},
-
                           timeout: const Duration(seconds: 60),
 
-                          verificationCompleted:
-                              (PhoneAuthCredential credential) async {
+                          verificationCompleted: (PhoneAuthCredential credential) async {
                             await auth.signInWithCredential(credential);
                           },
 
@@ -82,8 +78,7 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                             print('verificationFailed 에러!!');
                           },
 
-                          codeSent:
-                              (String verificationId, int? resendToken) async {
+                          codeSent: (String verificationId, int? resendToken) async {
                             setState(() {
                               _verificationId = verificationId;
                               _resendToken = resendToken;
@@ -93,8 +88,7 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                           },
                         );
                       },
-                      style: TextButton.styleFrom(
-                          foregroundColor: ColorStyles.mainColor),
+                      style: TextButton.styleFrom(foregroundColor: ColorStyles.mainColor),
                       child: const Text('인증번호 받기'),
                     ),
                   ],
@@ -114,18 +108,15 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                         hintText: "인증번호를 입력해주세요",
                         hintStyle: const TextStyle(fontSize: 12),
                         border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: ColorStyles.borderColor, width: 1),
+                          borderSide: const BorderSide(color: ColorStyles.borderColor, width: 1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: ColorStyles.borderColor, width: 1),
+                          borderSide: const BorderSide(color: ColorStyles.borderColor, width: 1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: ColorStyles.borderColor, width: 1),
+                          borderSide: const BorderSide(color: ColorStyles.borderColor, width: 1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
@@ -141,13 +132,9 @@ class _PhoneAuthForSignUpPageState extends State<PhoneAuthForSignUpPage> {
                       onPressed: () async {
                         FirebaseAuth auth = FirebaseAuth.instance;
 
-                        PhoneAuthCredential credential =
-                            PhoneAuthProvider.credential(
-                                verificationId: _verificationId,
-                                smsCode: _authEditingController.text);
-                        await auth
-                            .signInWithCredential(credential)
-                            .then((value) {
+                        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                            verificationId: _verificationId, smsCode: _authEditingController.text);
+                        await auth.signInWithCredential(credential).then((value) {
                           Navigator.pop(context, _phoneEditingController.text);
                         });
                       },

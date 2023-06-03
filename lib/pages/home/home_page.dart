@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
+import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/food/refrigerator.dart';
@@ -86,9 +87,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
     getUserName();
     getServerDataWithDio();
+
+    super.initState();
   }
 
   TabBar get _tabBar => const TabBar(
@@ -141,7 +143,8 @@ class _HomePageState extends State<HomePage> {
                         icon: const Icon(Icons.notifications,
                             color: Colors.white, size: 30),
                         onPressed: () {
-                          print("우측 상단 검색 아이콘 클릭 됨");
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => const PushList()));
                         })
                   ]),
             ),
@@ -168,22 +171,10 @@ class _HomePageState extends State<HomePage> {
                       ? const Center(child: Text("냉장고에 재료를 추가해주세요!"))
                       : TabBarView(
                           children: [
-                            Refrigerator(
-                                userId: widget.userId,
-                                foodList: foodList,
-                                storage: '전체'),
-                            Refrigerator(
-                                userId: widget.userId,
-                                foodList: foodList,
-                                storage: '냉장'),
-                            Refrigerator(
-                                userId: widget.userId,
-                                foodList: foodList,
-                                storage: '냉동'),
-                            Refrigerator(
-                                userId: widget.userId,
-                                foodList: foodList,
-                                storage: '실온')
+                            Refrigerator(userId: widget.userId, foodList: foodList, storage: '전체'),
+                            Refrigerator(userId: widget.userId, foodList: foodList, storage: '냉장'),
+                            Refrigerator(userId: widget.userId, foodList: foodList, storage: '냉동'),
+                            Refrigerator(userId: widget.userId, foodList: foodList, storage: '실온')
                           ],
                         ))
             ]),
@@ -223,9 +214,7 @@ Widget? floatingButtons(BuildContext context, int userId) {
         backgroundColor: ColorStyles.mainColor,
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ManualAddPage(userId: userId)));
+              context, MaterialPageRoute(builder: (context) => ManualAddPage(userId: userId)));
         },
       )
     ],
