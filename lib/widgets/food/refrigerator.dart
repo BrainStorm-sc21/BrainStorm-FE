@@ -13,10 +13,7 @@ class Refrigerator extends StatefulWidget {
   final String storage;
   final List<Food> foodList;
   const Refrigerator(
-      {super.key,
-      required this.userId,
-      required this.foodList,
-      required this.storage});
+      {super.key, required this.userId, required this.foodList, required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -116,16 +113,15 @@ class _RefrigeratorState extends State<Refrigerator> {
     initController();
   }
 
-  void setStock(int index, num value) =>
-      setState(() => foodList[index].stock = value);
-  void setStorage(int index, String value) =>
-      setState(() => foodList[index].storageWay = value);
+  void setStock(int index, num value) => setState(() => foodList[index].stock = value);
+  void setStorage(int index, String value) => setState(() => foodList[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
       setState(() => foodList[index!].expireDate = value);
 
   void deleteFood(int index) => setState(() {
-        foodList.removeAt(index);
-        _foodNameController.removeAt(index);
+        widget.foodList.removeAt(index);
+        //foodList.removeAt(index);
+        //_foodNameController.removeAt(index);
       });
 
   int dayCount(day) {
@@ -161,8 +157,7 @@ class _RefrigeratorState extends State<Refrigerator> {
               return Card(
                 elevation: 2.0,
                 key: PageStorageKey(_foodNameController[index]),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                 surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
                   initiallyExpanded: false,
@@ -181,8 +176,7 @@ class _RefrigeratorState extends State<Refrigerator> {
                                 child: TextField(
                                     controller: _foodNameController[index],
                                     decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: ''),
+                                        border: InputBorder.none, counterText: ''),
                                     style: const TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
@@ -194,18 +188,15 @@ class _RefrigeratorState extends State<Refrigerator> {
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w400,
-                                    color:
-                                        food.expireDate.difference(now).inDays >
-                                                0
-                                            ? ColorStyles.textColor
-                                            : ColorStyles.errorRed))
+                                    color: food.expireDate.difference(now).inDays > 0
+                                        ? ColorStyles.textColor
+                                        : ColorStyles.errorRed))
                           ],
                         ),
                         CustomProgressBar(
                             maxPercent: 7,
-                            currentPercent: 7 -
-                                dayCount(
-                                    food.expireDate.difference(now).inDays))
+                            currentPercent:
+                                7 - dayCount(food.expireDate.difference(now).inDays).toDouble())
                       ],
                     ),
                   ),
@@ -215,17 +206,12 @@ class _RefrigeratorState extends State<Refrigerator> {
                         child: SizedBox(
                             width: 350,
                             child: FoodStorageDropdown(
-                                index: index,
-                                storage: food.storageWay,
-                                setStorage: setStorage))),
+                                index: index, storage: food.storageWay, setStorage: setStorage))),
                     AbsorbPointer(
                       absorbing: absorbBool[index],
                       child: SizedBox(
                         width: 350,
-                        child: FoodStockButton(
-                            index: index,
-                            stock: food.stock,
-                            setStock: setStock),
+                        child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
                       ),
                     ),
                     AbsorbPointer(
@@ -255,17 +241,12 @@ class _RefrigeratorState extends State<Refrigerator> {
                               });
                             },
                             child: absorbBool[index]
-                                ? const Text('수정',
-                                    style:
-                                        TextStyle(color: ColorStyles.mainColor))
-                                : const Text('확인',
-                                    style: TextStyle(
-                                        color: ColorStyles.mainColor)),
+                                ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
+                                : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
-                            child: const Text('삭제',
-                                style: TextStyle(color: ColorStyles.mainColor)),
+                            child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
                               showDeleteDialog(index);
                             },
