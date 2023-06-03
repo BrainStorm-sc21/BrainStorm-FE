@@ -9,9 +9,11 @@ import 'package:image_picker/image_picker.dart';
 
 class SubmitImagePage extends StatefulWidget {
   final CameraDescription camera;
+  final int userId;
   const SubmitImagePage({
     super.key,
     required this.camera,
+    required this.userId,
   });
 
   @override
@@ -115,7 +117,11 @@ class _SubmitImagePageState extends State<SubmitImagePage> {
           actions: [
             IconButton(
               onPressed: () {
-                Popups.selectImageType(context, _croppedFile);
+                Popups.selectImageType(
+                  context,
+                  _croppedFile,
+                  widget.userId,
+                );
               },
               icon: const Icon(Icons.done),
             ),

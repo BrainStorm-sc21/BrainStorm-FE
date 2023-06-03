@@ -29,7 +29,6 @@ class _DealPageState extends State<DealPage> {
   final List<bool> _checkDeal = [false, false, false];
   final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
-  late int userId;
 
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
@@ -66,8 +65,11 @@ class _DealPageState extends State<DealPage> {
       Response resp = await dio.get("/deal/${widget.userId}/around");
 
       print("Deal Status: ${resp.statusCode}");
+      print("My Deal Data: ${resp.data}");
 
       DealData dealData = DealData.fromJson(resp.data);
+
+      print('딜 데이터: ${dealData.data}');
 
       setState(() {
         for (Deal dealitem in dealData.data) {
@@ -91,27 +93,38 @@ class _DealPageState extends State<DealPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: isDealPage
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SafeArea(
+            child: isDealPage
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _searchLayout(),
+                      _dealDropDown(),
+                      Expanded(
+                          child: (posts.isEmpty)
+                              ? const Center(
+                                  child: Text('주변 같이먹장이 없습니다!'),
+                                )
+                              : TradingBoard(
+                                  posts: posts,
+                                  userId: widget.userId,
+                                )),
+                    ],
+                  )
+                : Stack(children: [
+                    MapPage(
+                      posts: posts,
+                      userId: widget.userId,
+                    ),
                     _searchLayout(),
-                    _dealDropDown(),
-                    Expanded(
-                        child: (posts.isEmpty)
-                            ? const Center(
-                                child: Text('주변 같이먹장이 없습니다!'),
-                              )
-                            : TradingBoard(posts: posts)),
-                  ],
-                )
-              : Stack(children: [
-                  MapPage(userId: widget.userId, posts: posts),
-                  _searchLayout(),
-                ])),
-      floatingActionButton: _registerDealButton(),
+                  ])),
+        floatingActionButton: _registerDealButton(),
+      ),
     );
   }
 
@@ -194,7 +207,7 @@ class _DealPageState extends State<DealPage> {
               setState(() {
                 _selectedValue = value!;
                 if (_selectedValue == '거리순') {
-                  posts.sort((a, b) => a.distance.compareTo(b.distance));
+                  posts.sort((a, b) => a.distance!.compareTo(b.distance!));
                 } else if (_selectedValue == '최신순') {
                   posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
                 }
@@ -247,6 +260,15 @@ class _DealPageState extends State<DealPage> {
                   MaterialPageRoute(
                       builder: (context) => GroupPurchasePage(userId: widget.userId)));
             }),
+        // SpeedDialChild(
+        //     child: const Text('후기창 UI',
+        //         style: TextStyle(
+        //             color: ColorStyles.groupBuyTextColor,
+        //             fontWeight: FontWeight.w600)),
+        //     backgroundColor: ColorStyles.cream,
+        //     onTap: () {
+        //       Popups.showReview(context);
+        //     }),
       ],
     );
   }

@@ -19,7 +19,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
   Completer<NaverMapController> _controller = Completer();
   LatLng myPosition = const LatLng(37.286828, 127.0577689);
 
@@ -111,8 +110,7 @@ class _MapPageState extends State<MapPage> {
   _naverMap() {
     return Expanded(
       child: NaverMap(
-        initialCameraPosition:
-            CameraPosition(target: myPosition, zoom: 17),
+        initialCameraPosition: CameraPosition(target: myPosition, zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
@@ -127,7 +125,8 @@ class _MapPageState extends State<MapPage> {
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
-    Popups.goToPost(context, widget.posts[pos]);
+    bool isMine = (widget.posts[pos].userId == widget.userId) ? true : false;
+    Popups.goToPost(context, widget.userId, widget.posts[pos], isMine);
   }
 
   @override

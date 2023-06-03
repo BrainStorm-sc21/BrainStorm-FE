@@ -94,14 +94,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   TabBar get _tabBar => const TabBar(
-      padding: EdgeInsets.only(top: 10),
-      isScrollable: false,
-      indicatorColor: ColorStyles.mainColor,
-      indicatorWeight: 4,
-      labelColor: ColorStyles.mainColor,
-      unselectedLabelColor: ColorStyles.textColor,
-      labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      tabs: [Tab(text: "전체"), Tab(text: "냉장"), Tab(text: "냉동"), Tab(text: "실온")]);
+          padding: EdgeInsets.only(top: 10),
+          isScrollable: false,
+          indicatorColor: ColorStyles.mainColor,
+          indicatorWeight: 4,
+          labelColor: ColorStyles.mainColor,
+          unselectedLabelColor: ColorStyles.textColor,
+          labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          tabs: [
+            Tab(text: "전체"),
+            Tab(text: "냉장"),
+            Tab(text: "냉동"),
+            Tab(text: "실온")
+          ]);
 
   @override
   Widget build(BuildContext context) {
@@ -123,15 +128,20 @@ class _HomePageState extends State<HomePage> {
                   flexibleSpace: Container(
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
                           gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: <Color>[ColorStyles.darkmainColor, ColorStyles.mainColor]))),
+                              colors: <Color>[
+                                ColorStyles.darkmainColor,
+                                ColorStyles.mainColor
+                              ]))),
                   actions: [
                     IconButton(
                         padding: const EdgeInsets.only(top: 28, right: 30),
-                        icon: const Icon(Icons.notifications, color: Colors.white, size: 30),
+                        icon: const Icon(Icons.notifications,
+                            color: Colors.white, size: 30),
                         onPressed: () {
                           Navigator.push(
                               context, MaterialPageRoute(builder: (context) => const PushList()));
@@ -140,7 +150,11 @@ class _HomePageState extends State<HomePage> {
             ),
             body: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               _tabBar,
-              const Divider(height: 0, color: ColorStyles.lightgrey, thickness: 1.5, endIndent: 10),
+              const Divider(
+                  height: 0,
+                  color: ColorStyles.lightgrey,
+                  thickness: 1.5,
+                  endIndent: 10),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 13, 10),
                 child: RoundedOutlinedButton(

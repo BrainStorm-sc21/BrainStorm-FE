@@ -17,6 +17,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late User user;
+  bool isValid = false;
 
   @override
   void initState() {
@@ -24,13 +25,28 @@ class _SignUpPageState extends State<SignUpPage> {
 
     user = User(
         userName: "",
-        phoneNumber: '01093831727',
+        phoneNumber: null,
         snsType: null,
         snsKey: null,
         location: "",
         latitude: 0.0,
         longitude: 0.0,
-        gender: 0);
+        gender: null);
+  }
+
+  void checkValid() {
+    if (user.userName != "" &&
+        user.phoneNumber != null &&
+        user.location != "" &&
+        user.gender != null) {
+      setState(() {
+        isValid = true;
+      });
+    } else {
+      setState(() {
+        isValid = false;
+      });
+    }
   }
 
   @override
@@ -38,14 +54,24 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  void setNickname(String value) => setState(() => user.userName = value);
-  void setGender(int value) => setState(() => user.gender = value);
+  void setNickname(String value) => setState(() {
+        user.userName = value;
+        checkValid();
+      });
+  void setGender(int value) => setState(() {
+        user.gender = value;
+        checkValid();
+      });
   void setAddress(String location, double latitude, double longitude) => setState(() {
         user.location = location;
         user.latitude = latitude;
         user.longitude = longitude;
+        checkValid();
       });
-  void sendPhoneNumber(String phoneNumber) => setState(() => user.phoneNumber = phoneNumber);
+  void sendPhoneNumber(String phoneNumber) => setState(() {
+        user.phoneNumber = phoneNumber;
+        checkValid();
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -73,22 +99,25 @@ class _SignUpPageState extends State<SignUpPage> {
                     AuthField(sendPhoneNumber: sendPhoneNumber),
                     SizedBox(
                         width: deviceWidth * 0.8,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              int userId = await requestSignUp(user);
-
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CompleteSignUpImage(userId: userId),
-                                ),
-                                (route) => false,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorStyles.mainColor,
-                            ),
-                            child: const Text("회원가입하기"))),
+                        child: AbsorbPointer(
+                          absorbing: !isValid,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                int userId = await requestSignUp(user);
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CompleteSignUpImage(userId: userId),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    (isValid) ? ColorStyles.mainColor : ColorStyles.grey,
+                              ),
+                              child: const Text("회원가입하기")),
+                        )),
                   ],
                 )
               ],
@@ -345,6 +374,7 @@ class AuthField extends StatefulWidget {
 
 class _AuthFieldState extends State<AuthField> {
   String? phoneNumber;
+  bool isCompleteAuth = false;
 
   void setPhoneNumber(String phoneNumber) => setState(() => phoneNumber = phoneNumber);
 
@@ -442,20 +472,25 @@ class _AuthFieldState extends State<AuthField> {
                   ),
                   child: const Text("sns 인증"),
                 ),
-                TextButton(
-                  onPressed: () async {
-                    String phoneNumber = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PhoneAuthForSignUpPage()),
-                    );
-                    setState(() {
-                      widget.sendPhoneNumber(phoneNumber);
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: ColorStyles.mainColor,
+                AbsorbPointer(
+                  absorbing: isCompleteAuth,
+                  child: TextButton(
+                    onPressed: () async {
+                      String phoneNumber = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PhoneAuthForSignUpPage()),
+                      );
+                      setState(() {
+                        widget.sendPhoneNumber(phoneNumber);
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: (isCompleteAuth) ? ColorStyles.grey : ColorStyles.mainColor,
+                      side: BorderSide(
+                          color: (isCompleteAuth) ? ColorStyles.mainColor : ColorStyles.white),
+                    ),
+                    child: const Text("번호 인증"),
                   ),
-                  child: const Text("번호 인증"),
                 ),
               ],
             ),
@@ -500,6 +535,7 @@ class _CompleteSignUpImageState extends State<CompleteSignUpImage> {
       decoration: const BoxDecoration(
           image: DecorationImage(
         image: AssetImage('assets/images/completeSignUp.png'),
+        fit: BoxFit.fill,
       )),
     );
   }

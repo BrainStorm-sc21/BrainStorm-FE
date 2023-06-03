@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:dio/dio.dart';
@@ -37,6 +38,8 @@ class _RefrigeratorState extends State<Refrigerator> {
 
     try {
       final resp = await dio.delete("/food/$deleteFood");
+
+      showToast('식료품이 삭제되었습니다');
 
       print("Delete Status: ${resp.statusCode}");
     } catch (e) {

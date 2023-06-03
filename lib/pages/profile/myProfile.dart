@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/user.dart';
+import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -255,7 +256,13 @@ class _MyProfileState extends State<MyProfile> {
                                         alignment: Alignment.centerLeft,
                                         padding: const EdgeInsets.only(left: 0)),
                                     onPressed: () {
-                                      print("알림 및 소리 눌림");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DealHistoryPage(
+                                                  userId: widget.userId,
+                                                )),
+                                      );
                                     },
                                     child: Text(
                                       settingNames[0][i],

@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,13 @@ import 'package:intl/intl.dart';
 class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
+  final int userId;
 
   const OCRResultPage(
-      {super.key, required this.imagePath, required this.imageType});
+      {super.key,
+      required this.imagePath,
+      required this.imageType,
+      required this.userId});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -28,7 +33,6 @@ class _OCRResultPageState extends State<OCRResultPage> {
   late Map<int, List<DateTime>> recommendList = {};
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
-  late int userId;
 
   @override
   void initState() {
@@ -252,21 +256,21 @@ class _OCRResultPageState extends State<OCRResultPage> {
               ),
               // 식료품 아이템 좌측 노란색 세로선
               child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorStyles.mustardYellow,
-                      ColorStyles.transparent,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment(-0.95, 0),
-                    stops: [1, 1],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                  ),
-                ),
+                // decoration: const BoxDecoration(
+                //   gradient: LinearGradient(
+                //     colors: [
+                //       ColorStyles.mustardYellow,
+                //       ColorStyles.transparent,
+                //     ],
+                //     begin: Alignment.centerRight,
+                //     end: Alignment(-0.95, 0),
+                //     stops: [1, 1],
+                //   ),
+                //   borderRadius: BorderRadius.only(
+                //     topLeft: Radius.circular(8.0),
+                //     bottomLeft: Radius.circular(8.0),
+                //   ),
+                // ),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,
@@ -380,7 +384,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
 
     Map<String, dynamic> data = {
-      "userId": userId,
+      "userId": widget.userId,
       "foodList": encodedFoodList,
     };
     debugPrint('$data');
@@ -399,10 +403,11 @@ class _OCRResultPageState extends State<OCRResultPage> {
       if (!mounted) return;
       switch (res.data['status']) {
         case 200:
+          showToast('식료품이 등록되었습니다');
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const AppPagesContainer(userId: null),
+              builder: (context) => const AppPagesContainer(userId: 7),
             ),
             (route) => false,
           );

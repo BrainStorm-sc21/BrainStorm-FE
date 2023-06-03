@@ -14,7 +14,7 @@ class AppPagesNumber {
 }
 
 class AppPagesContainer extends StatefulWidget {
-  final int? index;
+  final int index;
   final int? userId;
   const AppPagesContainer({
     super.key,
@@ -32,6 +32,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
   @override
   void initState() {
     super.initState();
+    setCurrentIndex(widget.index);
     print('유저아이디: ${widget.userId}');
   }
 
@@ -83,9 +84,12 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               backgroundColor: Colors.white,
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: '냉장고'),
-                BottomNavigationBarItem(icon: Icon(Icons.groups_2), label: '같이먹장'),
-                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: '채팅'),
-                BottomNavigationBarItem(icon: Icon(Icons.person_2), label: '마이페이지'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.groups_2), label: '같이먹장'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.chat_bubble), label: '채팅'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_2), label: '마이페이지'),
               ],
             ),
           ),
