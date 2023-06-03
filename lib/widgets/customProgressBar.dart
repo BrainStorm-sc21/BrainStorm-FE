@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class CustomProgressBar extends StatelessWidget {
-  final int maxPercent;
-  final int currentPercent;
+  final double maxPercent;
+  final double currentPercent;
   final double lineHeight;
   final double radius;
   final Color backgroundColor;
