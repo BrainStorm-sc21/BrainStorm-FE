@@ -21,6 +21,7 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
   bool isClickedText = false;
+  double reliability = 0;
   final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _textFocus = FocusNode();
 
@@ -54,6 +55,7 @@ class _MyProfileState extends State<MyProfile> {
         print(resp.data);
         setState(() {
           _nickNameController.text = user.userName;
+          reliability = user.reliability!;
         });
       } else if (resp.data['status'] == 400) {
         print('회원 불러오기 실패!!');
@@ -77,19 +79,20 @@ class _MyProfileState extends State<MyProfile> {
     final data = {
       "userName": _nickNameController.text,
     };
+    print("데이터");
+    print(data);
 
     try {
-      final res = await dio.put("/users/${widget.userId}", data: data);
+      Response res = await dio.put("/users/${widget.userId}", data: data);
 
       if (!mounted) return;
       if (res.statusCode == 200) {
-        print('Modify User Info Success');
+        Popups.popSimpleDialog(context,
+            title: _nickNameController.text, body: "닉네임이 성공적으로 변경되었어요!");
       } else {
         throw Exception('Failed to send data [${res.statusCode}]');
       }
-    }
-    // when error occured, show error dialog
-    on DioError catch (err) {
+    } on DioError catch (err) {
       Popups.popSimpleDialog(
         context,
         title: '${err.type}',
@@ -131,184 +134,185 @@ class _MyProfileState extends State<MyProfile> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SingleChildScrollView(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: AbsorbPointer(
+                            absorbing: isClickedText,
+                            child: TextField(
+                                controller: _nickNameController,
+                                focusNode: _textFocus,
+                                onSubmitted: (value) {
+                                  modifyUserInfo();
+                                  setState(() {
+                                    isClickedText = true;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none, counterText: ''),
+                                style: const TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1,
+                                    color: ColorStyles.white,
+                                    overflow: TextOverflow.ellipsis),
+                                maxLength: 20),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => const PushList()));
+                            },
+                            icon: const Icon(
+                              Icons.notifications,
+                              color: ColorStyles.white,
+                              size: 35,
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: RoundedOutlinedButton(
+                        height: 23,
+                        backgroundColor: ColorStyles.lightmainColor,
+                        borderColor: ColorStyles.lightmainColor,
+                        foregroundColor: ColorStyles.white,
+                        onPressed: () {
+                          setState(() {
+                            isClickedText = isClickedText ? false : true;
+                          });
+                          _textFocus.requestFocus();
+                        },
+                        fontSize: 13,
+                        text: "닉네임 수정 >"),
+                  ),
+                  const Text(
+                    "내 신뢰도",
+                    style: TextStyle(
+                        color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Column(
                     children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        child: AbsorbPointer(
-                          absorbing: isClickedText,
-                          child: TextField(
-                              controller: _nickNameController,
-                              focusNode: _textFocus,
-                              onSubmitted: (value) {
-                                modifyUserInfo();
-                                Popups.popSimpleDialog(context,
-                                    title: _nickNameController.text, body: "닉네임이 성공적으로 변경되었어요!");
-                                setState(() {
-                                  isClickedText = true;
-                                });
-                              },
-                              decoration:
-                                  const InputDecoration(border: InputBorder.none, counterText: ''),
-                              style: const TextStyle(
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1,
-                                  color: ColorStyles.white,
-                                  overflow: TextOverflow.ellipsis),
-                              maxLength: 20),
+                      Container(
+                        alignment: FractionalOffset(reliability / 100, 1 - (reliability / 100)),
+                        child: FractionallySizedBox(
+                          child: Column(
+                            children: [
+                              Text(reliability.toString(),
+                                  style: const TextStyle(
+                                      color: ColorStyles.lightYellow, fontSize: 15)),
+                              const SizedBox(height: 3),
+                              Image.asset('assets/images/inverted_triangle1.png'),
+                            ],
+                          ),
                         ),
                       ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => const PushList()));
-                          },
-                          icon: const Icon(
-                            Icons.notifications,
-                            color: ColorStyles.white,
-                            size: 35,
-                          )),
+                      CustomProgressBar(
+                        paddingHorizontal: 5,
+                        currentPercent: reliability,
+                        maxPercent: 100,
+                        lineHeight: 12,
+                        firstColor: ColorStyles.lightYellow,
+                        secondColor: ColorStyles.lightYellow,
+                      ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: RoundedOutlinedButton(
-                      height: 23,
-                      backgroundColor: ColorStyles.lightmainColor,
-                      borderColor: ColorStyles.lightmainColor,
-                      foregroundColor: ColorStyles.white,
-                      onPressed: () {
-                        setState(() {
-                          isClickedText = isClickedText ? false : true;
-                        });
-                        _textFocus.requestFocus();
-                      },
-                      fontSize: 13,
-                      text: "닉네임 수정 >"),
-                ),
-                const Text(
-                  "내 신뢰도",
-                  style: TextStyle(
-                      color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Column(
-                  children: [
-                    Container(
-                      alignment: const FractionalOffset(43 / 100, 1 - 43 / 100),
-                      child: FractionallySizedBox(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorStyles.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("43",
-                                style: TextStyle(color: ColorStyles.lightYellow, fontSize: 15)),
-                            const SizedBox(height: 3),
-                            Image.asset('assets/images/inverted_triangle1.png'),
+                            const Text("거래 내역",
+                                style: TextStyle(
+                                    color: ColorStyles.black,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w800)),
+                            const SizedBox(height: 8),
+                            Column(
+                                children: List<Widget>.generate(2, (i) {
+                              return SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.only(left: 0)),
+                                    onPressed: () {
+                                      print("알림 및 소리 눌림");
+                                    },
+                                    child: Text(
+                                      settingNames[0][i],
+                                      style: const TextStyle(color: ColorStyles.textColor),
+                                    ),
+                                  ));
+                            }))
                           ],
                         ),
                       ),
                     ),
-                    const CustomProgressBar(
-                      paddingHorizontal: 5,
-                      currentPercent: 43,
-                      maxPercent: 100,
-                      lineHeight: 12,
-                      firstColor: ColorStyles.lightYellow,
-                      secondColor: ColorStyles.lightYellow,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: ColorStyles.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("거래 내역",
-                              style: TextStyle(
-                                  color: ColorStyles.black,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800)),
-                          const SizedBox(height: 8),
-                          Column(
-                              children: List<Widget>.generate(2, (i) {
-                            return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.only(left: 0)),
-                                  onPressed: () {
-                                    print("알림 및 소리 눌림");
-                                  },
-                                  child: Text(
-                                    settingNames[0][i],
-                                    style: const TextStyle(color: ColorStyles.textColor),
-                                  ),
-                                ));
-                          }))
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorStyles.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: ColorStyles.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("기타",
-                              style: TextStyle(
-                                  color: ColorStyles.black,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800)),
-                          const SizedBox(height: 8),
-                          Column(
-                              children: List<Widget>.generate(2, (i) {
-                            return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.only(left: 0)),
-                                  onPressed: () {
-                                    print("알림 및 소리 눌림");
-                                  },
-                                  child: Text(
-                                    settingNames[1][i],
-                                    style: const TextStyle(color: ColorStyles.textColor),
-                                  ),
-                                ));
-                          }))
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("기타",
+                                style: TextStyle(
+                                    color: ColorStyles.black,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w800)),
+                            const SizedBox(height: 8),
+                            Column(
+                                children: List<Widget>.generate(2, (i) {
+                              return SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.only(left: 0)),
+                                    onPressed: () {
+                                      print("알림 및 소리 눌림");
+                                    },
+                                    child: Text(
+                                      settingNames[1][i],
+                                      style: const TextStyle(color: ColorStyles.textColor),
+                                    ),
+                                  ));
+                            }))
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ]),
+                  )
+                ]),
+              ),
             ),
           ],
         ),
