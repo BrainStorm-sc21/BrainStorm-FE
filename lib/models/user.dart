@@ -135,8 +135,8 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 10)
-    ..receiveTimeout = const Duration(seconds: 15);
+    ..connectTimeout = const Duration(seconds: 20)
+    ..receiveTimeout = const Duration(seconds: 20);
 
   final Map<String, String>? data;
 
@@ -185,7 +185,7 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
   return null;
 }
 
-void requestLogout(context) async {
+Future<int> requestLogout(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   prefs.remove('isMeokjangUser');
@@ -197,6 +197,8 @@ void requestLogout(context) async {
       context,
       MaterialPageRoute(builder: (context) => const OnboardingPage()),
       (route) => false);
+
+  return 0;
 }
 
 void setUserInfo(User user) async {

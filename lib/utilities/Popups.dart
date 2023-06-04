@@ -41,13 +41,35 @@ class Popups {
     );
   }
 
-  // static void checkSignUp(context, type) {
-  //   showDialog(context: context, builder: (context) {
-  //     return Dialog(
-  //       shape: ,
-  //     )
-  //   });
-  // }
+//Regrigerator의 다이얼로그를 활용
+  static void showCustomDialog(title, clickAction, context) async {
+    VoidCallback onPressed = clickAction;
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            actions: [
+              // 취소 버튼
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("취소"),
+              ),
+              // 확인 버튼
+              TextButton(
+                onPressed: () => onPressed,
+                child: const Text(
+                  "확인",
+                  style: TextStyle(color: Colors.pink),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   static void showReview(context) {
     showDialog(
         context: context,
@@ -69,7 +91,9 @@ class Popups {
                   const Text(
                     '거래 후기',
                     style: TextStyle(
-                        color: ColorStyles.black, fontSize: 18, fontWeight: FontWeight.w400),
+                        color: ColorStyles.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
                   ),
                   const StarPointUnit(),
                   SizedBox(
@@ -79,7 +103,8 @@ class Popups {
                       maxLines: 8,
                       decoration: InputDecoration(
                         hintText: '거래에 대한 간단한 후기를 남겨주세요!',
-                        hintStyle: const TextStyle(fontSize: 12, color: ColorStyles.hintTextColor),
+                        hintStyle: const TextStyle(
+                            fontSize: 12, color: ColorStyles.hintTextColor),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide: const BorderSide(
@@ -140,10 +165,12 @@ class Popups {
                     height: height * 0.25,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                       child: deal.dealImage1 != null
                           ? Image.network(deal.dealImage1, fit: BoxFit.fill)
-                          : Image.asset('assets/images/logo.png', fit: BoxFit.fill),
+                          : Image.asset('assets/images/logo.png',
+                              fit: BoxFit.fill),
                     ),
                   ),
                   firstPostUnit(deal: deal),
@@ -160,7 +187,8 @@ class Popups {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: SizedBox(
                       child: Column(
                         children: [
@@ -296,8 +324,8 @@ class Popups {
             },
             baseBtnStyle: ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
             ),
             dotsDecorator: const DotsDecorator(
               size: Size(10, 10),
@@ -455,7 +483,9 @@ class _StarPointUnitState extends State<StarPointUnit> {
           itemCount: 5,
           itemBuilder: (BuildContext context, int index) {
             return IconButton(
-              color: (isHighlight[index]) ? ColorStyles.mainColor : ColorStyles.grey,
+              color: (isHighlight[index])
+                  ? ColorStyles.mainColor
+                  : ColorStyles.grey,
               onPressed: () {
                 print('클릭한 인덱스: $index');
                 setHighlight(index);
