@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
+import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -272,14 +273,25 @@ class _MyProfileState extends State<MyProfile> {
                                             padding:
                                                 const EdgeInsets.only(left: 0)),
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DealHistoryPage(
-                                                      userId: widget.userId,
-                                                    )),
-                                          );
+                                          (i == 0)
+                                              ? Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReviewHistoryPage(
+                                                            userId:
+                                                                widget.userId,
+                                                          )),
+                                                )
+                                              : Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DealHistoryPage(
+                                                            userId:
+                                                                widget.userId,
+                                                          )),
+                                                );
                                         },
                                         child: Text(
                                           settingNames[0][i],
@@ -328,9 +340,9 @@ class _MyProfileState extends State<MyProfile> {
                                             padding:
                                                 const EdgeInsets.only(left: 0)),
                                         onPressed: () {
-                                          if (i == 0) {
-                                            showLogoutDialog(context);
-                                          }
+                                          (i == 0)
+                                              ? showLogoutDialog(context)
+                                              : showSignOutDialog(context);
                                         },
                                         child: Text(
                                           settingNames[1][i],
@@ -354,13 +366,13 @@ class _MyProfileState extends State<MyProfile> {
   }
 }
 
-//Regrigerator의 다이얼로그를 활용
+//Regrigerator의 다이얼로그를 활용 - 로그아웃
 void showLogoutDialog(context) {
   showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("정말로 로그아웃 하시겠습니까?"),
+          title: const Text("정말로 로그아웃 하시겠습니까?", style: TextStyle(fontSize: 18)),
           actions: [
             // 취소 버튼
             TextButton(
@@ -374,6 +386,39 @@ void showLogoutDialog(context) {
               onPressed: () {
                 print('로그아웃 시도');
                 requestLogout(context);
+              },
+              child: const Text(
+                "확인",
+                style: TextStyle(color: Colors.pink),
+              ),
+            ),
+          ],
+        );
+      });
+}
+
+//Regrigerator의 다이얼로그를 활용 - 회원탈퇴
+void showSignOutDialog(context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            "정말로 회원탈퇴를 하시겠습니까?\n유저 데이터가 전부 삭제됩니다.",
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: [
+            // 취소 버튼
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("취소"),
+            ),
+            // 확인 버튼
+            TextButton(
+              onPressed: () {
+                print('회원탈퇴 시도');
               },
               child: const Text(
                 "확인",
