@@ -29,7 +29,7 @@ class _MyProfileState extends State<MyProfile> {
 
   List<String> settings = ["거래 내역", "기타"];
   List<List<String>> settingNames = [
-    ["준/받은 후기", "내 게시물"],
+    ["보낸/받은 후기", "내 게시물"],
     ["로그아웃", "회원 탈퇴"]
   ];
 

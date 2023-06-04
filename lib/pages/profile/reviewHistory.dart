@@ -9,34 +9,74 @@ class ReviewHistoryPage extends StatefulWidget {
   State<ReviewHistoryPage> createState() => _ReviewHistoryPageState();
 }
 
+//home_page의 tabbar 활용
 class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
+  TabBar get _tabBar => const TabBar(
+      padding: EdgeInsets.only(top: 10),
+      isScrollable: false,
+      indicatorColor: ColorStyles.mainColor,
+      indicatorWeight: 4,
+      labelColor: ColorStyles.mainColor,
+      unselectedLabelColor: ColorStyles.textColor,
+      labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      tabs: [Tab(text: "보낸 후기"), Tab(text: "받은 후기")]);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: ColorStyles.mainColor),
-        title: const Text(
-          '후기내역',
-          style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: ColorStyles.mainColor),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: ColorStyles.mainColor),
+          title: const Text(
+            '후기내역',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: ColorStyles.mainColor),
+          ),
+          backgroundColor: ColorStyles.white,
+          elevation: 0,
+          centerTitle: false,
         ),
-        backgroundColor: ColorStyles.white,
-        elevation: 0,
-        centerTitle: false,
+        body: Column(
+          children: [
+            _tabBar,
+            const Divider(
+                height: 0,
+                color: ColorStyles.lightgrey,
+                thickness: 1.5,
+                endIndent: 10),
+            Expanded(
+                child: TabBarView(
+              children: [
+                Container(
+                    color: ColorStyles.lightGrey,
+                    // child: const Center(child: Text('후기가 없습니다!'))),
+                    child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return MyReviewUnit(
+                          reviewPoint: index,
+                        );
+                      }),
+                    )),
+                Container(
+                    color: ColorStyles.lightGrey,
+                    // child: const Center(child: Text('후기가 없습니다!'))),
+                    child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return MyReviewUnit(
+                          reviewPoint: index,
+                        );
+                      }),
+                    )),
+              ],
+            ))
+          ],
+        ),
       ),
-      body: Container(
-          color: ColorStyles.lightGrey,
-          // child: const Center(child: Text('후기가 없습니다!'))),
-          child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: ((context, index) {
-              return MyReviewUnit(
-                reviewPoint: index,
-              );
-            }),
-          )),
     );
   }
 }
@@ -90,9 +130,11 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
                   color: ColorStyles.lightGrey,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      '${widget.reviewPoint + 1}번째 후기입니다. 별점은 ${widget.reviewPoint + 1}점 입니다.'),
+                  padding: const EdgeInsets.all(12),
+                  child: SingleChildScrollView(
+                    child: Text(
+                        '${widget.reviewPoint + 1}번째 후기입니다. 별점은 ${widget.reviewPoint + 1}점 입니다.'),
+                  ),
                 ),
               ),
             )
