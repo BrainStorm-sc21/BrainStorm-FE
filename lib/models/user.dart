@@ -1,5 +1,7 @@
 import 'package:brainstorm_meokjang/app_pages_container.dart';
+import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,7 +120,7 @@ Future<int> requestSignUp(User user) async {
       return res.data['data']['userId'];
     } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
-      throw Exception('Failed to send data [${res.statusCode}]');
+      return -1;
     }
   } catch (err) {
     debugPrint('$err');
@@ -160,6 +162,7 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
       prefs.setInt('userId', res.data['data']['userId']);
       prefs.setBool('isMeokjangUser', true);
       //setUserInfo(user);
+      showToast('로그인 되었습니다');
       if (!context.mounted) return;
 
       Navigator.pushAndRemoveUntil(
@@ -171,6 +174,7 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
       //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPagesContainer(userId: res.data['data']['userId'])),);
     } else if (res.data['status'] == 401) {
       print('로그인 실패!!');
+      showToast('로그인에 실패했습니다. 다시 시도해주세요');
       throw Exception('Failed to send data [${res.statusCode}]');
     }
   } catch (err) {
@@ -179,6 +183,20 @@ void requestLogin(String? phoneNumber, String? snsType, String? snsKey,
     dio.close();
   }
   return null;
+}
+
+void requestLogout(context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  prefs.remove('isMeokjangUser');
+  prefs.remove('userId');
+
+  showToast('로그아웃 되었습니다');
+
+  Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      (route) => false);
 }
 
 void setUserInfo(User user) async {
