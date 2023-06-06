@@ -28,6 +28,7 @@ class DealDetailPage extends StatefulWidget {
 
 class _DealDetailPageState extends State<DealDetailPage> {
   List<String> imageList = [];
+  bool isClickModifyButton = false;
 
   void setImageList() {
     if (widget.deal.dealImage1 != null) {
@@ -169,7 +170,11 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 width: double.infinity,
                                 height: 40,
                                 text: '수정하기',
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    isClickModifyButton = !isClickModifyButton;
+                                  });
+                                },
                                 backgroundColor: ColorStyles.mainColor,
                                 foregroundColor: ColorStyles.white,
                                 borderColor: ColorStyles.mainColor),
@@ -212,6 +217,40 @@ class _DealDetailPageState extends State<DealDetailPage> {
             ),
           ),
         ),
+        (isClickModifyButton)
+            ? Positioned(
+                bottom: 40,
+                left: 20,
+                right: 20,
+                child: Container(
+                  child: Column(
+                    children: [
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '확인',
+                          onPressed: () {},
+                          backgroundColor: ColorStyles.mainColor,
+                          foregroundColor: ColorStyles.white,
+                          borderColor: ColorStyles.mainColor),
+                      const SizedBox(height: 10),
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '취소',
+                          onPressed: () {
+                            setState(() {
+                              isClickModifyButton = !isClickModifyButton;
+                            });
+                          },
+                          backgroundColor: ColorStyles.white,
+                          foregroundColor: ColorStyles.mainColor,
+                          borderColor: ColorStyles.mainColor)
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
       ]),
     );
   }
@@ -254,5 +293,41 @@ class _DealDetailPageState extends State<DealDetailPage> {
             ],
           );
         });
+  }
+}
+
+class ModifyStatusButtons extends StatefulWidget {
+  const ModifyStatusButtons({super.key});
+
+  @override
+  State<ModifyStatusButtons> createState() => _ModifyStatusButtonsState();
+}
+
+class _ModifyStatusButtonsState extends State<ModifyStatusButtons> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          RoundedOutlinedButton(
+              width: double.infinity,
+              height: 40,
+              text: '확인',
+              onPressed: () {},
+              backgroundColor: ColorStyles.mainColor,
+              foregroundColor: ColorStyles.white,
+              borderColor: ColorStyles.mainColor),
+          const SizedBox(height: 10),
+          RoundedOutlinedButton(
+              width: double.infinity,
+              height: 40,
+              text: '취소',
+              onPressed: () {},
+              backgroundColor: ColorStyles.white,
+              foregroundColor: ColorStyles.mainColor,
+              borderColor: ColorStyles.mainColor)
+        ],
+      ),
+    );
   }
 }
