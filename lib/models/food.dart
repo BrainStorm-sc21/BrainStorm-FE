@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class FoodData {
   final List<Food> data;
 
@@ -17,6 +19,7 @@ class Food {
   String storageWay;
   num stock;
   DateTime expireDate;
+  late TextEditingController? foodNameController;
 
   Food({
     this.foodId,
@@ -24,6 +27,7 @@ class Food {
     required this.storageWay,
     required this.stock,
     required this.expireDate,
+    this.foodNameController,
   });
 
   // class to json
