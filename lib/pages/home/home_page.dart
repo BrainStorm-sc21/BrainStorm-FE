@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         storageFoods.add(fooditem);
       }
     }
+    storageFoods.sort((a, b) => a.expireDate.compareTo(b.expireDate));
     return storageFoods;
   }
 

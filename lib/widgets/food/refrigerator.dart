@@ -56,7 +56,7 @@ class _RefrigeratorState extends State<Refrigerator> {
               food = widget.foods[index];
               return Card(
                 elevation: 2.0,
-                key: PageStorageKey(food.foodNameController),
+                key: PageStorageKey(food.foodId),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                 surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
@@ -154,7 +154,7 @@ class _RefrigeratorState extends State<Refrigerator> {
                           OutlinedButton(
                             child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              showDeleteDialog(food);
+                              showDeleteDialog(widget.foods[index]);
                             },
                           ),
                         ],

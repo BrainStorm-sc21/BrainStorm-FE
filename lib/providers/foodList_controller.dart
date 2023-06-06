@@ -50,9 +50,9 @@ class FoodListController extends GetxController {
     var deleteFood = fooditem.foodId;
 
     try {
-      print(fooditem);
+      print('delete food : ${fooditem.foodName}');
       final resp = await dio.delete("/food/$deleteFood");
-      fooditem.foodNameController!.dispose();
+      //fooditem.foodNameController!.dispose();
       _foodList.remove(fooditem);
 
       print("Delete Status: ${resp.statusCode}");
