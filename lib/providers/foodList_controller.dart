@@ -1,33 +1,16 @@
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FoodListController extends GetxController {
   final RxList<Food> _foodList = <Food>[].obs;
-  //final RxList<TextEditingController> _foodNameController = <TextEditingController>[].obs;
-  late List<Food> _checkList;
   List<Food> foodsList = List.empty(growable: true);
 
   final RxBool _isLoading = false.obs;
 
   get foodList => _foodList;
   get isLoading => _isLoading.value;
-
-  List<Food> initController(foods) {
-    for (int index = 0; index < foods.length; index++) {
-      //foods.foodNameController = TextEditingController();
-      foods[index].foodNameController = TextEditingController(text: foods[index].foodName);
-    }
-    return foods;
-  }
-
-  void disposeController() {
-    for (var food in _foodList) {
-      food.foodNameController!.dispose();
-    }
-  }
 
   Future getServerDataWithDio(int userId) async {
     _isLoading.value = true;
@@ -45,8 +28,7 @@ class FoodListController extends GetxController {
       print(resp.data);
 
       FoodData foodData = FoodData.fromJson(resp.data);
-      _foodList.value = initController(foodData.data);
-      //_foodList.value = foodData.data;
+      _foodList.value = foodData.data;
       _isLoading.value = false;
 
       update();
@@ -68,7 +50,9 @@ class FoodListController extends GetxController {
     var deleteFood = fooditem.foodId;
 
     try {
+      print(fooditem);
       final resp = await dio.delete("/food/$deleteFood");
+      fooditem.foodNameController!.dispose();
       _foodList.remove(fooditem);
 
       print("Delete Status: ${resp.statusCode}");
@@ -104,5 +88,29 @@ class FoodListController extends GetxController {
     } finally {
       dio.close();
     }
+  }
+
+  Future updateFoodInfo(data) async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    try {
+      final res = await dio.post(
+        '/food/add',
+        data: data,
+      );
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+  }
+
+  void addOneFood(food) {
+    _foodList.add(food);
+    update();
   }
 }

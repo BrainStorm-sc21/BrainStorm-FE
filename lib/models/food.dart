@@ -49,6 +49,7 @@ class Food {
       storageWay: json['storageWay'],
       stock: json['stock'],
       expireDate: DateTime.parse(json['expireDate']),
+      foodNameController: TextEditingController(text: json['foodName']),
     );
   }
 
