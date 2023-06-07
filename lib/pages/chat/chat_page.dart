@@ -82,8 +82,11 @@ class _ChatPageState extends State<ChatPage> {
               itemCount: roomList.length,
               itemBuilder: (context, index) {
                 return ChatUnit(
-                  name: '먹짱 $index호',
+                  receiverId: roomList[index].sender == widget.userId
+                      ? roomList[index].receiver
+                      : roomList[index].sender,
                   content: '채팅 메시지 텍스트 $index',
+                  time: 'X 분 전', // 임시
                 );
               },
             ),

@@ -1,5 +1,7 @@
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -54,19 +56,20 @@ class GoRecipe extends StatelessWidget {
 }
 
 class ChatUnit extends StatefulWidget {
+  final int receiverId;
+
   final String imgUrl;
-  final String name;
   final String content;
   final String time;
   final int unread;
 
   const ChatUnit({
     super.key,
+    required this.receiverId,
     this.imgUrl = 'assets/images/logo.png',
-    this.name = '먹짱 1호',
-    this.content = '혹시 감자도 파시나요?',
-    this.time = '오후 1:36',
-    this.unread = 1,
+    required this.content,
+    required this.time,
+    this.unread = 0,
   });
 
   @override
@@ -74,13 +77,38 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
+  late String nickname;
+
+  void getUserInfo() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('users/${widget.receiverId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          nickname = json['userName'];
+        });
+      } else {
+        throw Exception(res.data['message']);
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const ChatDetailPage(
-            receiverId: 6, // 임시로 6 부여, 추후 수정 예정
+          builder: (context) => ChatDetailPage(
+            receiverId: widget.receiverId,
             deal: null,
           ),
         ),
@@ -114,7 +142,7 @@ class _ChatUnitState extends State<ChatUnit> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.name,
+                              nickname,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
