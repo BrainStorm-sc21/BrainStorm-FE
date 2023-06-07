@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
@@ -223,6 +222,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         color: ColorStyles.white,
         child: Column(
           children: [
+            /*
             Container(
               height: 80,
               color: ColorStyles.white,
@@ -230,7 +230,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 deal: widget.deal!,
                 isChat: true,
               ),
-            ),
+            ),*/
             // 채팅 기록
             Expanded(
               child: StreamBuilder(
