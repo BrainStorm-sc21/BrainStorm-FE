@@ -78,12 +78,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         data: data,
       );
 
-      if (res.statusCode == 200) {
+      if (res.data['status'] == 200) {
         debugPrint('채팅방 생성 성공!!:\n $res');
 
         setState(() {
           dbRoomId = int.parse(res.data['id']);
-          wsRoomId = res.data['roomId'].toString();
+          wsRoomId = res.data['data']['roomId'].toString();
         });
       } else {
         throw Exception();
@@ -120,10 +120,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         '/chat/message/$dbRoomId',
       );
 
-      if (res.statusCode == 200) {
-        debugPrint('메시지 로드 성공!!:\n $res');
-        debugPrint('${jsonDecode(res.data)}');
         // 데이터 Message 형태로 잘라야 함
+      if (res.data['status'] == 200) {
       } else {
         throw Exception();
       }

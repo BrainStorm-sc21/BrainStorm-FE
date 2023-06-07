@@ -35,8 +35,8 @@ class _ChatPageState extends State<ChatPage> {
     final Response res = await dio.get('/chat/room/${widget.userId}');
 
     try {
-      if (res.statusCode == 200) {
-        print('채팅 목록 로드 성공!!:\n ${res.data}');
+      if (res.data['status'] == 200) {
+        print('채팅 목록 로드 성공!!:\n ${res.data['data']}');
         List<dynamic> jsonList = res.data['data'] as List;
         setState(() {
           roomList = jsonList.map((data) => Room.fromJson(data)).toList();
