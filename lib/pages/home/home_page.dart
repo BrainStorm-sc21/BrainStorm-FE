@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _foodListController.getServerDataWithDio(widget.userId);
-    _userInfoController.getUserName(widget.userId);
+    _userInfoController.getUserInfo(widget.userId);
     super.initState();
   }
 
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Obx(() {
                 if (_foodListController.isLoading) {
-                  return const Center(child: Text("재료를 불러오고 있어요"));
+                  return const Center(child: CircularProgressIndicator());
                 } else {
                   return TabBarView(
                     children: [

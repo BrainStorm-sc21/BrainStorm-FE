@@ -19,7 +19,6 @@ class Refrigerator extends StatefulWidget {
 
 class _RefrigeratorState extends State<Refrigerator> {
   late Food food;
-  List<Food> foodList = List.empty(growable: true);
   List<bool> absorbBool = List.filled(100, true, growable: true);
   final now = DateTime.now();
 
@@ -141,7 +140,8 @@ class _RefrigeratorState extends State<Refrigerator> {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
-                                  _foodListController.modifyFoodInfo(widget.userId, food);
+                                  _foodListController.modifyFoodInfo(
+                                      widget.userId, widget.foods[index]);
                                   showToast('식료품이 수정되었습니다');
                                 }
                               });
@@ -152,9 +152,17 @@ class _RefrigeratorState extends State<Refrigerator> {
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
-                            child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: absorbBool[index]
+                                ? const Text('삭제', style: TextStyle(color: ColorStyles.mainColor))
+                                : const Text('취소', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              showDeleteDialog(widget.foods[index]);
+                              if (absorbBool[index]) {
+                                showDeleteDialog(widget.foods[index]);
+                              } else {
+                                setState(() {
+                                  absorbBool[index] = !absorbBool[index];
+                                });
+                              }
                             },
                           ),
                         ],
