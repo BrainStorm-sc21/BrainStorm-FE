@@ -7,6 +7,7 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -98,12 +99,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   void sendMessage(MessageType type, String message) {
     DateTime time = DateTime.now();
+    String timeFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(time);
     Message data = Message(
       type: type,
       roomId: wsRoomId,
       sender: widget.senderId,
       message: message,
-      time: time,
+      time: timeFormatted,
     );
     _client.sink.add(jsonEncode(data));
     _controller.clear();
