@@ -25,7 +25,6 @@ class FoodListController extends GetxController {
       final resp = await dio.get("/food/$userId");
 
       print("food statusCode : ${resp.statusCode}");
-      print(resp.data);
 
       FoodData foodData = FoodData.fromJson(resp.data);
       _foodList.value = foodData.data;
@@ -52,7 +51,6 @@ class FoodListController extends GetxController {
     try {
       print('delete food : ${fooditem.foodName}');
       final resp = await dio.delete("/food/$deleteFood");
-      //fooditem.foodNameController!.dispose();
       _foodList.remove(fooditem);
 
       print("Delete Status: ${resp.statusCode}");
@@ -64,7 +62,7 @@ class FoodListController extends GetxController {
     }
   }
 
-  Future modifyFoodInfo(int userId, Food fooditem) async {
+  Future modifyFoodInfo(int userId, Food item) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
@@ -73,10 +71,10 @@ class FoodListController extends GetxController {
 
     final data = {
       "userId": userId,
-      "food": fooditem.toJson(),
+      "food": item.toJson(),
     };
 
-    var modifyFoodId = fooditem.foodId;
+    var modifyFoodId = item.foodId;
 
     try {
       final resp = await dio.put('/food/$modifyFoodId', data: data);
@@ -90,7 +88,7 @@ class FoodListController extends GetxController {
     }
   }
 
-  Future updateFoodInfo(data) async {
+  Future addManualFoodInfo(data) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
