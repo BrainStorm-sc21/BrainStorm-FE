@@ -108,7 +108,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     _controller.clear();
   }
 
-  void loadPrevMessages() async {
+  Future<void> loadPrevMessages() async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
