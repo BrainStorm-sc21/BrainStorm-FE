@@ -12,13 +12,11 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatDetailPage extends StatefulWidget {
-  final String nickname;
-  final String content;
+  final int receiverId;
   final Deal? deal;
   const ChatDetailPage({
     super.key,
-    required this.nickname,
-    required this.content,
+    required this.receiverId,
     required this.deal,
   });
 

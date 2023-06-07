@@ -79,9 +79,8 @@ class _ChatUnitState extends State<ChatUnit> {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ChatDetailPage(
-            nickname: widget.name,
-            content: widget.content,
+          builder: (context) => const ChatDetailPage(
+            receiverId: 6, // 임시로 6 부여, 추후 수정 예정
             deal: null,
           ),
         ),
