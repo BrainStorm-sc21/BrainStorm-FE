@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
+import 'package:brainstorm_meokjang/pages/profile/othersProfile.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
@@ -72,8 +73,6 @@ class _DealPageState extends State<DealPage> {
       print("Deal Data: ${resp.data}");
 
       DealData dealData = DealData.fromJson(resp.data);
-
-      print('딜 데이터: ${dealData.data}');
 
       setState(() {
         for (Deal dealitem in dealData.data) {
@@ -282,15 +281,15 @@ class _DealPageState extends State<DealPage> {
                       builder: (context) =>
                           GroupPurchasePage(userId: widget.userId)));
             }),
-        // SpeedDialChild(
-        //     child: const Text('후기창 UI',
-        //         style: TextStyle(
-        //             color: ColorStyles.groupBuyTextColor,
-        //             fontWeight: FontWeight.w600)),
-        //     backgroundColor: ColorStyles.cream,
-        //     onTap: () {
-        //       Popups.showReview(context);
-        //     }),
+        SpeedDialChild(
+            child: const Text('상대 UI',
+                style:
+                    TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
+            backgroundColor: ColorStyles.cream,
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => const OtherProfile()));
+            }),
       ],
     );
   }

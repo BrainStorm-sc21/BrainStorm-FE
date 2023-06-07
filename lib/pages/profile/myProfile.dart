@@ -1,14 +1,16 @@
-import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyProfile extends StatefulWidget {
   int userId;
@@ -24,8 +26,9 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   bool isClickedText = false;
   double reliability = 0;
-  final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _textFocus = FocusNode();
+
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   List<String> settings = ["거래 내역", "기타"];
   List<List<String>> settingNames = [
@@ -40,38 +43,7 @@ class _MyProfileState extends State<MyProfile> {
     "회원 탈퇴": '',
   };
 
-  Future getUserInfo() async {
-    Dio dio = Dio();
-
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-    try {
-      Response resp = await dio.get("/users/${widget.userId}");
-
-      User user = User.fromJson(resp.data);
-
-      if (resp.data['status'] == 200) {
-        print('회원 불러오기 성공!!');
-        print(resp.data);
-        setState(() {
-          _nickNameController.text = user.userName;
-          reliability = user.reliability!;
-        });
-      } else if (resp.data['status'] == 400) {
-        print('회원 불러오기 실패!!');
-        throw Exception('Failed to send data [${resp.statusCode}]');
-      }
-    } catch (e) {
-      Exception(e);
-    } finally {
-      dio.close();
-    }
-    return false;
-  }
-
-  void modifyUserInfo() async {
+  void modifyUserInfo(String name) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
@@ -79,18 +51,15 @@ class _MyProfileState extends State<MyProfile> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
-      "userName": _nickNameController.text,
+      "userName": name,
     };
-    print("데이터");
-    print(data);
 
     try {
-      Response res = await dio.put("/users/${widget.userId}", data: data);
+      final res = await dio.put("/users/${widget.userId}", data: data);
 
       if (!mounted) return;
       if (res.statusCode == 200) {
-        Popups.popSimpleDialog(context,
-            title: _nickNameController.text, body: "닉네임이 성공적으로 변경되었어요!");
+        showToast('닉네임이 수정되었습니다');
       } else {
         throw Exception('Failed to send data [${res.statusCode}]');
       }
@@ -109,14 +78,12 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   void initState() {
-    getUserInfo();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _nickNameController.dispose();
     _textFocus.dispose();
   }
 
@@ -137,53 +104,45 @@ class _MyProfileState extends State<MyProfile> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: AbsorbPointer(
-                                absorbing: isClickedText,
-                                child: TextField(
-                                    controller: _nickNameController,
-                                    focusNode: _textFocus,
-                                    onSubmitted: (value) {
-                                      modifyUserInfo();
-                                      setState(() {
-                                        isClickedText = true;
-                                      });
-                                    },
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: ''),
-                                    style: const TextStyle(
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.bold,
-                                        height: 1,
-                                        color: ColorStyles.white,
-                                        overflow: TextOverflow.ellipsis),
-                                    maxLength: 20),
-                              ),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: AbsorbPointer(
+                            absorbing: isClickedText,
+                            child: Obx(
+                              () {
+                                if (_userInfoController.isLoading) {
+                                  return const CircularProgressIndicator();
+                                } else {
+                                  return TextField(
+                                      controller:
+                                          TextEditingController(text: _userInfoController.userName),
+                                      focusNode: _textFocus,
+                                      onSubmitted: (value) {
+                                        _userInfoController.modifyUserName(value);
+                                        modifyUserInfo(value);
+                                        setState(() {
+                                          isClickedText = true;
+                                        });
+                                      },
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none, counterText: ''),
+                                      style: const TextStyle(
+                                          fontSize: 30.0,
+                                          fontWeight: FontWeight.bold,
+                                          height: 1,
+                                          color: ColorStyles.white,
+                                          overflow: TextOverflow.ellipsis),
+                                      maxLength: 20);
+                                }
+                              },
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PushList()));
-                                },
-                                icon: const Icon(
-                                  Icons.notifications,
-                                  color: ColorStyles.white,
-                                  size: 35,
-                                )),
-                          ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -199,43 +158,72 @@ class _MyProfileState extends State<MyProfile> {
                               });
                               _textFocus.requestFocus();
                             },
-                            fontSize: 13,
-                            text: "닉네임 수정 >"),
-                      ),
-                      const Text(
-                        "내 신뢰도",
-                        style: TextStyle(
-                            color: ColorStyles.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            alignment: FractionalOffset(
-                                reliability / 100, 1 - (reliability / 100)),
-                            child: FractionallySizedBox(
-                              child: Column(
-                                children: [
-                                  Text(reliability.toString(),
-                                      style: const TextStyle(
-                                          color: ColorStyles.lightYellow,
-                                          fontSize: 15)),
-                                  const SizedBox(height: 3),
-                                  Image.asset(
-                                      'assets/images/inverted_triangle1.png'),
-                                ],
-                              ),
+                            icon: const Icon(
+                              Icons.notifications,
+                              color: ColorStyles.white,
+                              size: 35,
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: RoundedOutlinedButton(
+                        height: 23,
+                        backgroundColor: ColorStyles.lightmainColor,
+                        borderColor: ColorStyles.lightmainColor,
+                        foregroundColor: ColorStyles.white,
+                        onPressed: () {
+                          setState(() {
+                            isClickedText = isClickedText ? false : true;
+                          });
+                          _textFocus.requestFocus();
+                        },
+                        fontSize: 13,
+                        text: "닉네임 수정 >"),
+                  ),
+                  const Text(
+                    "내 신뢰도",
+                    style: TextStyle(
+                        color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Obx(
+                    () => Column(
+                      children: [
+                        Container(
+                          alignment: FractionalOffset(_userInfoController.reliability / 100,
+                              (100 - _userInfoController.reliability) / 100),
+                          child: FractionallySizedBox(
+                            child: Column(
+                              children: [
+                                Text(_userInfoController.reliability.toString(),
+                                    style: const TextStyle(
+                                        color: ColorStyles.lightYellow, fontSize: 15)),
+                                const SizedBox(height: 3),
+                                Image.asset('assets/images/inverted_triangle1.png'),
+                              ],
                             ),
                           ),
-                          CustomProgressBar(
-                            paddingHorizontal: 5,
-                            currentPercent: reliability,
-                            maxPercent: 100,
-                            lineHeight: 12,
-                            firstColor: ColorStyles.lightYellow,
-                            secondColor: ColorStyles.lightYellow,
-                          ),
+                        ),
+                        CustomProgressBar(
+                          paddingHorizontal: 5,
+                          currentPercent: _userInfoController.reliability,
+                          maxPercent: 100,
+                          lineHeight: 12,
+                          firstColor: ColorStyles.lightYellow,
+                          secondColor: ColorStyles.lightYellow,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorStyles.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
                         ],
                       ),
                       Padding(
