@@ -11,7 +11,11 @@ class Refrigerator extends StatefulWidget {
   final int userId;
   final String storage;
   final List<Food> foods;
-  const Refrigerator({super.key, required this.userId, required this.foods, required this.storage});
+  const Refrigerator(
+      {super.key,
+      required this.userId,
+      required this.foods,
+      required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -29,7 +33,8 @@ class _RefrigeratorState extends State<Refrigerator> {
     super.initState();
   }
 
-  void setStock(int index, num value) => setState(() => widget.foods[index].stock = value);
+  void setStock(int index, num value) =>
+      setState(() => widget.foods[index].stock = value);
   void setStorage(int index, String value) =>
       setState(() => widget.foods[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
@@ -56,7 +61,8 @@ class _RefrigeratorState extends State<Refrigerator> {
               return Card(
                 elevation: 2.0,
                 key: PageStorageKey(food.foodId),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
                 surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
                   initiallyExpanded: false,
@@ -73,6 +79,7 @@ class _RefrigeratorState extends State<Refrigerator> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: TextField(
+                                    enabled: !absorbBool[index],
                                     controller: food.foodNameController,
                                     onSubmitted: (String str) {
                                       setState(() {
@@ -80,7 +87,8 @@ class _RefrigeratorState extends State<Refrigerator> {
                                       });
                                     },
                                     decoration: const InputDecoration(
-                                        border: InputBorder.none, counterText: ''),
+                                        border: InputBorder.none,
+                                        counterText: ''),
                                     style: const TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
@@ -92,15 +100,18 @@ class _RefrigeratorState extends State<Refrigerator> {
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w400,
-                                    color: food.expireDate.difference(now).inDays > 0
-                                        ? ColorStyles.textColor
-                                        : ColorStyles.errorRed))
+                                    color:
+                                        food.expireDate.difference(now).inDays >
+                                                0
+                                            ? ColorStyles.textColor
+                                            : ColorStyles.errorRed))
                           ],
                         ),
                         CustomProgressBar(
                             maxPercent: 7,
-                            currentPercent:
-                                7 - dayCount(food.expireDate.difference(now).inDays).toDouble())
+                            currentPercent: 7 -
+                                dayCount(food.expireDate.difference(now).inDays)
+                                    .toDouble())
                       ],
                     ),
                   ),
@@ -110,12 +121,17 @@ class _RefrigeratorState extends State<Refrigerator> {
                         child: SizedBox(
                             width: 350,
                             child: FoodStorageDropdown(
-                                index: index, storage: food.storageWay, setStorage: setStorage))),
+                                index: index,
+                                storage: food.storageWay,
+                                setStorage: setStorage))),
                     AbsorbPointer(
                       absorbing: absorbBool[index],
                       child: SizedBox(
                         width: 350,
-                        child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
+                        child: FoodStockButton(
+                            index: index,
+                            stock: food.stock,
+                            setStock: setStock),
                       ),
                     ),
                     AbsorbPointer(
@@ -140,21 +156,32 @@ class _RefrigeratorState extends State<Refrigerator> {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
-                                  _foodListController.modifyFoodInfo(
-                                      widget.userId, widget.foods[index]);
-                                  showToast('식료품이 수정되었습니다');
+                                  Future<int> resultValue =
+                                      _foodListController.modifyFoodInfo(
+                                          widget.userId, widget.foods[index]);
+                                  (resultValue == 1)
+                                      ? showToast('식료품이 수정되었습니다')
+                                      : showToast('바뀐 정보가 없습니다!');
                                 }
                               });
                             },
                             child: absorbBool[index]
-                                ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
+                                ? const Text('수정',
+                                    style:
+                                        TextStyle(color: ColorStyles.mainColor))
+                                : const Text('확인',
+                                    style: TextStyle(
+                                        color: ColorStyles.mainColor)),
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
                             child: absorbBool[index]
-                                ? const Text('삭제', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('취소', style: TextStyle(color: ColorStyles.mainColor)),
+                                ? const Text('삭제',
+                                    style:
+                                        TextStyle(color: ColorStyles.mainColor))
+                                : const Text('취소',
+                                    style: TextStyle(
+                                        color: ColorStyles.mainColor)),
                             onPressed: () {
                               if (absorbBool[index]) {
                                 showDeleteDialog(widget.foods[index]);
