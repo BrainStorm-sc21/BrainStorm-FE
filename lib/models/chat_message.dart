@@ -8,7 +8,7 @@ class Message {
   final String roomId;
   final int sender; //userId
   final String message;
-  final String time;
+  final DateTime time;
 
   Message({
     required this.type,
@@ -18,11 +18,11 @@ class Message {
     required this.time,
   });
 
-  Map<String, String> toJson() {
-    final Map<String, String> data = <String, String>{};
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type.name;
     data['roomId'] = roomId;
-    data['sender'] = sender.toString();
+    data['sender'] = sender;
     data['message'] = message;
     data['time'] = time.toString();
     return data;
@@ -30,11 +30,12 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      type: MessageType.values.firstWhere((type) => type.name == json['type']),
-      roomId: json['roomId'],
+      type: MessageType.values
+          .firstWhere((type) => type.name == json['type'].toString()),
+      roomId: json['roomId'].toString(),
       sender: int.parse(json['sender']),
-      message: json['message'],
-      time: json['time'],
+      message: json['message'].toString(),
+      time: DateTime.parse(json['time']),
     );
   }
 }

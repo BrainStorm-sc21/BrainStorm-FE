@@ -67,7 +67,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       roomId: wsRoomId,
       sender: senderId,
       message: message,
-      time: time.toString(),
+      time: time,
     );
     _client.sink.add(jsonEncode(data));
     _controller.clear();
