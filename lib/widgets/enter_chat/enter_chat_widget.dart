@@ -82,7 +82,13 @@ class ChatUnit extends StatefulWidget {
 class _ChatUnitState extends State<ChatUnit> {
   late String nickname;
 
-  void getUserInfo() async {
+  @override
+  void initState() {
+    super.initState();
+    getUserNickname();
+  }
+
+  Future<void> getUserNickname() async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
