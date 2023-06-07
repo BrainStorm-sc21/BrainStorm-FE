@@ -95,7 +95,7 @@ class _ChatUnitState extends State<ChatUnit> {
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    final Response res = await dio.get('users/${widget.receiverId}');
+    final Response res = await dio.get('/users/${widget.receiverId}');
 
     try {
       if (res.data['status'] == 200) {
