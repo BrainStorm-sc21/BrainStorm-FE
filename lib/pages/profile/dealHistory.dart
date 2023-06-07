@@ -1,6 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -75,11 +74,9 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
       ),
       body: Container(
         color: ColorStyles.lightGrey,
-        child:
-            // (myPosts.isEmpty)
-            //     ? const Center(child: Text('내가 올린 게시글이 없습니다!'))
-            //     :
-            ListView.builder(
+        child: (myPosts.isEmpty)
+            ? const Center(child: Text('내가 올린 게시글이 없습니다!'))
+            : ListView.builder(
                 itemCount: myPosts.length,
                 itemBuilder: ((context, index) {
                   print('내 게시글의 갯수: ${myPosts.length}');
@@ -198,9 +195,7 @@ class _MyPostUnitState extends State<MyPostUnit> {
                   width: double.infinity,
                   height: 26,
                   text: '거래중',
-                  onPressed: () {
-                    Popups.showReview(context);
-                  },
+                  onPressed: () {},
                   backgroundColor: ColorStyles.mainColor,
                   foregroundColor: ColorStyles.white,
                   borderColor: ColorStyles.mainColor),
