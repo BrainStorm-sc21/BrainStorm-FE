@@ -33,6 +33,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
+  bool isRoomExist = false;
   late int dbRoomId;
   late String wsRoomId;
 
@@ -42,6 +43,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     if (widget.room != null) {
+      setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
       loadPrevMessages();
     }
@@ -56,6 +58,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   bool get isTextInputEmpty {
     return _controller.text.trim().isEmpty;
+  }
+
+  void setIsRoomExistToTrue() {
+    setState(() => isRoomExist = true);
   }
 
   Future<void> setRoomIds(int id, String roomId) async {
@@ -88,6 +94,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
           Room room = Room.fromJson(res.data['data']);
           setRoomIds(room.id, room.roomId);
+
+        setIsRoomExistToTrue();
       } else {
         throw Exception();
       }
