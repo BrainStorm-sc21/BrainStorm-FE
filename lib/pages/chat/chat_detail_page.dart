@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -12,12 +13,14 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class ChatDetailPage extends StatefulWidget {
   final int receiverId;
   final int senderId;
+  final Room? room;
   final Deal? deal;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
     required this.deal,
     required this.senderId,
+    this.room,
   });
 
   @override
