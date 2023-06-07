@@ -30,7 +30,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _controller = TextEditingController();
   final WebSocketChannel _client =
-      IOWebSocketChannel.connect('ws://meokjang.com/chat');
+      IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
   late final int dbRoomId;
   late final String wsRoomId;
