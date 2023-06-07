@@ -19,7 +19,7 @@ class ColorStyles {
   static const Color mustardYellow = Color.fromRGBO(237, 199, 0, 1);
   static const Color lightYellow = Color.fromRGBO(253, 243, 146, 1);
   static const Color cream = Color.fromRGBO(251, 246, 198, 1);
-  static const Color lightgrey = Color.fromRGBO(199, 199, 199, 1);
+  static const Color lightgrey = Color.fromRGBO(177, 177, 177, 1);
   static const Color backgroundColor = Color.fromRGBO(249, 249, 249, 1);
   static const Color shadowColor = Color.fromRGBO(0, 0, 0, 0.05);
   static const Color black = Colors.black;

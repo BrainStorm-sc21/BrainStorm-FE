@@ -105,7 +105,9 @@ flutter:
     - assets/images/exchangeMarker.png
     - assets/images/shareMarker.png
 
+    # 레시피
     - assets/images/chatGPT.png
+    - assets/images/recipe.png
 
     - assets/images/logo.png
     - assets/images/completeSignUp.png
