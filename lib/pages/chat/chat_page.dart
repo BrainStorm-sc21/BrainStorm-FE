@@ -25,7 +25,7 @@ class _ChatPageState extends State<ChatPage> {
     loadChatRoomList();
   }
 
-  void loadChatRoomList() async {
+  Future<void> loadChatRoomList() async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
