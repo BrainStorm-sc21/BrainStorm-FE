@@ -117,7 +117,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
     try {
       final Response res = await dio.get(
-        '/chat/mesage/{$dbRoomId}',
+        '/chat/message/$dbRoomId',
       );
 
       if (res.statusCode == 200) {
