@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
@@ -7,7 +6,6 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -33,13 +31,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   // );
   final int userId = 7; // 임시 유저 아이디
   List<Message> messages = List.empty(growable: true);
-  late final File historyFile;
   late final String _roomId;
 
   @override
   void initState() {
     super.initState();
-    _initializeFile();
   }
 
   @override
@@ -62,74 +58,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
     _client.sink.add(jsonEncode(data));
     _controller.clear();
-  }
-
-  Future<String> get _directoryPath async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    print("디렉토리 경로: ${directory.path}");
-    return directory.path;
-  }
-
-  Future<File> get _chatHistoryFile async {
-    final String path = await _directoryPath;
-    var fileName = 'TEMP';
-    return File('$path/$fileName.json');
-  }
-
-  void _initializeFile() async {
-    historyFile = await _chatHistoryFile;
-    if (historyFile.existsSync()) {
-      _readJson();
-    } else {
-      _createChatRoom();
-    }
-  }
-
-  void _createChatRoom() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    String roomName = 'RoomTest'; // 임시 roomName
-    try {
-      final res = await dio.post(
-        '/chat?name=$roomName',
-      );
-
-      debugPrint('req data: ${res.data}');
-      debugPrint('req statusCode: ${res.statusCode}');
-
-      if (res.statusCode == 200) {
-        setState(() {
-          _roomId = res.data['roomId'];
-        });
-        sendMessage(MessageType.ENTER, "");
-      } else {
-        throw Exception('Failed to create chat room [${res.statusCode}]');
-      }
-    } catch (err) {
-      debugPrint('$err');
-    } finally {
-      dio.close();
-    }
-  }
-
-  void _writeJson() async {
-    final List<String> jsonStringList =
-        messages.map((message) => jsonEncode(message)).toList();
-    final String jsonString = '[${jsonStringList.join(',\n')}]';
-    await historyFile.writeAsString(jsonString);
-  }
-
-  void _readJson() async {
-    String jsonString = await historyFile.readAsString();
-    List<dynamic> jsonList = jsonDecode(jsonString);
-    for (Map<String, dynamic> jsonMessage in jsonList) {
-      Message message = Message.fromJson(jsonMessage);
-      messages.add(message);
-    }
   }
 
   @override
