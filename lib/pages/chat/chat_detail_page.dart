@@ -26,9 +26,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _controller = TextEditingController();
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://meokjang.com/chat');
-  // final WebSocketChannel _client = IOWebSocketChannel.connect(
-  //   Uri.parse('wss://echo.websocket.events'),
-  // );
   final int userId = 7; // 임시 유저 아이디
   List<Message> messages = List.empty(growable: true);
   late final String _roomId;
@@ -86,10 +83,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     color: ColorStyles.black,
                   ),
                 ),
-                // TextButton(
-                //   onPressed: _writeJson,
-                //   child: const Text('파일 쓰기 버튼'),
-                // ),
               ],
             ),
           ),
@@ -109,15 +102,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
             // 채팅 기록
             Expanded(
-              // child: Center(
-              //     child: Text(
-              //   '삼식이 네끼님과\n채팅을 시작해보세요!',
-              //   style: TextStyle(
-              //       color: ColorStyles.mainColor,
-              //       fontSize: 16,
-              //       fontWeight: FontWeight.w400),
-              //   textAlign: TextAlign.center,
-              // )),
               child: StreamBuilder(
                 stream: _client.stream,
                 builder: (context, snapshot) {
