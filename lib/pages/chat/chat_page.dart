@@ -41,6 +41,8 @@ class _ChatPageState extends State<ChatPage> {
       }
     } catch (e) {
       debugPrint('$e');
+    } finally {
+      dio.close();
     }
   }
 

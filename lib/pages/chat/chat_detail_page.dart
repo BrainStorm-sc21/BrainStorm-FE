@@ -90,6 +90,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       }
     } catch (e) {
       debugPrint('$e');
+    } finally {
+      dio.close();
     }
   }
 
@@ -127,6 +129,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       }
     } catch (e) {
       debugPrint('$e');
+    } finally {
+      dio.close();
     }
   }
 

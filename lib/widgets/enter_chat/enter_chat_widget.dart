@@ -110,6 +110,8 @@ class _ChatUnitState extends State<ChatUnit> {
       }
     } catch (e) {
       debugPrint('$e');
+    } finally {
+      dio.close();
     }
   }
 
