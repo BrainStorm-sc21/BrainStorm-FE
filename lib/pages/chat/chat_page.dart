@@ -1,19 +1,57 @@
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/enter_chat/enter_chat_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  int userId;
-  ChatPage({
-    Key? key,
+  final int userId;
+  const ChatPage({
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  late List<Room> roomList = List.empty(growable: true);
+
+  @override
+  void initState() {
+    super.initState();
+    loadChatRoomList();
+  }
+
+  void loadChatRoomList() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/chat/room/${widget.userId}');
+
+    try {
+      if (res.statusCode == 200) {
+        print('채팅 목록 로드 성공!!:\n ${res.data}');
+        setRoomList(res.data);
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  void setRoomList(Map<String, dynamic> json) {
+    var list = json as List;
+    setState(() {
+      roomList = list.map((data) => Room.fromJson(data)).toList();
+    });
+    print('roomList: $roomList');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
             ListView.builder(
               shrinkWrap: true,
               // physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3, // 나중에 채팅 리스트 길이로 바꿀 것
+              itemCount: roomList.length,
               itemBuilder: (context, index) {
                 return ChatUnit(
                   name: '먹짱 $index호',
