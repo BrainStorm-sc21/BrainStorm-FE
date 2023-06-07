@@ -208,6 +208,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 TopPostUnit(
                   distance: '${widget.deal.distance?.round()}m',
                   isMine: widget.isMine,
+                  dealId: widget.deal.dealId!,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -355,6 +356,17 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 ),
               )
             : Container(),
+        Positioned(
+          left: 15,
+          top: 20,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () {
+              print('버튼 클릭');
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ]),
     );
   }
