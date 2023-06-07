@@ -3,20 +3,26 @@ class Room {
   final String roomId;
   final int sender;
   final int receiver;
+  final String lastMessage;
+  final DateTime lastTime;
 
   Room({
     required this.id,
     required this.roomId,
     required this.sender,
     required this.receiver,
+    required this.lastMessage,
+    required this.lastTime,
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
     return Room(
-      id: int.parse(json['id']),
-      roomId: json['roomId'].toString(),
-      sender: int.parse(json['sender']),
-      receiver: int.parse(json['receiver']),
+      id: json['id'],
+      roomId: json['roomId'],
+      sender: json['sender'],
+      receiver: json['receiver'],
+      lastMessage: json['lastMessage'],
+      lastTime: DateTime.parse(json['lastTime']),
     );
   }
 }
