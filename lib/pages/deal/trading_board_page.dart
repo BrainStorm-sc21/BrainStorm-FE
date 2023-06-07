@@ -3,7 +3,6 @@ import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class TradingBoard extends StatelessWidget {
   final int userId;
@@ -178,7 +177,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -236,13 +235,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
                     style: const TextStyle(fontSize: 13, color: Colors.grey)),
               ],
             ),
-            //const Spacer(),
-            IconButton(
-                onPressed: () {
-                  print('거래완료 버튼 클릭!');
-                  showCompleteDealDialog(context);
-                },
-                icon: const Icon(CupertinoIcons.checkmark_rectangle)),
+            const Spacer(),
           ],
         ));
   }
@@ -254,6 +247,8 @@ void showCompleteDealDialog(context) {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Text("거래를 완료하시겠습니까?"),
           actions: [
             // 취소 버튼

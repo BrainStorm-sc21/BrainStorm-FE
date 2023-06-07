@@ -48,6 +48,8 @@ class Popups {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Text(title),
             actions: [
               // 취소 버튼

@@ -207,6 +207,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
               children: [
                 TopPostUnit(
                   distance: '${widget.deal.distance?.round()}m',
+                  isMine: widget.isMine,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -364,6 +365,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text("정말로 삭제하시겠습니까?"),
             actions: [
               // 취소 버튼
@@ -403,6 +406,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text("게시글 정보를 수정하시겠습니까?"),
             actions: [
               // 취소 버튼
