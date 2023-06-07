@@ -33,8 +33,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
-  late final int dbRoomId;
-  late final String wsRoomId;
+  late int dbRoomId;
+  late String wsRoomId;
 
   List<Message> messages = List.empty(growable: true);
 
@@ -42,7 +42,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     if (widget.room != null) {
-      initRoomIds();
+      setRoomIds(widget.room!.id, widget.room!.roomId);
     }
   }
 
@@ -57,9 +57,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return _controller.text.trim().isEmpty;
   }
 
-  void initRoomIds() {
-    dbRoomId = widget.room!.id;
-    wsRoomId = widget.room!.roomId;
+  Future<void> setRoomIds(int id, String roomId) async {
+    setState(() {
+      dbRoomId = id;
+      wsRoomId = roomId;
+    });
   }
 
   Future<void> createChatRoom() async {
@@ -83,10 +85,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       if (res.data['status'] == 200) {
         debugPrint('채팅방 생성 성공!!:\n $res');
 
-        setState(() {
-          dbRoomId = int.parse(res.data['id']);
-          wsRoomId = res.data['data']['roomId'].toString();
-        });
+          Room room = Room.fromJson(res.data['data']);
+          setRoomIds(room.id, room.roomId);
       } else {
         throw Exception();
       }
