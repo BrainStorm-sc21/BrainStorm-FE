@@ -190,7 +190,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(
-                        type: messages[index].type,
                         message: messages[index].message,
                         isSentByMe:
                             messages[index].sender == senderId ? true : false,
@@ -268,70 +267,46 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 }
 
 class ChatBubble extends StatelessWidget {
-  final MessageType type;
   final String message;
   final bool isSentByMe;
   const ChatBubble({
     super.key,
-    required this.type,
     required this.message,
     required this.isSentByMe,
   });
 
   @override
   Widget build(BuildContext context) {
-    return type == MessageType.TALK
-        ? Align(
-            alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              margin:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                color: isSentByMe
-                    ? ColorStyles.groupBuyColor
-                    : ColorStyles.lightGrey,
-                borderRadius: isSentByMe
-                    ? const BorderRadius.only(
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0),
-                        bottomLeft: Radius.circular(16.0),
-                        bottomRight: Radius.zero,
-                      )
-                    : const BorderRadius.only(
-                        topLeft: Radius.zero,
-                        topRight: Radius.circular(16.0),
-                        bottomLeft: Radius.circular(16.0),
-                        bottomRight: Radius.circular(16.0),
-                      ),
-              ),
-              child: Text(
-                message,
-                style: TextStyle(
-                  color: isSentByMe
-                      ? ColorStyles.chatTextColor
-                      : ColorStyles.textColor,
-                  fontWeight: FontWeight.w600,
+    return Align(
+      alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+        decoration: BoxDecoration(
+          color: isSentByMe ? ColorStyles.groupBuyColor : ColorStyles.lightGrey,
+          borderRadius: isSentByMe
+              ? const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.zero,
+                )
+              : const BorderRadius.only(
+                  topLeft: Radius.zero,
+                  topRight: Radius.circular(16.0),
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
                 ),
-              ),
-            ),
-          )
-        : Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              margin:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: ColorStyles.textColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          );
+        ),
+        child: Text(
+          message,
+          style: TextStyle(
+            color:
+                isSentByMe ? ColorStyles.chatTextColor : ColorStyles.textColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 }
