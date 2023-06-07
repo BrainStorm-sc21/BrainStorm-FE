@@ -18,6 +18,7 @@ class ColorStyles {
   static const Color tipBackgroundColor = Color.fromRGBO(253, 243, 146, 0.5);
   static const Color mustardYellow = Color.fromRGBO(237, 199, 0, 1);
   static const Color lightYellow = Color.fromRGBO(253, 243, 146, 1);
+  static const Color yellow = Colors.yellow;
   static const Color cream = Color.fromRGBO(251, 246, 198, 1);
   static const Color lightgrey = Color.fromRGBO(199, 199, 199, 1);
   static const Color backgroundColor = Color.fromRGBO(249, 249, 249, 1);
