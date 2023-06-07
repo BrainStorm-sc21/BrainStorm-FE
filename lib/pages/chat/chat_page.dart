@@ -41,6 +41,9 @@ class _ChatPageState extends State<ChatPage> {
         setState(() {
           roomList = jsonList.map((data) => Room.fromJson(data)).toList();
         });
+      } else {
+        print('채팅 목록 로드 실패!!');
+        throw Exception();
       }
     } catch (e) {
       debugPrint('$e');
