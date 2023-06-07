@@ -40,8 +40,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-  }
-
+    if (widget.room != null) {
+      initRoomIds();
+    }
   }
 
   @override
@@ -53,6 +54,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   bool get isTextInputEmpty {
     return _controller.text.trim().isEmpty;
+  }
+
+  void initRoomIds() {
+    dbRoomId = widget.room!.id;
+    wsRoomId = widget.room!.roomId;
   }
 
   Future<void> createChatRoom() async {
