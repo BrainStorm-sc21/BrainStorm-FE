@@ -82,19 +82,19 @@ class _ChatPageState extends State<ChatPage> {
                       child: Text('같이먹장에서 다른 사용자와 대화를 시작해보세요!'),
                     ),
                   )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemCount: roomList.length,
-                    itemBuilder: (context, index) {
-                      return ChatUnit(
-                        senderId: widget.userId,
-                        receiverId: roomList[index].sender == widget.userId
-                            ? roomList[index].receiver
-                            : roomList[index].sender,
-                        room: roomList[index],
-                      );
-                    },
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: roomList.length,
+                      itemBuilder: (context, index) {
+                        return ChatUnit(
+                          senderId: widget.userId,
+                          receiverId: roomList[index].sender == widget.userId
+                              ? roomList[index].receiver
+                              : roomList[index].sender,
+                          room: roomList[index],
+                        );
+                      },
+                    ),
                   ),
           ],
         ),
