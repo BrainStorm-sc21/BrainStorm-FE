@@ -91,11 +91,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       );
 
       if (res.data['status'] == 200) {
-        debugPrint('채팅방 생성 성공!!:\n $res');
-
-          Room room = Room.fromJson(res.data['data']);
-          setRoomIds(room.id, room.roomId);
-
+        debugPrint('채팅방 생성 성공!!:\n ${res.data['data']}');
+        Room room = Room.fromJson(res.data['data']);
+        setRoomIds(room.id, room.roomId);
         setIsRoomExistToTrue();
       } else {
         throw Exception();
@@ -208,8 +206,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               child: StreamBuilder(
                 stream: _client.stream,
                 builder: (context, snapshot) {
+                  debugPrint('snapshot.data: ${snapshot.data}');
                   if (snapshot.data != null) {
-                    debugPrint('snpashot.data: ${snapshot.data}');
                     Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
                     messages.add(Message.fromJson(jsonData));
                   }
