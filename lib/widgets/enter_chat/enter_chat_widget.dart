@@ -20,20 +20,24 @@ class GoRecipe extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+          const Padding(
+            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
             child: SizedBox(
               width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   Text('냉장고 속 식품 레시피',
                       style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.white)),
                   Text('지금 확인하기',
                       style: TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w400, color: ColorStyles.white)),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: ColorStyles.white)),
                 ],
               ),
             ),
@@ -57,7 +61,6 @@ class GoRecipe extends StatelessWidget {
 
 class ChatUnit extends StatefulWidget {
   final int receiverId;
-
   final String imgUrl;
   final String content;
   final String time;
@@ -172,7 +175,9 @@ class _ChatUnitState extends State<ChatUnit> {
                     Text(
                       widget.time,
                       style: const TextStyle(
-                          fontSize: 11, fontWeight: FontWeight.w400, color: ColorStyles.textColor),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: ColorStyles.textColor),
                     ),
                     widget.unread != 0
                         ? Container(
@@ -185,7 +190,8 @@ class _ChatUnitState extends State<ChatUnit> {
                             child: Center(
                               child: Text(
                                 '${widget.unread}',
-                                style: const TextStyle(fontSize: 12, color: ColorStyles.white),
+                                style: const TextStyle(
+                                    fontSize: 12, color: ColorStyles.white),
                               ),
                             ),
                           )
