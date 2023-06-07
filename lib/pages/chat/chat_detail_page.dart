@@ -4,7 +4,6 @@ import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:brainstorm_meokjang/utilities/sharedData.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -12,11 +11,13 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatDetailPage extends StatefulWidget {
   final int receiverId;
+  final int senderId;
   final Deal? deal;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
     required this.deal,
+    required this.senderId,
   });
 
   @override
@@ -28,9 +29,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://meokjang.com/chat');
 
-  late int senderId;
-  late int receiverId;
-
   late final int dbRoomId;
   late final String wsRoomId;
 
@@ -39,14 +37,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    initChatUsersId();
   }
 
-  void initChatUsersId() {
-    setState(() {
-      senderId = SharedData.getInt('userId');
-      receiverId = widget.receiverId;
-    });
   }
 
   @override
@@ -68,8 +60,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
-      "sender": senderId,
-      "receiver": receiverId,
+      "sender": widget.senderId,
+      "receiver": widget.receiverId,
     };
 
     try {
@@ -100,7 +92,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     Message data = Message(
       type: type,
       roomId: wsRoomId,
-      sender: senderId,
+      sender: widget.senderId,
       message: message,
       time: time,
     );
@@ -191,8 +183,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     itemBuilder: (context, index) {
                       return ChatBubble(
                         message: messages[index].message,
-                        isSentByMe:
-                            messages[index].sender == senderId ? true : false,
+                        isSentByMe: messages[index].sender == widget.senderId
+                            ? true
+                            : false,
                       );
                     },
                   );
