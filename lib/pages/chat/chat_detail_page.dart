@@ -4,8 +4,8 @@ import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:dio/dio.dart';
 import 'package:brainstorm_meokjang/utilities/sharedData.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -58,6 +58,39 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   bool get isTextInputEmpty {
     return _controller.text.trim().isEmpty;
+  }
+
+  Future<void> createChatRoom() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final data = {
+      "sender": senderId,
+      "receiver": receiverId,
+    };
+
+    try {
+      final Response res = await dio.post(
+        '/chat',
+        data: data,
+      );
+
+      if (res.statusCode == 200) {
+        debugPrint('채팅방 생성 성공!!:\n $res');
+
+        setState(() {
+          dbRoomId = int.parse(res.data['id']);
+          wsRoomId = res.data['roomId'].toString();
+        });
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
   }
 
   void sendMessage(MessageType type, String message) {
