@@ -37,21 +37,16 @@ class _ChatPageState extends State<ChatPage> {
     try {
       if (res.statusCode == 200) {
         print('채팅 목록 로드 성공!!:\n ${res.data}');
-        setRoomList(res.data);
+        List<dynamic> jsonList = res.data['data'] as List;
+        setState(() {
+          roomList = jsonList.map((data) => Room.fromJson(data)).toList();
+        });
       }
     } catch (e) {
       debugPrint('$e');
     } finally {
       dio.close();
     }
-  }
-
-  void setRoomList(Map<String, dynamic> json) {
-    var list = json as List;
-    setState(() {
-      roomList = list.map((data) => Room.fromJson(data)).toList();
-    });
-    print('roomList: $roomList');
   }
 
   @override
