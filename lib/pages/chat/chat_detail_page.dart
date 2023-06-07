@@ -45,6 +45,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
+      sendMessage(MessageType.ENTER, '');
       loadPrevMessages();
     }
   }
@@ -106,6 +107,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
+  void checkRoomExist(MessageType type, String message) async {
+    if (isRoomExist == false) {
+      await createChatRoom();
+      sendMessage(MessageType.ENTER, '');
+      sendMessage(type, message);
+    } else {
+      sendMessage(type, message);
+    }
+  }
+
   void sendMessage(MessageType type, String message) {
     DateTime time = DateTime.now();
     String timeFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(time);
@@ -116,6 +127,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       message: message,
       time: timeFormatted,
     );
+    print(jsonEncode(data));
     _client.sink.add(jsonEncode(data));
     _controller.clear();
   }
@@ -261,7 +273,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         child: InkWell(
                           onTap: () {
                             if (isTextInputEmpty == false) {
-                              sendMessage(MessageType.TALK, _controller.text);
+                              checkRoomExist(
+                                  MessageType.TALK, _controller.text);
                             }
                           },
                           child: const Icon(
