@@ -43,6 +43,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     super.initState();
     if (widget.room != null) {
       setRoomIds(widget.room!.id, widget.room!.roomId);
+      loadPrevMessages();
     }
   }
 
@@ -123,8 +124,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         '/chat/message/$dbRoomId',
       );
 
-        // 데이터 Message 형태로 잘라야 함
       if (res.data['status'] == 200) {
+        debugPrint('메시지 로드 성공!!');
+        List<dynamic> jsonList = res.data['data'] as List;
+        setState(() {
+          messages = jsonList.map((data) => Message.fromJson(data)).toList();
+        });
       } else {
         throw Exception();
       }
