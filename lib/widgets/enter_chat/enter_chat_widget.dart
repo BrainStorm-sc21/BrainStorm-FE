@@ -165,7 +165,7 @@ class _ChatUnitState extends State<ChatUnit> {
                                   color: ColorStyles.black),
                             ),
                             Text(
-                              widget.room.lastMessage,
+                              widget.room.lastMessage!,
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -185,9 +185,10 @@ class _ChatUnitState extends State<ChatUnit> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      widget.room.lastTime.toString(),
-                      style: const TextStyle(
+                    const Text(
+                      'x 분 전',
+                      // widget.room.lastTime!.toString(),
+                      style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: ColorStyles.textColor),

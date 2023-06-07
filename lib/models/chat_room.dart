@@ -3,8 +3,8 @@ class Room {
   final String roomId;
   final int sender;
   final int receiver;
-  final String lastMessage;
-  final DateTime lastTime;
+  final String? lastMessage;
+  final DateTime? lastTime;
 
   Room({
     required this.id,
@@ -21,8 +21,9 @@ class Room {
       roomId: json['roomId'],
       sender: json['sender'],
       receiver: json['receiver'],
-      lastMessage: json['lastMessage'],
-      lastTime: DateTime.parse(json['lastTime']),
+      lastMessage: json['lastMessage'] ?? '',
+      lastTime:
+          json['lastTime'] == null ? null : DateTime.parse(json['lastTime']),
     );
   }
 }
