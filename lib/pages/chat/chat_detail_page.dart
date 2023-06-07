@@ -106,6 +106,30 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     _controller.clear();
   }
 
+  void loadPrevMessages() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    try {
+      final Response res = await dio.get(
+        '/chat/mesage/{$dbRoomId}',
+      );
+
+      if (res.statusCode == 200) {
+        debugPrint('메시지 로드 성공!!:\n $res');
+        debugPrint('${jsonDecode(res.data)}');
+        // 데이터 Message 형태로 잘라야 함
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
