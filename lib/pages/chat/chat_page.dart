@@ -81,15 +81,15 @@ class _ChatPageState extends State<ChatPage> {
               // physics: const NeverScrollableScrollPhysics(),
               itemCount: roomList.length,
               itemBuilder: (context, index) {
-                return ChatUnit(
-                  receiverId: roomList[index].sender == widget.userId
-                      ? roomList[index].receiver
-                      : roomList[index].sender,
-                  content: '채팅 메시지 텍스트 $index',
-                  time: 'X 분 전', // 임시
-                );
               },
             ),
+                      return ChatUnit(
+                        senderId: widget.userId,
+                        receiverId: roomList[index].sender == widget.userId
+                            ? roomList[index].receiver
+                            : roomList[index].sender,
+                        room: roomList[index],
+                      );
           ],
         ),
       ),

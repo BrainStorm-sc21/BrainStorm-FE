@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -60,18 +61,18 @@ class GoRecipe extends StatelessWidget {
 }
 
 class ChatUnit extends StatefulWidget {
+  final int senderId;
   final int receiverId;
+  final Room room;
   final String imgUrl;
-  final String content;
-  final String time;
   final int unread;
 
   const ChatUnit({
     super.key,
+    required this.senderId,
     required this.receiverId,
+    required this.room,
     this.imgUrl = 'assets/images/logo.png',
-    required this.content,
-    required this.time,
     this.unread = 0,
   });
 
@@ -121,7 +122,9 @@ class _ChatUnitState extends State<ChatUnit> {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatDetailPage(
+            senderId: widget.senderId,
             receiverId: widget.receiverId,
+            room: widget.room,
             deal: null,
           ),
         ),
@@ -162,7 +165,7 @@ class _ChatUnitState extends State<ChatUnit> {
                                   color: ColorStyles.black),
                             ),
                             Text(
-                              widget.content,
+                              widget.room.lastMessage,
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -183,7 +186,7 @@ class _ChatUnitState extends State<ChatUnit> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      widget.time,
+                      widget.room.lastTime.toString(),
                       style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
