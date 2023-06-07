@@ -8,14 +8,14 @@ class Message {
   final String roomId;
   final int sender; //userId
   final String message;
-  // final DateTime date;
+  final String time;
 
   Message({
     required this.type,
     required this.roomId,
     required this.sender,
     required this.message,
-    // required this.date,
+    required this.time,
   });
 
   Map<String, String> toJson() {
@@ -24,7 +24,7 @@ class Message {
     data['roomId'] = roomId;
     data['sender'] = sender.toString();
     data['message'] = message;
-    // data['date'] = date.toString();
+    data['time'] = time.toString();
     return data;
   }
 
@@ -34,7 +34,7 @@ class Message {
       roomId: json['roomId'],
       sender: int.parse(json['sender']),
       message: json['message'],
-      // date: DateTime.parse(json['date']),
+      time: json['time'],
     );
   }
 }
