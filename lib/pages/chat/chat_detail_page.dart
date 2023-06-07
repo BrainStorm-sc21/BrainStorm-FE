@@ -5,6 +5,7 @@ import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
+import 'package:brainstorm_meokjang/utilities/sharedData.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -26,13 +27,26 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _controller = TextEditingController();
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://meokjang.com/chat');
-  final int userId = 7; // 임시 유저 아이디
+
+  late int senderId;
+  late int receiverId;
+
+  late final int dbRoomId;
+  late final String wsRoomId;
+
   List<Message> messages = List.empty(growable: true);
-  late final String _roomId;
 
   @override
   void initState() {
     super.initState();
+    initChatUsersId();
+  }
+
+  void initChatUsersId() {
+    setState(() {
+      senderId = SharedData.getInt('userId');
+      receiverId = widget.receiverId;
+    });
   }
 
   @override
@@ -47,11 +61,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   void sendMessage(MessageType type, String message) {
+    DateTime time = DateTime.now();
     Message data = Message(
       type: type,
-      roomId: _roomId,
-      sender: userId,
+      roomId: wsRoomId,
+      sender: senderId,
       message: message,
+      time: time.toString(),
     );
     _client.sink.add(jsonEncode(data));
     _controller.clear();
@@ -118,7 +134,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         type: messages[index].type,
                         message: messages[index].message,
                         isSentByMe:
-                            messages[index].sender == userId ? true : false,
+                            messages[index].sender == senderId ? true : false,
                       );
                     },
                   );
