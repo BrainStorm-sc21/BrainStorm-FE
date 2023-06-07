@@ -80,7 +80,7 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
-  late String nickname;
+  late String nickname = '';
 
   @override
   void initState() {
