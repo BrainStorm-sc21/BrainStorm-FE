@@ -104,7 +104,9 @@ class _ChatUnitState extends State<ChatUnit> {
           nickname = json['userName'];
         });
       } else {
-        throw Exception(res.data['message']);
+        setState(() {
+          nickname = '(알 수 없음)';
+        });
       }
     } catch (e) {
       debugPrint('$e');
