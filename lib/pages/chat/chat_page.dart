@@ -76,13 +76,17 @@ class _ChatPageState extends State<ChatPage> {
               padding: EdgeInsets.symmetric(vertical: 20),
               child: GoRecipe(),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
-              itemCount: roomList.length,
-              itemBuilder: (context, index) {
-              },
-            ),
+            roomList.isEmpty
+                ? const Expanded(
+                    child: Center(
+                      child: Text('같이먹장에서 다른 사용자와 대화를 시작해보세요!'),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemCount: roomList.length,
+                    itemBuilder: (context, index) {
                       return ChatUnit(
                         senderId: widget.userId,
                         receiverId: roomList[index].sender == widget.userId
@@ -90,6 +94,8 @@ class _ChatPageState extends State<ChatPage> {
                             : roomList[index].sender,
                         room: roomList[index],
                       );
+                    },
+                  ),
           ],
         ),
       ),
