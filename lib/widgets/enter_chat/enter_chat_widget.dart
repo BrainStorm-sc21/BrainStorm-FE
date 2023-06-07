@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -82,11 +83,13 @@ class ChatUnit extends StatefulWidget {
 
 class _ChatUnitState extends State<ChatUnit> {
   late String nickname = '';
+  String timeAgo = '';
 
   @override
   void initState() {
     super.initState();
     getUserNickname();
+    initTimeAgo();
   }
 
   Future<void> getUserNickname() async {
@@ -114,6 +117,14 @@ class _ChatUnitState extends State<ChatUnit> {
     } finally {
       dio.close();
     }
+  }
+
+  void initTimeAgo() {
+    DateTime? time = widget.room.lastTime;
+    print(time);
+    setState(() {
+      timeAgo = time == null ? '' : countHour(time);
+    });
   }
 
   @override
@@ -185,10 +196,9 @@ class _ChatUnitState extends State<ChatUnit> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
-                      'x 분 전',
-                      // widget.room.lastTime!.toString(),
-                      style: TextStyle(
+                    Text(
+                      timeAgo,
+                      style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: ColorStyles.textColor),
