@@ -1,7 +1,9 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class TradingBoard extends StatelessWidget {
   final int userId;
@@ -34,16 +36,14 @@ class TradingBoard extends StatelessWidget {
     return ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
-        deal = posts[index];
+        if (index == 0) return const ADVBanner();
+        deal = posts[index - 1];
         final dealName = deal.dealName;
         final distance = deal.distance!.round();
         final dealType = deal.dealType;
         final time = countHour(deal.createdAt);
         final imgUrl = deal.dealImage1;
         return InkWell(
-          // child: OnePostUnit(
-          //   deal: deal,
-          // ),
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: Row(
@@ -109,13 +109,13 @@ class TradingBoard extends StatelessWidget {
                 ],
               )),
           onTap: () {
-            bool isMine = (posts[index].userId == userId) ? true : false;
+            bool isMine = (posts[index - 1].userId == userId) ? true : false;
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => DealDetailPage(
                           userId: userId,
-                          deal: posts[index],
+                          deal: posts[index - 1],
                           isMine: isMine,
                         )));
           },
@@ -215,7 +215,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -236,7 +236,65 @@ class _OnePostUnitState extends State<OnePostUnit> {
                     style: const TextStyle(fontSize: 13, color: Colors.grey)),
               ],
             ),
+            //const Spacer(),
+            IconButton(
+                onPressed: () {
+                  print('거래완료 버튼 클릭!');
+                  showCompleteDealDialog(context);
+                },
+                icon: const Icon(CupertinoIcons.checkmark_rectangle)),
           ],
         ));
+  }
+}
+
+//Regrigerator의 다이얼로그를 활용
+void showCompleteDealDialog(context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("거래를 완료하시겠습니까?"),
+          actions: [
+            // 취소 버튼
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("취소"),
+            ),
+            // 확인 버튼
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                "확인",
+                style: TextStyle(color: Colors.pink),
+              ),
+            ),
+          ],
+        );
+      });
+}
+
+class ADVBanner extends StatelessWidget {
+  const ADVBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: ColorStyles.mainColor,
+        ),
+        height: 80,
+        child: const Center(
+            child: Text(
+          '광고배너입니다.',
+          style: TextStyle(fontSize: 15),
+        )),
+      ),
+    );
   }
 }

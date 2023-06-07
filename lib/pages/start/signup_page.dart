@@ -4,6 +4,7 @@ import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/start/phone_signup_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/sns_webView_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
@@ -62,7 +63,8 @@ class _SignUpPageState extends State<SignUpPage> {
         user.gender = value;
         checkValid();
       });
-  void setAddress(String location, double latitude, double longitude) => setState(() {
+  void setAddress(String location, double latitude, double longitude) =>
+      setState(() {
         user.location = location;
         user.latitude = latitude;
         user.longitude = longitude;
@@ -104,17 +106,23 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: ElevatedButton(
                               onPressed: () async {
                                 int userId = await requestSignUp(user);
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CompleteSignUpImage(userId: userId),
-                                  ),
-                                  (route) => false,
-                                );
+                                if (userId != -1) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CompleteSignUpImage(userId: userId),
+                                    ),
+                                    (route) => false,
+                                  );
+                                } else {
+                                  showToast('회원가입에 실패했습니다!\n 다시 시도해주세요');
+                                }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    (isValid) ? ColorStyles.mainColor : ColorStyles.grey,
+                                backgroundColor: (isValid)
+                                    ? ColorStyles.mainColor
+                                    : ColorStyles.grey,
                               ),
                               child: const Text("회원가입하기")),
                         )),
@@ -281,7 +289,8 @@ class _GenderFieldState extends State<GenderField> {
 }
 
 class PositionField extends StatefulWidget {
-  final void Function(String location, double latitude, double longitude) setAddress;
+  final void Function(String location, double latitude, double longitude)
+      setAddress;
   const PositionField({super.key, required this.setAddress});
 
   @override
@@ -337,13 +346,14 @@ class _PositionFieldState extends State<PositionField> {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Kpostal result = await Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => KpostalView()));
+                      Kpostal result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => KpostalView()));
                       setState(() {
                         posText = result.address;
                         posColor = Colors.black;
                         posFontSize = 14;
-                        widget.setAddress(result.address, result.latitude!, result.longitude!);
+                        widget.setAddress(result.address, result.latitude!,
+                            result.longitude!);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -376,7 +386,8 @@ class _AuthFieldState extends State<AuthField> {
   String? phoneNumber;
   bool isCompleteAuth = false;
 
-  void setPhoneNumber(String phoneNumber) => setState(() => phoneNumber = phoneNumber);
+  void setPhoneNumber(String phoneNumber) =>
+      setState(() => phoneNumber = phoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -413,11 +424,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const NaverWebView()),
+                                                  builder: (context) =>
+                                                      const NaverWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Naver로\n인증하기"),
                                         ),
@@ -433,11 +446,13 @@ class _AuthFieldState extends State<AuthField> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => const KakaoWebView()),
+                                                  builder: (context) =>
+                                                      const KakaoWebView()),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorStyles.mainColor,
+                                            backgroundColor:
+                                                ColorStyles.mainColor,
                                           ),
                                           child: const Text("Kakao로\n인증하기"),
                                         ),
@@ -478,16 +493,21 @@ class _AuthFieldState extends State<AuthField> {
                     onPressed: () async {
                       String phoneNumber = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PhoneAuthForSignUpPage()),
+                        MaterialPageRoute(
+                            builder: (context) => PhoneAuthForSignUpPage()),
                       );
                       setState(() {
                         widget.sendPhoneNumber(phoneNumber);
                       });
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: (isCompleteAuth) ? ColorStyles.grey : ColorStyles.mainColor,
+                      foregroundColor: (isCompleteAuth)
+                          ? ColorStyles.grey
+                          : ColorStyles.mainColor,
                       side: BorderSide(
-                          color: (isCompleteAuth) ? ColorStyles.mainColor : ColorStyles.white),
+                          color: (isCompleteAuth)
+                              ? ColorStyles.mainColor
+                              : ColorStyles.white),
                     ),
                     child: const Text("번호 인증"),
                   ),

@@ -28,6 +28,14 @@ class DealDetailPage extends StatefulWidget {
 
 class _DealDetailPageState extends State<DealDetailPage> {
   List<String> imageList = [];
+  late bool isClickModifyButton = false;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _contentsController = TextEditingController();
+
+  void initEditingController() {
+    _nameController.text = widget.deal.dealName;
+    _contentsController.text = widget.deal.dealContent;
+  }
 
   void setImageList() {
     if (widget.deal.dealImage1 != null) {
@@ -70,11 +78,84 @@ class _DealDetailPageState extends State<DealDetailPage> {
     }
   }
 
+  void modifyDeal(int dealId, Deal deal) async {
+    String imageBaseURL =
+        'https://objectstorage.ap-chuncheon-1.oraclecloud.com/p/mOKCBwWiKyiyIkbN0aqY5KV5_K2-OzTt4V7feFotQqm3epdOyNO0VUJdtMUsv3Jq/n/axzkif4tbwyu/b/file-bucket/o/';
+    print('modifyDeal 호출');
+    print('userId: ${deal.userId}');
+    print('dealType: ${deal.dealType}');
+    print('dealName: ${deal.dealName}');
+    print('dealContent: ${deal.dealContent}');
+    print('image1: ${deal.dealImage1?.replaceFirst(imageBaseURL, "")}');
+    print('image2: ${deal.dealImage2?.replaceFirst(imageBaseURL, "")}');
+    print('image3: ${deal.dealImage3?.replaceFirst(imageBaseURL, "")}');
+    print('image4: ${deal.dealImage4?.replaceFirst(imageBaseURL, "")}');
+
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10)
+      ..contentType = 'multipart/form-data';
+
+    // final data = {
+    //   'userId': deal.userId,
+    //   'dealType': deal.dealType,
+    //   'dealName': deal.dealName,
+    //   'dealContent': deal.dealContent,
+    //   'image1': deal.dealImage1?.replaceFirst(imageBaseURL, ""),
+    //   'image2': deal.dealImage2?.replaceFirst(imageBaseURL, ""),
+    //   'image3': deal.dealImage3?.replaceFirst(imageBaseURL, ""),
+    //   'image4': deal.dealImage4?.replaceFirst(imageBaseURL, ""),
+    // };
+
+    final FormData formData = FormData.fromMap({
+      'userId': deal.userId,
+      'dealType': deal.dealType,
+      'dealName': deal.dealName,
+      'dealContent': deal.dealContent,
+      'image1': deal.dealImage1 == null
+          ? null
+          : MultipartFile.fromFileSync(
+              deal.dealImage1!.replaceFirst(imageBaseURL, "")),
+      'image2': deal.dealImage2 == null
+          ? null
+          : MultipartFile.fromFileSync(
+              deal.dealImage2!.replaceFirst(imageBaseURL, "")),
+      'image3': deal.dealImage3 == null
+          ? null
+          : MultipartFile.fromFileSync(
+              deal.dealImage3!.replaceFirst(imageBaseURL, "")),
+      'image4': deal.dealImage4 == null
+          ? null
+          : MultipartFile.fromFileSync(
+              deal.dealImage4!.replaceFirst(imageBaseURL, "")),
+    });
+
+    try {
+      final resp = await dio.put("/deal/$dealId", data: formData);
+      print("modify Status: ${resp.statusCode}");
+
+      if (resp.data['status'] == 200) {
+        print('수정 성공!');
+      } else {
+        print('??');
+      }
+    } catch (e) {
+      Exception(e);
+      print(e);
+    } finally {
+      dio.close();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setImageList();
+    initEditingController();
+    print(widget.deal.dealImage1);
   }
 
   @override
@@ -153,8 +234,22 @@ class _DealDetailPageState extends State<DealDetailPage> {
                       color: Colors.grey[200],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(widget.deal.dealContent),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 20),
+                      child: AbsorbPointer(
+                        absorbing: !isClickModifyButton,
+                        child: TextFormField(
+                          maxLines: 8,
+                          controller: _contentsController,
+                          decoration: InputDecoration(
+                            enabled: isClickModifyButton,
+                            labelStyle: const TextStyle(fontSize: 12),
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      // child: Text(widget.deal.dealContent),
                     ),
                   ),
                 ),
@@ -169,7 +264,13 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 width: double.infinity,
                                 height: 40,
                                 text: '수정하기',
-                                onPressed: () {},
+                                onPressed: () {
+                                  print('수정하기 버튼 클릭');
+                                  setState(() {
+                                    isClickModifyButton = !isClickModifyButton;
+                                  });
+                                  print(isClickModifyButton);
+                                },
                                 backgroundColor: ColorStyles.mainColor,
                                 foregroundColor: ColorStyles.white,
                                 borderColor: ColorStyles.mainColor),
@@ -179,7 +280,9 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 height: 40,
                                 text: '삭제하기',
                                 onPressed: () {
+                                  print('삭제하기 버튼 클릭');
                                   showDeleteDealDialog();
+                                  print(isClickModifyButton);
                                 },
                                 backgroundColor: ColorStyles.white,
                                 foregroundColor: ColorStyles.mainColor,
@@ -212,11 +315,50 @@ class _DealDetailPageState extends State<DealDetailPage> {
             ),
           ),
         ),
+        (isClickModifyButton)
+            ? Positioned(
+                bottom: 40,
+                left: 20,
+                right: 20,
+                child: Container(
+                  child: Column(
+                    children: [
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '확인',
+                          onPressed: () {
+                            showModifyDealDialog();
+                          },
+                          backgroundColor: ColorStyles.mainColor,
+                          foregroundColor: ColorStyles.white,
+                          borderColor: ColorStyles.mainColor),
+                      const SizedBox(height: 10),
+                      RoundedOutlinedButton(
+                          width: double.infinity,
+                          height: 40,
+                          text: '취소',
+                          onPressed: () {
+                            initEditingController();
+                            print('취소 버튼 클릭');
+                            setState(() {
+                              isClickModifyButton = !isClickModifyButton;
+                            });
+                            print(isClickModifyButton);
+                          },
+                          backgroundColor: ColorStyles.white,
+                          foregroundColor: ColorStyles.mainColor,
+                          borderColor: ColorStyles.mainColor)
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
       ]),
     );
   }
 
-  //Regrigerator의 다이얼로그를 활용
+  //Regrigerator의 다이얼로그를 활용 - 삭제 버튼 클릭 시
   void showDeleteDealDialog() {
     showDialog(
         context: context,
@@ -254,5 +396,81 @@ class _DealDetailPageState extends State<DealDetailPage> {
             ],
           );
         });
+  }
+
+  void showModifyDealDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("게시글 정보를 수정하시겠습니까?"),
+            actions: [
+              // 취소 버튼
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("취소"),
+              ),
+              // 확인 버튼
+              TextButton(
+                onPressed: () {
+                  widget.deal.dealContent = _contentsController.text;
+                  modifyDeal(widget.deal.dealId!, widget.deal);
+                  print('deal의 컨텐츠가 ${widget.deal.dealContent}로 바뀌었습니다.');
+                  showToast('게시글이 수정되었습니다');
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => AppPagesContainer(
+                  //         index: AppPagesNumber.deal, userId: widget.userId),
+                  //   ),
+                  //   (route) => false,
+                  // );
+                },
+                child: const Text(
+                  "확인",
+                  style: TextStyle(color: Colors.pink),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+}
+
+class ModifyStatusButtons extends StatefulWidget {
+  const ModifyStatusButtons({super.key});
+
+  @override
+  State<ModifyStatusButtons> createState() => _ModifyStatusButtonsState();
+}
+
+class _ModifyStatusButtonsState extends State<ModifyStatusButtons> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          RoundedOutlinedButton(
+              width: double.infinity,
+              height: 40,
+              text: '확인',
+              onPressed: () {},
+              backgroundColor: ColorStyles.mainColor,
+              foregroundColor: ColorStyles.white,
+              borderColor: ColorStyles.mainColor),
+          const SizedBox(height: 10),
+          RoundedOutlinedButton(
+              width: double.infinity,
+              height: 40,
+              text: '취소',
+              onPressed: () {},
+              backgroundColor: ColorStyles.white,
+              foregroundColor: ColorStyles.mainColor,
+              borderColor: ColorStyles.mainColor)
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
@@ -36,7 +35,7 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
 
       setState(() {
         for (Deal deal in dealData.data) {
-          print('게시글: $deal');
+          print('게시글: ${deal.dealName}');
           myPosts.add(deal);
         }
       });
@@ -75,17 +74,14 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
       ),
       body: Container(
         color: ColorStyles.lightGrey,
-        child:
-            // (myPosts.isEmpty)
-            //     ? const Center(child: Text('내가 올린 게시글이 없습니다!'))
-            //     :
-            ListView.builder(
+        child: (myPosts.isEmpty)
+            ? const Center(child: Text('내가 올린 게시글이 없습니다!'))
+            : ListView.builder(
                 itemCount: myPosts.length,
                 itemBuilder: ((context, index) {
                   print('내 게시글의 갯수: ${myPosts.length}');
                   return MyPostUnit(
                     deal: myPosts[index],
-                    statusCheck: (index % 2 == 0),
                   );
                 })),
       ),
@@ -95,8 +91,7 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
 
 class MyPostUnit extends StatefulWidget {
   final Deal deal;
-  final bool statusCheck; //true - 거래 중, false - 거래 완료 가능
-  const MyPostUnit({super.key, required this.deal, required this.statusCheck});
+  const MyPostUnit({super.key, required this.deal});
 
   @override
   State<MyPostUnit> createState() => _MyPostUnitState();
@@ -199,17 +194,11 @@ class _MyPostUnitState extends State<MyPostUnit> {
               child: RoundedOutlinedButton(
                   width: double.infinity,
                   height: 26,
-                  text: (widget.statusCheck) ? '거래중' : '거래완료하기',
-                  onPressed: () {
-                    Popups.showReview(context);
-                  },
-                  backgroundColor: (widget.statusCheck)
-                      ? ColorStyles.grey
-                      : ColorStyles.mainColor,
+                  text: '거래중',
+                  onPressed: () {},
+                  backgroundColor: ColorStyles.mainColor,
                   foregroundColor: ColorStyles.white,
-                  borderColor: (widget.statusCheck)
-                      ? ColorStyles.grey
-                      : ColorStyles.mainColor),
+                  borderColor: ColorStyles.mainColor),
             ),
             const SizedBox(height: 10),
           ],
