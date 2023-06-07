@@ -6,13 +6,15 @@ import 'package:get/get.dart';
 class UserInfoController extends GetxController {
   final RxList<User> _userInfo = <User>[].obs;
   final RxString _userName = "".obs;
+  final RxDouble _reliability = 0.0.obs;
   final RxBool _isLoading = false.obs;
 
   get userInfo => _userInfo;
   get userName => _userName.value;
+  get reliability => _reliability.value;
   get isLoading => _isLoading.value;
 
-  Future getUserName(int userId) async {
+  Future getUserInfo(int userId) async {
     _isLoading.value = true;
     userInfo.clear();
 
@@ -28,6 +30,7 @@ class UserInfoController extends GetxController {
       User user = User.fromJson(resp.data);
 
       _userName.value = user.userName;
+      _reliability.value = user.reliability!;
       _isLoading.value = false;
       update();
     } catch (e) {
@@ -36,5 +39,10 @@ class UserInfoController extends GetxController {
       dio.close();
     }
     return false;
+  }
+
+  void modifyUserName(String name) {
+    _userName.value = name;
+    update();
   }
 }
