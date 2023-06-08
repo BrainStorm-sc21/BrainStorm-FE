@@ -1,6 +1,7 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
+import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -15,37 +16,37 @@ class GoRecipe extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const RecipeRecommendPage(),
+          builder: (context) => const RecipeSnappingSheet(),
         ),
       ),
       child: Container(
         decoration: const BoxDecoration(
-            color: ColorStyles.mainColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            )),
+          color: ColorStyles.mainColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 10.0,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
               child: SizedBox(
                 width: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: const [
                     Text('냉장고 속 식품 레시피',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: ColorStyles.white)),
+                            fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
                     Text('지금 확인하기',
                         style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: ColorStyles.white)),
+                            fontSize: 13, fontWeight: FontWeight.w400, color: ColorStyles.white)),
                   ],
                 ),
               ),
@@ -56,11 +57,12 @@ class GoRecipe extends StatelessWidget {
                 width: 70,
                 height: 50,
                 decoration: const BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage('assets/images/chatGPT.png'),
-                )),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/chatGPT.png'),
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -206,9 +208,7 @@ class _ChatUnitState extends State<ChatUnit> {
                     Text(
                       timeAgo,
                       style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.textColor),
+                          fontSize: 11, fontWeight: FontWeight.w400, color: ColorStyles.textColor),
                     ),
                     widget.unread != 0
                         ? Container(
@@ -221,8 +221,7 @@ class _ChatUnitState extends State<ChatUnit> {
                             child: Center(
                               child: Text(
                                 '${widget.unread}',
-                                style: const TextStyle(
-                                    fontSize: 12, color: ColorStyles.white),
+                                style: const TextStyle(fontSize: 12, color: ColorStyles.white),
                               ),
                             ),
                           )
