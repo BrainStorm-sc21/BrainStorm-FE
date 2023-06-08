@@ -1,6 +1,10 @@
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/count_hour.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -14,37 +18,29 @@ class GoRecipe extends StatelessWidget {
           builder: (context) => const RecipeRecommendPage(),
         ),
       ),
-      child: Container(
-        width: double.infinity,
-        height: 80,
-        decoration: BoxDecoration(
-          color: ColorStyles.mainColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-              child: SizedBox(
-                width: 150,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('냉장고 속 식품 레시피',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: ColorStyles.white)),
-                    Text('지금 확인하기',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: ColorStyles.white)),
-                  ],
-                ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            child: SizedBox(
+              width: 150,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('냉장고 속 식품 레시피',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.white)),
+                  Text('지금 확인하기',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: ColorStyles.white)),
+                ],
               ),
             ),
             Padding(
@@ -66,19 +62,19 @@ class GoRecipe extends StatelessWidget {
 }
 
 class ChatUnit extends StatefulWidget {
+  final int senderId;
+  final int receiverId;
+  final Room room;
   final String imgUrl;
-  final String name;
-  final String content;
-  final String time;
   final int unread;
 
   const ChatUnit({
     super.key,
+    required this.senderId,
+    required this.receiverId,
+    required this.room,
     this.imgUrl = 'assets/images/logo.png',
-    this.name = '먹짱 1호',
-    this.content = '혹시 감자도 파시나요?',
-    this.time = '오후 1:36',
-    this.unread = 1,
+    this.unread = 0,
   });
 
   @override
@@ -86,14 +82,60 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
+  late String nickname = '';
+  String timeAgo = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getUserNickname();
+    initTimeAgo();
+  }
+
+  Future<void> getUserNickname() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/users/${widget.receiverId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          nickname = json['userName'];
+        });
+      } else {
+        setState(() {
+          nickname = '(알 수 없음)';
+        });
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
+  void initTimeAgo() {
+    DateTime? time = widget.room.lastTime;
+    print(time);
+    setState(() {
+      timeAgo = time == null ? '' : countHour(time);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatDetailPage(
-            nickname: widget.name,
-            content: widget.content,
+            senderId: widget.senderId,
+            receiverId: widget.receiverId,
+            room: widget.room,
             deal: null,
           ),
         ),
@@ -127,14 +169,14 @@ class _ChatUnitState extends State<ChatUnit> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.name,
+                              nickname,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   color: ColorStyles.black),
                             ),
                             Text(
-                              widget.content,
+                              widget.room.lastMessage!,
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -155,7 +197,7 @@ class _ChatUnitState extends State<ChatUnit> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      widget.time,
+                      timeAgo,
                       style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,

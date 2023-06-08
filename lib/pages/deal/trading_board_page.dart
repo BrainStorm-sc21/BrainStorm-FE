@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
+import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
@@ -9,25 +10,6 @@ class TradingBoard extends StatelessWidget {
   const TradingBoard({super.key, required this.posts, required this.userId});
 
   final List<Deal> posts;
-
-  String countHour(DateTime givenDate) {
-    DateTime currentDate = DateTime.now();
-
-    Duration difference = currentDate.difference(givenDate);
-    int minutesDifference = difference.inMinutes;
-    int hoursDifference = difference.inHours;
-    int daysDifference = difference.inDays;
-
-    if (daysDifference >= 1) {
-      return '$daysDifference일 전';
-    } else if (hoursDifference >= 1) {
-      return '$hoursDifference시간 전';
-    } else if (minutesDifference == 0) {
-      return '방금 전';
-    } else {
-      return '$minutesDifference분 전';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,25 +116,6 @@ class OnePostUnit extends StatefulWidget {
 }
 
 class _OnePostUnitState extends State<OnePostUnit> {
-  String countHour(DateTime givenDate) {
-    DateTime currentDate = DateTime.now();
-
-    Duration difference = currentDate.difference(givenDate);
-    int minutesDifference = difference.inMinutes;
-    int hoursDifference = difference.inHours;
-    int daysDifference = difference.inDays;
-
-    if (daysDifference >= 1) {
-      return '$daysDifference일 전';
-    } else if (hoursDifference >= 1) {
-      return '$hoursDifference시간 전';
-    } else if (minutesDifference == 0) {
-      return '방금 전';
-    } else {
-      return '$minutesDifference분 전';
-    }
-  }
-
   late String dealName;
   late int distance;
   late int dealType;
