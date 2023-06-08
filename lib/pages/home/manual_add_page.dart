@@ -1,12 +1,10 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
+import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 // 수동 추가 화면
@@ -29,6 +27,8 @@ class _ManualAddPageState extends State<ManualAddPage> {
   // 수량 입력란 focus가 컨트롤러에 의해 꼬이지 않도록 focus를 고정해주는 focusNode
   late final FocusNode _stockFocusNode = FocusNode();
 
+  final FoodListController _foodListController = Get.put(FoodListController());
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +50,10 @@ class _ManualAddPageState extends State<ManualAddPage> {
     super.dispose();
   }
 
-  void setName(String value) => setState(() => food.foodName = value);
+  void setName(String value) => setState(() {
+        food.foodName = value;
+        food.foodNameController = TextEditingController(text: value);
+      });
   void setStorage(String value) => setState(() => food.storageWay = value);
   void setStock(num value) => setState(() => food.stock = value);
   void setExpireDate(DateTime value, {int? index}) => setState(() => food.expireDate = value);
@@ -105,14 +108,6 @@ class _ManualAddPageState extends State<ManualAddPage> {
     if (food.isFoodValid() == false) {
       return;
     }
-
-    // init dio
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
     // setup data
     final data = {
       "userId": widget.userId,
@@ -120,40 +115,11 @@ class _ManualAddPageState extends State<ManualAddPage> {
     };
     debugPrint('req data: $data');
 
-    try {
-      // save data
-      final res = await dio.post(
-        '/food/add',
-        data: data,
-      );
+    _foodListController.addManualFoodInfo(data);
+    _foodListController.addOneFood(food);
 
-      // handle response
-      if (!mounted) return;
-      if (res.statusCode == 200) {
-        showToast('식료품이 등록되었습니다');
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AppPagesContainer(userId: widget.userId),
-          ),
-          (route) => false,
-        );
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
-      }
-    }
-    // when error occured, show error dialog
-    on DioError catch (err) {
-      Popups.popSimpleDialog(
-        context,
-        title: '${err.type}',
-        body: '${err.message}',
-      );
-    } catch (err) {
-      debugPrint('$err');
-    } finally {
-      dio.close();
-    }
+    showToast('식료품이 등록되었습니다');
+    Navigator.pop(context);
   }
 }
 

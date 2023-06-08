@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
+import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -11,12 +12,11 @@ class GoRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 80,
-      decoration: BoxDecoration(
-        color: ColorStyles.mainColor,
-        borderRadius: BorderRadius.circular(15),
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const RecipeRecommendPage(),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,19 +43,19 @@ class GoRecipe extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Container(
-              width: 70,
-              height: 50,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/chatGPT.png'),
-              )),
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Container(
+                width: 70,
+                height: 50,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage('assets/images/chatGPT.png'),
+                )),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

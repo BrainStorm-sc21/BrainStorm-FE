@@ -222,15 +222,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         color: ColorStyles.white,
         child: Column(
           children: [
-            /*
-            Container(
-              height: 80,
-              color: ColorStyles.white,
-              child: OnePostUnit(
-                deal: widget.deal!,
-                isChat: true,
-              ),
-            ),*/
+            (widget.deal != null)
+                ? Container(
+                    height: 80,
+                    color: ColorStyles.white,
+                    child: OnePostUnit(
+                      deal: widget.deal!,
+                      isChat: true,
+                    ),
+                  )
+                : Container(
+                    height: 80,
+                  ),
             // 채팅 기록
             Expanded(
               child: StreamBuilder(

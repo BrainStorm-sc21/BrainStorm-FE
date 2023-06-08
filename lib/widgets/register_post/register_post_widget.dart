@@ -217,6 +217,7 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
       setState(() {
         _image = XFile(pickedFile.path);
         widget.setImage(widget.index, _image!.path);
+        print(_image!.path);
       });
     }
   }

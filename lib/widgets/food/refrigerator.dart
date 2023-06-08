@@ -1,19 +1,17 @@
+import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Refrigerator extends StatefulWidget {
   final int userId;
   final String storage;
-  final List<Food> foodList;
-  const Refrigerator(
-      {super.key, required this.userId, required this.foodList, required this.storage});
+  final List<Food> foods;
+  const Refrigerator({super.key, required this.userId, required this.foods, required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -21,108 +19,21 @@ class Refrigerator extends StatefulWidget {
 
 class _RefrigeratorState extends State<Refrigerator> {
   late Food food;
-  List<Food> foodList = List.empty(growable: true);
   List<bool> absorbBool = List.filled(100, true, growable: true);
   final now = DateTime.now();
 
-  final List<TextEditingController> _foodNameController = [];
-
-  void deleteServerDataWithDio(index) async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    var deleteFood = foodList[index].foodId;
-
-    try {
-      final resp = await dio.delete("/food/$deleteFood");
-
-      showToast('식료품이 삭제되었습니다');
-
-      print("Delete Status: ${resp.statusCode}");
-    } catch (e) {
-      Exception(e);
-    } finally {
-      dio.close();
-    }
-  }
-
-  void modifyFoodInfo(index) async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final data = {
-      "userId": widget.userId,
-      "food": foodList[index].toJson(),
-    };
-
-    var modifyFoodId = foodList[index].foodId;
-
-    try {
-      final res = await dio.put('/food/$modifyFoodId', data: data);
-
-      if (!mounted) return;
-      if (res.statusCode == 200) {
-        Popups.popSimpleDialog(
-          context,
-          title: foodList[index].foodName,
-          body: '값이 수정되었습니다',
-        );
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
-      }
-    }
-    // when error occured, show error dialog
-    on DioError catch (err) {
-      Popups.popSimpleDialog(
-        context,
-        title: '${err.type}',
-        body: '${err.message}',
-      );
-    } catch (err) {
-      debugPrint('$err');
-    } finally {
-      dio.close();
-    }
-  }
-
-  void initFoods() {
-    for (Food fooditem in widget.foodList) {
-      if (widget.storage == "전체" || widget.storage == fooditem.storageWay) {
-        foodList.add(fooditem);
-      }
-    }
-  }
-
-  void initController() {
-    for (int index = 0; index < foodList.length; index++) {
-      _foodNameController.add(TextEditingController());
-      _foodNameController[index].text = foodList[index].foodName;
-    }
-  }
+  final FoodListController _foodListController = Get.find<FoodListController>();
 
   @override
   void initState() {
     super.initState();
-    initFoods();
-    initController();
   }
 
-  void setStock(int index, num value) => setState(() => foodList[index].stock = value);
-  void setStorage(int index, String value) => setState(() => foodList[index].storageWay = value);
+  void setStock(int index, num value) => setState(() => widget.foods[index].stock = value);
+  void setStorage(int index, String value) =>
+      setState(() => widget.foods[index].storageWay = value);
   void setExpireDate(DateTime value, {int? index}) =>
-      setState(() => foodList[index!].expireDate = value);
-
-  void deleteFood(int index) => setState(() {
-        widget.foodList.removeAt(index);
-        //foodList.removeAt(index);
-        //_foodNameController.removeAt(index);
-      });
+      setState(() => widget.foods[index!].expireDate = value);
 
   int dayCount(day) {
     if (day >= 7) {
@@ -135,28 +46,16 @@ class _RefrigeratorState extends State<Refrigerator> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    disposeController();
-  }
-
-  void disposeController() {
-    for (var controller in _foodNameController) {
-      controller.dispose();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return foodList.isEmpty
+    return widget.foods.isEmpty
         ? Center(child: Text("${widget.storage}에는 음식이 없어요!"))
         : ListView.builder(
-            itemCount: foodList.length,
+            itemCount: widget.foods.length,
             itemBuilder: (context, index) {
-              food = foodList[index];
+              food = widget.foods[index];
               return Card(
                 elevation: 2.0,
-                key: PageStorageKey(_foodNameController[index]),
+                key: PageStorageKey(food.foodId),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                 surfaceTintColor: ColorStyles.hintTextColor,
                 child: ExpansionTile(
@@ -174,7 +73,12 @@ class _RefrigeratorState extends State<Refrigerator> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: TextField(
-                                    controller: _foodNameController[index],
+                                    controller: food.foodNameController,
+                                    onSubmitted: (String str) {
+                                      setState(() {
+                                        food.foodName = str;
+                                      });
+                                    },
                                     decoration: const InputDecoration(
                                         border: InputBorder.none, counterText: ''),
                                     style: const TextStyle(
@@ -236,7 +140,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
-                                  modifyFoodInfo(index);
+                                  _foodListController.modifyFoodInfo(
+                                      widget.userId, widget.foods[index]);
+                                  showToast('식료품이 수정되었습니다');
                                 }
                               });
                             },
@@ -246,9 +152,17 @@ class _RefrigeratorState extends State<Refrigerator> {
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
-                            child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: absorbBool[index]
+                                ? const Text('삭제', style: TextStyle(color: ColorStyles.mainColor))
+                                : const Text('취소', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              showDeleteDialog(index);
+                              if (absorbBool[index]) {
+                                showDeleteDialog(widget.foods[index]);
+                              } else {
+                                setState(() {
+                                  absorbBool[index] = !absorbBool[index];
+                                });
+                              }
                             },
                           ),
                         ],
@@ -262,31 +176,26 @@ class _RefrigeratorState extends State<Refrigerator> {
   }
 
   // 삭제 확인 다이얼로그
-  void showDeleteDialog(index) {
+  void showDeleteDialog(food) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text("정말로 삭제하시겠습니까?"),
           actions: [
-            // 취소 버튼
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               child: const Text("취소"),
             ),
-            // 확인 버튼
             TextButton(
               onPressed: () {
-                deleteServerDataWithDio(index);
-                deleteFood(index);
+                _foodListController.deleteServerDataWithDio(food);
+                showToast('식료품이 삭제되었습니다');
                 Navigator.pop(context);
               },
-              child: const Text(
-                "확인",
-                style: TextStyle(color: Colors.pink),
-              ),
+              child: const Text("확인", style: TextStyle(color: Colors.pink)),
             ),
           ],
         );
