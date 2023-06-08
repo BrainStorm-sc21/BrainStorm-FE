@@ -222,6 +222,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         color: ColorStyles.white,
         child: Column(
           children: [
+            /*
             (widget.deal != null)
                 ? Container(
                     height: 80,
@@ -234,6 +235,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 : Container(
                     height: 80,
                   ),
+                  */
             // 채팅 기록
             Expanded(
               child: StreamBuilder(
@@ -303,6 +305,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: InkWell(
                           onTap: () {
+                            debugPrint('메시지 전송 버튼 눌림!!');
                             if (isTextInputEmpty == false) {
                               checkRoomExist(
                                   MessageType.TALK, _controller.text);

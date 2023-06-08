@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
@@ -37,7 +38,7 @@ class _MyProfileState extends State<MyProfile> {
   ];
 
   Map<String, dynamic> settingDetails = {
-    "준/받은 후기": '',
+    "보낸/받은 후기": '',
     "내 게시물": '',
     "로그아웃": '',
     "회원 탈퇴": '',
@@ -104,45 +105,65 @@ class _MyProfileState extends State<MyProfile> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: AbsorbPointer(
-                            absorbing: isClickedText,
-                            child: Obx(
-                              () {
-                                if (_userInfoController.isLoading) {
-                                  return const CircularProgressIndicator();
-                                } else {
-                                  return TextField(
-                                      controller:
-                                          TextEditingController(text: _userInfoController.userName),
-                                      focusNode: _textFocus,
-                                      onSubmitted: (value) {
-                                        _userInfoController.modifyUserName(value);
-                                        modifyUserInfo(value);
-                                        setState(() {
-                                          isClickedText = true;
-                                        });
-                                      },
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none, counterText: ''),
-                                      style: const TextStyle(
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: ColorStyles.white,
-                                          overflow: TextOverflow.ellipsis),
-                                      maxLength: 20);
-                                }
-                              },
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: AbsorbPointer(
+                                absorbing: isClickedText,
+                                child: Obx(
+                                  () {
+                                    if (_userInfoController.isLoading) {
+                                      return const CircularProgressIndicator();
+                                    } else {
+                                      return TextField(
+                                          controller: TextEditingController(
+                                              text:
+                                                  _userInfoController.userName),
+                                          focusNode: _textFocus,
+                                          onSubmitted: (value) {
+                                            _userInfoController
+                                                .modifyUserName(value);
+                                            modifyUserInfo(value);
+                                            setState(() {
+                                              isClickedText = true;
+                                            });
+                                          },
+                                          decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              counterText: ''),
+                                          style: const TextStyle(
+                                              fontSize: 30.0,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: ColorStyles.white,
+                                              overflow: TextOverflow.ellipsis),
+                                          maxLength: 20);
+                                    }
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PushList()));
+                                },
+                                icon: const Icon(
+                                  Icons.notifications,
+                                  color: ColorStyles.white,
+                                  size: 35,
+                                )),
+                          ],
                         ),
                       ),
                       Padding(
@@ -158,73 +179,50 @@ class _MyProfileState extends State<MyProfile> {
                               });
                               _textFocus.requestFocus();
                             },
-                            icon: const Icon(
-                              Icons.notifications,
-                              color: ColorStyles.white,
-                              size: 35,
-                            )),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: RoundedOutlinedButton(
-                        height: 23,
-                        backgroundColor: ColorStyles.lightmainColor,
-                        borderColor: ColorStyles.lightmainColor,
-                        foregroundColor: ColorStyles.white,
-                        onPressed: () {
-                          setState(() {
-                            isClickedText = isClickedText ? false : true;
-                          });
-                          _textFocus.requestFocus();
-                        },
-                        fontSize: 13,
-                        text: "닉네임 수정 >"),
-                  ),
-                  const Text(
-                    "내 신뢰도",
-                    style: TextStyle(
-                        color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Obx(
-                    () => Column(
-                      children: [
-                        Container(
-                          alignment: FractionalOffset(_userInfoController.reliability / 100,
-                              (100 - _userInfoController.reliability) / 100),
-                          child: FractionallySizedBox(
-                            child: Column(
-                              children: [
-                                Text(_userInfoController.reliability.toString(),
-                                    style: const TextStyle(
-                                        color: ColorStyles.lightYellow, fontSize: 15)),
-                                const SizedBox(height: 3),
-                                Image.asset('assets/images/inverted_triangle1.png'),
-                              ],
+                            fontSize: 13,
+                            text: "닉네임 수정 >"),
+                      ),
+                      const Text(
+                        "내 신뢰도",
+                        style: TextStyle(
+                            color: ColorStyles.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Obx(
+                        () => Column(
+                          children: [
+                            Container(
+                              alignment: FractionalOffset(
+                                  _userInfoController.reliability / 100,
+                                  (100 - _userInfoController.reliability) /
+                                      100),
+                              child: FractionallySizedBox(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                        _userInfoController.reliability
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: ColorStyles.lightYellow,
+                                            fontSize: 15)),
+                                    const SizedBox(height: 3),
+                                    Image.asset(
+                                        'assets/images/inverted_triangle1.png'),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            CustomProgressBar(
+                              paddingHorizontal: 5,
+                              currentPercent: _userInfoController.reliability,
+                              maxPercent: 100,
+                              lineHeight: 12,
+                              firstColor: ColorStyles.lightYellow,
+                              secondColor: ColorStyles.lightYellow,
+                            ),
+                          ],
                         ),
-                        CustomProgressBar(
-                          paddingHorizontal: 5,
-                          currentPercent: _userInfoController.reliability,
-                          maxPercent: 100,
-                          lineHeight: 12,
-                          firstColor: ColorStyles.lightYellow,
-                          secondColor: ColorStyles.lightYellow,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ColorStyles.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
-                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
@@ -328,9 +326,12 @@ class _MyProfileState extends State<MyProfile> {
                                             padding:
                                                 const EdgeInsets.only(left: 0)),
                                         onPressed: () {
-                                          (i == 0)
-                                              ? showLogoutDialog(context)
-                                              : showSignOutDialog(context);
+                                          print("알림 및 소리 눌림");
+                                          if (i == 0) {
+                                            showLogoutDialog(context);
+                                          } else {
+                                            showSignOutDialog(context);
+                                          }
                                         },
                                         child: Text(
                                           settingNames[1][i],
@@ -354,13 +355,15 @@ class _MyProfileState extends State<MyProfile> {
   }
 }
 
-//Regrigerator의 다이얼로그를 활용 - 로그아웃
+//Regrigerator의 다이얼로그를 활용
 void showLogoutDialog(context) {
   showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("정말로 로그아웃 하시겠습니까?", style: TextStyle(fontSize: 18)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("정말로 로그아웃 하시겠습니까?"),
           actions: [
             // 취소 버튼
             TextButton(
@@ -385,12 +388,13 @@ void showLogoutDialog(context) {
       });
 }
 
-//Regrigerator의 다이얼로그를 활용 - 회원탈퇴
 void showSignOutDialog(context) {
   showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: const Text(
             "정말로 회원탈퇴를 하시겠습니까?\n유저 데이터가 전부 삭제됩니다.",
             style: TextStyle(fontSize: 18),
