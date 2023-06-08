@@ -7,7 +7,10 @@ class FoodStockButton extends StatelessWidget {
   final int index;
 
   const FoodStockButton(
-      {super.key, required this.index, required this.stock, required this.setStock});
+      {super.key,
+      required this.index,
+      required this.stock,
+      required this.setStock});
 
   num convertInteger(stock) {
     if (stock == 1 || stock >= 2) {
