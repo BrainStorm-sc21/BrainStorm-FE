@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
@@ -29,6 +30,19 @@ class _RefrigeratorState extends State<Refrigerator> {
     super.initState();
   }
 
+  String stockString(num value) {
+    if (value >= 2 || value == 1) {
+      return "${value.ceil()} 개";
+    } else {
+      return "$value 개";
+    }
+  }
+
+  void setName(String value) => setState(() {
+        food.foodName = value;
+        food.foodNameController = TextEditingController(text: value);
+      });
+
   void setStock(int index, num value) => setState(() => widget.foods[index].stock = value);
   void setStorage(int index, String value) =>
       setState(() => widget.foods[index].storageWay = value);
@@ -44,6 +58,18 @@ class _RefrigeratorState extends State<Refrigerator> {
       return day;
     }
   }
+
+  var divider = Column(
+    children: [
+      const SizedBox(height: 10),
+      Divider(
+        thickness: 1,
+        height: 1,
+        color: ColorStyles.lightGrey,
+      ),
+      const SizedBox(height: 10),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -105,29 +131,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                     ),
                   ),
                   children: [
-                    AbsorbPointer(
-                        absorbing: absorbBool[index],
-                        child: SizedBox(
-                            width: 350,
-                            child: FoodStorageDropdown(
-                                index: index, storage: food.storageWay, setStorage: setStorage))),
-                    AbsorbPointer(
-                      absorbing: absorbBool[index],
-                      child: SizedBox(
-                        width: 350,
-                        child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
-                      ),
-                    ),
-                    AbsorbPointer(
-                      absorbing: absorbBool[index],
-                      child: SizedBox(
-                        width: 350,
-                        child: FoodExpireDate(
-                            index: index,
-                            expireDate: food.expireDate,
-                            setExpireDate: setExpireDate),
-                      ),
-                    ),
+                    detailList(context, "보관방법", food.storageWay),
+                    detailList(context, "수량", stockString(food.stock)),
+                    detailList(context, "소비기한", food.expireDate.toString().substring(0, 10)),
                     SizedBox(
                       width: 350,
                       height: 60,
@@ -137,32 +143,84 @@ class _RefrigeratorState extends State<Refrigerator> {
                         children: [
                           OutlinedButton(
                             onPressed: () {
-                              setState(() {
-                                absorbBool[index] = !absorbBool[index];
-                                if (absorbBool[index]) {
-                                  _foodListController.modifyFoodInfo(
-                                      widget.userId, widget.foods[index]);
-                                  showToast('식료품이 수정되었습니다');
-                                }
-                              });
+                              showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: MediaQuery.of(context).size.height * 0.7,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Column(
+                                        children: [
+                                          const SizedBox(height: 20),
+                                          FoodName(setName: setName), // 식료품 이름 입력
+                                          const SizedBox(height: 30), // 여백
+                                          FoodStorageDropdown(
+                                              index: index,
+                                              storage: widget.foods[index].storageWay,
+                                              setStorage: setStorage),
+                                          divider,
+                                          FoodStockButton(
+                                              index: index,
+                                              stock: widget.foods[index].stock,
+                                              setStock: setStock),
+                                          divider,
+                                          FoodExpireDate(
+                                            expireDate: widget.foods[index].expireDate,
+                                            setExpireDate: setExpireDate,
+                                          ),
+                                          const SizedBox(height: 30),
+                                          RoundedOutlinedButton(
+                                            text: '등록하기',
+                                            width: double.infinity,
+                                            onPressed: () {
+                                              _foodListController.modifyFoodInfo(
+                                                  widget.userId, widget.foods[index]);
+                                              Navigator.of(context).pop();
+                                              showToast('식료품이 수정되었습니다');
+                                            },
+                                            foregroundColor: ColorStyles.white,
+                                            backgroundColor: ColorStyles.mainColor,
+                                            borderColor: ColorStyles.mainColor,
+                                            fontSize: 18,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          RoundedOutlinedButton(
+                                            text: '취소하기',
+                                            width: double.infinity,
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            foregroundColor: ColorStyles.mainColor,
+                                            backgroundColor: ColorStyles.white,
+                                            borderColor: ColorStyles.mainColor,
+                                            fontSize: 18,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                              );
                             },
-                            child: absorbBool[index]
-                                ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: const Text('수정', style: TextStyle(color: ColorStyles.mainColor)),
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
-                            child: absorbBool[index]
-                                ? const Text('삭제', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('취소', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: const Text('삭제', style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              if (absorbBool[index]) {
-                                showDeleteDialog(widget.foods[index]);
-                              } else {
-                                setState(() {
-                                  absorbBool[index] = !absorbBool[index];
-                                });
-                              }
+                              showDeleteDialog(widget.foods[index]);
                             },
                           ),
                         ],
@@ -200,6 +258,22 @@ class _RefrigeratorState extends State<Refrigerator> {
           ],
         );
       },
+    );
+  }
+
+  Widget detailList(BuildContext context, String name, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: SizedBox(
+        width: 350,
+        child: Row(
+          children: [
+            Text(name),
+            const Spacer(),
+            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+          ],
+        ),
+      ),
     );
   }
 }

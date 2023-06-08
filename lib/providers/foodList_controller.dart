@@ -137,7 +137,6 @@ class FoodListController extends GetxController {
       );
 
       print("recipe statusCode : ${resp.statusCode}");
-      print(resp.data['data']['recipe']);
 
       _recipe.value = resp.data['data']['recipe'].toString();
       _isLoading.value = false;
