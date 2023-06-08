@@ -1,25 +1,26 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatDetailPage extends StatefulWidget {
-  final String nickname;
-  final String content;
+  final int receiverId;
+  final int senderId;
+  final Room? room;
   final Deal? deal;
   const ChatDetailPage({
     super.key,
-    required this.nickname,
-    required this.content,
+    required this.receiverId,
     required this.deal,
+    required this.senderId,
+    this.room,
   });
 
   @override
@@ -29,19 +30,26 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _controller = TextEditingController();
   final WebSocketChannel _client =
-      IOWebSocketChannel.connect('ws://meokjang.com/chat');
-  // final WebSocketChannel _client = IOWebSocketChannel.connect(
-  //   Uri.parse('wss://echo.websocket.events'),
-  // );
-  final int userId = 7; // 임시 유저 아이디
+      IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
+
+  late String nickname = '';
+
+  bool isRoomExist = false;
+  late int dbRoomId;
+  late String wsRoomId;
+
   List<Message> messages = List.empty(growable: true);
-  late final File historyFile;
-  late final String _roomId;
 
   @override
   void initState() {
     super.initState();
-    _initializeFile();
+    getUserNickname();
+    if (widget.room != null) {
+      setIsRoomExistToTrue();
+      setRoomIds(widget.room!.id, widget.room!.roomId);
+      sendMessage(MessageType.ENTER, '');
+      loadPrevMessages();
+    }
   }
 
   @override
@@ -55,82 +63,127 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return _controller.text.trim().isEmpty;
   }
 
-  void sendMessage(MessageType type, String message) {
-    Message data = Message(
-      type: type,
-      roomId: _roomId,
-      sender: userId,
-      message: message,
-    );
-    _client.sink.add(jsonEncode(data));
-    _controller.clear();
+  void setIsRoomExistToTrue() {
+    setState(() => isRoomExist = true);
   }
 
-  Future<String> get _directoryPath async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    print("디렉토리 경로: ${directory.path}");
-    return directory.path;
+  Future<void> setRoomIds(int id, String roomId) async {
+    setState(() {
+      dbRoomId = id;
+      wsRoomId = roomId;
+    });
   }
 
-  Future<File> get _chatHistoryFile async {
-    final String path = await _directoryPath;
-    var fileName = 'TEMP';
-    return File('$path/$fileName.json');
-  }
-
-  void _initializeFile() async {
-    historyFile = await _chatHistoryFile;
-    if (historyFile.existsSync()) {
-      _readJson();
-    } else {
-      _createChatRoom();
-    }
-  }
-
-  void _createChatRoom() async {
+  Future<void> createChatRoom() async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    String roomName = 'RoomTest'; // 임시 roomName
+    final data = {
+      "sender": widget.senderId,
+      "receiver": widget.receiverId,
+    };
+
     try {
-      final res = await dio.post(
-        '/chat?name=$roomName',
+      final Response res = await dio.post(
+        '/chat',
+        data: data,
       );
 
-      debugPrint('req data: ${res.data}');
-      debugPrint('req statusCode: ${res.statusCode}');
-
-      if (res.statusCode == 200) {
-        setState(() {
-          _roomId = res.data['roomId'];
-        });
-        sendMessage(MessageType.ENTER, "");
+      if (res.data['status'] == 200) {
+        debugPrint('채팅방 생성 성공!!:\n ${res.data['data']}');
+        Room room = Room.fromJson(res.data['data']);
+        setRoomIds(room.id, room.roomId);
+        setIsRoomExistToTrue();
       } else {
-        throw Exception('Failed to create chat room [${res.statusCode}]');
+        throw Exception();
       }
-    } catch (err) {
-      debugPrint('$err');
+    } catch (e) {
+      debugPrint('$e');
     } finally {
       dio.close();
     }
   }
 
-  void _writeJson() async {
-    final List<String> jsonStringList =
-        messages.map((message) => jsonEncode(message)).toList();
-    final String jsonString = '[${jsonStringList.join(',\n')}]';
-    await historyFile.writeAsString(jsonString);
+  void checkRoomExist(MessageType type, String message) async {
+    if (isRoomExist == false) {
+      await createChatRoom();
+      sendMessage(MessageType.ENTER, '');
+      sendMessage(type, message);
+    } else {
+      sendMessage(type, message);
+    }
   }
 
-  void _readJson() async {
-    String jsonString = await historyFile.readAsString();
-    List<dynamic> jsonList = jsonDecode(jsonString);
-    for (Map<String, dynamic> jsonMessage in jsonList) {
-      Message message = Message.fromJson(jsonMessage);
-      messages.add(message);
+  void sendMessage(MessageType type, String message) {
+    DateTime time = DateTime.now();
+    String timeFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(time);
+    Message data = Message(
+      type: type,
+      roomId: wsRoomId,
+      sender: widget.senderId,
+      message: message,
+      time: timeFormatted,
+    );
+    print(jsonEncode(data));
+    _client.sink.add(jsonEncode(data));
+    _controller.clear();
+  }
+
+  Future<void> loadPrevMessages() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    try {
+      final Response res = await dio.get(
+        '/chat/message/$dbRoomId',
+      );
+
+      if (res.data['status'] == 200) {
+        debugPrint('메시지 로드 성공!!');
+        List<dynamic> jsonList = res.data['data'] as List;
+        setState(() {
+          messages = jsonList.map((data) => Message.fromJson(data)).toList();
+        });
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
+  Future<void> getUserNickname() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/users/${widget.receiverId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          nickname = json['userName'];
+        });
+      } else {
+        setState(() {
+          nickname = '(알 수 없음)';
+        });
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
     }
   }
 
@@ -152,18 +205,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   onPressed: () => Navigator.of(context).pop(),
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 ),
-                const Text(
-                  '삼식이 네끼',
-                  style: TextStyle(
+                Text(
+                  nickname,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: ColorStyles.black,
                   ),
                 ),
-                // TextButton(
-                //   onPressed: _writeJson,
-                //   child: const Text('파일 쓰기 버튼'),
-                // ),
               ],
             ),
           ),
@@ -187,20 +236,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
             // 채팅 기록
             Expanded(
-              // child: Center(
-              //     child: Text(
-              //   '삼식이 네끼님과\n채팅을 시작해보세요!',
-              //   style: TextStyle(
-              //       color: ColorStyles.mainColor,
-              //       fontSize: 16,
-              //       fontWeight: FontWeight.w400),
-              //   textAlign: TextAlign.center,
-              // )),
               child: StreamBuilder(
                 stream: _client.stream,
                 builder: (context, snapshot) {
+                  debugPrint('snapshot.data: ${snapshot.data}');
                   if (snapshot.data != null) {
-                    debugPrint('snpashot.data: ${snapshot.data}');
                     Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
                     messages.add(Message.fromJson(jsonData));
                   }
@@ -209,10 +249,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(
-                        type: messages[index].type,
                         message: messages[index].message,
-                        isSentByMe:
-                            messages[index].sender == userId ? true : false,
+                        isSentByMe: messages[index].sender == widget.senderId
+                            ? true
+                            : false,
                       );
                     },
                   );
@@ -264,7 +304,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         child: InkWell(
                           onTap: () {
                             if (isTextInputEmpty == false) {
-                              sendMessage(MessageType.TALK, _controller.text);
+                              checkRoomExist(
+                                  MessageType.TALK, _controller.text);
                             }
                           },
                           child: const Icon(
@@ -287,70 +328,46 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 }
 
 class ChatBubble extends StatelessWidget {
-  final MessageType type;
   final String message;
   final bool isSentByMe;
   const ChatBubble({
     super.key,
-    required this.type,
     required this.message,
     required this.isSentByMe,
   });
 
   @override
   Widget build(BuildContext context) {
-    return type == MessageType.TALK
-        ? Align(
-            alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              margin:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                color: isSentByMe
-                    ? ColorStyles.groupBuyColor
-                    : ColorStyles.lightGrey,
-                borderRadius: isSentByMe
-                    ? const BorderRadius.only(
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0),
-                        bottomLeft: Radius.circular(16.0),
-                        bottomRight: Radius.zero,
-                      )
-                    : const BorderRadius.only(
-                        topLeft: Radius.zero,
-                        topRight: Radius.circular(16.0),
-                        bottomLeft: Radius.circular(16.0),
-                        bottomRight: Radius.circular(16.0),
-                      ),
-              ),
-              child: Text(
-                message,
-                style: TextStyle(
-                  color: isSentByMe
-                      ? ColorStyles.chatTextColor
-                      : ColorStyles.textColor,
-                  fontWeight: FontWeight.w600,
+    return Align(
+      alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+        decoration: BoxDecoration(
+          color: isSentByMe ? ColorStyles.groupBuyColor : ColorStyles.lightGrey,
+          borderRadius: isSentByMe
+              ? const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.zero,
+                )
+              : const BorderRadius.only(
+                  topLeft: Radius.zero,
+                  topRight: Radius.circular(16.0),
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
                 ),
-              ),
-            ),
-          )
-        : Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              margin:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: ColorStyles.textColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          );
+        ),
+        child: Text(
+          message,
+          style: TextStyle(
+            color:
+                isSentByMe ? ColorStyles.chatTextColor : ColorStyles.textColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -297,8 +297,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
                           onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ChatDetailPage(
-                                nickname: 'userId',
-                                content: '',
+                                senderId: widget.userId,
+                                receiverId: widget.deal.userId,
                                 deal: widget.deal,
                               ),
                             ),

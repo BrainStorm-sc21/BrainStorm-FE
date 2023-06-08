@@ -1,19 +1,57 @@
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/enter_chat/enter_chat_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  int userId;
-  ChatPage({
-    Key? key,
+  final int userId;
+  const ChatPage({
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  late List<Room> roomList = List.empty(growable: true);
+
+  @override
+  void initState() {
+    super.initState();
+    loadChatRoomList();
+  }
+
+  Future<void> loadChatRoomList() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/chat/room/${widget.userId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        print('채팅 목록 로드 성공!!:\n ${res.data['data']}');
+        List<dynamic> jsonList = res.data['data'] as List;
+        setState(() {
+          roomList = jsonList.map((data) => Room.fromJson(data)).toList();
+        });
+      } else {
+        print('채팅 목록 로드 실패!!');
+        throw Exception();
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,17 +76,26 @@ class _ChatPageState extends State<ChatPage> {
               padding: EdgeInsets.symmetric(vertical: 20),
               child: GoRecipe(),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3, // 나중에 채팅 리스트 길이로 바꿀 것
-              itemBuilder: (context, index) {
-                return ChatUnit(
-                  name: '먹짱 $index호',
-                  content: '채팅 메시지 텍스트 $index',
-                );
-              },
-            ),
+            roomList.isEmpty
+                ? const Expanded(
+                    child: Center(
+                      child: Text('같이먹장에서 다른 사용자와 대화를 시작해보세요!'),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: roomList.length,
+                      itemBuilder: (context, index) {
+                        return ChatUnit(
+                          senderId: widget.userId,
+                          receiverId: roomList[index].sender == widget.userId
+                              ? roomList[index].receiver
+                              : roomList[index].sender,
+                          room: roomList[index],
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
