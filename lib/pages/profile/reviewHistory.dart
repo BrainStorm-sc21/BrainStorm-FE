@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:flutter/material.dart';
 
 class ReviewHistoryPage extends StatefulWidget {
@@ -99,9 +100,11 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
           borderRadius: BorderRadius.circular(20),
           color: ColorStyles.white,
         ),
-        height: 150,
+        height: 220,
         child: Column(
           children: [
+            const TopPostUnit(isMine: false, dealId: 6),
+            Container(height: 1, color: ColorStyles.lightGrey),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: SizedBox(

@@ -18,29 +18,36 @@ class GoRecipe extends StatelessWidget {
           builder: (context) => const RecipeRecommendPage(),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-            child: SizedBox(
-              width: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('냉장고 속 식품 레시피',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.white)),
-                  Text('지금 확인하기',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.white)),
-                ],
+      child: Container(
+        decoration: const BoxDecoration(
+            color: ColorStyles.mainColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+              child: SizedBox(
+                width: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('냉장고 속 식품 레시피',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: ColorStyles.white)),
+                    Text('지금 확인하기',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: ColorStyles.white)),
+                  ],
+                ),
               ),
             ),
             Padding(

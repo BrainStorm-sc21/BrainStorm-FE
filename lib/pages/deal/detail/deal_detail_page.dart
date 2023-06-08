@@ -156,6 +156,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
     setImageList();
     initEditingController();
     print(widget.deal.dealImage1);
+    print('딜아이디: ${widget.deal.dealId}');
   }
 
   @override
