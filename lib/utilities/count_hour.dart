@@ -6,8 +6,6 @@ String countHour(DateTime givenDate) {
   int hoursDifference = difference.inHours;
   int daysDifference = difference.inDays;
 
-  print('m: $minutesDifference h: $hoursDifference d: $daysDifference');
-
   if (daysDifference >= 1) {
     return '$daysDifference일 전';
   } else if (hoursDifference >= 1) {
