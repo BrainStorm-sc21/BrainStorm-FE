@@ -7,11 +7,13 @@ class FoodListController extends GetxController {
   final RxList<Food> _foodList = <Food>[].obs;
   final List<bool> _isSelected = List.filled(100, false, growable: true).obs;
 
+  final RxString _recipe = ''.obs;
   final RxBool _isLoading = false.obs;
 
   get foodList => _foodList;
   get isLoading => _isLoading.value;
   get isSelected => _isSelected;
+  get recipe => _recipe;
 
   void changedSelected(int index) {
     _isSelected[index] = !_isSelected[index];
@@ -119,15 +121,11 @@ class FoodListController extends GetxController {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    //String sendData = '';
-
-    //for (var element in selectedFoods) {}
+      ..connectTimeout = const Duration(seconds: 30)
+      ..receiveTimeout = const Duration(seconds: 60);
 
     Map<String, dynamic> data = {
-      "foodList": [selectedFoods.join(", ").toString()],
+      "foodList": selectedFoods,
     };
 
     print("$data");
@@ -139,7 +137,11 @@ class FoodListController extends GetxController {
       );
 
       print("recipe statusCode : ${resp.statusCode}");
-      print(resp.data);
+      print(resp.data['data']['recipe']);
+
+      _recipe.value = resp.data['data']['recipe'].toString();
+      _isLoading.value = false;
+      update();
     } catch (e) {
       Exception(e);
     } finally {
