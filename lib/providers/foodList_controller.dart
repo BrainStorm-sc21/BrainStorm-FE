@@ -1,5 +1,4 @@
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/models/recipe.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -114,7 +113,7 @@ class FoodListController extends GetxController {
     }
   }
 
-  Future getRecipe(Recipe selectedFoods) async {
+  Future getRecipe(List<String> selectedFoods) async {
     _isLoading.value = true;
 
     Dio dio = Dio();
@@ -123,12 +122,20 @@ class FoodListController extends GetxController {
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    print("data : ${selectedFoods.toJson()}");
+    //String sendData = '';
+
+    //for (var element in selectedFoods) {}
+
+    Map<String, dynamic> data = {
+      "foodList": [selectedFoods.join(", ").toString()],
+    };
+
+    print("$data");
 
     try {
       final resp = await dio.post(
         "/recipe",
-        data: selectedFoods.toJson(),
+        data: data,
       );
 
       print("recipe statusCode : ${resp.statusCode}");

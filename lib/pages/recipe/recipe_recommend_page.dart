@@ -1,5 +1,4 @@
 import 'package:brainstorm_meokjang/models/food.dart';
-import 'package:brainstorm_meokjang/models/recipe.dart';
 import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
@@ -14,7 +13,7 @@ class RecipeRecommendPage extends StatelessWidget {
     final FoodListController foodListController =
         Get.find<FoodListController>();
     List<Food> foodsList = foodListController.foodList;
-    Recipe selectedFoods = Recipe(recipeFoods: []);
+    List<String> selectedFoods = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -111,7 +110,7 @@ class RecipeRecommendPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
-                                  "궁금한 레시피가 있다면 재료를 선택 후 하단 버튼을 눌러주세요!",
+                                  "냉장고에 있는 재료로 만들 수 있는 요리가 궁금하다면 재료를 선택 후 하단 버튼을 눌러주세요!",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 13,
@@ -125,7 +124,6 @@ class RecipeRecommendPage extends StatelessWidget {
                                   borderColor: ColorStyles.lightGrey,
                                   foregroundColor: ColorStyles.textColor,
                                   onPressed: () {
-                                    print(selectedFoods.recipeFoods);
                                     foodListController.getRecipe(selectedFoods);
                                   },
                                   text: '레시피 추천 시작',
@@ -193,11 +191,10 @@ class RecipeRecommendPage extends StatelessWidget {
                                   onPressed: () {
                                     if (foodListController.isSelected[i] ==
                                         true) {
-                                      selectedFoods.recipeFoods
+                                      selectedFoods
                                           .remove(foodsList[i].foodName);
                                     } else {
-                                      selectedFoods.recipeFoods
-                                          .add(foodsList[i].foodName);
+                                      selectedFoods.add(foodsList[i].foodName);
                                     }
                                     foodListController.changedSelected(i);
                                   },
