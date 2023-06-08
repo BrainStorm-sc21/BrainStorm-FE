@@ -250,9 +250,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         isChat: true,
                       ),
                     )
-                  : Container(
-                      height: 80,
-                    ),
+                  : Container(),
               // 채팅 기록
               Expanded(
                 child: StreamBuilder(
