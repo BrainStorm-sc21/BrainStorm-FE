@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 class RoundedOutlinedButton extends StatelessWidget {
@@ -10,6 +11,7 @@ class RoundedOutlinedButton extends StatelessWidget {
   final Color backgroundColor;
   final Color borderColor;
   final double fontSize;
+  final FontWeight fontWeight;
   final double radius;
 
   const RoundedOutlinedButton({
@@ -20,10 +22,11 @@ class RoundedOutlinedButton extends StatelessWidget {
     this.height = 35,
     this.borderwidth = 1.5,
     required this.backgroundColor,
-    required this.foregroundColor,
+    this.foregroundColor = ColorStyles.textColor,
     required this.borderColor,
     this.fontSize = 16,
     this.radius = 50,
+    this.fontWeight = FontWeight.normal,
   });
 
   @override
@@ -53,7 +56,10 @@ class RoundedOutlinedButton extends StatelessWidget {
           TextStyle(fontSize: fontSize, height: 1),
         ),
       ),
-      child: Text(text),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+      ),
     );
   }
 }

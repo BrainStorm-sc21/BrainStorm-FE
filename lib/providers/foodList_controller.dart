@@ -5,12 +5,20 @@ import 'package:get/get.dart';
 
 class FoodListController extends GetxController {
   final RxList<Food> _foodList = <Food>[].obs;
-  List<Food> foodsList = List.empty(growable: true);
+  final List<bool> _isSelected = List.filled(100, false, growable: true).obs;
 
+  final RxString _recipe = ''.obs;
   final RxBool _isLoading = false.obs;
 
   get foodList => _foodList;
   get isLoading => _isLoading.value;
+  get isSelected => _isSelected;
+  get recipe => _recipe;
+
+  void changedSelected(int index) {
+    _isSelected[index] = !_isSelected[index];
+    update();
+  }
 
   Future getServerDataWithDio(int userId) async {
     _isLoading.value = true;
@@ -105,6 +113,41 @@ class FoodListController extends GetxController {
     } finally {
       dio.close();
     }
+  }
+
+  Future getRecipe(List<String> selectedFoods) async {
+    _isLoading.value = true;
+
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 30)
+      ..receiveTimeout = const Duration(seconds: 60);
+
+    Map<String, dynamic> data = {
+      "foodList": selectedFoods,
+    };
+
+    print("$data");
+
+    try {
+      final resp = await dio.post(
+        "/recipe",
+        data: data,
+      );
+
+      print("recipe statusCode : ${resp.statusCode}");
+      print(resp.data['data']['recipe']);
+
+      _recipe.value = resp.data['data']['recipe'].toString();
+      _isLoading.value = false;
+      update();
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return;
   }
 
   void addOneFood(food) {

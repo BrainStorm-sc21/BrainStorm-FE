@@ -66,6 +66,7 @@ dependencies:
   flutter_local_notifications: ^14.1.0
   web_socket_channel: ^2.4.0
   fluttertoast: ^8.2.2
+  snapping_sheet: ^3.1.0
 
 dependency_overrides:
   intl: ^0.18.0
@@ -105,7 +106,9 @@ flutter:
     - assets/images/exchangeMarker.png
     - assets/images/shareMarker.png
 
+    # 레시피
     - assets/images/chatGPT.png
+    - assets/images/recipe.png
 
     - assets/images/logo.png
     - assets/images/completeSignUp.png
