@@ -21,6 +21,7 @@ class RecipeSnappingSheet extends StatelessWidget {
         grabbingHeight: 55,
         grabbing: RecipeGrapping(context),
         sheetBelow: SnappingSheetContent(
+          sizeBehavior: SheetSizeStatic(size: 100),
           draggable: true,
           child: Container(
             color: ColorStyles.white,
@@ -63,6 +64,26 @@ class RecipeSnappingSheet extends StatelessWidget {
             ),
           ),
         ),
+        snappingPositions: const [
+          SnappingPosition.factor(
+            positionFactor: 0.5,
+            snappingCurve: Curves.bounceOut,
+            snappingDuration: Duration(seconds: 1),
+            grabbingContentOffset: GrabbingContentOffset.bottom,
+          ),
+          SnappingPosition.factor(
+            positionFactor: 0.01,
+            snappingCurve: Curves.bounceOut,
+            snappingDuration: Duration(seconds: 1),
+            grabbingContentOffset: GrabbingContentOffset.top,
+          ),
+          SnappingPosition.factor(
+            positionFactor: 0.8,
+            snappingCurve: Curves.bounceOut,
+            snappingDuration: Duration(seconds: 1),
+            grabbingContentOffset: GrabbingContentOffset.bottom,
+          ),
+        ],
         child: RecipeRecommendPage(selectedFoods: selectedFoods),
       ),
     );
