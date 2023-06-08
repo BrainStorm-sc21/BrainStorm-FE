@@ -66,6 +66,7 @@ dependencies:
   flutter_local_notifications: ^14.1.0
   web_socket_channel: ^2.4.0
   fluttertoast: ^8.2.2
+  multi_image_picker: ^4.8.01
 
 dependency_overrides:
   intl: ^0.18.0

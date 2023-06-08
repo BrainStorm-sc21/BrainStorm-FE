@@ -358,7 +358,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
             : Container(),
         Positioned(
           left: 15,
-          top: 20,
+          top: 30,
           child: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () {

@@ -33,7 +33,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   // final WebSocketChannel _client = IOWebSocketChannel.connect(
   //   Uri.parse('wss://echo.websocket.events'),
   // );
-  final int userId = 7; // 임시 유저 아이디
+  final int userId = 3; // 임시 유저 아이디
   List<Message> messages = List.empty(growable: true);
   late final File historyFile;
   late final String _roomId;
