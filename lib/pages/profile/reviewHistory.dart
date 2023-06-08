@@ -59,6 +59,7 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                       itemBuilder: ((context, index) {
                         return MyReviewUnit(
                           reviewPoint: index,
+                          dealId: index,
                         );
                       }),
                     )),
@@ -70,6 +71,7 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                       itemBuilder: ((context, index) {
                         return MyReviewUnit(
                           reviewPoint: index,
+                          dealId: index,
                         );
                       }),
                     )),
@@ -84,7 +86,9 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
 
 class MyReviewUnit extends StatefulWidget {
   final int reviewPoint;
-  const MyReviewUnit({super.key, required this.reviewPoint});
+  final int dealId;
+  const MyReviewUnit(
+      {super.key, required this.reviewPoint, required this.dealId});
 
   @override
   State<MyReviewUnit> createState() => _MyReviewUnitState();
@@ -103,7 +107,7 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
         height: 220,
         child: Column(
           children: [
-            const TopPostUnit(isMine: false, dealId: 6),
+            TopPostUnit(isMine: false, dealId: widget.dealId),
             Container(height: 1, color: ColorStyles.lightGrey),
             Padding(
               padding: const EdgeInsets.only(left: 10),
