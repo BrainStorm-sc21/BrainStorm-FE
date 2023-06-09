@@ -41,6 +41,8 @@ class DealData {
 class Deal {
   int? dealId;
   int userId;
+  String? userName;
+  double? reliability;
   int dealType;
   String dealName;
   String dealContent;
@@ -56,6 +58,8 @@ class Deal {
   Deal(
       {this.dealId = 0,
       required this.userId,
+      this.userName,
+      this.reliability,
       required this.dealType,
       required this.dealName,
       required this.dealContent,
@@ -95,10 +99,12 @@ class Deal {
     return Deal(
       dealId: json['dealId'],
       userId: json['userId'],
+      userName: json['userName'] ?? '(알 수 없음)',
+      reliability: json['reliability'] ?? 0.0,
       dealType: json['dealType'],
       dealName: json['dealName'],
       dealContent: json['dealContent'],
-      distance: json['distance'],
+      distance: json['distance'] ?? 0.0,
       latitude: json['latitude'],
       longitude: json['longitude'],
       dealImage1: json['image1'] != null ? imageBaseURL + json['image1'] : null,
