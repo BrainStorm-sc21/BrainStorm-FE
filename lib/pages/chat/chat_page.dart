@@ -16,7 +16,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  late final ChatController _chatController = Get.put(ChatController());
+  final ChatController _chatController = Get.put(ChatController());
 
   @override
   void initState() {
