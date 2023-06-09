@@ -130,59 +130,57 @@ class _ChatUnitState extends State<ChatUnit> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 55,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 55,
+                    height: 55,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: widget.deal.dealImage1 == null
+                          ? Image.asset('assets/images/logo.png')
+                          : Image.network(
+                              widget.deal.dealImage1!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.65,
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SizedBox(
                       height: 55,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: widget.deal.dealImage1 == null
-                            ? Image.asset('assets/images/logo.png')
-                            : Image.network(
-                                widget.deal.dealImage1!,
-                                fit: BoxFit.cover,
-                              ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.deal.userName!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: ColorStyles.textColor,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4.0,
+                          ),
+                          Text(
+                            widget.room.lastMessage!,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: ColorStyles.grey,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.65,
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SizedBox(
-                        height: 55,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.deal.userName!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: ColorStyles.textColor,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 4.0,
-                            ),
-                            Text(
-                              widget.room.lastMessage!,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                color: ColorStyles.grey,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
               const Spacer(),
               SizedBox(
