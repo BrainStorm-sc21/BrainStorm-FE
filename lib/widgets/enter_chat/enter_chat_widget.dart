@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -79,6 +80,7 @@ class ChatUnit extends StatefulWidget {
   final Room room;
   final String imgUrl;
   final int unread;
+  final Deal deal;
 
   const ChatUnit({
     super.key,
@@ -87,6 +89,7 @@ class ChatUnit extends StatefulWidget {
     required this.room,
     this.imgUrl = 'assets/images/logo.png',
     this.unread = 0,
+    required this.deal,
   });
 
   @override
@@ -147,7 +150,7 @@ class _ChatUnitState extends State<ChatUnit> {
             senderId: widget.senderId,
             receiverId: widget.receiverId,
             room: widget.room,
-            deal: null,
+            deal: widget.deal,
           ),
         ),
       ),

@@ -65,6 +65,7 @@ class _ChatPageState extends State<ChatPage> {
                               ? _chatController.roomList[index].receiver
                               : _chatController.roomList[index].sender,
                           room: _chatController.roomList[index],
+                          deal: _chatController.roomList[index].dealInfo,
                         );
                       },
                     ),

@@ -16,7 +16,7 @@ class ChatDetailPage extends StatefulWidget {
   final int receiverId;
   final int senderId;
   final Room? room;
-  final Deal? deal;
+  final Deal deal;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
@@ -84,6 +84,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
+      "dealId": widget.deal.dealId,
       "sender": widget.senderId,
       "receiver": widget.receiverId,
     };
@@ -241,16 +242,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           color: ColorStyles.white,
           child: Column(
             children: [
-              (widget.deal != null)
-                  ? Container(
-                      height: 80,
-                      color: ColorStyles.white,
-                      child: OnePostUnit(
-                        deal: widget.deal!,
-                        isChat: true,
-                      ),
-                    )
-                  : Container(),
+              Container(
+                height: 80,
+                color: ColorStyles.white,
+                child: OnePostUnit(
+                  deal: widget.deal,
+                  isChat: true,
+                ),
+              ),
               // 채팅 기록
               Expanded(
                 child: StreamBuilder(
