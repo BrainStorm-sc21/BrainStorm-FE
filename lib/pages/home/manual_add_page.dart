@@ -118,7 +118,6 @@ class _ManualAddPageState extends State<ManualAddPage> {
     debugPrint('req data: $data');
 
     _foodListController.addManualFoodInfo(data);
-    _foodListController.addOneFood(food);
 
     showToast('식료품이 등록되었습니다');
     Navigator.pop(context);

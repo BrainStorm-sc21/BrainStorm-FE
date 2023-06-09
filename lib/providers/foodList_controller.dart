@@ -57,7 +57,7 @@ class FoodListController extends GetxController {
     var deleteFood = fooditem.foodId;
 
     try {
-      print('delete food : ${fooditem.foodName}');
+      print('delete food : ${fooditem.foodId}');
       final resp = await dio.delete("/food/$deleteFood");
       _foodList.remove(fooditem);
 
@@ -81,12 +81,23 @@ class FoodListController extends GetxController {
       "userId": userId,
       "food": item.toJson(),
     };
-
+    print("name: ${item.foodName}");
+    print("stock: ${item.stock}");
+    print("storageWay: ${item.storageWay}");
+    print("expireDate: ${item.expireDate}");
     var modifyFoodId = item.foodId;
 
     try {
       final resp = await dio.put('/food/$modifyFoodId', data: data);
       print("Modify Status: ${resp.statusCode}");
+
+      for (var i = 0; i < _foodList.length; i++) {
+        if (_foodList[i].foodId == item.foodId) {
+          _foodList[i] = item;
+          print(_foodList[i].foodName);
+          break;
+        }
+      }
 
       update();
     } catch (e) {
@@ -104,10 +115,9 @@ class FoodListController extends GetxController {
       ..receiveTimeout = const Duration(seconds: 10);
 
     try {
-      final res = await dio.post(
-        '/food/add',
-        data: data,
-      );
+      final resp = await dio.post('/food/add', data: data);
+      _foodList.add(Food.fromJson(resp.data['data']));
+      update();
     } catch (e) {
       Exception(e);
     } finally {
@@ -128,8 +138,6 @@ class FoodListController extends GetxController {
       "foodList": selectedFoods,
     };
 
-    print("$data");
-
     try {
       final resp = await dio.post(
         "/recipe",
@@ -147,10 +155,5 @@ class FoodListController extends GetxController {
       dio.close();
     }
     return;
-  }
-
-  void addOneFood(food) {
-    _foodList.add(food);
-    update();
   }
 }
