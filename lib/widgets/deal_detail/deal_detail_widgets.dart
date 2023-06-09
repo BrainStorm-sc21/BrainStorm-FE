@@ -31,13 +31,17 @@ class _TopPostUnitState extends State<TopPostUnit> {
       ..connectTimeout = const Duration(seconds: 5)
       ..receiveTimeout = const Duration(seconds: 10);
 
-    try {
-      final resp = await dio.put("deal/${widget.dealId}/complete");
+    print("딜 아이디: ${widget.dealId}");
 
-      if (resp.statusCode == 200) {
+    try {
+      final resp = await dio.put('deal/${widget.dealId}/complete');
+      print("Modify Status: ${resp.statusCode}");
+
+      //Navigator.pop(context);
+
+      if (resp.data['status']) if (resp.statusCode == 200) {
         print('거래 완료 성공!');
         showToast('해당 거래가 완료되었습니다');
-        Navigator.pop(context);
       } else {
         print('??');
       }
@@ -83,10 +87,11 @@ class _TopPostUnitState extends State<TopPostUnit> {
                     showCompleteDealDialog(context);
                   },
                   style: OutlinedButton.styleFrom(
-                      foregroundColor: ColorStyles.grey),
+                      side: const BorderSide(color: ColorStyles.mainColor)),
                   child: const Text(
                     '거래완료하기',
-                    style: TextStyle(fontSize: 14),
+                    style:
+                        TextStyle(color: ColorStyles.mainColor, fontSize: 14),
                   ),
                 )
               : SizedBox(
