@@ -223,7 +223,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         color: ColorStyles.white,
         child: Column(
           children: [
-            /*
             (widget.deal != null)
                 ? Container(
                     height: 80,
@@ -236,7 +235,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 : Container(
                     height: 80,
                   ),
-                  */
             // 채팅 기록
             Expanded(
               child: StreamBuilder(

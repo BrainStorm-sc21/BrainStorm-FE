@@ -2,6 +2,7 @@ import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/pages/home/smart_add_page.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
+import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -49,14 +50,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   TabBar get _tabBar => const TabBar(
-      padding: EdgeInsets.only(top: 10),
-      isScrollable: false,
-      indicatorColor: ColorStyles.mainColor,
-      indicatorWeight: 4,
-      labelColor: ColorStyles.mainColor,
-      unselectedLabelColor: ColorStyles.textColor,
-      labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      tabs: [Tab(text: "전체"), Tab(text: "냉장"), Tab(text: "냉동"), Tab(text: "실온")]);
+          padding: EdgeInsets.only(top: 10),
+          isScrollable: false,
+          indicatorColor: ColorStyles.mainColor,
+          indicatorWeight: 4,
+          labelColor: ColorStyles.mainColor,
+          unselectedLabelColor: ColorStyles.textColor,
+          labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          tabs: [
+            Tab(text: "전체"),
+            Tab(text: "냉장"),
+            Tab(text: "냉동"),
+            Tab(text: "실온")
+          ]);
 
   @override
   Widget build(BuildContext context) {
@@ -69,24 +75,34 @@ class _HomePageState extends State<HomePage> {
               centerTitle: false,
               title: Obx(() => Text("${_userInfoController.userName}님의 냉장고",
                   style: const TextStyle(
-                      height: 3, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25))),
+                      height: 3,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25))),
               backgroundColor: ColorStyles.white,
               elevation: 0,
               flexibleSpace: Container(
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)),
                       gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: <Color>[ColorStyles.darkmainColor, ColorStyles.mainColor]))),
+                          colors: <Color>[
+                            ColorStyles.darkmainColor,
+                            ColorStyles.mainColor
+                          ]))),
               actions: [
                 IconButton(
                     padding: const EdgeInsets.only(top: 28, right: 30),
-                    icon: const Icon(Icons.notifications, color: Colors.white, size: 30),
+                    icon: const Icon(Icons.notifications,
+                        color: Colors.white, size: 30),
                     onPressed: () {
                       Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => const PushList()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PushList()));
                     })
               ]),
         ),
@@ -94,7 +110,11 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _tabBar,
-            const Divider(height: 0, color: ColorStyles.lightgrey, thickness: 1.5, endIndent: 10),
+            const Divider(
+                height: 0,
+                color: ColorStyles.lightgrey,
+                thickness: 1.5,
+                endIndent: 10),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 13, 10),
               child: RoundedOutlinedButton(
@@ -102,7 +122,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: ColorStyles.cream,
                   borderColor: ColorStyles.cream,
                   foregroundColor: ColorStyles.textColor,
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const RecipeSnappingSheet(),
+                      )),
                   fontSize: 14,
                   text: "🧑🏻‍🍳 레시피 추천받기"),
             ),
@@ -114,13 +136,21 @@ class _HomePageState extends State<HomePage> {
                   return TabBarView(
                     children: [
                       Obx(() => Refrigerator(
-                          userId: widget.userId, foods: initFoods("전체"), storage: '전체')),
+                          userId: widget.userId,
+                          foods: initFoods("전체"),
+                          storage: '전체')),
                       Obx(() => Refrigerator(
-                          userId: widget.userId, foods: initFoods("냉장"), storage: '냉장')),
+                          userId: widget.userId,
+                          foods: initFoods("냉장"),
+                          storage: '냉장')),
                       Obx(() => Refrigerator(
-                          userId: widget.userId, foods: initFoods("냉동"), storage: '냉동')),
+                          userId: widget.userId,
+                          foods: initFoods("냉동"),
+                          storage: '냉동')),
                       Obx(() => Refrigerator(
-                          userId: widget.userId, foods: initFoods("실온"), storage: '실온'))
+                          userId: widget.userId,
+                          foods: initFoods("실온"),
+                          storage: '실온'))
                     ],
                   );
                 }
