@@ -6,7 +6,7 @@ class SentReviewData {
   SentReviewData({required this.data});
 
   factory SentReviewData.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List;
+    var list = json['data']['reviewFrom'] as List;
 
     List<Review> reviewList = list.map((i) => Review.fromJson(i)).toList();
 
@@ -20,7 +20,7 @@ class ReceivedReviewData {
   ReceivedReviewData({required this.data});
 
   factory ReceivedReviewData.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List;
+    var list = json['data']['reviewTo'] as List;
 
     List<Review> reviewList = list.map((i) => Review.fromJson(i)).toList();
 

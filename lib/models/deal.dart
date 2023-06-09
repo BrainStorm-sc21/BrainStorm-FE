@@ -16,8 +16,6 @@ class DealData {
 
     List<Deal> dealList = list.map((i) => Deal.fromJson(i)).toList();
 
-    print('dealData');
-
     // for (Deal deals in dealList) {
     //   print(deals.dealName);
     //   if (deals.dealImage1 != null) {

@@ -1,5 +1,8 @@
+import 'package:brainstorm_meokjang/models/review.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ReviewHistoryPage extends StatefulWidget {
@@ -12,6 +15,52 @@ class ReviewHistoryPage extends StatefulWidget {
 
 //home_page의 tabbar 활용
 class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
+  late List<Review> SentReviews = List.empty(growable: true);
+  late List<Review> ReceivedReviews = List.empty(growable: true);
+
+  Future getServerMyReviewDataWithDio() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+    try {
+      Response resp = await dio.get("/review/${widget.userId}");
+
+      print("Review Status: ${resp.statusCode}");
+      print("My Review Data: ${resp.data}");
+
+      if (resp.statusCode == 200) {
+        print('통신 성공!!');
+
+        SentReviewData sendReviews = SentReviewData.fromJson(resp.data);
+        ReceivedReviewData receivedReviews =
+            ReceivedReviewData.fromJson(resp.data);
+
+        setState(() {
+          for (Review review in sendReviews.data) {
+            SentReviews.add(review);
+          }
+          for (Review review in receivedReviews.data) {
+            ReceivedReviews.add(review);
+          }
+        });
+      }
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getServerMyReviewDataWithDio();
+  }
+
   TabBar get _tabBar => const TabBar(
       padding: EdgeInsets.only(top: 10),
       isScrollable: false,
