@@ -133,7 +133,6 @@ class _ChatUnitState extends State<ChatUnit> {
 
   void initTimeAgo() {
     DateTime? time = widget.room.lastTime;
-    print(time);
     setState(() {
       timeAgo = time == null ? '' : countHour(time);
     });
