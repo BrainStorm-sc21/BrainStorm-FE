@@ -73,6 +73,13 @@ class Popups {
   }
 
   static void showReview(context) {
+    int reviewPoint = 0;
+    String? reviewContents;
+
+    void setPoint(int point) {
+      reviewPoint = point;
+    }
+
     showDialog(
         context: context,
         builder: (context) {
@@ -97,11 +104,16 @@ class Popups {
                         fontSize: 18,
                         fontWeight: FontWeight.w400),
                   ),
-                  const StarPointUnit(),
+                  StarPointUnit(
+                    setPoint: setPoint,
+                  ),
                   SizedBox(
                     width: 230,
                     height: 130,
                     child: TextFormField(
+                      onChanged: (value) {
+                        reviewContents = value;
+                      },
                       maxLines: 8,
                       decoration: InputDecoration(
                         hintText: '거래에 대한 간단한 후기를 남겨주세요!',
@@ -129,7 +141,10 @@ class Popups {
                       width: 230,
                       height: 28,
                       text: '보내기',
-                      onPressed: () {},
+                      onPressed: () {
+                        print('리뷰점수: $reviewPoint');
+                        print('리뷰컨텐츠: $reviewContents');
+                      },
                       backgroundColor: ColorStyles.mainColor,
                       foregroundColor: ColorStyles.white,
                       borderColor: ColorStyles.mainColor),
@@ -408,7 +423,8 @@ class GuidePage extends StatelessWidget {
 }
 
 class StarPointUnit extends StatefulWidget {
-  const StarPointUnit({super.key});
+  final void Function(int point) setPoint;
+  const StarPointUnit({super.key, required this.setPoint});
 
   @override
   State<StarPointUnit> createState() => _StarPointUnitState();
@@ -416,6 +432,7 @@ class StarPointUnit extends StatefulWidget {
 
 class _StarPointUnitState extends State<StarPointUnit> {
   List<bool> isHighlight = [false, false, false, false, false];
+  int reviewPoint = 0;
 
   void setHighlight(idx) {
     // setState(() {
@@ -491,6 +508,7 @@ class _StarPointUnitState extends State<StarPointUnit> {
               onPressed: () {
                 print('클릭한 인덱스: $index');
                 setHighlight(index);
+                widget.setPoint(index + 1);
               },
               icon: const Icon(Icons.star),
             );
