@@ -4,8 +4,6 @@ import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -95,41 +93,12 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
-  late String nickname = '';
   String timeAgo = '';
 
   @override
   void initState() {
     super.initState();
-    getUserNickname();
     initTimeAgo();
-  }
-
-  Future<void> getUserNickname() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final Response res = await dio.get('/users/${widget.receiverId}');
-
-    try {
-      if (res.data['status'] == 200) {
-        Map<String, dynamic> json = res.data['data'];
-        setState(() {
-          nickname = json['userName'];
-        });
-      } else {
-        setState(() {
-          nickname = '(알 수 없음)';
-        });
-      }
-    } catch (e) {
-      debugPrint('$e');
-    } finally {
-      dio.close();
-    }
   }
 
   void initTimeAgo() {
@@ -187,7 +156,7 @@ class _ChatUnitState extends State<ChatUnit> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              nickname,
+                              widget.deal.userName!,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
