@@ -227,7 +227,7 @@ class _ChatUnitState extends State<ChatUnit> {
                       style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
-                          color: ColorStyles.textColor),
+                          color: ColorStyles.grey),
                     ),
                     widget.unread != 0
                         ? Container(
@@ -245,7 +245,10 @@ class _ChatUnitState extends State<ChatUnit> {
                               ),
                             ),
                           )
-                        : Container(),
+                        : const SizedBox(
+                            width: 18,
+                            height: 18,
+                          ),
                   ],
                 ),
               ),
