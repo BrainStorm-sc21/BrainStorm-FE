@@ -8,6 +8,12 @@ import 'package:get/get.dart';
 class ChatController extends GetxController {
   RxList<Room> roomList = <Room>[].obs;
 
+  void setChatRoomList(int userId) async {
+    await loadChatRoomList(userId);
+    await replaceDealInfo(); // 유효한 값의 deal info로 교체 (DB 로직 수정이 불가하여 직접 api를 호출함)
+    sortRoomListByNewest();
+  }
+
   // load chat room list from DB
   Future<void> loadChatRoomList(int userId) async {
     Dio dio = Dio();
@@ -23,7 +29,6 @@ class ChatController extends GetxController {
         print('채팅 목록 로드 성공!!:\n ${res.data['data']}');
         List<dynamic> jsonList = res.data['data'] as List;
         roomList.value = jsonList.map((data) => Room.fromJson(data)).toList();
-        sortRoomListByNewest();
       } else {
         print('채팅 목록 로드 실패!!');
         throw Exception();

@@ -78,7 +78,7 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
                 print("selected newIndex : $newIndex");
                 setCurrentIndex(newIndex); // 버튼 눌렀을 때 누른 페이지로 이동
                 if (newIndex == AppPagesNumber.chat) {
-                  _chatController.loadChatRoomList(widget.userId!);
+                  _chatController.setChatRoomList(widget.userId!);
                 }
               },
               selectedItemColor: ColorStyles.darkmainColor, // 선택된 아이콘 색상
