@@ -81,24 +81,20 @@ class FoodListController extends GetxController {
       "userId": userId,
       "food": item.toJson(),
     };
-    print("name: ${item.foodName}");
     print("stock: ${item.stock}");
     print("storageWay: ${item.storageWay}");
     print("expireDate: ${item.expireDate}");
-    var modifyFoodId = item.foodId;
 
     try {
-      final resp = await dio.put('/food/$modifyFoodId', data: data);
+      final resp = await dio.put('/food/${item.foodId}', data: data);
       print("Modify Status: ${resp.statusCode}");
 
       for (var i = 0; i < _foodList.length; i++) {
         if (_foodList[i].foodId == item.foodId) {
           _foodList[i] = item;
-          print(_foodList[i].foodName);
           break;
         }
       }
-
       update();
     } catch (e) {
       Exception(e);

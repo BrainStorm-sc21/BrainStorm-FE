@@ -1,10 +1,9 @@
-import 'package:brainstorm_meokjang/pages/home/manual_add_page.dart';
 import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
-import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
+import 'package:brainstorm_meokjang/widgets/food/modify_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,21 +36,6 @@ class _RefrigeratorState extends State<Refrigerator> {
     }
   }
 
-  void setName(String value) => setState(() {
-        modifyFood.foodName = value;
-      });
-
-  void setStock(int index, num value) => setState(() {
-        modifyFood.stock = value;
-      });
-  void setStorage(String value) => setState(() {
-        modifyFood.storageWay = value;
-        print(modifyFood.storageWay);
-        print(food.storageWay);
-      });
-  void setExpireDate(DateTime value, {int? index}) =>
-      setState(() => modifyFood.expireDate = value);
-
   int dayCount(day) {
     if (day >= 7) {
       return 7;
@@ -61,18 +45,6 @@ class _RefrigeratorState extends State<Refrigerator> {
       return day;
     }
   }
-
-  var divider = Column(
-    children: [
-      const SizedBox(height: 10),
-      Divider(
-        thickness: 1,
-        height: 1,
-        color: ColorStyles.lightGrey,
-      ),
-      const SizedBox(height: 10),
-    ],
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -147,75 +119,18 @@ class _RefrigeratorState extends State<Refrigerator> {
                         children: [
                           OutlinedButton(
                             onPressed: () {
-                              modifyFood = widget.foods[index];
-                              showModalBottomSheet<void>(
+                              modifyFood = Food(
+                                  foodId: widget.foods[index].foodId,
+                                  foodName: widget.foods[index].foodName,
+                                  storageWay: widget.foods[index].storageWay,
+                                  stock: widget.foods[index].stock,
+                                  expireDate: widget.foods[index].expireDate);
+                              showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.7,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15),
-                                      child: Column(
-                                        children: [
-                                          const SizedBox(height: 20),
-                                          FoodName(
-                                            setName: setName,
-                                            foodName: modifyFood.foodName,
-                                          ),
-                                          const SizedBox(height: 30),
-                                          FoodStorageDropdown(
-                                              storage: modifyFood.storageWay,
-                                              setStorage: setStorage),
-                                          divider,
-                                          FoodStockButton(
-                                              index: index,
-                                              stock: modifyFood.stock,
-                                              setStock: setStock),
-                                          divider,
-                                          FoodExpireDate(
-                                            expireDate: modifyFood.expireDate,
-                                            setExpireDate: setExpireDate,
-                                          ),
-                                          const SizedBox(height: 30),
-                                          RoundedOutlinedButton(
-                                            text: '등록하기',
-                                            width: double.infinity,
-                                            onPressed: () {
-                                              _foodListController
-                                                  .modifyFoodInfo(widget.userId,
-                                                      modifyFood);
-                                              Navigator.of(context).pop();
-                                              showToast('식료품이 수정되었습니다');
-                                            },
-                                            foregroundColor: ColorStyles.white,
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
-                                            borderColor: ColorStyles.mainColor,
-                                            fontSize: 18,
-                                          ),
-                                          const SizedBox(height: 10),
-                                          RoundedOutlinedButton(
-                                            text: '취소하기',
-                                            width: double.infinity,
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
-                                            foregroundColor:
-                                                ColorStyles.mainColor,
-                                            backgroundColor: ColorStyles.white,
-                                            borderColor: ColorStyles.mainColor,
-                                            fontSize: 18,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                  return ModifyFoodBottomSheet(
+                                      modifyFood: modifyFood,
+                                      userId: widget.userId);
                                 },
                                 isScrollControlled: true,
                                 shape: const RoundedRectangleBorder(
