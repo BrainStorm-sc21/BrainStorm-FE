@@ -15,8 +15,8 @@ class ReviewHistoryPage extends StatefulWidget {
 
 //home_page의 tabbar 활용
 class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
-  late List<Review> SentReviews = List.empty(growable: true);
-  late List<Review> ReceivedReviews = List.empty(growable: true);
+  late List<Review> sentReviewList = List.empty(growable: true);
+  late List<Review> receivedReviewList = List.empty(growable: true);
 
   Future getServerMyReviewDataWithDio() async {
     Dio dio = Dio();
@@ -33,16 +33,16 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
       if (resp.statusCode == 200) {
         print('통신 성공!!');
 
-        SentReviewData sendReviews = SentReviewData.fromJson(resp.data);
+        SentReviewData sentReviews = SentReviewData.fromJson(resp.data);
         ReceivedReviewData receivedReviews =
             ReceivedReviewData.fromJson(resp.data);
 
         setState(() {
-          for (Review review in sendReviews.data) {
-            SentReviews.add(review);
+          for (Review review in sentReviews.data) {
+            sentReviewList.add(review);
           }
           for (Review review in receivedReviews.data) {
-            ReceivedReviews.add(review);
+            receivedReviewList.add(review);
           }
         });
       }
@@ -102,30 +102,36 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
               children: [
                 Container(
                     color: ColorStyles.lightGrey,
-                    // child: const Center(child: Text('후기가 없습니다!'))),
-                    child: ListView.builder(
-                      itemCount: 5,
-                      itemBuilder: ((context, index) {
-                        return MyReviewUnit(
-                          reviewPoint: index,
-                          reviewContents: (index % 2 == 0) ? '임시 후기입니다.' : null,
-                          dealId: index,
-                        );
-                      }),
-                    )),
+                    child: (sentReviewList.isNotEmpty)
+                        ? ListView.builder(
+                            itemCount: sentReviewList.length,
+                            itemBuilder: ((context, index) {
+                              return MyReviewUnit(
+                                reviewPoint: sentReviewList[index].rating,
+                                reviewContents:
+                                    sentReviewList[index].reviewContent,
+                                dealId: sentReviewList[index].dealId,
+                              );
+                            }),
+                          )
+                        : const Center(child: Text('보낸 후기가 없습니다!'))),
                 Container(
-                    color: ColorStyles.lightGrey,
-                    // child: const Center(child: Text('후기가 없습니다!'))),
-                    child: ListView.builder(
-                      itemCount: 5,
-                      itemBuilder: ((context, index) {
-                        return MyReviewUnit(
-                          reviewPoint: index,
-                          reviewContents: (index % 2 != 0) ? '임시 후기입니다.' : null,
-                          dealId: index,
-                        );
-                      }),
-                    )),
+                  color: ColorStyles.lightGrey,
+                  // child: const Center(child: Text('후기가 없습니다!'))),
+                  child: (receivedReviewList.isNotEmpty)
+                      ? ListView.builder(
+                          itemCount: receivedReviewList.length,
+                          itemBuilder: ((context, index) {
+                            return MyReviewUnit(
+                              reviewPoint: receivedReviewList[index].rating,
+                              reviewContents:
+                                  receivedReviewList[index].reviewContent,
+                              dealId: receivedReviewList[index].dealId,
+                            );
+                          }),
+                        )
+                      : const Center(child: Text('받은 후기가 없습니다!')),
+                ),
               ],
             ))
           ],
