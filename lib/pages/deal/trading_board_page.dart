@@ -15,7 +15,7 @@ class TradingBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     Deal deal;
     return ListView.builder(
-      itemCount: posts.length,
+      itemCount: posts.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) return const ADVBanner();
         deal = posts[index - 1];
@@ -140,7 +140,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -177,7 +177,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
