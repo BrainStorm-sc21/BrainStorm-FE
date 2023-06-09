@@ -78,7 +78,6 @@ class ChatUnit extends StatefulWidget {
   final int senderId;
   final int receiverId;
   final Room room;
-  final String imgUrl;
   final int unread;
   final Deal deal;
 
@@ -87,7 +86,6 @@ class ChatUnit extends StatefulWidget {
     required this.senderId,
     required this.receiverId,
     required this.room,
-    this.imgUrl = 'assets/images/logo.png',
     this.unread = 0,
     required this.deal,
   });
@@ -171,7 +169,12 @@ class _ChatUnitState extends State<ChatUnit> {
                       height: 55,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(widget.imgUrl),
+                        child: widget.deal.dealImage1 == null
+                            ? Image.asset('assets/images/logo.png')
+                            : Image.network(
+                                widget.deal.dealImage1!,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Padding(
