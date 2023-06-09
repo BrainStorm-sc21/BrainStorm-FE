@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 
 class FoodStockButton extends StatelessWidget {
   final num stock;
-  final void Function(int index, num value) setStock;
-  final int index;
+  final void Function(num value, {int? index}) setStock;
+  final int? index;
 
   const FoodStockButton(
-      {super.key,
-      required this.index,
-      required this.stock,
-      required this.setStock});
+      {super.key, this.index, required this.stock, required this.setStock});
 
   num convertInteger(stock) {
     if (stock == 1 || stock >= 2) {
@@ -34,7 +31,12 @@ class FoodStockButton extends StatelessWidget {
     } else {
       result = (stock - 1).ceil();
     }
-    setStock(index, result);
+
+    if (index != null) {
+      setStock(result, index: index);
+    } else {
+      setStock(result);
+    }
   }
 
   void increaseStock() {
@@ -50,7 +52,11 @@ class FoodStockButton extends StatelessWidget {
     } else {
       result = (stock + 1).floor();
     }
-    setStock(index, result);
+    if (index != null) {
+      setStock(result, index: index);
+    } else {
+      setStock(result);
+    }
   }
 
   @override
