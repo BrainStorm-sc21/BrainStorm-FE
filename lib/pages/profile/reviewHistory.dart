@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
-import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
+import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:flutter/material.dart';
 
 class ReviewHistoryPage extends StatefulWidget {
@@ -59,6 +59,7 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                       itemBuilder: ((context, index) {
                         return MyReviewUnit(
                           reviewPoint: index,
+                          reviewContents: (index % 2 == 0) ? '임시 후기입니다.' : null,
                           dealId: index,
                         );
                       }),
@@ -71,6 +72,7 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                       itemBuilder: ((context, index) {
                         return MyReviewUnit(
                           reviewPoint: index,
+                          reviewContents: (index % 2 != 0) ? '임시 후기입니다.' : null,
                           dealId: index,
                         );
                       }),
@@ -86,9 +88,13 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
 
 class MyReviewUnit extends StatefulWidget {
   final int reviewPoint;
+  final String? reviewContents;
   final int dealId;
   const MyReviewUnit(
-      {super.key, required this.reviewPoint, required this.dealId});
+      {super.key,
+      required this.reviewPoint,
+      required this.reviewContents,
+      required this.dealId});
 
   @override
   State<MyReviewUnit> createState() => _MyReviewUnitState();
@@ -104,49 +110,143 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
           borderRadius: BorderRadius.circular(20),
           color: ColorStyles.white,
         ),
-        height: 220,
+        height: (widget.reviewContents == null) ? 130 : 220,
         child: Column(
           children: [
-            TopPostUnit(isMine: false, dealId: widget.dealId),
+            const TopReviewUnit(
+              userName: '삼식이 네끼',
+              dealTitle: '사과 나눔해요',
+              reliability: 75,
+            ),
             Container(height: 1, color: ColorStyles.lightGrey),
             Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: SizedBox(
-                height: 50,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Icon(
-                      Icons.star,
-                      color: (index <= widget.reviewPoint)
-                          ? ColorStyles.mainColor
-                          : ColorStyles.grey,
-                    );
-                  },
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 150,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Icon(
+                          Icons.star,
+                          color: (index <= widget.reviewPoint)
+                              ? ColorStyles.mainColor
+                              : ColorStyles.grey,
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text(
+                    '2023-06-08',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                width: double.infinity,
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: ColorStyles.lightGrey,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SingleChildScrollView(
-                    child: Text(
-                        '${widget.reviewPoint + 1}번째 후기입니다. 별점은 ${widget.reviewPoint + 1}점 입니다.'),
-                  ),
-                ),
-              ),
-            )
+            (widget.reviewContents != null)
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Container(
+                      width: double.infinity,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: ColorStyles.lightGrey,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SingleChildScrollView(
+                          child: Text(widget.reviewContents!),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(height: 1),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TopReviewUnit extends StatelessWidget {
+  final String userName;
+  final String dealTitle;
+  final int reliability;
+  const TopReviewUnit(
+      {super.key,
+      required this.userName,
+      required this.dealTitle,
+      required this.reliability});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, top: 25, right: 20),
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: Row(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                dealTitle,
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: ColorStyles.black),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Row(
+                  children: [
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          SizedBox(
+            width: 65,
+            height: 50,
+            child: Column(
+              children: [
+                Container(
+                  child: FractionallySizedBox(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('신뢰도 ${reliability.toString()}',
+                            style: const TextStyle(
+                              color: ColorStyles.mainColor,
+                              fontSize: 14,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                CustomProgressBar(
+                  paddingHorizontal: 2,
+                  currentPercent: reliability.toDouble(),
+                  maxPercent: 100,
+                  lineHeight: 8,
+                  firstColor: ColorStyles.mainColor,
+                  secondColor: ColorStyles.mainColor,
+                ),
+              ],
+            ),
+          ),
+        ]),
       ),
     );
   }
