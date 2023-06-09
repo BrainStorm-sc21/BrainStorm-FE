@@ -76,12 +76,75 @@ class Popups {
         });
   }
 
+  static void showParticipantList(context, dealId, reviewFrom, reviewTo) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: SizedBox(
+              width: 250,
+              height: 320,
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    '거래 참여자 목록',
+                    style: TextStyle(
+                        color: ColorStyles.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 35, left: 5, right: 5),
+                    child: SizedBox(
+                      width: 240,
+                      height: 200,
+                      child: ListView.builder(
+                          itemCount: 3,
+                          itemBuilder: (BuildContext context, index) {
+                            switch (index) {
+                              case 0:
+                                return const ParticipantUnit(
+                                    userName: '삼식이 한끼');
+                              case 1:
+                                return const ParticipantUnit(
+                                    userName: '삼식이 두끼');
+                              case 2:
+                                return const ParticipantUnit(
+                                    userName: '삼식이 세끼');
+                            }
+                            return null;
+                          }),
+                    ),
+                  ),
+                  const Spacer(),
+                  RoundedOutlinedButton(
+                      width: 230,
+                      height: 28,
+                      text: '리뷰 쓰기',
+                      onPressed: () {
+                        showReview(context, dealId, reviewFrom, reviewTo);
+                      },
+                      backgroundColor: ColorStyles.mainColor,
+                      foregroundColor: ColorStyles.white,
+                      borderColor: ColorStyles.mainColor),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   static void showReview(context, dealId, reviewFrom, reviewTo) {
-    int reviewPoint = 0;
+    double reviewPoint = 0;
     String? reviewContents;
     late Review review;
 
-    void setPoint(int point) {
+    void setPoint(double point) {
       reviewPoint = point;
     }
 
@@ -97,8 +160,8 @@ class Popups {
       print(data);
 
       try {
-        final resp = await dio
-            .post('review', data: data, queryParameters: {'dealId': dealId});
+        final resp = await dio.post('review/$dealId',
+            data: data, queryParameters: dealId);
 
         print(resp.data);
 
@@ -468,7 +531,7 @@ class GuidePage extends StatelessWidget {
 }
 
 class StarPointUnit extends StatefulWidget {
-  final void Function(int point) setPoint;
+  final void Function(double point) setPoint;
   const StarPointUnit({super.key, required this.setPoint});
 
   @override
@@ -559,5 +622,61 @@ class _StarPointUnitState extends State<StarPointUnit> {
             );
           },
         ));
+  }
+}
+
+class ParticipantUnit extends StatefulWidget {
+  final String userName;
+  const ParticipantUnit({super.key, required this.userName});
+
+  @override
+  State<ParticipantUnit> createState() => _ParticipantUnitState();
+}
+
+class _ParticipantUnitState extends State<ParticipantUnit> {
+  bool isClicked = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        width: 240,
+        height: 40,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: BorderSide(
+                  width: 1,
+                  color:
+                      (isClicked) ? ColorStyles.mainColor : ColorStyles.grey)),
+          onPressed: buttonClicked,
+          child: Text(widget.userName,
+              style: const TextStyle(color: ColorStyles.black)),
+        ),
+      ),
+    );
+  }
+
+  void buttonClicked() {
+    setState(() {
+      if (isClicked == false) {
+        isClicked = true;
+      } else {
+        isClicked = false;
+      }
+      //isClicked != isClicked;
+    });
   }
 }
