@@ -25,7 +25,7 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  bool isClickedText = false;
+  bool isClickedModifyButton = false;
   double reliability = 0;
   final FocusNode _textFocus = FocusNode();
 
@@ -85,270 +85,278 @@ class _MyProfileState extends State<MyProfile> {
   @override
   void dispose() {
     super.dispose();
-    _textFocus.dispose();
+    //_textFocus.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Image.asset(
-                'assets/images/myPagebackground.png',
-                fit: BoxFit.fill,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Image.asset(
+                  'assets/images/myPagebackground.png',
+                  fit: BoxFit.fill,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: AbsorbPointer(
-                                absorbing: isClickedText,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.3,
                                 child: Obx(
                                   () {
                                     if (_userInfoController.isLoading) {
                                       return const CircularProgressIndicator();
                                     } else {
                                       return TextField(
+                                          enabled: isClickedModifyButton,
                                           controller: TextEditingController(
                                               text:
                                                   _userInfoController.userName),
-                                          focusNode: _textFocus,
+                                          //focusNode: _textFocus,
                                           onSubmitted: (value) {
-                                            _userInfoController
-                                                .modifyUserName(value);
-                                            modifyUserInfo(value);
+                                            // _userInfoController
+                                            //     .modifyUserName(value);
+                                            // modifyUserInfo(value);
                                             setState(() {
-                                              isClickedText = true;
+                                              //isClickedModifyButton = true;
                                             });
                                           },
                                           decoration: const InputDecoration(
                                               border: InputBorder.none,
                                               counterText: ''),
                                           style: const TextStyle(
-                                              fontSize: 30.0,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1,
-                                              color: ColorStyles.white,
-                                              overflow: TextOverflow.ellipsis),
+                                            fontSize: 30.0,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                            color: ColorStyles.white,
+                                            //overflow: TextOverflow.ellipsis
+                                          ),
                                           maxLength: 20);
                                     }
                                   },
                                 ),
                               ),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PushList()));
-                                },
-                                icon: const Icon(
-                                  Icons.notifications,
-                                  color: ColorStyles.white,
-                                  size: 35,
-                                )),
-                          ],
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const PushList()));
+                                  },
+                                  icon: const Icon(
+                                    Icons.notifications,
+                                    color: ColorStyles.white,
+                                    size: 35,
+                                  )),
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: RoundedOutlinedButton(
-                            height: 23,
-                            backgroundColor: ColorStyles.lightmainColor,
-                            borderColor: ColorStyles.lightmainColor,
-                            foregroundColor: ColorStyles.white,
-                            onPressed: () {
-                              setState(() {
-                                isClickedText = isClickedText ? false : true;
-                              });
-                              _textFocus.requestFocus();
-                            },
-                            fontSize: 13,
-                            text: "닉네임 수정 >"),
-                      ),
-                      const Text(
-                        "내 신뢰도",
-                        style: TextStyle(
-                            color: ColorStyles.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Obx(
-                        () => Column(
-                          children: [
-                            Container(
-                              alignment: FractionalOffset(
-                                  _userInfoController.reliability / 100,
-                                  (100 - _userInfoController.reliability) /
-                                      100),
-                              child: FractionallySizedBox(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                        _userInfoController.reliability
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: ColorStyles.lightYellow,
-                                            fontSize: 15)),
-                                    const SizedBox(height: 3),
-                                    Image.asset(
-                                        'assets/images/inverted_triangle1.png'),
-                                  ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: RoundedOutlinedButton(
+                              height: 23,
+                              backgroundColor: ColorStyles.lightmainColor,
+                              borderColor: ColorStyles.lightmainColor,
+                              foregroundColor: ColorStyles.white,
+                              onPressed: () {
+                                print('프로필 수정 버튼 클릭!');
+                                // setState(() {
+                                //   isClickedModifyButton =
+                                //       !isClickedModifyButton;
+                                // });
+                                //_textFocus.requestFocus();
+                              },
+                              fontSize: 13,
+                              text: "프로필 수정"),
+                        ),
+                        const Text(
+                          "내 신뢰도",
+                          style: TextStyle(
+                              color: ColorStyles.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Obx(
+                          () => Column(
+                            children: [
+                              Container(
+                                alignment: FractionalOffset(
+                                    _userInfoController.reliability / 100,
+                                    (100 - _userInfoController.reliability) /
+                                        100),
+                                child: FractionallySizedBox(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                          _userInfoController.reliability
+                                              .toString(),
+                                          style: const TextStyle(
+                                              color: ColorStyles.lightYellow,
+                                              fontSize: 15)),
+                                      const SizedBox(height: 3),
+                                      Image.asset(
+                                          'assets/images/inverted_triangle1.png'),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            CustomProgressBar(
-                              paddingHorizontal: 5,
-                              currentPercent: _userInfoController.reliability,
-                              maxPercent: 100,
-                              lineHeight: 12,
-                              firstColor: ColorStyles.lightYellow,
-                              secondColor: ColorStyles.lightYellow,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyles.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: ColorStyles.shadowColor,
-                                  spreadRadius: 5,
-                                  blurRadius: 4),
+                              CustomProgressBar(
+                                paddingHorizontal: 5,
+                                currentPercent: _userInfoController.reliability,
+                                maxPercent: 100,
+                                lineHeight: 12,
+                                firstColor: ColorStyles.lightYellow,
+                                secondColor: ColorStyles.lightYellow,
+                              ),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("거래 내역",
-                                    style: TextStyle(
-                                        color: ColorStyles.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800)),
-                                const SizedBox(height: 8),
-                                Column(
-                                    children: List<Widget>.generate(2, (i) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            alignment: Alignment.centerLeft,
-                                            padding:
-                                                const EdgeInsets.only(left: 0)),
-                                        onPressed: () {
-                                          (i == 0)
-                                              ? Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ReviewHistoryPage(
-                                                            userId:
-                                                                widget.userId,
-                                                          )),
-                                                )
-                                              : Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DealHistoryPage(
-                                                            userId:
-                                                                widget.userId,
-                                                          )),
-                                                );
-                                        },
-                                        child: Text(
-                                          settingNames[0][i],
-                                          style: const TextStyle(
-                                              color: ColorStyles.textColor),
-                                        ),
-                                      ));
-                                }))
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyles.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: ColorStyles.shadowColor,
+                                    spreadRadius: 5,
+                                    blurRadius: 4),
                               ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("거래 내역",
+                                      style: TextStyle(
+                                          color: ColorStyles.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800)),
+                                  const SizedBox(height: 8),
+                                  Column(
+                                      children: List<Widget>.generate(2, (i) {
+                                    return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              alignment: Alignment.centerLeft,
+                                              padding: const EdgeInsets.only(
+                                                  left: 0)),
+                                          onPressed: () {
+                                            (i == 0)
+                                                ? Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReviewHistoryPage(
+                                                              userId:
+                                                                  widget.userId,
+                                                            )),
+                                                  )
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DealHistoryPage(
+                                                              userId:
+                                                                  widget.userId,
+                                                            )),
+                                                  );
+                                          },
+                                          child: Text(
+                                            settingNames[0][i],
+                                            style: const TextStyle(
+                                                color: ColorStyles.textColor),
+                                          ),
+                                        ));
+                                  }))
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyles.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: ColorStyles.shadowColor,
-                                  spreadRadius: 5,
-                                  blurRadius: 4),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("기타",
-                                    style: TextStyle(
-                                        color: ColorStyles.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800)),
-                                const SizedBox(height: 8),
-                                Column(
-                                    children: List<Widget>.generate(2, (i) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            alignment: Alignment.centerLeft,
-                                            padding:
-                                                const EdgeInsets.only(left: 0)),
-                                        onPressed: () {
-                                          print("알림 및 소리 눌림");
-                                          if (i == 0) {
-                                            showLogoutDialog(context);
-                                          } else {
-                                            showSignOutDialog(context);
-                                          }
-                                        },
-                                        child: Text(
-                                          settingNames[1][i],
-                                          style: const TextStyle(
-                                              color: ColorStyles.textColor),
-                                        ),
-                                      ));
-                                }))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyles.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: ColorStyles.shadowColor,
+                                    spreadRadius: 5,
+                                    blurRadius: 4),
                               ],
                             ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("기타",
+                                      style: TextStyle(
+                                          color: ColorStyles.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800)),
+                                  const SizedBox(height: 8),
+                                  Column(
+                                      children: List<Widget>.generate(2, (i) {
+                                    return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              alignment: Alignment.centerLeft,
+                                              padding: const EdgeInsets.only(
+                                                  left: 0)),
+                                          onPressed: () {
+                                            print("알림 및 소리 눌림");
+                                            if (i == 0) {
+                                              showLogoutDialog(context);
+                                            } else {
+                                              showSignOutDialog(context);
+                                            }
+                                          },
+                                          child: Text(
+                                            settingNames[1][i],
+                                            style: const TextStyle(
+                                                color: ColorStyles.textColor),
+                                          ),
+                                        ));
+                                  }))
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    ]),
+                        )
+                      ]),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
