@@ -1,8 +1,12 @@
+import 'package:brainstorm_meokjang/models/review.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -72,12 +76,44 @@ class Popups {
         });
   }
 
-  static void showReview(context) {
+  static void showReview(context, dealId, reviewFrom, reviewTo) {
     int reviewPoint = 0;
     String? reviewContents;
+    late Review review;
 
     void setPoint(int point) {
       reviewPoint = point;
+    }
+
+    Future requestSendReview() async {
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      final data = review.toJson();
+
+      print(data);
+
+      try {
+        final resp =
+            await dio.post('review', data: data, queryParameters: dealId);
+
+        print(resp);
+
+        if (resp.statusCode == 200) {
+          print('리뷰 등록에 성공했습니다!');
+          showToast('리뷰를 보냈습니다!');
+          Navigator.pop(context);
+        } else {
+          print('엥 왜 실패했지');
+        }
+      } catch (e) {
+        Exception(e);
+      } finally {
+        dio.close();
+      }
     }
 
     showDialog(
@@ -142,8 +178,17 @@ class Popups {
                       height: 28,
                       text: '보내기',
                       onPressed: () {
+                        review = Review(
+                            reviewFrom: reviewFrom,
+                            reviewTo: reviewTo,
+                            dealId: dealId,
+                            rating: reviewPoint,
+                            reviewContent: reviewContents);
+
+                        requestSendReview();
                         print('리뷰점수: $reviewPoint');
                         print('리뷰컨텐츠: $reviewContents');
+                        print('$reviewFrom 이 $reviewTo 에게 리뷰를 보냅니다');
                       },
                       backgroundColor: ColorStyles.mainColor,
                       foregroundColor: ColorStyles.white,
