@@ -51,6 +51,7 @@ class Deal {
   String? dealImage2;
   String? dealImage3;
   String? dealImage4;
+  bool? isClosed;
   DateTime createdAt;
 
   Deal(
@@ -66,6 +67,7 @@ class Deal {
       this.dealImage2,
       this.dealImage3,
       this.dealImage4,
+      this.isClosed,
       required this.createdAt});
 
   // class to json
@@ -105,6 +107,7 @@ class Deal {
       dealImage2: json['image2'] != null ? imageBaseURL + json['image2'] : null,
       dealImage3: json['image3'] != null ? imageBaseURL + json['image3'] : null,
       dealImage4: json['image4'] != null ? imageBaseURL + json['image4'] : null,
+      isClosed: json['isClosed'],
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
