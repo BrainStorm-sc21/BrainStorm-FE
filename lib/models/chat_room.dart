@@ -1,6 +1,9 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
+
 class Room {
   final int id;
   final String roomId;
+  Deal dealInfo;
   final int sender;
   final int receiver;
   final String? lastMessage;
@@ -9,6 +12,7 @@ class Room {
   Room({
     required this.id,
     required this.roomId,
+    required this.dealInfo,
     required this.sender,
     required this.receiver,
     required this.lastMessage,
@@ -19,6 +23,7 @@ class Room {
     return Room(
       id: json['id'],
       roomId: json['roomId'],
+      dealInfo: Deal.fromJson(json['dealInfo']),
       sender: json['sender'],
       receiver: json['receiver'],
       lastMessage: json['lastMessage'] ?? '',

@@ -15,7 +15,7 @@ class ChatDetailPage extends StatefulWidget {
   final int receiverId;
   final int senderId;
   final Room? room;
-  final Deal? deal;
+  final Deal deal;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
@@ -33,8 +33,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
-  late String nickname = '';
-
   bool isRoomExist = false;
   late int dbRoomId;
   late String wsRoomId;
@@ -44,7 +42,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    getUserNickname();
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
@@ -83,6 +80,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
+      "dealId": widget.deal.dealId,
       "sender": widget.senderId,
       "receiver": widget.receiverId,
     };
@@ -161,33 +159,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  Future<void> getUserNickname() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final Response res = await dio.get('/users/${widget.receiverId}');
-
-    try {
-      if (res.data['status'] == 200) {
-        Map<String, dynamic> json = res.data['data'];
-        setState(() {
-          nickname = json['userName'];
-        });
-      } else {
-        setState(() {
-          nickname = '(알 수 없음)';
-        });
-      }
-    } catch (e) {
-      debugPrint('$e');
-    } finally {
-      dio.close();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,7 +178,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 ),
                 Text(
-                  nickname,
+                  widget.deal.userName!,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -223,18 +194,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         color: ColorStyles.white,
         child: Column(
           children: [
-            (widget.deal != null)
-                ? Container(
-                    height: 80,
-                    color: ColorStyles.white,
-                    child: OnePostUnit(
-                      deal: widget.deal!,
-                      isChat: true,
-                    ),
-                  )
-                : Container(
-                    height: 80,
-                  ),
+            Container(
+              height: 80,
+              color: ColorStyles.white,
+              child: OnePostUnit(
+                deal: widget.deal,
+                isChat: true,
+              ),
+            ),
             // 채팅 기록
             Expanded(
               child: StreamBuilder(
