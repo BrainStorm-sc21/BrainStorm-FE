@@ -1,5 +1,33 @@
 import 'dart:ffi';
 
+class SentReviewData {
+  final List<Review> data;
+
+  SentReviewData({required this.data});
+
+  factory SentReviewData.fromJson(Map<String, dynamic> json) {
+    var list = json['data'] as List;
+
+    List<Review> reviewList = list.map((i) => Review.fromJson(i)).toList();
+
+    return SentReviewData(data: reviewList);
+  }
+}
+
+class ReceivedReviewData {
+  final List<Review> data;
+
+  ReceivedReviewData({required this.data});
+
+  factory ReceivedReviewData.fromJson(Map<String, dynamic> json) {
+    var list = json['data'] as List;
+
+    List<Review> reviewList = list.map((i) => Review.fromJson(i)).toList();
+
+    return ReceivedReviewData(data: reviewList);
+  }
+}
+
 class Review {
   int? reviewId;
   int reviewFrom;

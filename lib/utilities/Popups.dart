@@ -97,10 +97,10 @@ class Popups {
       print(data);
 
       try {
-        final resp =
-            await dio.post('review', data: data, queryParameters: dealId);
+        final resp = await dio
+            .post('review', data: data, queryParameters: {'dealId': dealId});
 
-        print(resp);
+        print(resp.data);
 
         if (resp.statusCode == 200) {
           print('리뷰 등록에 성공했습니다!');
