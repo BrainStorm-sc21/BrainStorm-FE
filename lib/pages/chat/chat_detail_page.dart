@@ -265,17 +265,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       shrinkWrap: true,
                       itemCount: messages.length,
                       itemBuilder: (context, index) {
-                        if (messages[index].type == MessageType.TALK) {
-                          return ChatBubble(
-                            message: messages[index].message,
-                            isSentByMe:
-                                messages[index].sender == widget.senderId
-                                    ? true
-                                    : false,
-                          );
-                        } else {
-                          return null;
-                        }
+                        return ChatBubble(
+                          message: messages[index].message,
+                          isSentByMe: messages[index].sender == widget.senderId
+                              ? true
+                              : false,
+                        );
                       },
                     );
                   },
