@@ -8,13 +8,15 @@ import 'package:flutter/material.dart';
 class TopPostUnit extends StatefulWidget {
   final String nickname;
   final String distance;
+  final double reliability;
   final bool isMine;
   final int dealId;
 
   const TopPostUnit({
     super.key,
-    this.nickname = '삼식이 네끼',
-    this.distance = '300M',
+    required this.nickname,
+    required this.distance,
+    required this.reliability,
     required this.isMine,
     required this.dealId,
   });
@@ -107,7 +109,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text('신뢰도 ${60.toString()}',
+                              Text('신뢰도 ${widget.reliability.toInt()}',
                                   style: const TextStyle(
                                     color: ColorStyles.mainColor,
                                     fontSize: 14,
@@ -119,9 +121,9 @@ class _TopPostUnitState extends State<TopPostUnit> {
                           ),
                         ),
                       ),
-                      const CustomProgressBar(
+                      CustomProgressBar(
                         paddingHorizontal: 2,
-                        currentPercent: 60,
+                        currentPercent: widget.reliability,
                         maxPercent: 100,
                         lineHeight: 8,
                         firstColor: ColorStyles.mainColor,

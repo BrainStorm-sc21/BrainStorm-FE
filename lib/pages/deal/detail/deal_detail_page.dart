@@ -155,8 +155,10 @@ class _DealDetailPageState extends State<DealDetailPage> {
     super.initState();
     setImageList();
     initEditingController();
-    print(widget.deal.dealImage1);
     print('딜아이디: ${widget.deal.dealId}');
+    print('게시글 등록자 이름: ${widget.deal.userName}');
+    print('게시글 등록자의 신뢰도: ${widget.deal.reliability}');
+    print('게시글 등록자와의 거리: ${widget.deal.distance}');
   }
 
   @override
@@ -207,6 +209,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
             child: Column(
               children: [
                 TopPostUnit(
+                  nickname: widget.deal.userName!,
+                  reliability: widget.deal.reliability!,
                   distance: '${widget.deal.distance?.round()}m',
                   isMine: widget.isMine,
                   dealId: widget.deal.dealId!,
