@@ -3,7 +3,7 @@ import 'package:brainstorm_meokjang/models/deal.dart';
 class Room {
   final int id;
   final String roomId;
-  final Deal dealInfo;
+  Deal dealInfo;
   final int sender;
   final int receiver;
   final String? lastMessage;

@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,31 @@ class ChatController extends GetxController {
     } finally {
       dio.close();
     }
+  }
+
+  Future<void> replaceDealInfo() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    for (int index = 0; index < roomList.length; index++) {
+      int dealId = roomList[index].dealInfo.dealId!;
+      int userId = roomList[index].sender; // me
+      final res = await dio.get('/deal/$dealId/$userId');
+
+      try {
+        if (res.data['status'] == 200) {
+          roomList[index].dealInfo = Deal.fromJson(res.data['data']);
+        } else {
+          throw Exception();
+        }
+      } catch (e) {
+        debugPrint('$e');
+      }
+    }
+    dio.close();
   }
 
   // sort chat rooms by newest message
