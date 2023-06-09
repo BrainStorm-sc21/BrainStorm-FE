@@ -34,7 +34,9 @@ class _DealPageState extends State<DealPage> {
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
         if (_checkDeal.contains(true)) {
-          posts = entirePosts.where((deal) => _checkDeal[deal.dealType] == true).toList();
+          posts = entirePosts
+              .where((deal) => _checkDeal[deal.dealType] == true)
+              .toList();
         } else {
           posts = entirePosts;
         }
@@ -45,11 +47,13 @@ class _DealPageState extends State<DealPage> {
           posts = entirePosts;
         } else {
           posts = entirePosts
-              .where((deal) => deal.dealName.contains(_textEditingController.text))
+              .where(
+                  (deal) => deal.dealName.contains(_textEditingController.text))
               .toList();
         }
       });
-  void setdropdown(String selectedValue, String value) => setState(() => selectedValue = value);
+  void setdropdown(String selectedValue, String value) =>
+      setState(() => selectedValue = value);
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -66,6 +70,7 @@ class _DealPageState extends State<DealPage> {
       Response resp = await dio.get("/deal/${widget.userId}/around");
 
       print("Deal Status: ${resp.statusCode}");
+      print("Deal Data: ${resp.data}");
 
       DealData dealData = DealData.fromJson(resp.data);
 
@@ -158,8 +163,9 @@ class _DealPageState extends State<DealPage> {
                               backgroundColor: _checkDeal[index]
                                   ? DealType.dealTextColors[index]
                                   : ColorStyles.white,
-                              foregroundColor:
-                                  _checkDeal[index] ? ColorStyles.white : ColorStyles.black,
+                              foregroundColor: _checkDeal[index]
+                                  ? ColorStyles.white
+                                  : ColorStyles.black,
                               borderColor: DealType.dealTextColors[index],
                               borderwidth: 2,
                             ));
@@ -175,8 +181,10 @@ class _DealPageState extends State<DealPage> {
                           });
                         },
                         child: isDealPage
-                            ? const Icon(Icons.map, color: ColorStyles.mainColor)
-                            : const Icon(Icons.format_list_bulleted, color: ColorStyles.mainColor)),
+                            ? const Icon(Icons.map,
+                                color: ColorStyles.mainColor)
+                            : const Icon(Icons.format_list_bulleted,
+                                color: ColorStyles.mainColor)),
                   ],
                 )),
           ],
@@ -191,14 +199,18 @@ class _DealPageState extends State<DealPage> {
         height: 27,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.0),
-            border: Border.all(color: ColorStyles.black, style: BorderStyle.solid, width: 0.7)),
+            border: Border.all(
+                color: ColorStyles.black,
+                style: BorderStyle.solid,
+                width: 0.7)),
         child: DropdownButton(
             value: _selectedValue,
             items: _valueList
                 .map((e) => DropdownMenuItem(
                       value: e,
                       child: Text(e,
-                          style: const TextStyle(fontSize: 14, color: ColorStyles.textColor)),
+                          style: const TextStyle(
+                              fontSize: 14, color: ColorStyles.textColor)),
                     ))
                 .toList(),
             onChanged: (value) {
@@ -232,31 +244,42 @@ class _DealPageState extends State<DealPage> {
       children: [
         SpeedDialChild(
             child: const Text('나눔',
-                style: TextStyle(color: ColorStyles.shareTextColor, fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: ColorStyles.shareTextColor,
+                    fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SharingPage(userId: widget.userId)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SharingPage(userId: widget.userId)));
             }),
         SpeedDialChild(
             child: const Text('교환',
-                style:
-                    TextStyle(color: ColorStyles.exchangeTextColor, fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: ColorStyles.exchangeTextColor,
+                    fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.exchangeColor,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ExchangePage(userId: widget.userId)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ExchangePage(userId: widget.userId)));
             }),
         SpeedDialChild(
             child: const Text('공구',
-                style:
-                    TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: ColorStyles.groupBuyTextColor,
+                    fontWeight: FontWeight.w600)),
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => GroupPurchasePage(userId: widget.userId)));
+                      builder: (context) =>
+                          GroupPurchasePage(userId: widget.userId)));
             }),
         SpeedDialChild(
             child: const Text('상대 UI',

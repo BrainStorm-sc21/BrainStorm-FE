@@ -166,7 +166,9 @@ Widget? floatingButtons(BuildContext context, int userId) {
         backgroundColor: ColorStyles.mainColor,
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ManualAddPage(userId: userId)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ManualAddPage(userId: userId)));
         },
       )
     ],

@@ -75,15 +75,19 @@ class _MyAppState extends State<MyApp> {
             bodyMedium: TextStyle(color: ColorStyles.textColor),
             bodySmall: TextStyle(color: ColorStyles.textColor),
           ),
+          disabledColor: ColorStyles.textColor,
           dividerColor: ColorStyles.lightGrey,
           primaryColor: ColorStyles.mainColor,
           iconTheme: const IconThemeData(
             color: ColorStyles.iconColor,
           ),
         ),
-        initialBinding: BindingsBuilder.put(() => NotificationController(), permanent: true),
-        home: const AppPagesContainer(userId: 3)
-        //home: isMeokjangUser ? AppPagesContainer(userId: userId) : const OnboardingPage(),
+        initialBinding: BindingsBuilder.put(() => NotificationController(),
+            permanent: true),
+        home: const AppPagesContainer(userId: 7)
+        // home: isMeokjangUser
+        //     ? AppPagesContainer(userId: userId)
+        //     : const OnboardingPage(),
         );
   }
 }

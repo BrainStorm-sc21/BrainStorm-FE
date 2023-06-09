@@ -8,6 +8,7 @@ import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/food/foodAll.dart';
 
@@ -35,10 +36,19 @@ class _OCRResultPageState extends State<OCRResultPage> {
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
 
+  int? userId;
+
   @override
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
+  }
+
+  void initUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = prefs.getInt('userId');
+    });
   }
 
   // json list parsing
@@ -408,7 +418,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const AppPagesContainer(userId: 7),
+              builder: (context) => AppPagesContainer(userId: userId),
             ),
             (route) => false,
           );
