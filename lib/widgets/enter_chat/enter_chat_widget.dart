@@ -73,16 +73,16 @@ class GoRecipe extends StatelessWidget {
 }
 
 class ChatUnit extends StatefulWidget {
-  final int senderId;
-  final int receiverId;
+  final int fromId;
+  final int toId;
   final Room room;
   final int unread;
   final Deal deal;
 
   const ChatUnit({
     super.key,
-    required this.senderId,
-    required this.receiverId,
+    required this.fromId,
+    required this.toId,
     required this.room,
     this.unread = 0,
     required this.deal,
@@ -114,8 +114,8 @@ class _ChatUnitState extends State<ChatUnit> {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatDetailPage(
-            senderId: widget.senderId,
-            receiverId: widget.receiverId,
+            senderId: widget.fromId,
+            receiverId: widget.toId,
             room: widget.room,
             deal: widget.deal,
           ),
