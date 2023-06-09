@@ -70,7 +70,7 @@ class FoodListController extends GetxController {
     }
   }
 
-  Future<int> modifyFoodInfo(int userId, Food item) async {
+  Future modifyFoodInfo(int userId, Food item) async {
     Dio dio = Dio();
     dio.options
       ..baseUrl = baseURI
@@ -92,8 +92,7 @@ class FoodListController extends GetxController {
 
       return 1;
     } catch (e) {
-      return -1;
-      //Exception(e);
+      Exception(e);
     } finally {
       dio.close();
     }

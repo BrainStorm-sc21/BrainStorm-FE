@@ -156,12 +156,9 @@ class _RefrigeratorState extends State<Refrigerator> {
                               setState(() {
                                 absorbBool[index] = !absorbBool[index];
                                 if (absorbBool[index]) {
-                                  Future<int> resultValue =
-                                      _foodListController.modifyFoodInfo(
-                                          widget.userId, widget.foods[index]);
-                                  (resultValue == 1)
-                                      ? showToast('식료품이 수정되었습니다')
-                                      : showToast('바뀐 정보가 없습니다!');
+                                  _foodListController.modifyFoodInfo(
+                                      widget.userId, widget.foods[index]);
+                                  showToast('식료품이 수정되었습니다');
                                 }
                               });
                             },
