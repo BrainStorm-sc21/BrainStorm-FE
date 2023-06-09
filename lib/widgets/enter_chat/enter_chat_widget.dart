@@ -177,27 +177,36 @@ class _ChatUnitState extends State<ChatUnit> {
                               ),
                       ),
                     ),
-                    Padding(
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 0.65,
                       padding: const EdgeInsets.only(left: 10),
                       child: SizedBox(
                         height: 55,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               nickname,
                               style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.black),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: ColorStyles.textColor,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 4.0,
                             ),
                             Text(
                               widget.room.lastMessage!,
+                              maxLines: 2,
                               style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.textColor),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: ColorStyles.grey,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             )
                           ],
                         ),
