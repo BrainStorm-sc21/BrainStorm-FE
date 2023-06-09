@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
@@ -192,153 +191,135 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => AppPagesContainer(
-                userId: widget.senderId, index: AppPagesNumber.chat),
-          ),
-          (route) => false,
-        );
-        return true as Future<bool>;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: ColorStyles.white,
-          flexibleSpace: SafeArea(
-            child: Container(
-              height: 60,
-              color: ColorStyles.white,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                    onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => AppPagesContainer(
-                              userId: widget.senderId,
-                              index: AppPagesNumber.chat),
-                        ),
-                        (route) => false),
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: ColorStyles.white,
+        flexibleSpace: SafeArea(
+          child: Container(
+            height: 60,
+            color: ColorStyles.white,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  onPressed: () => Navigator.of(context).pop(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                ),
+                Text(
+                  nickname,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: ColorStyles.black,
                   ),
-                  Text(
-                    nickname,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: ColorStyles.black,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        body: Container(
-          color: ColorStyles.white,
-          child: Column(
-            children: [
-              Container(
-                height: 80,
+      ),
+      body: Container(
+        color: ColorStyles.white,
+        child: Column(
+          children: [
+            Container(
+              height: 80,
+              color: ColorStyles.white,
+              child: OnePostUnit(
+                deal: widget.deal,
+                isChat: true,
+              ),
+            ),
+            // 채팅 기록
+            Expanded(
+              child: StreamBuilder(
+                stream: _client.stream,
+                builder: (context, snapshot) {
+                  debugPrint('snapshot.data: ${snapshot.data}');
+                  if (snapshot.data != null) {
+                    Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
+                    messages.add(Message.fromJson(jsonData));
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return ChatBubble(
+                        message: messages[index].message,
+                        isSentByMe: messages[index].sender == widget.senderId
+                            ? true
+                            : false,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            // 하단 바
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
                 color: ColorStyles.white,
-                child: OnePostUnit(
-                  deal: widget.deal,
-                  isChat: true,
-                ),
-              ),
-              // 채팅 기록
-              Expanded(
-                child: StreamBuilder(
-                  stream: _client.stream,
-                  builder: (context, snapshot) {
-                    debugPrint('snapshot.data: ${snapshot.data}');
-                    if (snapshot.data != null) {
-                      Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
-                      messages.add(Message.fromJson(jsonData));
-                    }
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        return ChatBubble(
-                          message: messages[index].message,
-                          isSentByMe: messages[index].sender == widget.senderId
-                              ? true
-                              : false,
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              // 하단 바
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: Container(
-                  color: ColorStyles.white,
-                  child: TextFieldTapRegion(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // 메시지 입력 창
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: ColorStyles.lightGrey,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(25.0),
-                              ),
-                            ),
-                            child: TextField(
-                              controller: _controller,
-                              minLines: 1,
-                              maxLines: 3,
-                              decoration: const InputDecoration(
-                                hintText: '메시지를 입력하세요',
-                                hintStyle: TextStyle(
-                                  color: ColorStyles.iconColor,
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                  horizontal: 18.0,
-                                ),
-                              ),
-                              onTapOutside: (event) =>
-                                  FocusScope.of(context).unfocus(), // 키보드 숨김,
+                child: TextFieldTapRegion(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // 메시지 입력 창
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: ColorStyles.lightGrey,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(25.0),
                             ),
                           ),
-                        ),
-                        // 전송 버튼
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              debugPrint('메시지 전송 버튼 눌림!!');
-                              if (isTextInputEmpty == false) {
-                                checkRoomExist(
-                                    MessageType.TALK, _controller.text);
-                              }
-                            },
-                            child: const Icon(
-                              Icons.send_rounded,
-                              color: ColorStyles.mainColor,
-                              size: 35,
+                          child: TextField(
+                            controller: _controller,
+                            minLines: 1,
+                            maxLines: 3,
+                            decoration: const InputDecoration(
+                              hintText: '메시지를 입력하세요',
+                              hintStyle: TextStyle(
+                                color: ColorStyles.iconColor,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 4.0,
+                                horizontal: 18.0,
+                              ),
                             ),
+                            onTapOutside: (event) =>
+                                FocusScope.of(context).unfocus(), // 키보드 숨김,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      // 전송 버튼
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            debugPrint('메시지 전송 버튼 눌림!!');
+                            if (isTextInputEmpty == false) {
+                              checkRoomExist(
+                                  MessageType.TALK, _controller.text);
+                            }
+                          },
+                          child: const Icon(
+                            Icons.send_rounded,
+                            color: ColorStyles.mainColor,
+                            size: 35,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
