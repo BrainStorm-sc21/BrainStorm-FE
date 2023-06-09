@@ -126,7 +126,6 @@ class _ChatUnitState extends State<ChatUnit> {
         child: SizedBox(
           width: double.infinity,
           height: 70,
-          //color: ColorStyles.mainColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
