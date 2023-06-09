@@ -5,10 +5,11 @@ import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
-import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../widgets/food/foodAll.dart';
 
 class OCRResultPage extends StatefulWidget {
   final String imagePath;
@@ -223,8 +224,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
     setState(() => foodList[index].storageWay = value);
   }
 
-  void setStock(int index, num value) {
-    setState(() => foodList[index].stock = value);
+  void setStock(num value, {int? index}) {
+    setState(() => foodList[index!].stock = value);
   }
 
   void setExpireDate(DateTime value, {int? index}) {

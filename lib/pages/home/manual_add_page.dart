@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:brainstorm_meokjang/widgets/food/foodAll.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
