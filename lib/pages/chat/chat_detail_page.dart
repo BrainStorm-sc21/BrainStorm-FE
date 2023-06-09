@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/chat_message.dart';
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
@@ -16,7 +15,7 @@ class ChatDetailPage extends StatefulWidget {
   final int receiverId;
   final int senderId;
   final Room? room;
-  final Deal? deal;
+  final Deal deal;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
@@ -34,8 +33,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
-  late String nickname = '';
-
   bool isRoomExist = false;
   late int dbRoomId;
   late String wsRoomId;
@@ -45,7 +42,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    getUserNickname();
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
@@ -84,6 +80,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ..receiveTimeout = const Duration(seconds: 10);
 
     final data = {
+      "dealId": widget.deal.dealId,
       "sender": widget.senderId,
       "receiver": widget.receiverId,
     };
@@ -162,189 +159,137 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  Future<void> getUserNickname() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final Response res = await dio.get('/users/${widget.receiverId}');
-
-    try {
-      if (res.data['status'] == 200) {
-        Map<String, dynamic> json = res.data['data'];
-        setState(() {
-          nickname = json['userName'];
-        });
-      } else {
-        setState(() {
-          nickname = '(알 수 없음)';
-        });
-      }
-    } catch (e) {
-      debugPrint('$e');
-    } finally {
-      dio.close();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => AppPagesContainer(
-                userId: widget.senderId, index: AppPagesNumber.chat),
-          ),
-          (route) => false,
-        );
-        return true as Future<bool>;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: ColorStyles.white,
-          flexibleSpace: SafeArea(
-            child: Container(
-              height: 60,
-              color: ColorStyles.white,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                    onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => AppPagesContainer(
-                              userId: widget.senderId,
-                              index: AppPagesNumber.chat),
-                        ),
-                        (route) => false),
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: ColorStyles.white,
+        flexibleSpace: SafeArea(
+          child: Container(
+            height: 60,
+            color: ColorStyles.white,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  onPressed: () => Navigator.of(context).pop(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                ),
+                Text(
+                  widget.deal.userName!,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: ColorStyles.black,
                   ),
-                  Text(
-                    nickname,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: ColorStyles.black,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        body: Container(
-          color: ColorStyles.white,
-          child: Column(
-            children: [
-              (widget.deal != null)
-                  ? Container(
-                      height: 80,
-                      color: ColorStyles.white,
-                      child: OnePostUnit(
-                        deal: widget.deal!,
-                        isChat: true,
-                      ),
-                    )
-                  : Container(),
-              // 채팅 기록
-              Expanded(
-                child: StreamBuilder(
-                  stream: _client.stream,
-                  builder: (context, snapshot) {
-                    debugPrint('snapshot.data: ${snapshot.data}');
-                    if (snapshot.data != null) {
-                      Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
-                      messages.add(Message.fromJson(jsonData));
-                    }
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        if (messages[index].type == MessageType.TALK) {
-                          return ChatBubble(
-                            message: messages[index].message,
-                            isSentByMe:
-                                messages[index].sender == widget.senderId
-                                    ? true
-                                    : false,
-                          );
-                        } else {
-                          return null;
-                        }
-                      },
-                    );
-                  },
-                ),
+      ),
+      body: Container(
+        color: ColorStyles.white,
+        child: Column(
+          children: [
+            Container(
+              height: 80,
+              color: ColorStyles.white,
+              child: OnePostUnit(
+                deal: widget.deal,
+                isChat: true,
               ),
-              // 하단 바
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: Container(
-                  color: ColorStyles.white,
-                  child: TextFieldTapRegion(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // 메시지 입력 창
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: ColorStyles.lightGrey,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(25.0),
-                              ),
-                            ),
-                            child: TextField(
-                              controller: _controller,
-                              minLines: 1,
-                              maxLines: 3,
-                              decoration: const InputDecoration(
-                                hintText: '메시지를 입력하세요',
-                                hintStyle: TextStyle(
-                                  color: ColorStyles.iconColor,
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                  horizontal: 18.0,
-                                ),
-                              ),
-                              onTapOutside: (event) =>
-                                  FocusScope.of(context).unfocus(), // 키보드 숨김,
-                            ),
-                          ),
-                        ),
-                        // 전송 버튼
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              debugPrint('메시지 전송 버튼 눌림!!');
-                              if (isTextInputEmpty == false) {
-                                checkRoomExist(
-                                    MessageType.TALK, _controller.text);
-                              }
-                            },
-                            child: const Icon(
-                              Icons.send_rounded,
-                              color: ColorStyles.mainColor,
-                              size: 35,
+            ),
+            // 채팅 기록
+            Expanded(
+              child: StreamBuilder(
+                stream: _client.stream,
+                builder: (context, snapshot) {
+                  debugPrint('snapshot.data: ${snapshot.data}');
+                  if (snapshot.data != null) {
+                    Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
+                    messages.add(Message.fromJson(jsonData));
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return ChatBubble(
+                        message: messages[index].message,
+                        isSentByMe: messages[index].sender == widget.senderId
+                            ? true
+                            : false,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            // 하단 바
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
+                color: ColorStyles.white,
+                child: TextFieldTapRegion(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // 메시지 입력 창
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: ColorStyles.lightGrey,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(25.0),
                             ),
                           ),
+                          child: TextField(
+                            controller: _controller,
+                            minLines: 1,
+                            maxLines: 3,
+                            decoration: const InputDecoration(
+                              hintText: '메시지를 입력하세요',
+                              hintStyle: TextStyle(
+                                color: ColorStyles.iconColor,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 4.0,
+                                horizontal: 18.0,
+                              ),
+                            ),
+                            onTapOutside: (event) =>
+                                FocusScope.of(context).unfocus(), // 키보드 숨김,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      // 전송 버튼
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            debugPrint('메시지 전송 버튼 눌림!!');
+                            if (isTextInputEmpty == false) {
+                              checkRoomExist(
+                                  MessageType.TALK, _controller.text);
+                            }
+                          },
+                          child: const Icon(
+                            Icons.send_rounded,
+                            color: ColorStyles.mainColor,
+                            size: 35,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

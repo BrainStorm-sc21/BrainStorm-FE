@@ -1,10 +1,9 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -77,16 +76,16 @@ class ChatUnit extends StatefulWidget {
   final int senderId;
   final int receiverId;
   final Room room;
-  final String imgUrl;
   final int unread;
+  final Deal deal;
 
   const ChatUnit({
     super.key,
     required this.senderId,
     required this.receiverId,
     required this.room,
-    this.imgUrl = 'assets/images/logo.png',
     this.unread = 0,
+    required this.deal,
   });
 
   @override
@@ -94,46 +93,16 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
-  late String nickname = '';
   String timeAgo = '';
 
   @override
   void initState() {
     super.initState();
-    getUserNickname();
     initTimeAgo();
-  }
-
-  Future<void> getUserNickname() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final Response res = await dio.get('/users/${widget.receiverId}');
-
-    try {
-      if (res.data['status'] == 200) {
-        Map<String, dynamic> json = res.data['data'];
-        setState(() {
-          nickname = json['userName'];
-        });
-      } else {
-        setState(() {
-          nickname = '(알 수 없음)';
-        });
-      }
-    } catch (e) {
-      debugPrint('$e');
-    } finally {
-      dio.close();
-    }
   }
 
   void initTimeAgo() {
     DateTime? time = widget.room.lastTime;
-    print(time);
     setState(() {
       timeAgo = time == null ? '' : countHour(time);
     });
@@ -148,7 +117,7 @@ class _ChatUnitState extends State<ChatUnit> {
             senderId: widget.senderId,
             receiverId: widget.receiverId,
             room: widget.room,
-            deal: null,
+            deal: widget.deal,
           ),
         ),
       ),
@@ -161,45 +130,57 @@ class _ChatUnitState extends State<ChatUnit> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 55,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 55,
+                    height: 55,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: widget.deal.dealImage1 == null
+                          ? Image.asset('assets/images/logo.png')
+                          : Image.network(
+                              widget.deal.dealImage1!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.65,
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SizedBox(
                       height: 55,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(widget.imgUrl),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.deal.userName!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: ColorStyles.textColor,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4.0,
+                          ),
+                          Text(
+                            widget.room.lastMessage!,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: ColorStyles.grey,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SizedBox(
-                        height: 55,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              nickname,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.black),
-                            ),
-                            Text(
-                              widget.room.lastMessage!,
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.textColor),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
               const Spacer(),
               SizedBox(
@@ -213,7 +194,7 @@ class _ChatUnitState extends State<ChatUnit> {
                       style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
-                          color: ColorStyles.textColor),
+                          color: ColorStyles.grey),
                     ),
                     widget.unread != 0
                         ? Container(
@@ -231,7 +212,10 @@ class _ChatUnitState extends State<ChatUnit> {
                               ),
                             ),
                           )
-                        : Container(),
+                        : const SizedBox(
+                            width: 18,
+                            height: 18,
+                          ),
                   ],
                 ),
               ),

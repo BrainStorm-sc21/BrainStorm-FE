@@ -2,8 +2,10 @@ import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
 import 'package:brainstorm_meokjang/pages/profile/myProfile.dart';
+import 'package:brainstorm_meokjang/providers/chat_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // for switching bottom tab in app page container
 class AppPagesNumber {
@@ -28,6 +30,7 @@ class AppPagesContainer extends StatefulWidget {
 
 class _AppPagesContainerState extends State<AppPagesContainer> {
   int currentIndex = 0;
+  final ChatController _chatController = Get.put(ChatController());
 
   @override
   void initState() {
@@ -74,6 +77,9 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               onTap: (newIndex) {
                 print("selected newIndex : $newIndex");
                 setCurrentIndex(newIndex); // 버튼 눌렀을 때 누른 페이지로 이동
+                if (newIndex == AppPagesNumber.chat) {
+                  _chatController.setChatRoomList(widget.userId!);
+                }
               },
               selectedItemColor: ColorStyles.darkmainColor, // 선택된 아이콘 색상
               unselectedItemColor: ColorStyles.iconColor, // 선택되지 않은 아이콘 색상
