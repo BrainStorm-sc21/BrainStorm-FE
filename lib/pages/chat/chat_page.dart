@@ -41,6 +41,7 @@ class _ChatPageState extends State<ChatPage> {
         setState(() {
           roomList = jsonList.map((data) => Room.fromJson(data)).toList();
         });
+        sortRoomListByNewest();
       } else {
         print('채팅 목록 로드 실패!!');
         throw Exception();
@@ -50,6 +51,18 @@ class _ChatPageState extends State<ChatPage> {
     } finally {
       dio.close();
     }
+  }
+
+  void sortRoomListByNewest() {
+    roomList.sort((b, a) {
+      if (b.lastTime == null) {
+        return 1;
+      } else if (a.lastTime == null) {
+        return 0;
+      } else {
+        return a.lastTime!.compareTo(b.lastTime!);
+      }
+    });
   }
 
   @override
