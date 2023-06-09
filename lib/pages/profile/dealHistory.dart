@@ -178,7 +178,9 @@ class _MyPostUnitState extends State<MyPostUnit> {
                   width: double.infinity,
                   height: 26,
                   text: '거래중',
-                  onPressed: () {},
+                  onPressed: () {
+                    Popups.showReview(context);
+                  },
                   backgroundColor: ColorStyles.mainColor,
                   foregroundColor: ColorStyles.white,
                   borderColor: ColorStyles.mainColor),
