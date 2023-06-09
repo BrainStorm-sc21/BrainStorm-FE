@@ -142,7 +142,7 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
 }
 
 class MyReviewUnit extends StatefulWidget {
-  final int reviewPoint;
+  final double reviewPoint;
   final String? reviewContents;
   final int dealId;
   const MyReviewUnit(

@@ -37,7 +37,7 @@ class Review {
   String? reviewToName;
   Double? reviewToReliability;
   int dealId;
-  int rating;
+  double rating;
   String? reviewContent;
   String? createdAt;
 
