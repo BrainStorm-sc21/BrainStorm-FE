@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:get/get.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,7 +20,7 @@ class NotificationController extends GetxController {
       sound: true,
     );
     print(settings.authorizationStatus);
-    _getToken();
+    //_getToken();
     _onMessage();
     super.onInit();
   }
@@ -58,7 +59,9 @@ class NotificationController extends GetxController {
         await FirebaseMessaging.instance.getInitialMessage();
 
     // 종료상태에서 클릭한 푸시 알림 메세지 핸들링
-    if (initialMessage != null) _handleMessage(initialMessage);
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
 
     // 앱이 백그라운드 상태에서 푸시 알림 클릭 하여 열릴 경우 메세지 스트림을 통해 처리
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
@@ -109,21 +112,19 @@ class NotificationController extends GetxController {
   }
 
   void _handleMessage(RemoteMessage message) {
-    print('message = ${message.notification!.title}');
     print('백그라운드 메세지 받았다!!!!!!!!!!!');
+
+    //0: 채팅 1: 후기작성 2: 후기받음 3: 소비기한
     if (message.data['type'] == '0') {
-      //채팅
       print('채팅으로 이동');
     } else if (message.data['type'] == '1') {
-      //후기 받음
-      print('후기 받음으로 이동');
-    } else if (message.data['type'] == '2') {
-      //후기 작성
       print('후기 작성으로 이동');
     } else if (message.data['type'] == '2') {
-      //소비기한
+      print('후기 받음으로 이동');
+      Get.to(() => const ReviewHistoryPage(userId: 7),
+          arguments: message.data['sender']);
+    } else if (message.data['type'] == '3') {
       print('소비기한으로 이동');
-      //Get.toNamed('/chat', arguments: message.data);
     }
   }
 }
