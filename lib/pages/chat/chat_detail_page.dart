@@ -16,12 +16,14 @@ class ChatDetailPage extends StatefulWidget {
   final int senderId;
   final Room? room;
   final Deal deal;
+  final String receiverName;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
     required this.deal,
     required this.senderId,
     this.room,
+    required this.receiverName,
   });
 
   @override
@@ -29,7 +31,9 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
@@ -42,6 +46,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
+    listenStream();
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
@@ -53,12 +58,23 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void dispose() {
     _client.sink.close();
-    _controller.dispose();
+    _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
+  void listenStream() {
+    _client.stream.listen((data) {
+      print('received data: $data');
+      Map<String, dynamic> jsonData = jsonDecode(data);
+      setState(() {
+        messages.add(Message.fromJson(jsonData));
+      });
+    });
+  }
+
   bool get isTextInputEmpty {
-    return _controller.text.trim().isEmpty;
+    return _textController.text.trim().isEmpty;
   }
 
   void setIsRoomExistToTrue() {
@@ -128,7 +144,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
     print(jsonEncode(data));
     _client.sink.add(jsonEncode(data));
-    _controller.clear();
+    _textController.clear();
   }
 
   Future<void> loadPrevMessages() async {
@@ -178,7 +194,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 ),
                 Text(
-                  widget.deal.userName!,
+                  widget.receiverName,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -204,32 +220,27 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
             // 채팅 기록
             Expanded(
-              child: StreamBuilder(
-                stream: _client.stream,
-                builder: (context, snapshot) {
-                  debugPrint('snapshot.data: ${snapshot.data}');
-                  if (snapshot.data != null) {
-                    Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
-                    messages.add(Message.fromJson(jsonData));
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      return ChatBubble(
-                        message: messages[index].message,
-                        isSentByMe: messages[index].sender == widget.senderId
-                            ? true
-                            : false,
-                      );
-                    },
+              child: ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return ChatBubble(
+                    message: messages[messages.length - index - 1].message,
+                    isSentByMe: messages[messages.length - index - 1].sender ==
+                            widget.senderId
+                        ? true
+                        : false,
                   );
                 },
               ),
             ),
             // 하단 바
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 15.0,
+              ),
               child: Container(
                 color: ColorStyles.white,
                 child: TextFieldTapRegion(
@@ -247,7 +258,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             ),
                           ),
                           child: TextField(
-                            controller: _controller,
+                            focusNode: _focusNode,
+                            controller: _textController,
                             minLines: 1,
                             maxLines: 3,
                             decoration: const InputDecoration(
@@ -271,10 +283,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: InkWell(
                           onTap: () {
-                            debugPrint('메시지 전송 버튼 눌림!!');
                             if (isTextInputEmpty == false) {
                               checkRoomExist(
-                                  MessageType.TALK, _controller.text);
+                                  MessageType.TALK, _textController.text);
                             }
                           },
                           child: const Icon(
@@ -310,6 +321,9 @@ class ChatBubble extends StatelessWidget {
     return Align(
       alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
       child: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
         decoration: BoxDecoration(

@@ -4,6 +4,8 @@ import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -73,16 +75,16 @@ class GoRecipe extends StatelessWidget {
 }
 
 class ChatUnit extends StatefulWidget {
-  final int senderId;
-  final int receiverId;
+  final int fromId;
+  final int toId;
   final Room room;
   final int unread;
   final Deal deal;
 
   const ChatUnit({
     super.key,
-    required this.senderId,
-    required this.receiverId,
+    required this.fromId,
+    required this.toId,
     required this.room,
     this.unread = 0,
     required this.deal,
@@ -94,10 +96,12 @@ class ChatUnit extends StatefulWidget {
 
 class _ChatUnitState extends State<ChatUnit> {
   String timeAgo = '';
+  late String receiverName = '(알 수 없음)';
 
   @override
   void initState() {
     super.initState();
+    getReceiverName();
     initTimeAgo();
   }
 
@@ -108,14 +112,43 @@ class _ChatUnitState extends State<ChatUnit> {
     });
   }
 
+  // 상대방 닉네임 가져오기
+  Future<void> getReceiverName() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/users/${widget.toId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          receiverName = json['userName'];
+        });
+      } else {
+        setState(() {
+          receiverName = '(알 수 없음)';
+        });
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatDetailPage(
-            senderId: widget.senderId,
-            receiverId: widget.receiverId,
+            senderId: widget.fromId,
+            receiverId: widget.toId,
+            receiverName: receiverName,
             room: widget.room,
             deal: widget.deal,
           ),
@@ -126,7 +159,6 @@ class _ChatUnitState extends State<ChatUnit> {
         child: SizedBox(
           width: double.infinity,
           height: 70,
-          //color: ColorStyles.mainColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -155,7 +187,7 @@ class _ChatUnitState extends State<ChatUnit> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.deal.userName!,
+                            receiverName,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
