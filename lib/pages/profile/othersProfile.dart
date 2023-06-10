@@ -3,7 +3,10 @@ import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:flutter/material.dart';
 
 class OtherProfile extends StatelessWidget {
-  const OtherProfile({super.key});
+  final String userName;
+  final double reliability;
+  const OtherProfile(
+      {super.key, required this.userName, required this.reliability});
 
   @override
   Widget build(BuildContext context) {
@@ -40,37 +43,42 @@ class OtherProfile extends StatelessWidget {
                       children: [
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            child: const Text(
-                              "상대방 닉네임",
-                              style: TextStyle(fontSize: 25),
+                            child: Text(
+                              userName,
+                              style: const TextStyle(fontSize: 25),
                             )),
                       ],
                     ),
                   ),
-                  const Text(
-                    "신뢰도",
-                    style: TextStyle(
-                        color: ColorStyles.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    reliability.toString(),
+                    style: const TextStyle(
+                        color: ColorStyles.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                   Column(
                     children: [
                       Container(
-                        alignment: const FractionalOffset(60 / 100, 1 - (60 / 100)),
+                        alignment: FractionalOffset(
+                            reliability / 100, 1 - (reliability / 100)),
                         child: FractionallySizedBox(
                           child: Column(
                             children: [
-                              Text(60.toString(),
+                              Text(reliability.toString(),
                                   style: const TextStyle(
-                                      color: ColorStyles.lightYellow, fontSize: 15)),
+                                      color: ColorStyles.lightYellow,
+                                      fontSize: 15)),
                               const SizedBox(height: 3),
-                              Image.asset('assets/images/inverted_triangle1.png'),
+                              Image.asset(
+                                  'assets/images/inverted_triangle1.png'),
                             ],
                           ),
                         ),
                       ),
-                      const CustomProgressBar(
+                      CustomProgressBar(
                         paddingHorizontal: 5,
-                        currentPercent: 60,
+                        currentPercent: reliability,
                         maxPercent: 100,
                         lineHeight: 12,
                         firstColor: ColorStyles.lightYellow,
@@ -85,11 +93,15 @@ class OtherProfile extends StatelessWidget {
                         color: ColorStyles.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: const [
-                          BoxShadow(color: ColorStyles.shadowColor, spreadRadius: 5, blurRadius: 4),
+                          BoxShadow(
+                              color: ColorStyles.shadowColor,
+                              spreadRadius: 5,
+                              blurRadius: 4),
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -100,7 +112,8 @@ class OtherProfile extends StatelessWidget {
                                   child: TextButton(
                                     style: TextButton.styleFrom(
                                         alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.only(left: 0)),
+                                        padding:
+                                            const EdgeInsets.only(left: 0)),
                                     onPressed: () {
                                       print("알림 및 소리 눌림");
                                     },
