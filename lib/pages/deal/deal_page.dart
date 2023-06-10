@@ -1,8 +1,6 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/register_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/pages/profile/othersProfile.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -260,10 +258,16 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SharingPage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 2,
+                    title: '나눔하기',
+                    subTitle: '필요 이상으로 많은 식재료를\n이웃에게 나눔해요',
+                  ),
+                ),
+              );
             }),
         SpeedDialChild(
             child: const Text('교환',
@@ -273,10 +277,16 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.exchangeColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ExchangePage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 1,
+                    title: '교환하기',
+                    subTitle: '필요 이상으로 많은 식재료를\n이웃과 교환해요',
+                  ),
+                ),
+              );
             }),
         SpeedDialChild(
             child: const Text('공구',
@@ -286,10 +296,16 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          GroupPurchasePage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 0,
+                    title: '공동구매하기',
+                    subTitle: '묶음으로만 파는 식재료를\n이웃과 공동구매해요',
+                  ),
+                ),
+              );
             }),
         SpeedDialChild(
             child: const Text('상대 UI',
