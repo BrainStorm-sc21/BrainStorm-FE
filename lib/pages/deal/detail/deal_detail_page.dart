@@ -300,6 +300,9 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 senderId: widget.userId,
                                 receiverId: widget.deal.userId,
                                 deal: widget.deal,
+                                receiverName: widget.deal.userName == null
+                                    ? '(알 수 없음)'
+                                    : widget.deal.userName!,
                               ),
                             ),
                           ),

@@ -4,6 +4,8 @@ import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -94,10 +96,12 @@ class ChatUnit extends StatefulWidget {
 
 class _ChatUnitState extends State<ChatUnit> {
   String timeAgo = '';
+  late String receiverName = '(알 수 없음)';
 
   @override
   void initState() {
     super.initState();
+    getReceiverName();
     initTimeAgo();
   }
 
@@ -108,6 +112,34 @@ class _ChatUnitState extends State<ChatUnit> {
     });
   }
 
+  // 상대방 닉네임 가져오기
+  Future<void> getReceiverName() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/users/${widget.toId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          receiverName = json['userName'];
+        });
+      } else {
+        setState(() {
+          receiverName = '(알 수 없음)';
+        });
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -116,6 +148,7 @@ class _ChatUnitState extends State<ChatUnit> {
           builder: (context) => ChatDetailPage(
             senderId: widget.fromId,
             receiverId: widget.toId,
+            receiverName: receiverName,
             room: widget.room,
             deal: widget.deal,
           ),
@@ -154,7 +187,7 @@ class _ChatUnitState extends State<ChatUnit> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.deal.userName!,
+                            receiverName,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

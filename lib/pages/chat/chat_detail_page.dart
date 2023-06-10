@@ -16,12 +16,14 @@ class ChatDetailPage extends StatefulWidget {
   final int senderId;
   final Room? room;
   final Deal deal;
+  final String receiverName;
   const ChatDetailPage({
     super.key,
     required this.receiverId,
     required this.deal,
     required this.senderId,
     this.room,
+    required this.receiverName,
   });
 
   @override
@@ -192,7 +194,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 ),
                 Text(
-                  widget.deal.userName!,
+                  widget.receiverName,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,

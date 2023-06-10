@@ -10,7 +10,6 @@ class ChatController extends GetxController {
 
   void setChatRoomList(int userId) async {
     await loadChatRoomList(userId);
-    await replaceDealInfo(); // 유효한 값의 deal info로 교체 (DB 로직 수정이 불가하여 직접 api를 호출함)
     sortRoomListByNewest();
   }
 
@@ -38,31 +37,6 @@ class ChatController extends GetxController {
     } finally {
       dio.close();
     }
-  }
-
-  Future<void> replaceDealInfo() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    for (int index = 0; index < roomList.length; index++) {
-      int dealId = roomList[index].dealInfo.dealId!;
-      int userId = roomList[index].sender; // me
-      final res = await dio.get('/deal/$dealId/$userId');
-
-      try {
-        if (res.data['status'] == 200) {
-          roomList[index].dealInfo = Deal.fromJson(res.data['data']);
-        } else {
-          throw Exception();
-        }
-      } catch (e) {
-        debugPrint('$e');
-      }
-    }
-    dio.close();
   }
 
   // sort chat rooms by newest message
