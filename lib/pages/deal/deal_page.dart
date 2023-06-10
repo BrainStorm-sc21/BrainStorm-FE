@@ -213,20 +213,22 @@ class _DealPageState extends State<DealPage> {
                               fontSize: 14, color: ColorStyles.textColor)),
                     ))
                 .toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value!;
-                if (_selectedValue == '거리순') {
-                  posts.sort((a, b) => a.distance!.compareTo(b.distance!));
-                } else if (_selectedValue == '최신순') {
-                  posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-                }
-              });
-            },
+            onChanged: (value) => sortPosts(value!),
             underline: Container(),
             elevation: 2),
       ),
     );
+  }
+
+  void sortPosts(String value) {
+    setState(() {
+      _selectedValue = value;
+      if (_selectedValue == '거리순') {
+        posts.sort((a, b) => a.distance!.compareTo(b.distance!));
+      } else if (_selectedValue == '최신순') {
+        posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
+      }
+    });
   }
 
   _registerDealButton() {
