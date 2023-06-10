@@ -28,8 +28,8 @@ class _DealPageState extends State<DealPage> {
   bool isDealPage = true;
 
   final List<bool> _checkDeal = [false, false, false];
-  final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
+  final List<String> _valueList = ['가까운순', '최신순'];
 
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
@@ -224,6 +224,7 @@ class _DealPageState extends State<DealPage> {
     setState(() {
       _selectedValue = value;
       if (_selectedValue == '거리순') {
+      if (_selectedValue == '가까운순') {
         posts.sort((a, b) => a.distance!.compareTo(b.distance!));
       } else if (_selectedValue == '최신순') {
         posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
