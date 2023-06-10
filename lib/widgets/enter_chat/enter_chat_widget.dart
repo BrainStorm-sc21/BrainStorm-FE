@@ -1,7 +1,6 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
-import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
 import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
@@ -32,20 +31,24 @@ class GoRecipe extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
               child: SizedBox(
                 width: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     Text('냉장고 속 식품 레시피',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: ColorStyles.white)),
                     Text('지금 확인하기',
                         style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w400, color: ColorStyles.white)),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: ColorStyles.white)),
                   ],
                 ),
               ),
@@ -204,7 +207,8 @@ class _ChatUnitState extends State<ChatUnit> {
                             child: Center(
                               child: Text(
                                 '${widget.unread}',
-                                style: const TextStyle(fontSize: 12, color: ColorStyles.white),
+                                style: const TextStyle(
+                                    fontSize: 12, color: ColorStyles.white),
                               ),
                             ),
                           )
