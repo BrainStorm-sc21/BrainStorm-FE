@@ -109,7 +109,12 @@ class TradingBoard extends StatelessWidget {
 class OnePostUnit extends StatefulWidget {
   final Deal deal;
   final bool isChat;
-  const OnePostUnit({super.key, required this.deal, this.isChat = false});
+  final bool isMyDeal;
+  const OnePostUnit(
+      {super.key,
+      required this.deal,
+      this.isChat = false,
+      this.isMyDeal = false});
 
   @override
   State<OnePostUnit> createState() => _OnePostUnitState();
@@ -177,7 +182,9 @@ class _OnePostUnitState extends State<OnePostUnit> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  width: (widget.isMyDeal)
+                      ? MediaQuery.of(context).size.width * 0.3
+                      : MediaQuery.of(context).size.width * 0.5,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -199,6 +206,20 @@ class _OnePostUnitState extends State<OnePostUnit> {
               ],
             ),
             const Spacer(),
+            (widget.isChat == true && widget.isMyDeal == true)
+                ? OutlinedButton(
+                    onPressed: () {
+                      //showCompleteDealDialog(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: ColorStyles.mainColor)),
+                    child: const Text(
+                      '거래완료',
+                      style:
+                          TextStyle(color: ColorStyles.mainColor, fontSize: 14),
+                    ),
+                  )
+                : const SizedBox(width: 5)
           ],
         ));
   }

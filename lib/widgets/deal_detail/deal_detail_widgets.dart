@@ -91,7 +91,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
                   style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: ColorStyles.mainColor)),
                   child: const Text(
-                    '거래완료하기',
+                    '거래완료',
                     style:
                         TextStyle(color: ColorStyles.mainColor, fontSize: 14),
                   ),
