@@ -59,8 +59,8 @@ class _ChatPageState extends State<ChatPage> {
                       itemCount: _chatController.roomList.length,
                       itemBuilder: (context, index) {
                         return ChatUnit(
-                          senderId: widget.userId,
-                          receiverId: _chatController.roomList[index].sender ==
+                          fromId: widget.userId,
+                          toId: _chatController.roomList[index].sender ==
                                   widget.userId
                               ? _chatController.roomList[index].receiver
                               : _chatController.roomList[index].sender,
