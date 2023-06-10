@@ -1,3 +1,6 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/pages/profile/othersProfile.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
@@ -11,6 +14,8 @@ class TopPostUnit extends StatefulWidget {
   final double reliability;
   final bool isMine;
   final int dealId;
+  final int reviewFrom;
+  final Deal deal;
 
   const TopPostUnit({
     super.key,
@@ -19,6 +24,8 @@ class TopPostUnit extends StatefulWidget {
     required this.reliability,
     required this.isMine,
     required this.dealId,
+    required this.reviewFrom,
+    required this.deal,
   });
 
   @override
@@ -26,6 +33,30 @@ class TopPostUnit extends StatefulWidget {
 }
 
 class _TopPostUnitState extends State<TopPostUnit> {
+  late List<dynamic> keyList = [];
+  late List<dynamic> valueList = [];
+
+  Future requestChatUserList() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    try {
+      Response resp = await dio.get("/deal/${widget.dealId}/complete");
+
+      keyList = resp.data['data'].keys.toList();
+      valueList = resp.data['data'].values.toList();
+      print(keyList);
+      print(valueList);
+    } catch (e) {
+      Exception(e);
+    } finally {
+      dio.close();
+    }
+  }
+
   void requestCompleteDeal() async {
     Dio dio = Dio();
     dio.options
@@ -55,6 +86,13 @@ class _TopPostUnitState extends State<TopPostUnit> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestChatUserList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 25, right: 20),
@@ -65,12 +103,22 @@ class _TopPostUnitState extends State<TopPostUnit> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.nickname,
-                style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: ColorStyles.black),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtherProfile(
+                            userName: widget.deal.userName!,
+                            reliability: widget.deal.reliability!,
+                          )),
+                ),
+                child: Text(
+                  widget.nickname,
+                  style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: ColorStyles.black),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
@@ -86,14 +134,19 @@ class _TopPostUnitState extends State<TopPostUnit> {
           (widget.isMine)
               ? OutlinedButton(
                   onPressed: () {
-                    showCompleteDealDialog(context);
+                    (keyList.isEmpty)
+                        ? showToast('아직 거래 참여자가 없습니다!')
+                        : Popups.showParticipantList(
+                            context, widget.dealId, widget.reviewFrom);
                   },
                   style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: ColorStyles.mainColor)),
                   child: const Text(
                     '거래완료',
-                    style:
-                        TextStyle(color: ColorStyles.mainColor, fontSize: 14),
+                    style: TextStyle(
+                      color: ColorStyles.mainColor,
+                      fontSize: 14,
+                    ),
                   ),
                 )
               : SizedBox(
