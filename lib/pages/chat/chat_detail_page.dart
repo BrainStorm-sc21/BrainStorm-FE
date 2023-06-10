@@ -30,6 +30,7 @@ class ChatDetailPage extends StatefulWidget {
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
@@ -55,6 +56,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void dispose() {
     _client.sink.close();
     _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -214,14 +216,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     messages.add(Message.fromJson(jsonData));
                   }
                   return ListView.builder(
+                    reverse: true,
                     shrinkWrap: true,
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(
-                        message: messages[index].message,
-                        isSentByMe: messages[index].sender == widget.senderId
-                            ? true
-                            : false,
+                        message: messages[messages.length - index - 1].message,
+                        isSentByMe:
+                            messages[messages.length - index - 1].sender ==
+                                    widget.senderId
+                                ? true
+                                : false,
                       );
                     },
                   );
@@ -248,6 +253,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             ),
                           ),
                           child: TextField(
+                            focusNode: _focusNode,
                             controller: _textController,
                             minLines: 1,
                             maxLines: 3,
