@@ -176,6 +176,13 @@ class _DealDetailPageState extends State<DealDetailPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _contentsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
