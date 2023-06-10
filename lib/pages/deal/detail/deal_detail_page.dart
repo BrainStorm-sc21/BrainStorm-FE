@@ -1,6 +1,8 @@
 import 'package:brainstorm_meokjang/app_pages_container.dart';
+import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
+import 'package:brainstorm_meokjang/providers/chat_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
@@ -9,6 +11,8 @@ import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_instance/get_instance.dart';
 
 class DealDetailPage extends StatefulWidget {
   final int userId;
@@ -31,6 +35,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
   late bool isClickModifyButton = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _contentsController = TextEditingController();
+  final ChatController _chatController = Get.put(ChatController());
+  late Room? chatRoom;
 
   void initEditingController() {
     _nameController.text = widget.deal.dealName;
@@ -149,12 +155,23 @@ class _DealDetailPageState extends State<DealDetailPage> {
     }
   }
 
+  void findChatRoom() {
+    for (Room roomItem in _chatController.roomList) {
+      if (roomItem.dealInfo.dealId == widget.deal.dealId) {
+        setState(() {
+          chatRoom = roomItem;
+          return;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setImageList();
     initEditingController();
+    findChatRoom();
     print(widget.deal.dealImage1);
   }
 
@@ -300,6 +317,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                                 senderId: widget.userId,
                                 receiverId: widget.deal.userId,
                                 deal: widget.deal,
+                                room: chatRoom,
                                 receiverName: widget.deal.userName == null
                                     ? '(알 수 없음)'
                                     : widget.deal.userName!,
