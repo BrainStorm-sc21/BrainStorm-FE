@@ -235,7 +235,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
             // 하단 바
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 15.0,
+              ),
               child: Container(
                 color: ColorStyles.white,
                 child: TextFieldTapRegion(
