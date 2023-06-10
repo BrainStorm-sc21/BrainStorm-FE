@@ -29,7 +29,8 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
 
@@ -53,12 +54,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void dispose() {
     _client.sink.close();
-    _controller.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
   bool get isTextInputEmpty {
-    return _controller.text.trim().isEmpty;
+    return _textController.text.trim().isEmpty;
   }
 
   void setIsRoomExistToTrue() {
@@ -128,7 +129,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
     print(jsonEncode(data));
     _client.sink.add(jsonEncode(data));
-    _controller.clear();
+    _textController.clear();
   }
 
   Future<void> loadPrevMessages() async {
@@ -247,7 +248,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             ),
                           ),
                           child: TextField(
-                            controller: _controller,
+                            controller: _textController,
                             minLines: 1,
                             maxLines: 3,
                             decoration: const InputDecoration(
@@ -274,7 +275,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             debugPrint('메시지 전송 버튼 눌림!!');
                             if (isTextInputEmpty == false) {
                               checkRoomExist(
-                                  MessageType.TALK, _controller.text);
+                                  MessageType.TALK, _textController.text);
                             }
                           },
                           child: const Icon(
