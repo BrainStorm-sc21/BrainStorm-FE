@@ -2,7 +2,6 @@ import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/register/register_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
-import 'package:brainstorm_meokjang/pages/profile/othersProfile.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
@@ -305,15 +304,6 @@ class _DealPageState extends State<DealPage> {
                   ),
                 ),
               );
-            }),
-        SpeedDialChild(
-            child: const Text('상대 UI',
-                style:
-                    TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
-            backgroundColor: ColorStyles.cream,
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const OtherProfile()));
             }),
       ],
     );
