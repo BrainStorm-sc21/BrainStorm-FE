@@ -237,7 +237,7 @@ class _DealPageState extends State<DealPage> {
     });
   }
 
-  _registerDealButton() {
+  SpeedDial _registerDealButton() {
     return SpeedDial(
       icon: Icons.add,
       activeIcon: Icons.close,
