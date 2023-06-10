@@ -76,70 +76,111 @@ class Popups {
         });
   }
 
-  static void showParticipantList(context, dealId, reviewFrom, reviewTo) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: SizedBox(
-              width: 250,
-              height: 320,
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  const Text(
-                    '거래 참여자 목록',
-                    style: TextStyle(
-                        color: ColorStyles.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400),
+  static void showParticipantList(context, dealId, reviewFrom) async {
+    late List<dynamic> keyList = [];
+    late List<dynamic> valueList = [];
+    Future requestChatUserList() async {
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      try {
+        Response resp = await dio.get("/deal/$dealId/complete");
+
+        keyList = resp.data['data'].keys.toList();
+        valueList = resp.data['data'].values.toList();
+        print(keyList);
+        print(valueList);
+      } catch (e) {
+        Exception(e);
+      } finally {
+        dio.close();
+      }
+    }
+
+    await requestChatUserList();
+
+    (keyList.isEmpty)
+        ? showToast('아직 거래 참여자가 없습니다!')
+        : showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: SizedBox(
+                  width: 250,
+                  height: (keyList.length + 1) * 40 + 110,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      const Text(
+                        '거래 참여자 목록',
+                        style: TextStyle(
+                            color: ColorStyles.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Padding(
+                          padding:
+                              const EdgeInsets.only(top: 30, left: 5, right: 5),
+                          child: (keyList.isNotEmpty)
+                              ? SizedBox(
+                                  width: 240,
+                                  height: (keyList.length + 1) * 40,
+                                  child: ListView.builder(
+                                      itemCount: keyList.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return ParticipantUnit(
+                                            userName: valueList[index]);
+                                      }),
+                                )
+                              : const Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Center(
+                                    child: Text(
+                                      '아직 거래 참여자가 없습니다!\n',
+                                      style: TextStyle(
+                                          color: ColorStyles.mainColor),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )),
+                      const Spacer(),
+                      (keyList.isNotEmpty)
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: AbsorbPointer(
+                                absorbing: keyList.isEmpty,
+                                child: RoundedOutlinedButton(
+                                    width: 230,
+                                    height: 28,
+                                    text: '거래완료',
+                                    onPressed: () {
+                                      showReview(context, dealId, reviewFrom);
+                                    },
+                                    backgroundColor: (keyList.isNotEmpty)
+                                        ? ColorStyles.mainColor
+                                        : ColorStyles.grey,
+                                    foregroundColor: ColorStyles.white,
+                                    borderColor: (keyList.isNotEmpty)
+                                        ? ColorStyles.mainColor
+                                        : ColorStyles.grey),
+                              ),
+                            )
+                          : const SizedBox(height: 5),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 35, left: 5, right: 5),
-                    child: SizedBox(
-                      width: 240,
-                      height: 200,
-                      child: ListView.builder(
-                          itemCount: 3,
-                          itemBuilder: (BuildContext context, index) {
-                            switch (index) {
-                              case 0:
-                                return const ParticipantUnit(
-                                    userName: '삼식이 한끼');
-                              case 1:
-                                return const ParticipantUnit(
-                                    userName: '삼식이 두끼');
-                              case 2:
-                                return const ParticipantUnit(
-                                    userName: '삼식이 세끼');
-                            }
-                            return null;
-                          }),
-                    ),
-                  ),
-                  const Spacer(),
-                  RoundedOutlinedButton(
-                      width: 230,
-                      height: 28,
-                      text: '리뷰 쓰기',
-                      onPressed: () {
-                        showReview(context, dealId, reviewFrom, reviewTo);
-                      },
-                      backgroundColor: ColorStyles.mainColor,
-                      foregroundColor: ColorStyles.white,
-                      borderColor: ColorStyles.mainColor),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
-          );
-        });
+                ),
+              );
+            });
   }
 
-  static void showReview(context, dealId, reviewFrom, reviewTo) {
+  static void showReview(context, dealId, reviewFrom) {
     double reviewPoint = 0;
     String? reviewContents;
     late Review review;
@@ -243,7 +284,7 @@ class Popups {
                       onPressed: () {
                         review = Review(
                             reviewFrom: reviewFrom,
-                            reviewTo: reviewTo,
+                            reviewTo: 3,
                             dealId: dealId,
                             rating: reviewPoint,
                             reviewContent: reviewContents);
@@ -251,7 +292,7 @@ class Popups {
                         requestSendReview();
                         print('리뷰점수: $reviewPoint');
                         print('리뷰컨텐츠: $reviewContents');
-                        print('$reviewFrom 이 $reviewTo 에게 리뷰를 보냅니다');
+                        print('$reviewFrom 이 3 에게 리뷰를 보냅니다');
                       },
                       backgroundColor: ColorStyles.mainColor,
                       foregroundColor: ColorStyles.white,

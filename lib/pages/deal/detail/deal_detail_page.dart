@@ -232,6 +232,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   distance: '${widget.deal.distance?.round()}m',
                   isMine: widget.isMine,
                   dealId: widget.deal.dealId!,
+                  reviewFrom: widget.deal.userId,
+                  deal: widget.deal,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(

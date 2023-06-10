@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
@@ -209,7 +210,8 @@ class _OnePostUnitState extends State<OnePostUnit> {
             (widget.isChat == true && widget.isMyDeal == true)
                 ? OutlinedButton(
                     onPressed: () {
-                      //showCompleteDealDialog(context);
+                      Popups.showParticipantList(
+                          context, widget.deal.dealId, widget.deal.userId);
                     },
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: ColorStyles.mainColor)),
