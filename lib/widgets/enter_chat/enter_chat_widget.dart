@@ -1,7 +1,7 @@
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
-import 'package:brainstorm_meokjang/pages/recipe/recipe_recommend_page.dart';
+import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class GoRecipe extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const RecipeRecommendPage(),
+          builder: (context) => const RecipeSnappingSheet(),
         ),
       ),
       child: Container(

@@ -2,8 +2,8 @@ import 'package:brainstorm_meokjang/providers/foodList_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/models/food.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
-import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
+import 'package:brainstorm_meokjang/widgets/food/modify_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +11,11 @@ class Refrigerator extends StatefulWidget {
   final int userId;
   final String storage;
   final List<Food> foods;
-  const Refrigerator({super.key, required this.userId, required this.foods, required this.storage});
+  const Refrigerator(
+      {super.key,
+      required this.userId,
+      required this.foods,
+      required this.storage});
 
   @override
   State<Refrigerator> createState() => _RefrigeratorState();
@@ -19,21 +23,18 @@ class Refrigerator extends StatefulWidget {
 
 class _RefrigeratorState extends State<Refrigerator> {
   late Food food;
-  List<bool> absorbBool = List.filled(100, true, growable: true);
+  late Food modifyFood;
   final now = DateTime.now();
 
   final FoodListController _foodListController = Get.find<FoodListController>();
 
-  @override
-  void initState() {
-    super.initState();
+  String stockString(num value) {
+    if (value >= 2 || value == 1) {
+      return "${value.ceil()} 개";
+    } else {
+      return "$value 개";
+    }
   }
-
-  void setStock(int index, num value) => setState(() => widget.foods[index].stock = value);
-  void setStorage(int index, String value) =>
-      setState(() => widget.foods[index].storageWay = value);
-  void setExpireDate(DateTime value, {int? index}) =>
-      setState(() => widget.foods[index!].expireDate = value);
 
   int dayCount(day) {
     if (day >= 7) {
@@ -56,8 +57,8 @@ class _RefrigeratorState extends State<Refrigerator> {
               return Card(
                 elevation: 2.0,
                 key: PageStorageKey(food.foodId),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                surfaceTintColor: ColorStyles.hintTextColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
                 child: ExpansionTile(
                   initiallyExpanded: false,
                   title: Padding(
@@ -65,69 +66,50 @@ class _RefrigeratorState extends State<Refrigerator> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AbsorbPointer(
-                              absorbing: absorbBool[index],
-                              child: SizedBox(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
-                                child: TextField(
-                                    controller: food.foodNameController,
-                                    onSubmitted: (String str) {
-                                      setState(() {
-                                        food.foodName = str;
-                                      });
-                                    },
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none, counterText: ''),
+                                child: Text(food.foodName,
                                     style: const TextStyle(
+                                        color: ColorStyles.textColor,
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
-                                        overflow: TextOverflow.ellipsis),
-                                    maxLength: 20),
+                                        overflow: TextOverflow.ellipsis)),
                               ),
-                            ),
-                            Text('${food.expireDate.difference(now).inDays}일',
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: food.expireDate.difference(now).inDays > 0
-                                        ? ColorStyles.textColor
-                                        : ColorStyles.errorRed))
-                          ],
+                              Text(
+                                  '${food.expireDate.difference(now).inDays + 1}일',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: food.expireDate
+                                                  .difference(now)
+                                                  .inDays >
+                                              -1
+                                          ? ColorStyles.textColor
+                                          : ColorStyles.errorRed))
+                            ],
+                          ),
                         ),
                         CustomProgressBar(
                             maxPercent: 7,
-                            currentPercent:
-                                7 - dayCount(food.expireDate.difference(now).inDays).toDouble())
+                            currentPercent: 7 -
+                                dayCount(
+                                        food.expireDate.difference(now).inDays +
+                                            1)
+                                    .toDouble())
                       ],
                     ),
                   ),
                   children: [
-                    AbsorbPointer(
-                        absorbing: absorbBool[index],
-                        child: SizedBox(
-                            width: 350,
-                            child: FoodStorageDropdown(
-                                index: index, storage: food.storageWay, setStorage: setStorage))),
-                    AbsorbPointer(
-                      absorbing: absorbBool[index],
-                      child: SizedBox(
-                        width: 350,
-                        child: FoodStockButton(index: index, stock: food.stock, setStock: setStock),
-                      ),
-                    ),
-                    AbsorbPointer(
-                      absorbing: absorbBool[index],
-                      child: SizedBox(
-                        width: 350,
-                        child: FoodExpireDate(
-                            index: index,
-                            expireDate: food.expireDate,
-                            setExpireDate: setExpireDate),
-                      ),
-                    ),
+                    detailList(context, "보관방법", food.storageWay),
+                    detailList(context, "수량", stockString(food.stock)),
+                    detailList(context, "소비기한",
+                        food.expireDate.toString().substring(0, 10)),
+                    const SizedBox(height: 8),
                     SizedBox(
                       width: 350,
                       height: 60,
@@ -137,32 +119,37 @@ class _RefrigeratorState extends State<Refrigerator> {
                         children: [
                           OutlinedButton(
                             onPressed: () {
-                              setState(() {
-                                absorbBool[index] = !absorbBool[index];
-                                if (absorbBool[index]) {
-                                  _foodListController.modifyFoodInfo(
-                                      widget.userId, widget.foods[index]);
-                                  showToast('식료품이 수정되었습니다');
-                                }
-                              });
+                              modifyFood = Food(
+                                  foodId: widget.foods[index].foodId,
+                                  foodName: widget.foods[index].foodName,
+                                  storageWay: widget.foods[index].storageWay,
+                                  stock: widget.foods[index].stock,
+                                  expireDate: widget.foods[index].expireDate);
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ModifyFoodBottomSheet(
+                                      modifyFood: modifyFood,
+                                      userId: widget.userId);
+                                },
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                              );
                             },
-                            child: absorbBool[index]
-                                ? const Text('수정', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('확인', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: const Text('수정',
+                                style: TextStyle(color: ColorStyles.mainColor)),
                           ),
                           const SizedBox(width: 10),
                           OutlinedButton(
-                            child: absorbBool[index]
-                                ? const Text('삭제', style: TextStyle(color: ColorStyles.mainColor))
-                                : const Text('취소', style: TextStyle(color: ColorStyles.mainColor)),
+                            child: const Text('삭제',
+                                style: TextStyle(color: ColorStyles.mainColor)),
                             onPressed: () {
-                              if (absorbBool[index]) {
-                                showDeleteDialog(widget.foods[index]);
-                              } else {
-                                setState(() {
-                                  absorbBool[index] = !absorbBool[index];
-                                });
-                              }
+                              showDeleteDialog(widget.foods[index]);
                             },
                           ),
                         ],
@@ -200,6 +187,24 @@ class _RefrigeratorState extends State<Refrigerator> {
           ],
         );
       },
+    );
+  }
+
+  Widget detailList(BuildContext context, String name, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: SizedBox(
+        width: 350,
+        child: Row(
+          children: [
+            Text(name),
+            const Spacer(),
+            Text(value,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+          ],
+        ),
+      ),
     );
   }
 }
