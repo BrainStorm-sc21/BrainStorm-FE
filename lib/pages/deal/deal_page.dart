@@ -228,7 +228,6 @@ class _DealPageState extends State<DealPage> {
   void sortPosts(String value) {
     setState(() {
       _selectedValue = value;
-      if (_selectedValue == '거리순') {
       if (_selectedValue == '가까운순') {
         posts.sort((a, b) => a.distance!.compareTo(b.distance!));
       } else if (_selectedValue == '최신순') {
