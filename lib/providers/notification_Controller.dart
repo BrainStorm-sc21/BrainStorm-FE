@@ -19,7 +19,7 @@ class NotificationController extends GetxController {
       sound: true,
     );
     print(settings.authorizationStatus);
-    //_getToken();
+    _getToken();
     _onMessage();
     super.onInit();
   }
@@ -35,7 +35,8 @@ class NotificationController extends GetxController {
   final AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.', // description
+    description:
+        'This channel is used for important notifications.', // description
     importance: Importance.max,
   );
 
@@ -44,7 +45,8 @@ class NotificationController extends GetxController {
 
   void _onMessage() async {
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
     await flutterLocalNotificationsPlugin.initialize(
         const InitializationSettings(
@@ -52,73 +54,73 @@ class NotificationController extends GetxController {
             iOS: DarwinInitializationSettings()),
         onDidReceiveNotificationResponse: (details) => {});
 
-    /// 메시지가 올 때마다 listen 내부 콜백 실행.
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-
-      // android 일 때만
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(channel.id, channel.name,
-                  channelDescription: channel.description),
-            ),
-
-            // 넘길 데이터 있으면 아래코드 쓰기.
-            payload: message.data['type']);
-      }
-
-      //데이터 잘 받는지 테스트용 코드
-      print('foreground 상황에서 메시지를 받았다.');
-      print('Message data: ${message.data}');
-      print('Message type: ${message.data['type']}');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification!.body}');
-      }
-      if (message.data['type'] == '0') {
-        //채팅
-        print('채팅으로 이동');
-      } else if (message.data['type'] == 1) {
-        //후기 받음
-        print('후기 받음으로 이동');
-      } else if (message.data['type'] == 2) {
-        //후기 작성
-        print('후기 작성으로 이동');
-      } else if (message.data['type'] == 2) {
-        //소비기한
-        print('소비기한으로 이동');
-        //Get.toNamed('/chat', arguments: message.data);
-      }
-    });
-  }
-
-  Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     // 종료상태에서 클릭한 푸시 알림 메세지 핸들링
     if (initialMessage != null) _handleMessage(initialMessage);
 
     // 앱이 백그라운드 상태에서 푸시 알림 클릭 하여 열릴 경우 메세지 스트림을 통해 처리
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+    /// foreground 메세지
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   RemoteNotification? notification = message.notification;
+    //   AndroidNotification? android = message.notification?.android;
+
+    //   // android 일 때만
+    //   if (notification != null && android != null) {
+    //     flutterLocalNotificationsPlugin.show(
+    //         notification.hashCode,
+    //         notification.title,
+    //         notification.body,
+    //         NotificationDetails(
+    //           android: AndroidNotificationDetails(channel.id, channel.name,
+    //               channelDescription: channel.description),
+    //         ),
+
+    //         // 넘길 데이터 있으면 아래코드 쓰기.
+    //         payload: message.data['type']);
+    //   }
+
+    //   //데이터 잘 받는지 테스트용 코드
+    //   print('foreground 상황에서 메시지를 받았다.');
+    //   print('Message data: ${message.data}');
+    //   print('Message type: ${message.data['type']}');
+    //   if (message.notification != null) {
+    //     print(
+    //         'Message also contained a notification: ${message.notification!.body}');
+    //   }
+    //   if (message.data['type'] == '0') {
+    //     //채팅
+    //     print('채팅으로 이동');
+    //   } else if (message.data['type'] == 1) {
+    //     //후기 받음
+    //     print('후기 받음으로 이동');
+    //   } else if (message.data['type'] == 2) {
+    //     //후기 작성
+    //     print('후기 작성으로 이동');
+    //   } else if (message.data['type'] == 2) {
+    //     //소비기한
+    //     print('소비기한으로 이동');
+    //     //Get.toNamed('/chat', arguments: message.data);
+    //   }
+    // });
   }
 
   void _handleMessage(RemoteMessage message) {
     print('message = ${message.notification!.title}');
     print('백그라운드 메세지 받았다!!!!!!!!!!!');
-    if (message.data['type'] == 0) {
+    if (message.data['type'] == '0') {
       //채팅
       print('채팅으로 이동');
-    } else if (message.data['type'] == 1) {
+    } else if (message.data['type'] == '1') {
       //후기 받음
       print('후기 받음으로 이동');
-    } else if (message.data['type'] == 2) {
+    } else if (message.data['type'] == '2') {
       //후기 작성
       print('후기 작성으로 이동');
-    } else if (message.data['type'] == 2) {
+    } else if (message.data['type'] == '2') {
       //소비기한
       print('소비기한으로 이동');
       //Get.toNamed('/chat', arguments: message.data);

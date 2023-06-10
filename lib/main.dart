@@ -19,7 +19,8 @@ Future<void> onBackgroundHandler(RemoteMessage message) async {
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
 
     runApp(const MyApp());
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
+        // 날짜 선택기 및 달력에 표시되는 언어 세`  qaS팅을 위한 localization
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -88,7 +89,8 @@ class _MyAppState extends State<MyApp> {
             color: ColorStyles.iconColor,
           ),
         ),
-        initialBinding: BindingsBuilder.put(() => NotificationController(), permanent: true),
+        initialBinding: BindingsBuilder.put(() => NotificationController(),
+            permanent: true),
         home: const AppPagesContainer(userId: 7)
         // home: isMeokjangUser
         //     ? AppPagesContainer(userId: userId)
