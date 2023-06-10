@@ -43,6 +43,12 @@ class _DealPageState extends State<DealPage> {
     // sortPosts('최신순');
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
+  }
+
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
         if (_checkDeal.contains(true)) {
