@@ -441,6 +441,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   modifyDeal(widget.deal.dealId!, widget.deal);
                   print('deal의 컨텐츠가 ${widget.deal.dealContent}로 바뀌었습니다.');
                   showToast('게시글이 수정되었습니다');
+                  Navigator.pop(context);
                   // Navigator.pushAndRemoveUntil(
                   //   context,
                   //   MaterialPageRoute(

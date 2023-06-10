@@ -157,11 +157,12 @@ class Popups {
 
       final data = review.toJson();
 
-      print(data);
+      print('리뷰 데이터: $data');
+      print('딜아이디: $dealId');
 
       try {
         final resp = await dio.post('review/$dealId',
-            data: data, queryParameters: dealId);
+            data: data, queryParameters: {'param': dealId});
 
         print(resp.data);
 

@@ -179,7 +179,7 @@ class _MyPostUnitState extends State<MyPostUnit> {
                   height: 26,
                   text: '거래중',
                   onPressed: () {
-                    Popups.showParticipantList(
+                    Popups.showReview(
                         context, widget.deal.dealId, widget.deal.userId, 3);
                   },
                   backgroundColor: ColorStyles.mainColor,
