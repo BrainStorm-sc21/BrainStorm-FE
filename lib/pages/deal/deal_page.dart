@@ -27,9 +27,21 @@ class DealPage extends StatefulWidget {
 class _DealPageState extends State<DealPage> {
   bool isDealPage = true;
 
+  final TextEditingController _textEditingController = TextEditingController();
+
+  List<Deal> posts = List.empty(growable: true);
+  List<Deal> entirePosts = List.empty(growable: true);
+
   final List<bool> _checkDeal = [false, false, false];
   String _selectedValue = '거리순';
   final List<String> _valueList = ['가까운순', '최신순'];
+
+  @override
+  void initState() {
+    super.initState();
+    getServerDealDataWithDio();
+    // sortPosts('최신순');
+  }
 
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
@@ -54,11 +66,6 @@ class _DealPageState extends State<DealPage> {
       });
   void setdropdown(String selectedValue, String value) =>
       setState(() => selectedValue = value);
-
-  final TextEditingController _textEditingController = TextEditingController();
-
-  List<Deal> posts = List.empty(growable: true);
-  List<Deal> entirePosts = List.empty(growable: true);
 
   Future getServerDealDataWithDio() async {
     Dio dio = Dio();
@@ -86,12 +93,6 @@ class _DealPageState extends State<DealPage> {
       dio.close();
     }
     return false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getServerDealDataWithDio();
   }
 
   @override
