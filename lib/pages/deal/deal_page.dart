@@ -30,7 +30,7 @@ class _DealPageState extends State<DealPage> {
   List<Deal> entirePosts = List.empty(growable: true);
 
   final List<bool> _checkDeal = [false, false, false];
-  String _selectedValue = '거리순';
+  String _selectedValue = '가까운순';
   final List<String> _valueList = ['가까운순', '최신순'];
 
   @override
