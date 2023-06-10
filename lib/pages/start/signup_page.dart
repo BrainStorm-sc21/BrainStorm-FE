@@ -77,7 +77,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -88,48 +87,40 @@ class _SignUpPageState extends State<SignUpPage> {
           backgroundColor: ColorStyles.mainColor,
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Container(
-            child: ListView(
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    NicknameField(setNickname: setNickname),
-                    GenderField(setGender: setGender),
-                    PositionField(setAddress: setAddress),
-                    AuthField(sendPhoneNumber: sendPhoneNumber),
-                    SizedBox(
-                        width: deviceWidth * 0.8,
-                        child: AbsorbPointer(
-                          absorbing: !isValid,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                int userId = await requestSignUp(user);
-                                if (userId != -1) {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          CompleteSignUpImage(userId: userId),
-                                    ),
-                                    (route) => false,
-                                  );
-                                } else {
-                                  showToast('회원가입에 실패했습니다!\n 다시 시도해주세요');
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: (isValid)
-                                    ? ColorStyles.mainColor
-                                    : ColorStyles.grey,
-                              ),
-                              child: const Text("회원가입하기")),
-                        )),
-                  ],
-                )
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              NicknameField(setNickname: setNickname),
+              GenderField(setGender: setGender),
+              PositionField(setAddress: setAddress),
+              AuthField(sendPhoneNumber: sendPhoneNumber),
+              AbsorbPointer(
+                absorbing: !isValid,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      int userId = await requestSignUp(user);
+                      if (userId != -1) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CompleteSignUpImage(userId: userId),
+                          ),
+                          (route) => false,
+                        );
+                      } else {
+                        showToast('회원가입에 실패했습니다!\n 다시 시도해주세요');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          (isValid) ? ColorStyles.mainColor : ColorStyles.grey,
+                    ),
+                    child: const Text("회원가입하기")),
+              ),
+            ],
           ),
         ),
       ),
@@ -156,47 +147,38 @@ class _NicknameFieldState extends State<NicknameField> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-
     return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: SizedBox(
-                width: deviceWidth * 0.8,
-                child: const Text(
-                  "닉네임",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 15),
+            child: Text(
+              "닉네임",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
-            SizedBox(
-              width: deviceWidth * 0.8,
-              child: Form(
-                child: TextFormField(
-                  controller: _nicknameController,
-                  maxLength: 10,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    hintText: "2글자 이상 10글자 이하로 입력해주세요.",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  validator: (value) {
-                    if (value!.length < 2) {
-                      return '2글자 이상 입력해주세요.';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => widget.setNickname(value),
-                ),
+          ),
+          Form(
+            child: TextFormField(
+              controller: _nicknameController,
+              maxLength: 10,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                hintText: "2글자 이상 10글자 이하로 입력해주세요.",
+                hintStyle: TextStyle(fontSize: 12),
               ),
+              validator: (value) {
+                if (value!.length < 2) {
+                  return '2글자 이상 입력해주세요.';
+                }
+                return null;
+              },
+              onChanged: (value) => widget.setNickname(value),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -223,26 +205,22 @@ class _GenderFieldState extends State<GenderField> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-
     return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: SizedBox(
-                width: deviceWidth * 0.8,
-                child: const Text(
-                  "성별",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 15),
+            child: Text(
+              "성별",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
-            ToggleButtons(
-              fillColor: ColorStyles.mainColor.withOpacity(0.5),
+          ),
+          Center(
+            child: ToggleButtons(
+              fillColor: ColorStyles.mainColor.withOpacity(0.4),
               borderRadius: BorderRadius.circular(4),
               isSelected: isSelected,
               constraints: const BoxConstraints(minWidth: 120, minHeight: 38),
@@ -252,23 +230,22 @@ class _GenderFieldState extends State<GenderField> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     "남",
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                    style:
+                        TextStyle(color: ColorStyles.textColor, fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     "여",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 16,
-                    ),
+                    style:
+                        TextStyle(color: ColorStyles.textColor, fontSize: 16),
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -304,71 +281,67 @@ class _PositionFieldState extends State<PositionField> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-
     return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: SizedBox(
-                width: deviceWidth * 0.8,
-                child: const Text(
-                  "주소",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 15),
+            child: Text(
+              "주소",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
                   decoration: const BoxDecoration(
                       border: Border(
                     bottom: BorderSide(color: Colors.grey),
                   )),
-                  width: deviceWidth * 0.65,
                   height: 35,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 7),
                     child: Text(
                       posText,
                       textAlign: TextAlign.start,
+                      maxLines: 2,
                       style: TextStyle(color: posColor, fontSize: posFontSize),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: deviceWidth * 0.15,
-                  height: 35,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Kpostal result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => KpostalView()));
-                      setState(() {
-                        posText = result.address;
-                        posColor = Colors.black;
-                        posFontSize = 14;
-                        widget.setAddress(result.address, result.latitude!,
-                            result.longitude!);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                    ),
-                    child: const Text(
-                      "검색",
-                      style: TextStyle(fontSize: 12),
-                    ),
+              ),
+              SizedBox(
+                width: 55,
+                height: 35,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Kpostal result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => KpostalView()));
+                    setState(() {
+                      posText = result.address;
+                      posColor = Colors.black;
+                      posFontSize = 14;
+                      widget.setAddress(
+                          result.address, result.latitude!, result.longitude!);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                  ),
+                  child: const Text(
+                    "검색",
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -392,130 +365,127 @@ class _AuthFieldState extends State<AuthField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Container(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Center(
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(
-                                        width: 110,
-                                        height: 70,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const NaverWebView()),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
-                                          ),
-                                          child: const Text("Naver로\n인증하기"),
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Center(
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 110,
+                                      height: 70,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const NaverWebView()),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              ColorStyles.mainColor,
                                         ),
+                                        child: const Text("Naver로\n인증하기"),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(
-                                        width: 110,
-                                        height: 70,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const KakaoWebView()),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                ColorStyles.mainColor,
-                                          ),
-                                          child: const Text("Kakao로\n인증하기"),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 0),
-                                child: SizedBox(
-                                  height: 40,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: ColorStyles.mainColor,
-                                    ),
-                                    child: const Text("확인"),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 110,
+                                      height: 70,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const KakaoWebView()),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              ColorStyles.mainColor,
+                                        ),
+                                        child: const Text("Kakao로\n인증하기"),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 0),
+                              child: SizedBox(
+                                height: 40,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: ColorStyles.mainColor,
+                                  ),
+                                  child: const Text("확인"),
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: ColorStyles.mainColor,
+                ),
+                child: const Text("sns 인증"),
+              ),
+              AbsorbPointer(
+                absorbing: isCompleteAuth,
+                child: TextButton(
+                  onPressed: () async {
+                    String phoneNumber = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PhoneAuthForSignUpPage()),
                     );
+                    setState(() {
+                      widget.sendPhoneNumber(phoneNumber);
+                    });
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: ColorStyles.mainColor,
+                    foregroundColor: (isCompleteAuth)
+                        ? ColorStyles.grey
+                        : ColorStyles.mainColor,
+                    side: BorderSide(
+                        color: (isCompleteAuth)
+                            ? ColorStyles.mainColor
+                            : ColorStyles.backgroundColor),
                   ),
-                  child: const Text("sns 인증"),
+                  child: const Text("번호 인증"),
                 ),
-                AbsorbPointer(
-                  absorbing: isCompleteAuth,
-                  child: TextButton(
-                    onPressed: () async {
-                      String phoneNumber = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PhoneAuthForSignUpPage()),
-                      );
-                      setState(() {
-                        widget.sendPhoneNumber(phoneNumber);
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: (isCompleteAuth)
-                          ? ColorStyles.grey
-                          : ColorStyles.mainColor,
-                      side: BorderSide(
-                          color: (isCompleteAuth)
-                              ? ColorStyles.mainColor
-                              : ColorStyles.white),
-                    ),
-                    child: const Text("번호 인증"),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

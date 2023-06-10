@@ -4,12 +4,9 @@ import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:brainstorm_meokjang/pages/pushMessage/push_list_page.dart';
 import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
-import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +25,6 @@ class _MyProfileState extends State<MyProfile> {
   bool isClickedText = false;
   double reliability = 0;
   final FocusNode _textFocus = FocusNode();
-
   final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   List<String> settings = ["거래 내역", "기타"];
@@ -43,39 +39,6 @@ class _MyProfileState extends State<MyProfile> {
     "로그아웃": '',
     "회원 탈퇴": '',
   };
-
-  void modifyUserInfo(String name) async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    final data = {
-      "userName": name,
-    };
-
-    try {
-      final res = await dio.put("/users/${widget.userId}", data: data);
-
-      if (!mounted) return;
-      if (res.statusCode == 200) {
-        showToast('닉네임이 수정되었습니다');
-      } else {
-        throw Exception('Failed to send data [${res.statusCode}]');
-      }
-    } on DioError catch (err) {
-      Popups.popSimpleDialog(
-        context,
-        title: '${err.type}',
-        body: '${err.message}',
-      );
-    } catch (err) {
-      debugPrint('$err');
-    } finally {
-      dio.close();
-    }
-  }
 
   @override
   void initState() {
@@ -113,41 +76,23 @@ class _MyProfileState extends State<MyProfile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: AbsorbPointer(
-                                absorbing: isClickedText,
-                                child: Obx(
-                                  () {
-                                    if (_userInfoController.isLoading) {
-                                      return const CircularProgressIndicator();
-                                    } else {
-                                      return TextField(
-                                          controller: TextEditingController(
-                                              text:
-                                                  _userInfoController.userName),
-                                          focusNode: _textFocus,
-                                          onSubmitted: (value) {
-                                            _userInfoController
-                                                .modifyUserName(value);
-                                            modifyUserInfo(value);
-                                            setState(() {
-                                              isClickedText = true;
-                                            });
-                                          },
-                                          decoration: const InputDecoration(
-                                              border: InputBorder.none,
-                                              counterText: ''),
-                                          style: const TextStyle(
-                                              fontSize: 30.0,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1,
-                                              color: ColorStyles.white,
-                                              overflow: TextOverflow.ellipsis),
-                                          maxLength: 20);
-                                    }
-                                  },
-                                ),
+                            Expanded(
+                              child: Obx(
+                                () {
+                                  if (_userInfoController.isLoading) {
+                                    return const CircularProgressIndicator();
+                                  } else {
+                                    return Text(
+                                      _userInfoController.userName,
+                                      style: const TextStyle(
+                                          fontSize: 30.0,
+                                          fontWeight: FontWeight.bold,
+                                          height: 1,
+                                          color: ColorStyles.white,
+                                          overflow: TextOverflow.ellipsis),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                             IconButton(
@@ -174,13 +119,10 @@ class _MyProfileState extends State<MyProfile> {
                             borderColor: ColorStyles.lightmainColor,
                             foregroundColor: ColorStyles.white,
                             onPressed: () {
-                              setState(() {
-                                isClickedText = isClickedText ? false : true;
-                              });
-                              _textFocus.requestFocus();
+                              Popups.changeUserInfo(context, widget.userId);
                             },
                             fontSize: 13,
-                            text: "닉네임 수정 >"),
+                            text: "프로필 수정 >"),
                       ),
                       const Text(
                         "내 신뢰도",
@@ -214,7 +156,7 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                             ),
                             CustomProgressBar(
-                              paddingHorizontal: 5,
+                              paddingHorizontal: 3,
                               currentPercent: _userInfoController.reliability,
                               maxPercent: 100,
                               lineHeight: 12,
@@ -225,7 +167,7 @@ class _MyProfileState extends State<MyProfile> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 15),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Container(
                           decoration: BoxDecoration(
                             color: ColorStyles.white,
@@ -326,7 +268,6 @@ class _MyProfileState extends State<MyProfile> {
                                             padding:
                                                 const EdgeInsets.only(left: 0)),
                                         onPressed: () {
-                                          print("알림 및 소리 눌림");
                                           if (i == 0) {
                                             showLogoutDialog(context);
                                           } else {
