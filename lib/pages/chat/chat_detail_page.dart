@@ -44,6 +44,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
+    listenStream();
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
@@ -58,6 +59,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     _textController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void listenStream() {
+    _client.stream.listen((data) {
+      print('received data: $data');
+      Map<String, dynamic> jsonData = jsonDecode(data);
+      setState(() {
+        messages.add(Message.fromJson(jsonData));
+      });
+    });
   }
 
   bool get isTextInputEmpty {
@@ -207,28 +218,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             ),
             // 채팅 기록
             Expanded(
-              child: StreamBuilder(
-                stream: _client.stream,
-                builder: (context, snapshot) {
-                  debugPrint('snapshot.data: ${snapshot.data}');
-                  if (snapshot.data != null) {
-                    Map<String, dynamic> jsonData = jsonDecode(snapshot.data);
-                    messages.add(Message.fromJson(jsonData));
-                  }
-                  return ListView.builder(
-                    reverse: true,
-                    shrinkWrap: true,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      return ChatBubble(
-                        message: messages[messages.length - index - 1].message,
-                        isSentByMe:
-                            messages[messages.length - index - 1].sender ==
-                                    widget.senderId
-                                ? true
-                                : false,
-                      );
-                    },
+              child: ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return ChatBubble(
+                    message: messages[messages.length - index - 1].message,
+                    isSentByMe: messages[messages.length - index - 1].sender ==
+                            widget.senderId
+                        ? true
+                        : false,
                   );
                 },
               ),
