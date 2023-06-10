@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class DealPage extends StatefulWidget {
-  int userId;
-  DealPage({
+  final int userId;
+  const DealPage({
     Key? key,
     required this.userId,
   }) : super(key: key);
