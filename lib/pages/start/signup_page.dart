@@ -309,6 +309,7 @@ class _PositionFieldState extends State<PositionField> {
                     child: Text(
                       posText,
                       textAlign: TextAlign.start,
+                      maxLines: 2,
                       style: TextStyle(color: posColor, fontSize: posFontSize),
                     ),
                   ),

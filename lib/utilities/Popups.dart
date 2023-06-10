@@ -251,13 +251,14 @@ class Popups {
 
     showDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
+      builder: (_) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Container(
-            //width: width * 0.95,
+          content: Container(
+            width: width * 0.8,
             height: height * 0.6,
             decoration: BoxDecoration(
               color: ColorStyles.white,
@@ -265,10 +266,16 @@ class Popups {
             ),
             child: SizedBox(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 25),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const Text(
+                      "닉네임",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 10),
                     Form(
                       key: formKey,
                       child: TextFormField(
@@ -276,7 +283,7 @@ class Popups {
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력하세요',
                           contentPadding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
+                              vertical: 15, horizontal: 20),
                           enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             borderSide: BorderSide(
