@@ -1,5 +1,7 @@
-import 'package:brainstorm_meokjang/models/review.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
+import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
@@ -8,6 +10,7 @@ import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Popups {
@@ -382,6 +385,143 @@ class Popups {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void changeUserInfo(context, userId) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    final UserInfoController userInfoController = Get.put(UserInfoController());
+    final User info = User(
+        userName: userInfoController.userName,
+        location: '',
+        latitude: 0,
+        longitude: 0);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final TextEditingController textController =
+        TextEditingController(text: userInfoController.userName);
+
+    void setName(String value) => (info.userName = value);
+
+    void setAddress(String location, double latitude, double longitude) {
+      info.location = location;
+      info.latitude = latitude;
+      info.longitude = longitude;
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Container(
+            width: width * 0.8,
+            height: height * 0.6,
+            decoration: BoxDecoration(
+              color: ColorStyles.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      "닉네임",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 10),
+                    Form(
+                      key: formKey,
+                      child: TextFormField(
+                        controller: textController,
+                        decoration: InputDecoration(
+                          hintText: '닉네임을 입력하세요',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 20),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(
+                                width: 2, color: ColorStyles.mainColor),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(
+                                width: 2, color: ColorStyles.mainColor),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(
+                                width: 2, color: ColorStyles.errorRed),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(
+                                width: 2, color: ColorStyles.errorRed),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return '값을 입력해주세요.';
+                          } else if (value.startsWith(' ')) {
+                            return '올바른 값을 입력해주세요.';
+                          } else {
+                            return null;
+                          }
+                        },
+                        autovalidateMode: AutovalidateMode.always,
+                        onChanged: (value) => setName(value),
+                        onTapOutside: (event) =>
+                            FocusScope.of(context).unfocus(), // 키보드 숨김
+                      ),
+                    ),
+                    PositionField(setAddress: setAddress),
+                    const Spacer(),
+                    SizedBox(
+                      child: Column(
+                        children: [
+                          RoundedOutlinedButton(
+                            text: '수정하기',
+                            width: double.infinity,
+                            onPressed: () {
+                              final data = {
+                                "userName": info.userName,
+                              };
+                              userInfoController.modifyUserInfo(userId, data);
+                              Navigator.of(context).pop();
+                            },
+                            foregroundColor: ColorStyles.white,
+                            backgroundColor: ColorStyles.mainColor,
+                            borderColor: ColorStyles.mainColor,
+                            fontSize: 18,
+                          ),
+                          const SizedBox(height: 10),
+                          RoundedOutlinedButton(
+                            text: '취소하기',
+                            width: double.infinity,
+                            onPressed: () => Navigator.of(context).pop(),
+                            foregroundColor: ColorStyles.mainColor,
+                            backgroundColor: ColorStyles.white,
+                            borderColor: ColorStyles.mainColor,
+                            fontSize: 18,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
