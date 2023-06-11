@@ -16,16 +16,8 @@ class OthersProfile extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "프로필",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-          centerTitle: true,
           backgroundColor: ColorStyles.mainColor,
-          elevation: 0.3,
+          elevation: 0,
         ),
         body: Stack(
           children: [
