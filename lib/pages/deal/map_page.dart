@@ -56,7 +56,6 @@ class _MapPageState extends State<MapPage> {
       for (var post in widget.posts) {
         OverlayImage.fromAssetImage(
           assetName: DealType.markerImage[post.dealType],
-          //devicePixelRatio: window.devicePixelRatio,
         ).then((image) {
           markers.add(Marker(
               markerId: post.dealName.toString(),
