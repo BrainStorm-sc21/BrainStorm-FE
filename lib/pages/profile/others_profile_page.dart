@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
+import 'package:brainstorm_meokjang/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 
 class OthersProfile extends StatelessWidget {
@@ -135,32 +136,16 @@ class OthersProfile extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Column(
-                                children: List<Widget>.generate(
-                                  2,
-                                  (i) {
-                                    return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                          alignment: Alignment.centerLeft,
-                                          padding:
-                                              const EdgeInsets.only(left: 0),
-                                        ),
-                                        onPressed: () {
-                                          print("알림 및 소리 눌림");
-                                        },
-                                        child: const Text(
-                                          "판매내역",
-                                          style: TextStyle(
-                                            color: ColorStyles.textColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                children: [
+                                  ProfileListItem(
+                                    title: "작성한 게시글 보기",
+                                    onPressed: () {},
+                                  ),
+                                  ProfileListItem(
+                                    title: "후기 내역 보기",
+                                    onPressed: () {},
+                                  ),
+                                ],
                               ),
                             ],
                           ),
