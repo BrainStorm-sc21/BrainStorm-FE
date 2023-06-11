@@ -106,6 +106,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => OthersProfile(
+                            ownerId: widget.deal.userId,
                             userName: widget.deal.userName!,
                             reliability: widget.deal.reliability!,
                           )),

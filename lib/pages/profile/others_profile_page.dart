@@ -5,6 +5,7 @@ import 'package:brainstorm_meokjang/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 
 class OthersProfile extends StatelessWidget {
+  final int ownerId;
   final String userName;
   final double reliability;
   const OthersProfile({
