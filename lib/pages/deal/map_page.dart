@@ -20,7 +20,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   Completer<NaverMapController> _controller = Completer();
-  LatLng myPosition = const LatLng(37.286828, 127.0577689);
+  late LatLng myPosition;
+  //LatLng myPosition = const LatLng(37.286828, 127.0577689);
 
   Future getMyLocation() async {
     Dio dio = Dio();
@@ -71,7 +72,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));

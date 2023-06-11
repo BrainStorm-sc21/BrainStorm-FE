@@ -3,6 +3,7 @@ import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
+import 'package:brainstorm_meokjang/widgets/deal_detail/deal_detail_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
