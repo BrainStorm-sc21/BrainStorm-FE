@@ -126,7 +126,7 @@ Future<int> requestSignUp(User user) async {
       print("유저아이디: ${res.data['data']['userId']}");
       prefs.setInt('userId', res.data['data']['userId']);
       prefs.setBool('isMeokjangUser', true);
-      setUserInfo(user);
+      // setUserInfo(user);
       return res.data['data']['userId'];
     } else if (res.data['status'] == 400) {
       print('회원가입 실패!!');
@@ -218,6 +218,6 @@ void setUserInfo(User user) async {
   prefs.setString('location', user.location);
   prefs.setDouble('latitude', user.latitude);
   prefs.setDouble('longitude', user.longitude);
-  prefs.setDouble('reliability', user.reliability!);
+  // prefs.setDouble('reliability', user.reliability!);
   prefs.setString('stopUntil', user.stopUntil!);
 }

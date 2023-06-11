@@ -208,7 +208,7 @@ class _OnePostUnitState extends State<OnePostUnit> {
             IconButton(
               onPressed: () {
                 print('거래완료 버튼 클릭!');
-                showCompleteDealDialog(context);
+                // showCompleteDealDialog(context);
               },
               icon: const Icon(CupertinoIcons.checkmark_rectangle),
             ),
