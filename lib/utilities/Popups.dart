@@ -98,13 +98,19 @@ class Popups {
         ..connectTimeout = const Duration(seconds: 5)
         ..receiveTimeout = const Duration(seconds: 10);
 
-      try {
-        final res = await dio.post('/report', data: {
-          "reporter": reporterId,
-          "reportedUser": reportedUserId,
-          "content": content,
-        });
+      final data = {
+        "reporter": reporterId,
+        "reportedUser": reportedUserId,
+        "content": content,
+      };
 
+      debugPrint('report data: $data');
+
+      try {
+        final res = await dio.post(
+          '/report',
+          data: data,
+        );
         debugPrint('${res.data}');
       } catch (e) {
         debugPrint('$e');
