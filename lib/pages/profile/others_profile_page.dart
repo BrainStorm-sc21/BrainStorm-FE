@@ -46,13 +46,17 @@ class OthersProfile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 30, bottom: 15),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
                         children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                          Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.6,
+                            ),
                             child: Text(
                               userName,
                               style: const TextStyle(fontSize: 25),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
