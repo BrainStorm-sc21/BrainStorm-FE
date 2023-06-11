@@ -131,29 +131,27 @@ class DescriptionInput extends StatelessWidget {
                 style: TextStyle(color: ColorStyles.black),
               ),
             ),
-            Container(
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return '상세 설명은 필수 입력 사항입니다.';
-                  } else {
-                    return null;
-                  }
-                },
-                autovalidateMode: AutovalidateMode.always,
-                maxLines: 8,
-                decoration: InputDecoration(
-                  hintText:
-                      '상세 내용에는 아래의 내용들을 포함시켜 작성해주세요.\n\n - 식재료 명\n - 거래 장소\n - 거래 식재료의 간단한 소개',
-                  hintStyle: const TextStyle(
-                      fontSize: 12, color: ColorStyles.hintTextColor),
-                  enabledBorder: outlineInputBorder,
-                  focusedBorder: outlineInputBorder,
-                  errorBorder: outlineInputBorder,
-                  focusedErrorBorder: outlineInputBorder,
-                ),
-                onChanged: (value) => setContent(value),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return '상세 설명은 필수 입력 사항입니다.';
+                } else {
+                  return null;
+                }
+              },
+              autovalidateMode: AutovalidateMode.always,
+              maxLines: 8,
+              decoration: InputDecoration(
+                hintText:
+                    '상세 내용에는 아래의 내용들을 포함시켜 작성해주세요.\n\n - 식재료 명\n - 거래 장소\n - 거래 식재료의 간단한 소개',
+                hintStyle: const TextStyle(
+                    fontSize: 12, color: ColorStyles.hintTextColor),
+                enabledBorder: outlineInputBorder,
+                focusedBorder: outlineInputBorder,
+                errorBorder: outlineInputBorder,
+                focusedErrorBorder: outlineInputBorder,
               ),
+              onChanged: (value) => setContent(value),
             ),
           ],
         ),
