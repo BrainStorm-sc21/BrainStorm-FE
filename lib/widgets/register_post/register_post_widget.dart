@@ -62,6 +62,11 @@ class TitleInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(24),
+      borderSide: const BorderSide(color: ColorStyles.borderColor),
+    );
+
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30),
       child: SizedBox(
@@ -80,14 +85,10 @@ class TitleInput extends StatelessWidget {
                 hintText: "게시글 제목을 입력해주세요",
                 hintStyle: const TextStyle(
                     fontSize: 14, color: ColorStyles.hintTextColor),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: ColorStyles.borderColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: ColorStyles.borderColor),
-                ),
+                enabledBorder: outlineInputBorder,
+                focusedBorder: outlineInputBorder,
+                errorBorder: outlineInputBorder,
+                focusedErrorBorder: outlineInputBorder,
               ),
               onChanged: (value) => setTitle(value),
             ),
@@ -104,6 +105,11 @@ class DescriptionInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(24),
+      borderSide: const BorderSide(color: ColorStyles.borderColor),
+    );
+
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30),
       child: SizedBox(
@@ -125,20 +131,10 @@ class DescriptionInput extends StatelessWidget {
                       '상세 내용에는 아래의 내용들을 포함시켜 작성해주세요.\n\n - 식재료 명\n - 거래 장소\n - 거래 식재료의 간단한 소개',
                   hintStyle: const TextStyle(
                       fontSize: 12, color: ColorStyles.hintTextColor),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: const BorderSide(
-                      color: ColorStyles.borderColor,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: const BorderSide(
-                      color: ColorStyles.borderColor,
-                      width: 1.0,
-                    ),
-                  ),
+                  enabledBorder: outlineInputBorder,
+                  focusedBorder: outlineInputBorder,
+                  errorBorder: outlineInputBorder,
+                  focusedErrorBorder: outlineInputBorder,
                 ),
                 onChanged: (value) => setContent(value),
               ),
