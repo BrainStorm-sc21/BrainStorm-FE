@@ -11,8 +11,7 @@ import 'package:get/get.dart';
 class ModifyFoodBottomSheet extends StatefulWidget {
   final Food modifyFood;
   final int userId;
-  const ModifyFoodBottomSheet(
-      {super.key, required this.modifyFood, required this.userId});
+  const ModifyFoodBottomSheet({super.key, required this.modifyFood, required this.userId});
 
   @override
   State<ModifyFoodBottomSheet> createState() => _ModifyFoodBottomSheetState();
@@ -66,8 +65,7 @@ class _ModifyFoodBottomSheetState extends State<ModifyFoodBottomSheet> {
               foodName: widget.modifyFood.foodName,
             ),
             const SizedBox(height: 30),
-            FoodStorageDropdown(
-                storage: widget.modifyFood.storageWay, setStorage: setStorage),
+            FoodStorageDropdown(storage: widget.modifyFood.storageWay, setStorage: setStorage),
             divider,
             FoodStockButton(stock: widget.modifyFood.stock, setStock: setStock),
             divider,
@@ -77,11 +75,10 @@ class _ModifyFoodBottomSheetState extends State<ModifyFoodBottomSheet> {
             ),
             const SizedBox(height: 30),
             RoundedOutlinedButton(
-              text: '등록하기',
+              text: '수정하기',
               width: double.infinity,
               onPressed: () {
-                _foodListController.modifyFoodInfo(
-                    widget.userId, widget.modifyFood);
+                _foodListController.modifyFoodInfo(widget.userId, widget.modifyFood);
                 Navigator.of(context).pop();
                 showToast('식료품이 수정되었습니다');
               },

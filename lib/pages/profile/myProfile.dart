@@ -69,35 +69,35 @@ class _MyProfileState extends State<MyProfile> {
                   fit: BoxFit.fill,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Obx(
-                                () {
-                                  if (_userInfoController.isLoading) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    return Text(
-                                      _userInfoController.userName,
-                                      style: const TextStyle(
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: ColorStyles.white,
-                                          overflow: TextOverflow.ellipsis),
-                                    );
-                                  }
-                                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Obx(
+                                  () {
+                                    if (_userInfoController.isLoading) {
+                                      return const CircularProgressIndicator();
+                                    } else {
+                                      return Text(
+                                        _userInfoController.userName,
+                                        style: const TextStyle(
+                                            fontSize: 30.0,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                            color: ColorStyles.white,
+                                            overflow: TextOverflow.ellipsis),
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
                               IconButton(
                                   onPressed: () {
@@ -115,78 +115,63 @@ class _MyProfileState extends State<MyProfile> {
                             ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: RoundedOutlinedButton(
-                            height: 23,
-                            backgroundColor: ColorStyles.lightmainColor,
-                            borderColor: ColorStyles.lightmainColor,
-                            foregroundColor: ColorStyles.white,
-                            onPressed: () {
-                              Popups.changeUserInfo(context, widget.userId);
-                            },
-                            fontSize: 13,
-                            text: "프로필 수정 >"),
-                      ),
-                      const Text(
-                        "내 신뢰도",
-                        style: TextStyle(
-                            color: ColorStyles.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Obx(
-                        () => Column(
-                          children: [
-                            Container(
-                              alignment: FractionalOffset(
-                                  _userInfoController.reliability / 100,
-                                  (100 - _userInfoController.reliability) /
-                                      100),
-                              child: FractionallySizedBox(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                        _userInfoController.reliability
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: ColorStyles.lightYellow,
-                                            fontSize: 15)),
-                                    const SizedBox(height: 3),
-                                    Image.asset(
-                                        'assets/images/inverted_triangle1.png'),
-                                  ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: RoundedOutlinedButton(
+                              height: 23,
+                              backgroundColor: ColorStyles.lightmainColor,
+                              borderColor: ColorStyles.lightmainColor,
+                              foregroundColor: ColorStyles.white,
+                              onPressed: () {
+                                Popups.changeUserInfo(context, widget.userId);
+                              },
+                              fontSize: 13,
+                              text: "프로필 수정 >"),
+                        ),
+                        const Text(
+                          "내 신뢰도",
+                          style: TextStyle(
+                              color: ColorStyles.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Obx(
+                          () => Column(
+                            children: [
+                              Container(
+                                alignment: FractionalOffset(
+                                    _userInfoController.reliability / 100,
+                                    (100 - _userInfoController.reliability) /
+                                        100),
+                                child: FractionallySizedBox(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                          _userInfoController.reliability
+                                              .toString(),
+                                          style: const TextStyle(
+                                              color: ColorStyles.lightYellow,
+                                              fontSize: 15)),
+                                      const SizedBox(height: 3),
+                                      Image.asset(
+                                          'assets/images/inverted_triangle1.png'),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            CustomProgressBar(
-                              paddingHorizontal: 3,
-                              currentPercent: _userInfoController.reliability,
-                              maxPercent: 100,
-                              lineHeight: 12,
-                              firstColor: ColorStyles.lightYellow,
-                              secondColor: ColorStyles.lightYellow,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyles.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: ColorStyles.shadowColor,
-                                  spreadRadius: 5,
-                                  blurRadius: 4),
+                              CustomProgressBar(
+                                paddingHorizontal: 3,
+                                currentPercent: _userInfoController.reliability,
+                                maxPercent: 100,
+                                lineHeight: 12,
+                                firstColor: ColorStyles.lightYellow,
+                                secondColor: ColorStyles.lightYellow,
+                              ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Container(
                             decoration: BoxDecoration(
                               color: ColorStyles.white,
@@ -253,99 +238,59 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyles.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: ColorStyles.shadowColor,
-                                  spreadRadius: 5,
-                                  blurRadius: 4),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("기타",
-                                    style: TextStyle(
-                                        color: ColorStyles.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800)),
-                                const SizedBox(height: 8),
-                                Column(
-                                    children: List<Widget>.generate(2, (i) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            alignment: Alignment.centerLeft,
-                                            padding:
-                                                const EdgeInsets.only(left: 0)),
-                                        onPressed: () {
-                                          if (i == 0) {
-                                            showLogoutDialog(context);
-                                          } else {
-                                            showSignOutDialog(context);
-                                          }
-                                        },
-                                        child: Text(
-                                          settingNames[1][i],
-                                          style: const TextStyle(
-                                              color: ColorStyles.textColor),
-                                        ),
-                                      ));
-                                }))
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("기타",
-                                      style: TextStyle(
-                                          color: ColorStyles.black,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w800)),
-                                  const SizedBox(height: 8),
-                                  Column(
-                                      children: List<Widget>.generate(2, (i) {
-                                    return SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: TextButton(
-                                          style: TextButton.styleFrom(
-                                              alignment: Alignment.centerLeft,
-                                              padding: const EdgeInsets.only(
-                                                  left: 0)),
-                                          onPressed: () {
-                                            print("알림 및 소리 눌림");
-                                            if (i == 0) {
-                                              showLogoutDialog(context);
-                                            } else {
-                                              showSignOutDialog(context);
-                                            }
-                                          },
-                                          child: Text(
-                                            settingNames[1][i],
-                                            style: const TextStyle(
-                                                color: ColorStyles.textColor),
-                                          ),
-                                        ));
-                                  }))
+                        Padding(
+                            padding: const EdgeInsets.only(top: 30),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ColorStyles.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: ColorStyles.shadowColor,
+                                      spreadRadius: 5,
+                                      blurRadius: 4),
                                 ],
                               ),
-                            ),
-                          ),
-                        )
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("기타",
+                                        style: TextStyle(
+                                            color: ColorStyles.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w800)),
+                                    const SizedBox(height: 8),
+                                    Column(
+                                        children: List<Widget>.generate(2, (i) {
+                                      return SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: TextButton(
+                                            style: TextButton.styleFrom(
+                                                alignment: Alignment.centerLeft,
+                                                padding: const EdgeInsets.only(
+                                                    left: 0)),
+                                            onPressed: () {
+                                              if (i == 0) {
+                                                showLogoutDialog(context);
+                                              } else {
+                                                showSignOutDialog(context);
+                                              }
+                                            },
+                                            child: Text(
+                                              settingNames[1][i],
+                                              style: const TextStyle(
+                                                  color: ColorStyles.textColor),
+                                            ),
+                                          ));
+                                    }))
+                                  ],
+                                ),
+                              ),
+                            )),
                       ]),
                 ),
               ),

@@ -4,18 +4,25 @@ import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/providers/notification_Controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
 
+Future<void> onBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+        options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
+
     runApp(const MyApp());
   } catch (e) {
     debugPrint('$e');

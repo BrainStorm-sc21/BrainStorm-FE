@@ -1,9 +1,9 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
-import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TradingBoard extends StatelessWidget {
@@ -138,7 +138,6 @@ class _OnePostUnitState extends State<OnePostUnit> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setDeal();
   }
@@ -207,11 +206,12 @@ class _OnePostUnitState extends State<OnePostUnit> {
               ],
             ),
             IconButton(
-                onPressed: () {
-                  print('거래완료 버튼 클릭!');
-                  showCompleteDealDialog(context);
-                },
-                icon: const Icon(CupertinoIcons.checkmark_rectangle)),
+              onPressed: () {
+                print('거래완료 버튼 클릭!');
+                showCompleteDealDialog(context);
+              },
+              icon: const Icon(CupertinoIcons.checkmark_rectangle),
+            ),
           ],
         ));
   }
