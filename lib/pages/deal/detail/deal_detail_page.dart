@@ -1,8 +1,8 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/models/chat_room.dart';
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
 import 'package:brainstorm_meokjang/providers/chat_controller.dart';
+import 'package:brainstorm_meokjang/providers/deal_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
@@ -31,6 +31,8 @@ class DealDetailPage extends StatefulWidget {
 }
 
 class _DealDetailPageState extends State<DealDetailPage> {
+  final DealListController _dealListController = Get.put(DealListController());
+
   List<String> imageList = [];
   late bool isClickModifyButton = false;
   final TextEditingController _nameController = TextEditingController();
@@ -55,32 +57,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
     }
     if (widget.deal.dealImage4 != null) {
       imageList.add(widget.deal.dealImage4!);
-    }
-  }
-
-  void deleteDeal(int dealId) async {
-    print('deleteDeal 호출');
-    print('dealId: $dealId');
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    try {
-      final resp = await dio.delete("/deal/$dealId");
-      print("Delete Status: ${resp.statusCode}");
-
-      if (resp.data['status'] == 200) {
-        print('삭제 성공!');
-      } else {
-        print('??');
-      }
-    } catch (e) {
-      Exception(e);
-      print(e);
-    } finally {
-      dio.close();
     }
   }
 
@@ -416,17 +392,18 @@ class _DealDetailPageState extends State<DealDetailPage> {
               // 확인 버튼
               TextButton(
                 onPressed: () {
-                  deleteDeal(widget.deal.dealId!);
+                  _dealListController.deleteDeal(widget.deal);
+                  //deleteDeal(widget.deal.dealId!);
                   showToast('게시글이 삭제되었습니다');
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AppPagesContainer(
-                          index: AppPagesNumber.deal, userId: widget.userId),
-                    ),
-                    (route) => false,
-                  );
-                  //Navigator.pop(context);
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => AppPagesContainer(
+                  //         index: AppPagesNumber.deal, userId: widget.userId),
+                  //   ),
+                  //   (route) => false,
+                  // );
+                  Navigator.pop(context);
                 },
                 child: const Text(
                   "확인",
