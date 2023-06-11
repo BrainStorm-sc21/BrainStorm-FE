@@ -1,5 +1,6 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/profile/others_profile_page.dart';
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -7,6 +8,8 @@ import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_instance/get_instance.dart';
 
 class TopPostUnit extends StatefulWidget {
   final String nickname;
@@ -33,6 +36,7 @@ class TopPostUnit extends StatefulWidget {
 }
 
 class _TopPostUnitState extends State<TopPostUnit> {
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
   late List<dynamic> keyList = [];
   late List<dynamic> valueList = [];
 
@@ -92,6 +96,9 @@ class _TopPostUnitState extends State<TopPostUnit> {
 
   @override
   Widget build(BuildContext context) {
+    _userInfoController.getUserIdFromSharedData();
+    int myId = _userInfoController.userId;
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 25, right: 20),
       child: SizedBox(
@@ -102,15 +109,20 @@ class _TopPostUnitState extends State<TopPostUnit> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OthersProfile(
-                            ownerId: widget.deal.userId,
-                            userName: widget.deal.userName!,
-                            reliability: widget.deal.reliability!,
-                          )),
-                ),
+                onTap: () {
+                  if (widget.deal.userId != myId) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OthersProfile(
+                          ownerId: widget.deal.userId,
+                          userName: widget.deal.userName!,
+                          reliability: widget.deal.reliability!,
+                        ),
+                      ),
+                    );
+                  }
+                },
                 child: Text(
                   widget.nickname,
                   style: const TextStyle(
