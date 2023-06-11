@@ -149,6 +149,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       type: type,
       roomId: wsRoomId,
       sender: widget.senderId,
+      receiver: widget.receiverId,
       message: message,
       time: timeFormatted,
     );

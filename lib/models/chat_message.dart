@@ -7,6 +7,7 @@ class Message {
   final MessageType? type;
   final String? roomId;
   final int sender; //userId
+  final int receiver; //userId
   final String message;
   final String? time;
 
@@ -14,6 +15,7 @@ class Message {
     this.type,
     this.roomId,
     required this.sender,
+    required this.receiver,
     required this.message,
     this.time,
   });
@@ -23,6 +25,7 @@ class Message {
     data['type'] = type!.name;
     data['roomId'] = roomId!;
     data['sender'] = sender;
+    data['receiver'] = receiver;
     data['message'] = message;
     data['time'] = time;
     return data;
@@ -34,6 +37,7 @@ class Message {
       //     .firstWhere((type) => type.name == json['type'].toString()),
       // roomId: json['roomId'].toString(),
       sender: json['sender'],
+      receiver: json['receiver'],
       message: json['message'],
       time: json['time'],
     );
