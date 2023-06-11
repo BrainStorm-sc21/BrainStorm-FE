@@ -59,6 +59,13 @@ class OthersProfile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.error_outline_sharp,
+                              color: ColorStyles.iconColor,
+                            ),
+                            onPressed: () {},
+                          ),
                         ],
                       ),
                     ),
