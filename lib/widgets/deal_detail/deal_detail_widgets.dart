@@ -105,7 +105,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => OtherProfile(
+                      builder: (context) => OthersProfile(
                             userName: widget.deal.userName!,
                             reliability: widget.deal.reliability!,
                           )),

@@ -1,12 +1,11 @@
-
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:flutter/material.dart';
 
-class OtherProfile extends StatelessWidget {
+class OthersProfile extends StatelessWidget {
   final String userName;
   final double reliability;
-  const OtherProfile({
+  const OthersProfile({
     super.key,
     required this.userName,
     required this.reliability,
