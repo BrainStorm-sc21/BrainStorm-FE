@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/widgets/all.dart';
 import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
 import 'package:brainstorm_meokjang/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
@@ -89,32 +90,45 @@ class OthersProfile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.6,
-                            ),
-                            child: Text(
-                              userName,
-                              style: const TextStyle(fontSize: 25),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.6,
+                          ),
+                          child: Text(
+                            userName,
+                            style: const TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              height: 1,
+                              color: ColorStyles.white,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.error_outline_sharp,
-                              color: ColorStyles.iconColor,
+                        ),
+                        const SizedBox(width: 6),
+                        InkWell(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                10,
+                              ),
+                              color: ColorStyles.snow,
                             ),
-                            onPressed: () {},
+                            child: const Icon(
+                              Icons.help_rounded,
+                              color: ColorStyles.lightgrey,
+                              size: 16,
+                            ),
                           ),
-                        ],
-                      ),
+                          onTap: () {},
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 25),
                     reliabilityBox,
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
