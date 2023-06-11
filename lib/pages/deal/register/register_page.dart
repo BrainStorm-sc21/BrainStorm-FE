@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,11 @@ class _RegisterPageState extends State<RegisterPage> {
   late Deal deal;
 
   void registerPost() async {
-    requestRegisterPost(widget.userId, deal, context);
+    if (deal.dealName == '' || deal.dealContent == '') {
+      showToast('제목과 상세설명을 입력해주세요');
+    } else {
+      requestRegisterPost(widget.userId, deal, context);
+    }
   }
 
   @override
