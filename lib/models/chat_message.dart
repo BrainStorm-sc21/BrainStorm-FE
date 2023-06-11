@@ -7,7 +7,7 @@ class Message {
   final MessageType? type;
   final String? roomId;
   final int sender; //userId
-  final int receiver; //userId
+  final int? receiver; //userId
   final String message;
   final String? time;
 
@@ -15,7 +15,7 @@ class Message {
     this.type,
     this.roomId,
     required this.sender,
-    required this.receiver,
+    this.receiver,
     required this.message,
     this.time,
   });
@@ -33,11 +33,7 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      // type: MessageType.values
-      //     .firstWhere((type) => type.name == json['type'].toString()),
-      // roomId: json['roomId'].toString(),
       sender: json['sender'],
-      receiver: json['receiver'],
       message: json['message'],
       time: json['time'],
     );
