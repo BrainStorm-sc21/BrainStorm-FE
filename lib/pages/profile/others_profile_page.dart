@@ -1,4 +1,5 @@
 import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
+import 'package:brainstorm_meokjang/pages/profile/reviewHistory.dart';
 import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -185,7 +186,17 @@ class OthersProfile extends StatelessWidget {
                                   ),
                                   ProfileListItem(
                                     title: "후기 내역 보기",
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ReviewHistoryPage(
+                                            userId: ownerId,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
