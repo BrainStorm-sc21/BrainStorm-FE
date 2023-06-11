@@ -15,12 +15,15 @@ class OthersProfile extends StatelessWidget {
   Widget get reliabilityBox {
     return Column(
       children: [
-        Text(
-          reliability.toString(),
-          style: const TextStyle(
-            color: ColorStyles.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            '신뢰도',
+            style: TextStyle(
+              color: ColorStyles.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Column(
