@@ -81,14 +81,6 @@ class TitleInput extends StatelessWidget {
               ),
             ),
             TextFormField(
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return '제목은 필수 입력 사항입니다.';
-                } else {
-                  return null;
-                }
-              },
-              autovalidateMode: AutovalidateMode.always,
               decoration: InputDecoration(
                 hintText: "게시글 제목을 입력해주세요",
                 hintStyle: const TextStyle(
@@ -132,14 +124,6 @@ class DescriptionInput extends StatelessWidget {
               ),
             ),
             TextFormField(
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return '상세 설명은 필수 입력 사항입니다.';
-                } else {
-                  return null;
-                }
-              },
-              autovalidateMode: AutovalidateMode.always,
               maxLines: 8,
               decoration: InputDecoration(
                 hintText:
