@@ -1,8 +1,6 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/map_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/exchange_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/group_purchase_page.dart';
-import 'package:brainstorm_meokjang/pages/deal/register/sharing_page.dart';
+import 'package:brainstorm_meokjang/pages/deal/register/register_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/trading_board_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
@@ -13,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class DealPage extends StatefulWidget {
-  int userId;
-  DealPage({
+  final int userId;
+  const DealPage({
     Key? key,
     required this.userId,
   }) : super(key: key);
@@ -26,9 +24,27 @@ class DealPage extends StatefulWidget {
 class _DealPageState extends State<DealPage> {
   bool isDealPage = true;
 
+  final TextEditingController _textEditingController = TextEditingController();
+
+  List<Deal> posts = List.empty(growable: true);
+  List<Deal> entirePosts = List.empty(growable: true);
+
   final List<bool> _checkDeal = [false, false, false];
-  final List<String> _valueList = ['거리순', '최신순'];
   String _selectedValue = '거리순';
+  final List<String> _valueList = ['가까운순', '최신순'];
+
+  @override
+  void initState() {
+    super.initState();
+    getServerDealDataWithDio();
+    // sortPosts('최신순');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
+  }
 
   void setDeal(int dealType) => setState(() {
         _checkDeal[dealType] = !_checkDeal[dealType];
@@ -53,11 +69,6 @@ class _DealPageState extends State<DealPage> {
       });
   void setdropdown(String selectedValue, String value) =>
       setState(() => selectedValue = value);
-
-  final TextEditingController _textEditingController = TextEditingController();
-
-  List<Deal> posts = List.empty(growable: true);
-  List<Deal> entirePosts = List.empty(growable: true);
 
   Future getServerDealDataWithDio() async {
     Dio dio = Dio();
@@ -85,12 +96,6 @@ class _DealPageState extends State<DealPage> {
       dio.close();
     }
     return false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getServerDealDataWithDio();
   }
 
   @override
@@ -212,23 +217,25 @@ class _DealPageState extends State<DealPage> {
                               fontSize: 14, color: ColorStyles.textColor)),
                     ))
                 .toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value!;
-                if (_selectedValue == '거리순') {
-                  posts.sort((a, b) => a.distance!.compareTo(b.distance!));
-                } else if (_selectedValue == '최신순') {
-                  posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-                }
-              });
-            },
+            onChanged: (value) => sortPosts(value!),
             underline: Container(),
             elevation: 2),
       ),
     );
   }
 
-  _registerDealButton() {
+  void sortPosts(String value) {
+    setState(() {
+      _selectedValue = value;
+      if (_selectedValue == '가까운순') {
+        posts.sort((a, b) => a.distance!.compareTo(b.distance!));
+      } else if (_selectedValue == '최신순') {
+        posts.sort((b, a) => a.createdAt.compareTo(b.createdAt));
+      }
+    });
+  }
+
+  SpeedDial _registerDealButton() {
     return SpeedDial(
       icon: Icons.add,
       activeIcon: Icons.close,
@@ -249,10 +256,16 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.shareColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SharingPage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 2,
+                    title: '나눔하기',
+                    subTitle: '필요 이상으로 많은 식재료를\n이웃에게 나눔해요',
+                  ),
+                ),
+              );
             }),
         SpeedDialChild(
             child: const Text('교환',
@@ -262,10 +275,16 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.exchangeColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ExchangePage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 1,
+                    title: '교환하기',
+                    subTitle: '필요 이상으로 많은 식재료를\n이웃과 교환해요',
+                  ),
+                ),
+              );
             }),
         SpeedDialChild(
             child: const Text('공구',
@@ -275,20 +294,17 @@ class _DealPageState extends State<DealPage> {
             backgroundColor: ColorStyles.groupBuyColor,
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          GroupPurchasePage(userId: widget.userId)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(
+                    userId: widget.userId,
+                    dealType: 0,
+                    title: '공동구매하기',
+                    subTitle: '묶음으로만 파는 식재료를\n이웃과 공동구매해요',
+                  ),
+                ),
+              );
             }),
-        // SpeedDialChild(
-        //     child: const Text('상대 UI',
-        //         style:
-        //             TextStyle(color: ColorStyles.groupBuyTextColor, fontWeight: FontWeight.w600)),
-        //     backgroundColor: ColorStyles.cream,
-        //     onTap: () {
-        //       Navigator.push(
-        //           context, MaterialPageRoute(builder: (context) => const OtherProfile()));
-        //     }),
       ],
     );
   }

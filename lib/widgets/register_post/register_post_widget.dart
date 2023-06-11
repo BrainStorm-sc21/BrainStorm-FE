@@ -240,11 +240,13 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
                     return Container(
                       height: 150,
                       color: ColorStyles.transparent,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () => getImage(ImageSource.camera),
+                            child: Container(
                               width: 80,
                               height: 80,
                               decoration: BoxDecoration(
@@ -252,19 +254,19 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
                                 border: Border.all(
                                     color: ColorStyles.borderColor, width: 2),
                               ),
-                              child: Column(
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      getImage(ImageSource.camera);
-                                    },
-                                    icon: const Icon(Icons.camera_alt_outlined),
-                                  ),
-                                  const Text("카메라"),
+                                  Icon(Icons.camera_alt_outlined),
+                                  SizedBox(height: 4.0),
+                                  Text("카메라"),
                                 ],
                               ),
                             ),
-                            Container(
+                          ),
+                          InkWell(
+                            onTap: () => getImage(ImageSource.gallery),
+                            child: Container(
                               width: 80,
                               height: 80,
                               decoration: BoxDecoration(
@@ -272,20 +274,17 @@ class _PhotoboxUnitState extends State<PhotoboxUnit> {
                                 border: Border.all(
                                     color: ColorStyles.borderColor, width: 2),
                               ),
-                              child: Column(
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      getImage(ImageSource.gallery);
-                                    },
-                                    icon: const Icon(Icons.photo),
-                                  ),
-                                  const Text("갤러리"),
+                                  Icon(Icons.photo),
+                                  SizedBox(height: 4.0),
+                                  Text("갤러리"),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },

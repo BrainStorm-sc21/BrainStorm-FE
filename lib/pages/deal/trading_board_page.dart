@@ -145,83 +145,73 @@ class _OnePostUnitState extends State<OnePostUnit> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+    return Container(
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: imgUrl != null
-                  ? Image.network(imgUrl!,
-                      height: 60, width: 60, fit: BoxFit.fill)
-                  : Image.asset('assets/images/logo.png',
-                      height: 60, width: 60, fit: BoxFit.fill),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              width: 35,
-              height: 20,
-              margin: const EdgeInsets.only(bottom: 25),
-              decoration: BoxDecoration(
-                color: DealType.dealColors[dealType],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(DealType.dealTypeName[dealType],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 11,
-                        color: DealType.dealTextColors[dealType],
-                        fontWeight: FontWeight.w500,
-                        height: 1)),
+            SizedBox(
+              width: 55,
+              height: 55,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: imgUrl == null
+                    ? Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        imgUrl!,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: (widget.isMyDeal)
-                      ? MediaQuery.of(context).size.width * 0.3
-                      : MediaQuery.of(context).size.width * 0.5,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                            child: Text(dealName,
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1),
-                                overflow: TextOverflow.ellipsis)),
-                        Text((widget.isChat) ? ' ' : time,
-                            style: const TextStyle(
-                                fontSize: 13, color: Colors.grey, height: 1)),
-                      ]),
+                Container(
+                  width: 35,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: DealType.dealColors[dealType],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      DealType.dealTypeName[dealType],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: DealType.dealTextColors[dealType],
+                        fontWeight: FontWeight.w500,
+                        height: 1,
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 6),
-                Text('${distance}M',
-                    style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    dealName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      height: 1,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
-            const Spacer(),
-            (widget.isChat == true && widget.isMyDeal == true)
-                ? OutlinedButton(
-                    onPressed: () {
-                      Popups.showParticipantList(
-                          context, widget.deal.dealId, widget.deal.userId);
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorStyles.mainColor)),
-                    child: const Text(
-                      '거래완료',
-                      style:
-                          TextStyle(color: ColorStyles.mainColor, fontSize: 14),
-                    ),
-                  )
-                : const SizedBox(width: 5)
+            IconButton(
+                onPressed: () {
+                  print('거래완료 버튼 클릭!');
+                  showCompleteDealDialog(context);
+                },
+                icon: const Icon(CupertinoIcons.checkmark_rectangle)),
           ],
         ));
   }

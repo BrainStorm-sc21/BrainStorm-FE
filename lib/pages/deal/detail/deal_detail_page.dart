@@ -104,17 +104,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
       ..receiveTimeout = const Duration(seconds: 10)
       ..contentType = 'multipart/form-data';
 
-    // final data = {
-    //   'userId': deal.userId,
-    //   'dealType': deal.dealType,
-    //   'dealName': deal.dealName,
-    //   'dealContent': deal.dealContent,
-    //   'image1': deal.dealImage1?.replaceFirst(imageBaseURL, ""),
-    //   'image2': deal.dealImage2?.replaceFirst(imageBaseURL, ""),
-    //   'image3': deal.dealImage3?.replaceFirst(imageBaseURL, ""),
-    //   'image4': deal.dealImage4?.replaceFirst(imageBaseURL, ""),
-    // };
-
     final FormData formData = FormData.fromMap({
       'userId': deal.userId,
       'dealType': deal.dealType,
@@ -177,6 +166,13 @@ class _DealDetailPageState extends State<DealDetailPage> {
     initEditingController();
     findChatRoom();
     print(widget.deal.dealImage1);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _contentsController.dispose();
+    super.dispose();
   }
 
   @override
