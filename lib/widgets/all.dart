@@ -3,3 +3,4 @@ export 'rounded_outlined_button.dart';
 export 'outline_circle_button.dart';
 export 'search_bar.dart';
 export 'customProgressBar.dart';
+export 'profile_widget.dart';

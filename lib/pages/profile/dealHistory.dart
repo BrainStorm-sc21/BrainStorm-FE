@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 
 class DealHistoryPage extends StatefulWidget {
   final int userId;
-  const DealHistoryPage({super.key, required this.userId});
+  final bool buttonEnable;
+  const DealHistoryPage({
+    super.key,
+    required this.userId,
+    this.buttonEnable = true,
+  });
 
   @override
   State<DealHistoryPage> createState() => _DealHistoryPageState();
@@ -84,6 +89,7 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
                   print('내 게시글의 갯수: ${myPosts.length}');
                   return MyPostUnit(
                     deal: myPosts[index],
+                    buttonEnable: widget.buttonEnable,
                     isComplete: myPosts[index].isClosed,
                   );
                 })),
@@ -95,7 +101,12 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
 class MyPostUnit extends StatefulWidget {
   final Deal deal;
   final bool? isComplete;
-  const MyPostUnit({super.key, required this.deal, required this.isComplete});
+  final bool buttonEnable;
+  const MyPostUnit({
+    super.key,
+    required this.deal,
+    required this.buttonEnable,
+  });
 
   @override
   State<MyPostUnit> createState() => _MyPostUnitState();

@@ -81,7 +81,128 @@ class Popups {
         });
   }
 
-  static void showParticipantList(context, int dealId, reviewFrom) async {
+  static void showReportDialog(
+    context, {
+    required reporterId,
+    required reportedUserId,
+  }) {
+    late String content = '';
+
+    // on reported
+    void onReported() async {
+      debugPrint('Press report button !');
+      debugPrint(content);
+
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      final data = {
+        "reporter": reporterId,
+        "reportedUser": reportedUserId,
+        "content": content,
+      };
+
+      debugPrint('report data: $data');
+
+      try {
+        final res = await dio.post(
+          '/report',
+          data: data,
+        );
+        debugPrint('${res.data}');
+      } catch (e) {
+        debugPrint('$e');
+      } finally {
+        dio.close();
+      }
+      return Navigator.of(context).pop();
+    }
+
+    // show report dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: ColorStyles.white,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.42,
+            padding: const EdgeInsets.symmetric(
+              vertical: 20,
+              horizontal: 12,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        '신고',
+                        style: TextStyle(
+                          color: ColorStyles.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  onChanged: (value) => content = value,
+                  maxLines: 8,
+                  decoration: InputDecoration(
+                    hintText:
+                        '신고할 내용에 대해 입력해주세요.\n다른 사용자를 허위로 신고하는 경우 제재 대상이 될 수 있습니다.',
+                    hintStyle: const TextStyle(
+                        fontSize: 12, color: ColorStyles.hintTextColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: ColorStyles.borderColor,
+                        width: 1.0,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: ColorStyles.borderColor,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                RoundedOutlinedButton(
+                  width: double.infinity,
+                  text: '신고하기',
+                  onPressed: onReported,
+                  foregroundColor: ColorStyles.white,
+                  backgroundColor: ColorStyles.errorRed,
+                  borderColor: ColorStyles.errorRed,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void showParticipantList(context, dealId, reviewFrom) async {
     late List<dynamic> keyList = [];
     late List<dynamic> valueList = [];
 
