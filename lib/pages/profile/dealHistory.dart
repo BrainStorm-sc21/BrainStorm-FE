@@ -105,6 +105,7 @@ class MyPostUnit extends StatefulWidget {
   const MyPostUnit({
     super.key,
     required this.deal,
+    required this.isComplete,
     required this.buttonEnable,
   });
 

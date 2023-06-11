@@ -116,20 +116,28 @@ class _TopPostUnitState extends State<TopPostUnit> {
           ),
           const Spacer(),
           (widget.isMine)
-              ? OutlinedButton(
-                  onPressed: () {
-                    (keyList.isEmpty)
-                        ? showToast('아직 거래 참여자가 없습니다!')
-                        : Popups.showParticipantList(
-                            context, widget.dealId, widget.reviewFrom);
-                  },
-                  style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: ColorStyles.mainColor)),
-                  child: const Text(
-                    '거래완료',
-                    style: TextStyle(
-                      color: ColorStyles.mainColor,
-                      fontSize: 14,
+              ? AbsorbPointer(
+                  absorbing: widget.deal.isClosed == true,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      (keyList.isEmpty)
+                          ? showToast('아직 거래 참여자가 없습니다!')
+                          : Popups.showParticipantList(
+                              context, widget.dealId, widget.reviewFrom);
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                            color: (widget.deal.isClosed == true)
+                                ? ColorStyles.grey
+                                : ColorStyles.mainColor)),
+                    child: Text(
+                      '거래완료',
+                      style: TextStyle(
+                        color: (widget.deal.isClosed == true)
+                            ? ColorStyles.grey
+                            : ColorStyles.mainColor,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 )

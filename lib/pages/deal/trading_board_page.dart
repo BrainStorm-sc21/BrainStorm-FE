@@ -207,18 +207,26 @@ class _OnePostUnitState extends State<OnePostUnit> {
           (widget.isMyDeal)
               ? Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Popups.showParticipantList(
-                          context, widget.deal.dealId!, widget.deal.userId);
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorStyles.mainColor)),
-                    child: const Text(
-                      '거래완료',
-                      style: TextStyle(
-                        color: ColorStyles.mainColor,
-                        fontSize: 14,
+                  child: AbsorbPointer(
+                    absorbing: widget.deal.isClosed == true,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Popups.showParticipantList(
+                            context, widget.deal.dealId!, widget.deal.userId);
+                      },
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              color: (widget.deal.isClosed == true)
+                                  ? ColorStyles.grey
+                                  : ColorStyles.mainColor)),
+                      child: Text(
+                        '거래완료',
+                        style: TextStyle(
+                          color: (widget.deal.isClosed == true)
+                              ? ColorStyles.grey
+                              : ColorStyles.mainColor,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ),
