@@ -211,6 +211,42 @@ Future<int> requestLogout(context) async {
   return 0;
 }
 
+Future<int> requestSignOut(context, userId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  prefs.remove('isMeokjangUser');
+  prefs.remove('userId');
+
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 5)
+    ..receiveTimeout = const Duration(seconds: 10);
+
+  try {
+    final res = await dio.delete('/users/$userId');
+    if (res.statusCode == 200) {
+      debugPrint('회원탈퇴 성공!!');
+    } else {
+      debugPrint('회원탈퇴 실패!!');
+    }
+  } catch (e) {
+    debugPrint('$e');
+  } finally {
+    dio.close();
+  }
+
+  showToast('회원탈퇴를 했습니다');
+
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const OnboardingPage()),
+    (route) => false,
+  );
+
+  return 0;
+}
+
 void setUserInfo(User user) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
