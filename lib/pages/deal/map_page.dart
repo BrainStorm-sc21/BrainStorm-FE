@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/models/user.dart';
-import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
@@ -19,45 +18,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
   Completer<NaverMapController> _controller = Completer();
   late LatLng myPosition;
-  //LatLng myPosition = const LatLng(37.286828, 127.0577689);
-
-  Future getMyLocation() async {
-    Dio dio = Dio();
-
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-    try {
-      Response resp = await dio.get("/users/${widget.userId}");
-
-      User user = User.fromJson(resp.data);
-
-      if (resp.data['status'] == 200) {
-        print('회원 불러오기 성공!!');
-        print(resp.data);
-        setState(() {
-          myPosition = LatLng(user.latitude, user.longitude);
-        });
-      } else if (resp.data['status'] == 400) {
-        print('회원 불러오기 실패!!');
-        throw Exception('Failed to send data [${resp.statusCode}]');
-      }
-    } catch (e) {
-      Exception(e);
-    } finally {
-      dio.close();
-    }
-    return false;
-  }
-
-  @override
-  void initState() {
-    getMyLocation();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +75,10 @@ class _MapPageState extends State<MapPage> {
   _naverMap() {
     return Expanded(
       child: NaverMap(
-        initialCameraPosition: CameraPosition(target: myPosition, zoom: 17),
+        initialCameraPosition: CameraPosition(
+            target: LatLng(
+                _userInfoController.latitude, _userInfoController.longitude),
+            zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
