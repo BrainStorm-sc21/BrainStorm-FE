@@ -11,6 +11,56 @@ class OthersProfile extends StatelessWidget {
     required this.reliability,
   });
 
+  Widget get reliabilityBox {
+    return Column(
+      children: [
+        Text(
+          reliability.toString(),
+          style: const TextStyle(
+            color: ColorStyles.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Column(
+          children: [
+            Container(
+              alignment: FractionalOffset(
+                reliability / 100,
+                1 - (reliability / 100),
+              ),
+              child: FractionallySizedBox(
+                child: Column(
+                  children: [
+                    Text(
+                      reliability.toString(),
+                      style: const TextStyle(
+                        color: ColorStyles.lightYellow,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Image.asset(
+                      'assets/images/inverted_triangle1.png',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CustomProgressBar(
+              paddingHorizontal: 5,
+              currentPercent: reliability,
+              maxPercent: 100,
+              lineHeight: 12,
+              firstColor: ColorStyles.lightYellow,
+              secondColor: ColorStyles.lightYellow,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,49 +111,7 @@ class OthersProfile extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Text(
-                      reliability.toString(),
-                      style: const TextStyle(
-                        color: ColorStyles.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          alignment: FractionalOffset(
-                            reliability / 100,
-                            1 - (reliability / 100),
-                          ),
-                          child: FractionallySizedBox(
-                            child: Column(
-                              children: [
-                                Text(
-                                  reliability.toString(),
-                                  style: const TextStyle(
-                                    color: ColorStyles.lightYellow,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(height: 3),
-                                Image.asset(
-                                  'assets/images/inverted_triangle1.png',
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        CustomProgressBar(
-                          paddingHorizontal: 5,
-                          currentPercent: reliability,
-                          maxPercent: 100,
-                          lineHeight: 12,
-                          firstColor: ColorStyles.lightYellow,
-                          secondColor: ColorStyles.lightYellow,
-                        ),
-                      ],
-                    ),
+                    reliabilityBox,
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: Container(
