@@ -1,5 +1,5 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
-import 'package:brainstorm_meokjang/pages/profile/othersProfile.dart';
+import 'package:brainstorm_meokjang/pages/profile/others_profile_page.dart';
 import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
