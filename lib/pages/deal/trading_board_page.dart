@@ -1,10 +1,10 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class TradingBoard extends StatelessWidget {
   final int userId;
@@ -16,7 +16,7 @@ class TradingBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     Deal deal;
     return ListView.builder(
-      itemCount: posts.length,
+      itemCount: posts.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) return const ADVBanner();
         deal = posts[index - 1];
@@ -110,7 +110,12 @@ class TradingBoard extends StatelessWidget {
 class OnePostUnit extends StatefulWidget {
   final Deal deal;
   final bool isChat;
-  const OnePostUnit({super.key, required this.deal, this.isChat = false});
+  final bool isMyDeal;
+  const OnePostUnit(
+      {super.key,
+      required this.deal,
+      this.isChat = false,
+      this.isMyDeal = false});
 
   @override
   State<OnePostUnit> createState() => _OnePostUnitState();
@@ -210,34 +215,6 @@ class _OnePostUnitState extends State<OnePostUnit> {
           ],
         ));
   }
-}
-
-//Regrigerator의 다이얼로그를 활용
-void showCompleteDealDialog(context) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("거래를 완료하시겠습니까?"),
-          actions: [
-            // 취소 버튼
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("취소"),
-            ),
-            // 확인 버튼
-            TextButton(
-              onPressed: () {},
-              child: const Text(
-                "확인",
-                style: TextStyle(color: Colors.pink),
-              ),
-            ),
-          ],
-        );
-      });
 }
 
 class ADVBanner extends StatelessWidget {

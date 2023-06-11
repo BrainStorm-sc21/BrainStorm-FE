@@ -168,6 +168,8 @@ class _RefrigeratorState extends State<Refrigerator> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: const Text("정말로 삭제하시겠습니까?"),
           actions: [
             TextButton(

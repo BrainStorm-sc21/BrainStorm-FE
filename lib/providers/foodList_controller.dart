@@ -96,6 +96,8 @@ class FoodListController extends GetxController {
         }
       }
       update();
+
+      return 1;
     } catch (e) {
       Exception(e);
     } finally {

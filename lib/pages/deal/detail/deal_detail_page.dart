@@ -153,6 +153,10 @@ class _DealDetailPageState extends State<DealDetailPage> {
         });
       }
     }
+
+    setState(() {
+      chatRoom = null;
+    });
   }
 
   @override
@@ -219,7 +223,13 @@ class _DealDetailPageState extends State<DealDetailPage> {
             child: Column(
               children: [
                 TopPostUnit(
+                  nickname: widget.deal.userName!,
+                  reliability: widget.deal.reliability!,
                   distance: '${widget.deal.distance?.round()}m',
+                  isMine: widget.isMine,
+                  dealId: widget.deal.dealId!,
+                  reviewFrom: widget.deal.userId,
+                  deal: widget.deal,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -371,6 +381,17 @@ class _DealDetailPageState extends State<DealDetailPage> {
                 ),
               )
             : Container(),
+        Positioned(
+          left: 15,
+          top: 30,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () {
+              print('버튼 클릭');
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ]),
     );
   }
@@ -381,6 +402,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text("정말로 삭제하시겠습니까?"),
             actions: [
               // 취소 버튼
@@ -420,6 +443,8 @@ class _DealDetailPageState extends State<DealDetailPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text("게시글 정보를 수정하시겠습니까?"),
             actions: [
               // 취소 버튼
@@ -436,6 +461,7 @@ class _DealDetailPageState extends State<DealDetailPage> {
                   modifyDeal(widget.deal.dealId!, widget.deal);
                   print('deal의 컨텐츠가 ${widget.deal.dealContent}로 바뀌었습니다.');
                   showToast('게시글이 수정되었습니다');
+                  Navigator.pop(context);
                   // Navigator.pushAndRemoveUntil(
                   //   context,
                   //   MaterialPageRoute(

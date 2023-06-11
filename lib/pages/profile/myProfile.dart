@@ -22,7 +22,7 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  bool isClickedText = false;
+  bool isClickedModifyButton = false;
   double reliability = 0;
   final FocusNode _textFocus = FocusNode();
   final UserInfoController _userInfoController = Get.put(UserInfoController());
@@ -48,21 +48,26 @@ class _MyProfileState extends State<MyProfile> {
   @override
   void dispose() {
     super.dispose();
-    _textFocus.dispose();
+    //_textFocus.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Image.asset(
-                'assets/images/myPagebackground.png',
-                fit: BoxFit.fill,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Image.asset(
+                  'assets/images/myPagebackground.png',
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             Padding(
@@ -94,21 +99,21 @@ class _MyProfileState extends State<MyProfile> {
                                   }
                                 },
                               ),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PushList()));
-                                },
-                                icon: const Icon(
-                                  Icons.notifications,
-                                  color: ColorStyles.white,
-                                  size: 35,
-                                )),
-                          ],
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const PushList()));
+                                  },
+                                  icon: const Icon(
+                                    Icons.notifications,
+                                    color: ColorStyles.white,
+                                    size: 35,
+                                  )),
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -179,56 +184,72 @@ class _MyProfileState extends State<MyProfile> {
                                   blurRadius: 4),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("거래 내역",
-                                    style: TextStyle(
-                                        color: ColorStyles.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800)),
-                                const SizedBox(height: 8),
-                                Column(
-                                    children: List<Widget>.generate(2, (i) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            alignment: Alignment.centerLeft,
-                                            padding:
-                                                const EdgeInsets.only(left: 0)),
-                                        onPressed: () {
-                                          (i == 0)
-                                              ? Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ReviewHistoryPage(
-                                                            userId:
-                                                                widget.userId,
-                                                          )),
-                                                )
-                                              : Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DealHistoryPage(
-                                                            userId:
-                                                                widget.userId,
-                                                          )),
-                                                );
-                                        },
-                                        child: Text(
-                                          settingNames[0][i],
-                                          style: const TextStyle(
-                                              color: ColorStyles.textColor),
-                                        ),
-                                      ));
-                                }))
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyles.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: ColorStyles.shadowColor,
+                                    spreadRadius: 5,
+                                    blurRadius: 4),
                               ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("거래 내역",
+                                      style: TextStyle(
+                                          color: ColorStyles.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800)),
+                                  const SizedBox(height: 8),
+                                  Column(
+                                      children: List<Widget>.generate(2, (i) {
+                                    return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              alignment: Alignment.centerLeft,
+                                              padding: const EdgeInsets.only(
+                                                  left: 0)),
+                                          onPressed: () {
+                                            (i == 0)
+                                                ? Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReviewHistoryPage(
+                                                              userId:
+                                                                  widget.userId,
+                                                            )),
+                                                  )
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DealHistoryPage(
+                                                              userId:
+                                                                  widget.userId,
+                                                            )),
+                                                  );
+                                          },
+                                          child: Text(
+                                            settingNames[0][i],
+                                            style: const TextStyle(
+                                                color: ColorStyles.textColor),
+                                          ),
+                                        ));
+                                  }))
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -283,13 +304,53 @@ class _MyProfileState extends State<MyProfile> {
                                 }))
                               ],
                             ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("기타",
+                                      style: TextStyle(
+                                          color: ColorStyles.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800)),
+                                  const SizedBox(height: 8),
+                                  Column(
+                                      children: List<Widget>.generate(2, (i) {
+                                    return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              alignment: Alignment.centerLeft,
+                                              padding: const EdgeInsets.only(
+                                                  left: 0)),
+                                          onPressed: () {
+                                            print("알림 및 소리 눌림");
+                                            if (i == 0) {
+                                              showLogoutDialog(context);
+                                            } else {
+                                              showSignOutDialog(context);
+                                            }
+                                          },
+                                          child: Text(
+                                            settingNames[1][i],
+                                            style: const TextStyle(
+                                                color: ColorStyles.textColor),
+                                          ),
+                                        ));
+                                  }))
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    ]),
+                        )
+                      ]),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
