@@ -267,21 +267,21 @@ class _OCRResultPageState extends State<OCRResultPage> {
               ),
               // 식료품 아이템 좌측 노란색 세로선
               child: Container(
-                // decoration: const BoxDecoration(
-                //   gradient: LinearGradient(
-                //     colors: [
-                //       ColorStyles.mustardYellow,
-                //       ColorStyles.transparent,
-                //     ],
-                //     begin: Alignment.centerRight,
-                //     end: Alignment(-0.95, 0),
-                //     stops: [1, 1],
-                //   ),
-                //   borderRadius: BorderRadius.only(
-                //     topLeft: Radius.circular(8.0),
-                //     bottomLeft: Radius.circular(8.0),
-                //   ),
-                // ),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorStyles.mustardYellow,
+                      ColorStyles.transparent,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment(-0.95, 0),
+                    stops: [1, 1],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0),
+                  ),
+                ),
                 padding: const EdgeInsets.only(
                   top: 10,
                   left: 30,

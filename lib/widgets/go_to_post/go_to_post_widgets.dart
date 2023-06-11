@@ -88,10 +88,10 @@ class _secondPostUnitState extends State<secondPostUnit> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 12),
-                  child: Text('삼식이 네끼',
-                      style: TextStyle(
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(widget.deal.userName!,
+                      style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: ColorStyles.black)),

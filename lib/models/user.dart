@@ -6,6 +6,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// class ChatUserData() {
+//   final List<User> data;
+
+//   ChatUserData({required this.data});
+// }
+
 class User {
   late int? userId;
   String userName;
@@ -75,6 +81,10 @@ class User {
       stopUntil: json['data']['stopUntil'],
     );
   }
+
+  //   factory User.fromJsonForChatUser(Map<String, dynamic> json) {
+  //   return User(userId: json['data'],userName: json['data'], location: '', latitude: 0, longitude: 0);
+  // }
 }
 
 Map<String, String> toJsonPhoneNumber(String phoneNumber) {

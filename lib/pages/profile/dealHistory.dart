@@ -178,7 +178,10 @@ class _MyPostUnitState extends State<MyPostUnit> {
                   width: double.infinity,
                   height: 26,
                   text: '거래중',
-                  onPressed: () {},
+                  onPressed: () {
+                    Popups.showParticipantList(
+                        context, widget.deal.dealId, widget.deal.userId);
+                  },
                   backgroundColor: ColorStyles.mainColor,
                   foregroundColor: ColorStyles.white,
                   borderColor: ColorStyles.mainColor),
@@ -198,7 +201,7 @@ void showCompleteDialog(context) {
     builder: (context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(16),
         ),
         title: const Text("거래 완료로 변경하시겠습니까?"),
         actions: [

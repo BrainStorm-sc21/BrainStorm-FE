@@ -33,6 +33,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  late final isMyDeal;
 
   final WebSocketChannel _client =
       IOWebSocketChannel.connect('ws://www.meokjang.com/ws/chat');
@@ -47,6 +48,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     listenStream();
+    setIsMyDeal();
     if (widget.room != null) {
       setIsRoomExistToTrue();
       setRoomIds(widget.room!.id, widget.room!.roomId);
@@ -61,6 +63,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     _textController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void setIsMyDeal() {
+    isMyDeal = (widget.deal.userId == widget.senderId) ? true : false;
+
+    (isMyDeal)
+        ? print('내가 올린 게시물의 채팅방입니다.')
+        : print('상대방이 올린 게시글에 내가 채팅을 걸었습니다');
   }
 
   void listenStream() {
@@ -139,6 +149,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       type: type,
       roomId: wsRoomId,
       sender: widget.senderId,
+      receiver: widget.receiverId,
       message: message,
       time: timeFormatted,
     );
@@ -216,6 +227,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               child: OnePostUnit(
                 deal: widget.deal,
                 isChat: true,
+                isMyDeal: isMyDeal,
               ),
             ),
             // 채팅 기록

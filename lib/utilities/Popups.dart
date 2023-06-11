@@ -3,9 +3,12 @@ import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
 import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/go_to_post/go_to_post_widgets.dart';
 import 'package:brainstorm_meokjang/pages/home/ocr_result_page.dart';
 import 'package:brainstorm_meokjang/widgets/rounded_outlined_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -52,6 +55,8 @@ class Popups {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Text(title),
             actions: [
               // 취소 버튼
@@ -74,7 +79,150 @@ class Popups {
         });
   }
 
-  static void showReview(context) {
+  static void showParticipantList(context, dealId, reviewFrom) async {
+    late List<dynamic> keyList = [];
+    late List<dynamic> valueList = [];
+    Future requestChatUserList() async {
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      try {
+        Response resp = await dio.get("/deal/$dealId/complete");
+
+        keyList = resp.data['data'].keys.toList();
+        valueList = resp.data['data'].values.toList();
+        print(keyList);
+        print(valueList);
+      } catch (e) {
+        Exception(e);
+      } finally {
+        dio.close();
+      }
+    }
+
+    await requestChatUserList();
+
+    (keyList.isEmpty)
+        ? showToast('아직 거래 참여자가 없습니다!')
+        : showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: SizedBox(
+                  width: 250,
+                  height: (keyList.length + 1) * 40 + 110,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      const Text(
+                        '거래 참여자 목록',
+                        style: TextStyle(
+                            color: ColorStyles.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Padding(
+                          padding:
+                              const EdgeInsets.only(top: 30, left: 5, right: 5),
+                          child: (keyList.isNotEmpty)
+                              ? SizedBox(
+                                  width: 240,
+                                  height: (keyList.length + 1) * 40,
+                                  child: ListView.builder(
+                                      itemCount: keyList.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return ParticipantUnit(
+                                            userName: valueList[index]);
+                                      }),
+                                )
+                              : const Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Center(
+                                    child: Text(
+                                      '아직 거래 참여자가 없습니다!\n',
+                                      style: TextStyle(
+                                          color: ColorStyles.mainColor),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )),
+                      const Spacer(),
+                      (keyList.isNotEmpty)
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: AbsorbPointer(
+                                absorbing: keyList.isEmpty,
+                                child: RoundedOutlinedButton(
+                                    width: 230,
+                                    height: 28,
+                                    text: '거래완료',
+                                    onPressed: () {
+                                      showReview(context, dealId, reviewFrom);
+                                    },
+                                    backgroundColor: (keyList.isNotEmpty)
+                                        ? ColorStyles.mainColor
+                                        : ColorStyles.grey,
+                                    foregroundColor: ColorStyles.white,
+                                    borderColor: (keyList.isNotEmpty)
+                                        ? ColorStyles.mainColor
+                                        : ColorStyles.grey),
+                              ),
+                            )
+                          : const SizedBox(height: 5),
+                    ],
+                  ),
+                ),
+              );
+            });
+  }
+
+  static void showReview(context, dealId, reviewFrom) {
+    double reviewPoint = 0;
+    String? reviewContents;
+    late Review review;
+
+    void setPoint(double point) {
+      reviewPoint = point;
+    }
+
+    Future requestSendReview() async {
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      final data = review.toJson();
+
+      print('리뷰 데이터: $data');
+      print('딜아이디: $dealId');
+
+      try {
+        final resp = await dio.post('review/$dealId', data: data);
+
+        print('리스폰스 데이터: ${resp.data}');
+
+        if (resp.statusCode == 200) {
+          print('리뷰 등록에 성공했습니다!');
+          showToast('리뷰를 보냈습니다!');
+          Navigator.pop(context);
+        } else {
+          print('엥 왜 실패했지');
+        }
+      } catch (e) {
+        Exception(e);
+      } finally {
+        dio.close();
+      }
+    }
+
     showDialog(
         context: context,
         builder: (context) {
@@ -99,11 +247,16 @@ class Popups {
                         fontSize: 18,
                         fontWeight: FontWeight.w400),
                   ),
-                  const StarPointUnit(),
+                  StarPointUnit(
+                    setPoint: setPoint,
+                  ),
                   SizedBox(
                     width: 230,
                     height: 130,
                     child: TextFormField(
+                      onChanged: (value) {
+                        reviewContents = value;
+                      },
                       maxLines: 8,
                       decoration: InputDecoration(
                         hintText: '거래에 대한 간단한 후기를 남겨주세요!',
@@ -131,7 +284,19 @@ class Popups {
                       width: 230,
                       height: 28,
                       text: '보내기',
-                      onPressed: () {},
+                      onPressed: () {
+                        review = Review(
+                            reviewFrom: reviewFrom,
+                            reviewTo: 3,
+                            dealId: dealId,
+                            rating: reviewPoint,
+                            reviewContent: reviewContents);
+
+                        requestSendReview();
+                        print('리뷰점수: $reviewPoint');
+                        print('리뷰컨텐츠: $reviewContents');
+                        print('$reviewFrom 이 3 에게 리뷰를 보냅니다');
+                      },
                       backgroundColor: ColorStyles.mainColor,
                       foregroundColor: ColorStyles.white,
                       borderColor: ColorStyles.mainColor),
@@ -547,7 +712,8 @@ class GuidePage extends StatelessWidget {
 }
 
 class StarPointUnit extends StatefulWidget {
-  const StarPointUnit({super.key});
+  final void Function(double point) setPoint;
+  const StarPointUnit({super.key, required this.setPoint});
 
   @override
   State<StarPointUnit> createState() => _StarPointUnitState();
@@ -555,6 +721,7 @@ class StarPointUnit extends StatefulWidget {
 
 class _StarPointUnitState extends State<StarPointUnit> {
   List<bool> isHighlight = [false, false, false, false, false];
+  int reviewPoint = 0;
 
   void setHighlight(idx) {
     // setState(() {
@@ -630,10 +797,67 @@ class _StarPointUnitState extends State<StarPointUnit> {
               onPressed: () {
                 print('클릭한 인덱스: $index');
                 setHighlight(index);
+                widget.setPoint(index + 1);
               },
               icon: const Icon(Icons.star),
             );
           },
         ));
+  }
+}
+
+class ParticipantUnit extends StatefulWidget {
+  final String userName;
+  const ParticipantUnit({super.key, required this.userName});
+
+  @override
+  State<ParticipantUnit> createState() => _ParticipantUnitState();
+}
+
+class _ParticipantUnitState extends State<ParticipantUnit> {
+  bool isClicked = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        width: 240,
+        height: 40,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: BorderSide(
+                  width: 1,
+                  color:
+                      (isClicked) ? ColorStyles.mainColor : ColorStyles.grey)),
+          onPressed: buttonClicked,
+          child: Text(widget.userName,
+              style: const TextStyle(color: ColorStyles.black)),
+        ),
+      ),
+    );
+  }
+
+  void buttonClicked() {
+    setState(() {
+      if (isClicked == false) {
+        isClicked = true;
+      } else {
+        isClicked = false;
+      }
+      //isClicked != isClicked;
+    });
   }
 }
