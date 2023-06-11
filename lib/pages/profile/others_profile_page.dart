@@ -90,7 +90,7 @@ class OthersProfile extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 30, bottom: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Container(
                             constraints: BoxConstraints(
