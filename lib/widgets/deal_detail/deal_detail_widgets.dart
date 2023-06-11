@@ -72,8 +72,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
 
       //Navigator.pop(context);
 
-      if (resp.data['status']) if (resp.statusCode == 200) {
-        print('거래 완료 성공!');
+      if (resp.statusCode == 200) {
         showToast('해당 거래가 완료되었습니다');
       } else {
         print('??');
@@ -87,7 +86,6 @@ class _TopPostUnitState extends State<TopPostUnit> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     requestChatUserList();
   }
@@ -150,7 +148,6 @@ class _TopPostUnitState extends State<TopPostUnit> {
                   ),
                 )
               : SizedBox(
-                  //color: Colors.grey.shade50,
                   width: 65,
                   height: 50,
                   child: Column(
