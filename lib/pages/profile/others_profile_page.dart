@@ -170,7 +170,16 @@ class OthersProfile extends StatelessWidget {
                                 children: [
                                   ProfileListItem(
                                     title: "작성한 게시글 보기",
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DealHistoryPage(
+                                            userId: ownerId,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                   ProfileListItem(
                                     title: "후기 내역 보기",
