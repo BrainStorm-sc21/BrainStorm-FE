@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/review.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
 import 'package:brainstorm_meokjang/pages/start/signup_page.dart';
@@ -90,7 +91,7 @@ class Popups {
         ..receiveTimeout = const Duration(seconds: 10);
 
       try {
-        Response resp = await dio.get("/deal/$dealId/complete");
+        final resp = await dio.get("/deal/$dealId/complete");
 
         keyList = resp.data['data'].keys.toList();
         valueList = resp.data['data'].values.toList();
