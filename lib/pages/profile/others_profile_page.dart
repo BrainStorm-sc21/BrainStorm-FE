@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/pages/profile/dealHistory.dart';
 import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
@@ -176,6 +177,7 @@ class OthersProfile extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) => DealHistoryPage(
                                             userId: ownerId,
+                                            buttonEnable: false,
                                           ),
                                         ),
                                       );

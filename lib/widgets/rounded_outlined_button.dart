@@ -13,6 +13,7 @@ class RoundedOutlinedButton extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final double radius;
+  final bool enabled;
 
   const RoundedOutlinedButton({
     super.key,
@@ -27,12 +28,13 @@ class RoundedOutlinedButton extends StatelessWidget {
     this.fontSize = 16,
     this.radius = 50,
     this.fontWeight = FontWeight.normal,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: enabled ? onPressed : null,
       style: ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         minimumSize: MaterialStateProperty.all(Size(width, height)),
