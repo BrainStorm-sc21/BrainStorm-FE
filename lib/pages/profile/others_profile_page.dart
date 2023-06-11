@@ -1,18 +1,22 @@
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
+import 'package:brainstorm_meokjang/utilities/Popups.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/widgets/all.dart';
-import 'package:brainstorm_meokjang/widgets/customProgressBar.dart';
-import 'package:brainstorm_meokjang/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OthersProfile extends StatelessWidget {
   final int ownerId;
   final String userName;
   final double reliability;
-  const OthersProfile({
+  OthersProfile({
     super.key,
+    required this.ownerId,
     required this.userName,
     required this.reliability,
   });
+
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   Widget get reliabilityBox {
     return Column(
@@ -69,6 +73,9 @@ class OthersProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _userInfoController.getUserIdFromSharedData();
+    int myId = _userInfoController.userId;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -125,7 +132,13 @@ class OthersProfile extends StatelessWidget {
                               size: 16,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Popups.showReportDialog(
+                              context,
+                              reporterId: myId,
+                              reportedUserId: ownerId,
+                            );
+                          },
                         ),
                       ],
                     ),
