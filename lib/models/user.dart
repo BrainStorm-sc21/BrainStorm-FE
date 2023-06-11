@@ -25,6 +25,7 @@ class User {
   double? reliability;
   String? stopUntil;
   String? createdAt;
+  String? firebaseToken;
 
   User({
     this.userId,
@@ -38,6 +39,7 @@ class User {
     this.gender,
     this.reliability,
     this.stopUntil,
+    this.firebaseToken,
   });
 
   Map<String, dynamic> toJsonForSignUp() {
@@ -51,7 +53,7 @@ class User {
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     data['gender'] = gender;
-
+    data['firebaseToken'] = firebaseToken;
     return data;
   }
 

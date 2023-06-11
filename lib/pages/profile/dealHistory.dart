@@ -90,6 +90,7 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
                   return MyPostUnit(
                     deal: myPosts[index],
                     buttonEnable: widget.buttonEnable,
+                    isComplete: myPosts[index].isClosed,
                   );
                 })),
       ),
@@ -99,10 +100,12 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
 
 class MyPostUnit extends StatefulWidget {
   final Deal deal;
+  final bool? isComplete;
   final bool buttonEnable;
   const MyPostUnit({
     super.key,
     required this.deal,
+    required this.isComplete,
     required this.buttonEnable,
   });
 
@@ -185,18 +188,23 @@ class _MyPostUnitState extends State<MyPostUnit> {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: RoundedOutlinedButton(
-                width: double.infinity,
-                height: 26,
-                text: '거래중',
-                onPressed: () {
-                  Popups.showParticipantList(
-                      context, widget.deal.dealId, widget.deal.userId);
-                },
-                backgroundColor: ColorStyles.mainColor,
-                foregroundColor: ColorStyles.white,
-                borderColor: ColorStyles.mainColor,
-                enabled: widget.buttonEnable,
+              child: AbsorbPointer(
+                absorbing: (widget.isComplete == true),
+                child: RoundedOutlinedButton(
+                    width: double.infinity,
+                    height: 26,
+                    text: (widget.isComplete == null) ? '거래중' : '거래완료',
+                    onPressed: () {
+                      Popups.showParticipantList(
+                          context, widget.deal.dealId!, widget.deal.userId);
+                    },
+                    backgroundColor: (widget.isComplete == null)
+                        ? ColorStyles.mainColor
+                        : ColorStyles.grey,
+                    foregroundColor: ColorStyles.white,
+                    borderColor: (widget.isComplete == null)
+                        ? ColorStyles.mainColor
+                        : ColorStyles.grey),
               ),
             ),
             const SizedBox(height: 10),

@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
       ),
       initialBinding:
           BindingsBuilder.put(() => NotificationController(), permanent: true),
-      // home: const AppPagesContainer(userId: 54)
+      //home: const AppPagesContainer(userId: 7)
       home: isMeokjangUser
           ? AppPagesContainer(userId: userId)
           : const OnboardingPage(),

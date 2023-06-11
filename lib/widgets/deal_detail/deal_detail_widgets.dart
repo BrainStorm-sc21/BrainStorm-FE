@@ -61,33 +61,6 @@ class _TopPostUnitState extends State<TopPostUnit> {
     }
   }
 
-  void requestCompleteDeal() async {
-    Dio dio = Dio();
-    dio.options
-      ..baseUrl = baseURI
-      ..connectTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 10);
-
-    print("딜 아이디: ${widget.dealId}");
-
-    try {
-      final resp = await dio.put('deal/${widget.dealId}/complete');
-      print("Modify Status: ${resp.statusCode}");
-
-      //Navigator.pop(context);
-
-      if (resp.statusCode == 200) {
-        showToast('해당 거래가 완료되었습니다');
-      } else {
-        print('??');
-      }
-    } catch (e) {
-      Exception(e);
-    } finally {
-      dio.close();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -143,20 +116,28 @@ class _TopPostUnitState extends State<TopPostUnit> {
           ),
           const Spacer(),
           (widget.isMine)
-              ? OutlinedButton(
-                  onPressed: () {
-                    (keyList.isEmpty)
-                        ? showToast('아직 거래 참여자가 없습니다!')
-                        : Popups.showParticipantList(
-                            context, widget.dealId, widget.reviewFrom);
-                  },
-                  style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: ColorStyles.mainColor)),
-                  child: const Text(
-                    '거래완료',
-                    style: TextStyle(
-                      color: ColorStyles.mainColor,
-                      fontSize: 14,
+              ? AbsorbPointer(
+                  absorbing: widget.deal.isClosed == true,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      (keyList.isEmpty)
+                          ? showToast('아직 거래 참여자가 없습니다!')
+                          : Popups.showParticipantList(
+                              context, widget.dealId, widget.reviewFrom);
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                            color: (widget.deal.isClosed == true)
+                                ? ColorStyles.grey
+                                : ColorStyles.mainColor)),
+                    child: Text(
+                      '거래완료',
+                      style: TextStyle(
+                        color: (widget.deal.isClosed == true)
+                            ? ColorStyles.grey
+                            : ColorStyles.mainColor,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 )
@@ -219,9 +200,7 @@ class _TopPostUnitState extends State<TopPostUnit> {
               ),
               // 확인 버튼
               TextButton(
-                onPressed: () {
-                  requestCompleteDeal();
-                },
+                onPressed: () {},
                 child: const Text(
                   "확인",
                   style: TextStyle(color: Colors.pink),

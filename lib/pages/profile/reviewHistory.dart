@@ -111,6 +111,9 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                                 reviewContents:
                                     sentReviewList[index].reviewContent,
                                 dealId: sentReviewList[index].dealId,
+                                userName: sentReviewList[index].reviewToName!,
+                                reliability:
+                                    sentReviewList[index].reviewToReliability!,
                               );
                             }),
                           )
@@ -127,6 +130,10 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                               reviewContents:
                                   receivedReviewList[index].reviewContent,
                               dealId: receivedReviewList[index].dealId,
+                              userName:
+                                  receivedReviewList[index].reviewFromName!,
+                              reliability: receivedReviewList[index]
+                                  .reviewFromReliability!,
                             );
                           }),
                         )
@@ -145,11 +152,21 @@ class MyReviewUnit extends StatefulWidget {
   final double reviewPoint;
   final String? reviewContents;
   final int dealId;
-  const MyReviewUnit(
-      {super.key,
-      required this.reviewPoint,
-      required this.reviewContents,
-      required this.dealId});
+  final String dealName;
+  final String userName;
+  final double reliability;
+  final String createAt;
+
+  const MyReviewUnit({
+    super.key,
+    required this.reviewPoint,
+    required this.reviewContents,
+    required this.dealId,
+    this.dealName = '사과 나눔해요',
+    required this.userName,
+    required this.reliability,
+    this.createAt = '2023-06-08',
+  });
 
   @override
   State<MyReviewUnit> createState() => _MyReviewUnitState();
@@ -168,10 +185,10 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
         height: (widget.reviewContents == null) ? 130 : 220,
         child: Column(
           children: [
-            const TopReviewUnit(
-              userName: '삼식이 네끼',
-              dealTitle: '사과 나눔해요',
-              reliability: 75,
+            TopReviewUnit(
+              userName: widget.userName,
+              dealTitle: widget.dealName,
+              reliability: widget.reliability.toInt(),
             ),
             Container(height: 1, color: ColorStyles.lightGrey),
             Padding(
@@ -187,7 +204,7 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
                       itemBuilder: (BuildContext context, int index) {
                         return Icon(
                           Icons.star,
-                          color: (index <= widget.reviewPoint)
+                          color: (index <= widget.reviewPoint.toInt() - 1)
                               ? ColorStyles.mainColor
                               : ColorStyles.grey,
                         );
@@ -195,9 +212,10 @@ class _MyReviewUnitState extends State<MyReviewUnit> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    '2023-06-08',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  Text(
+                    widget.createAt,
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),

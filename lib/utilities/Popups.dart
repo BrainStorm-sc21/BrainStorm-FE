@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/models/review.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
@@ -204,6 +205,13 @@ class Popups {
   static void showParticipantList(context, dealId, reviewFrom) async {
     late List<dynamic> keyList = [];
     late List<dynamic> valueList = [];
+
+    int reviewTo = -1;
+
+    void setReviewTo(int value) {
+      reviewTo = value;
+    }
+
     Future requestChatUserList() async {
       Dio dio = Dio();
       dio.options
@@ -261,7 +269,11 @@ class Popups {
                                       itemBuilder:
                                           (BuildContext context, index) {
                                         return ParticipantUnit(
-                                            userName: valueList[index]);
+                                          userName: valueList[index],
+                                          userId: int.parse(keyList[index]),
+                                          //userId: keyList[index],
+                                          setReviewTo: setReviewTo,
+                                        );
                                       }),
                                 )
                               : const Padding(
@@ -276,28 +288,31 @@ class Popups {
                                   ),
                                 )),
                       const Spacer(),
-                      (keyList.isNotEmpty)
-                          ? Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: AbsorbPointer(
-                                absorbing: keyList.isEmpty,
-                                child: RoundedOutlinedButton(
-                                    width: 230,
-                                    height: 28,
-                                    text: '거래완료',
-                                    onPressed: () {
-                                      showReview(context, dealId, reviewFrom);
-                                    },
-                                    backgroundColor: (keyList.isNotEmpty)
-                                        ? ColorStyles.mainColor
-                                        : ColorStyles.grey,
-                                    foregroundColor: ColorStyles.white,
-                                    borderColor: (keyList.isNotEmpty)
-                                        ? ColorStyles.mainColor
-                                        : ColorStyles.grey),
-                              ),
-                            )
-                          : const SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: RoundedOutlinedButton(
+                            width: 230,
+                            height: 28,
+                            text: '거래완료',
+                            onPressed: () {
+                              if (reviewTo == -1) {
+                                showToast('거래 참여자를 선택해주세요!');
+                                return;
+                              }
+                              print('거래완료 시도');
+                              print('거래완료한 상대 사용자 아이디: $reviewTo');
+                              requestCompleteDeal(dealId);
+                              //print('거래완료 완료');
+                              showReview(context, dealId, reviewFrom, reviewTo);
+                            },
+                            backgroundColor: (reviewTo == -1)
+                                ? ColorStyles.mainColor
+                                : ColorStyles.grey,
+                            foregroundColor: ColorStyles.white,
+                            borderColor: (reviewTo == -1)
+                                ? ColorStyles.mainColor
+                                : ColorStyles.grey),
+                      )
                     ],
                   ),
                 ),
@@ -305,7 +320,7 @@ class Popups {
             });
   }
 
-  static void showReview(context, dealId, reviewFrom) {
+  static void showReview(context, dealId, reviewFrom, reviewTo) {
     double reviewPoint = 0;
     String? reviewContents;
     late Review review;
@@ -327,7 +342,7 @@ class Popups {
       print('딜아이디: $dealId');
 
       try {
-        final resp = await dio.post('review/$dealId', data: data);
+        final resp = await dio.post('/review/$dealId', data: data);
 
         print('리스폰스 데이터: ${resp.data}');
 
@@ -409,7 +424,7 @@ class Popups {
                       onPressed: () {
                         review = Review(
                             reviewFrom: reviewFrom,
-                            reviewTo: 3,
+                            reviewTo: reviewTo,
                             dealId: dealId,
                             rating: reviewPoint,
                             reviewContent: reviewContents);
@@ -930,7 +945,13 @@ class _StarPointUnitState extends State<StarPointUnit> {
 
 class ParticipantUnit extends StatefulWidget {
   final String userName;
-  const ParticipantUnit({super.key, required this.userName});
+  final int userId;
+  final void Function(int value) setReviewTo;
+  const ParticipantUnit(
+      {super.key,
+      required this.userName,
+      required this.userId,
+      required this.setReviewTo});
 
   @override
   State<ParticipantUnit> createState() => _ParticipantUnitState();
@@ -976,8 +997,10 @@ class _ParticipantUnitState extends State<ParticipantUnit> {
     setState(() {
       if (isClicked == false) {
         isClicked = true;
+        widget.setReviewTo(widget.userId);
       } else {
         isClicked = false;
+        widget.setReviewTo(-1);
       }
       //isClicked != isClicked;
     });
