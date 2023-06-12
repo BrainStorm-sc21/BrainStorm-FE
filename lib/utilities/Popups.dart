@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/models/review.dart';
 import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/deal/detail/deal_detail_page.dart';
@@ -80,9 +81,137 @@ class Popups {
         });
   }
 
+  static void showReportDialog(
+    context, {
+    required reporterId,
+    required reportedUserId,
+  }) {
+    late String content = '';
+
+    // on reported
+    void onReported() async {
+      debugPrint('Press report button !');
+      debugPrint(content);
+
+      Dio dio = Dio();
+      dio.options
+        ..baseUrl = baseURI
+        ..connectTimeout = const Duration(seconds: 5)
+        ..receiveTimeout = const Duration(seconds: 10);
+
+      final data = {
+        "reporter": reporterId,
+        "reportedUser": reportedUserId,
+        "content": content,
+      };
+
+      debugPrint('report data: $data');
+
+      try {
+        final res = await dio.post(
+          '/report',
+          data: data,
+        );
+        debugPrint('${res.data}');
+      } catch (e) {
+        debugPrint('$e');
+      } finally {
+        dio.close();
+      }
+      return Navigator.of(context).pop();
+    }
+
+    // show report dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: ColorStyles.white,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.42,
+            padding: const EdgeInsets.symmetric(
+              vertical: 20,
+              horizontal: 12,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        '신고',
+                        style: TextStyle(
+                          color: ColorStyles.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  onChanged: (value) => content = value,
+                  maxLines: 8,
+                  decoration: InputDecoration(
+                    hintText:
+                        '신고할 내용에 대해 입력해주세요.\n다른 사용자를 허위로 신고하는 경우 제재 대상이 될 수 있습니다.',
+                    hintStyle: const TextStyle(
+                        fontSize: 12, color: ColorStyles.hintTextColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: ColorStyles.borderColor,
+                        width: 1.0,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: const BorderSide(
+                        color: ColorStyles.borderColor,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                RoundedOutlinedButton(
+                  width: double.infinity,
+                  text: '신고하기',
+                  onPressed: onReported,
+                  foregroundColor: ColorStyles.white,
+                  backgroundColor: ColorStyles.errorRed,
+                  borderColor: ColorStyles.errorRed,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   static void showParticipantList(context, dealId, reviewFrom) async {
     late List<dynamic> keyList = [];
     late List<dynamic> valueList = [];
+
+    int reviewTo = -1;
+
+    void setReviewTo(int value) {
+      reviewTo = value;
+    }
+
     Future requestChatUserList() async {
       Dio dio = Dio();
       dio.options
@@ -140,7 +269,11 @@ class Popups {
                                       itemBuilder:
                                           (BuildContext context, index) {
                                         return ParticipantUnit(
-                                            userName: valueList[index]);
+                                          userName: valueList[index],
+                                          userId: int.parse(keyList[index]),
+                                          //userId: keyList[index],
+                                          setReviewTo: setReviewTo,
+                                        );
                                       }),
                                 )
                               : const Padding(
@@ -155,28 +288,31 @@ class Popups {
                                   ),
                                 )),
                       const Spacer(),
-                      (keyList.isNotEmpty)
-                          ? Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: AbsorbPointer(
-                                absorbing: keyList.isEmpty,
-                                child: RoundedOutlinedButton(
-                                    width: 230,
-                                    height: 28,
-                                    text: '거래완료',
-                                    onPressed: () {
-                                      showReview(context, dealId, reviewFrom);
-                                    },
-                                    backgroundColor: (keyList.isNotEmpty)
-                                        ? ColorStyles.mainColor
-                                        : ColorStyles.grey,
-                                    foregroundColor: ColorStyles.white,
-                                    borderColor: (keyList.isNotEmpty)
-                                        ? ColorStyles.mainColor
-                                        : ColorStyles.grey),
-                              ),
-                            )
-                          : const SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: RoundedOutlinedButton(
+                            width: 230,
+                            height: 28,
+                            text: '거래완료',
+                            onPressed: () {
+                              if (reviewTo == -1) {
+                                showToast('거래 참여자를 선택해주세요!');
+                                return;
+                              }
+                              print('거래완료 시도');
+                              print('거래완료한 상대 사용자 아이디: $reviewTo');
+                              requestCompleteDeal(dealId);
+                              //print('거래완료 완료');
+                              showReview(context, dealId, reviewFrom, reviewTo);
+                            },
+                            backgroundColor: (reviewTo == -1)
+                                ? ColorStyles.mainColor
+                                : ColorStyles.grey,
+                            foregroundColor: ColorStyles.white,
+                            borderColor: (reviewTo == -1)
+                                ? ColorStyles.mainColor
+                                : ColorStyles.grey),
+                      )
                     ],
                   ),
                 ),
@@ -184,7 +320,7 @@ class Popups {
             });
   }
 
-  static void showReview(context, dealId, reviewFrom) {
+  static void showReview(context, dealId, reviewFrom, reviewTo) {
     double reviewPoint = 0;
     String? reviewContents;
     late Review review;
@@ -206,7 +342,7 @@ class Popups {
       print('딜아이디: $dealId');
 
       try {
-        final resp = await dio.post('review/$dealId', data: data);
+        final resp = await dio.post('/review/$dealId', data: data);
 
         print('리스폰스 데이터: ${resp.data}');
 
@@ -288,7 +424,7 @@ class Popups {
                       onPressed: () {
                         review = Review(
                             reviewFrom: reviewFrom,
-                            reviewTo: 3,
+                            reviewTo: reviewTo,
                             dealId: dealId,
                             rating: reviewPoint,
                             reviewContent: reviewContents);
@@ -809,7 +945,13 @@ class _StarPointUnitState extends State<StarPointUnit> {
 
 class ParticipantUnit extends StatefulWidget {
   final String userName;
-  const ParticipantUnit({super.key, required this.userName});
+  final int userId;
+  final void Function(int value) setReviewTo;
+  const ParticipantUnit(
+      {super.key,
+      required this.userName,
+      required this.userId,
+      required this.setReviewTo});
 
   @override
   State<ParticipantUnit> createState() => _ParticipantUnitState();
@@ -855,8 +997,10 @@ class _ParticipantUnitState extends State<ParticipantUnit> {
     setState(() {
       if (isClicked == false) {
         isClicked = true;
+        widget.setReviewTo(widget.userId);
       } else {
         isClicked = false;
+        widget.setReviewTo(-1);
       }
       //isClicked != isClicked;
     });

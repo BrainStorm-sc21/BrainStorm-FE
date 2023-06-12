@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class SentReviewData {
   final List<Review> data;
 
@@ -32,19 +30,26 @@ class Review {
   int? reviewId;
   int reviewFrom;
   String? reviewFromName;
-  Double? reviewFromReliability;
+  double? reviewFromReliability;
   int reviewTo;
   String? reviewToName;
-  Double? reviewToReliability;
+  double? reviewToReliability;
   int dealId;
+  String? dealName;
   double rating;
   String? reviewContent;
   String? createdAt;
 
   Review({
+    this.reviewId,
     required this.reviewFrom,
+    this.reviewFromName,
+    this.reviewFromReliability,
     required this.reviewTo,
+    this.reviewToName,
+    this.reviewToReliability,
     required this.dealId,
+    this.dealName,
     required this.rating,
     required this.reviewContent,
   });
@@ -63,8 +68,13 @@ class Review {
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
       reviewFrom: json['reviewFrom'],
+      reviewFromName: json['reviewFromName'],
+      reviewFromReliability: json['reviewFromReliability'],
       reviewTo: json['reviewTo'],
+      reviewToName: json['reviewToName'],
+      reviewToReliability: json['reviewToReliability'],
       dealId: json['dealId'],
+      dealName: json['dealName'],
       rating: json['rating'],
       reviewContent: json['reviewContent'],
     );

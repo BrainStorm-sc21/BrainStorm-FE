@@ -3,8 +3,10 @@ import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfoController extends GetxController {
+  final RxInt _userId = 0.obs;
   final RxString _userName = "".obs;
   final RxString _location = "".obs;
   final RxDouble _latitude = 0.0.obs;
@@ -12,12 +14,18 @@ class UserInfoController extends GetxController {
   final RxDouble _reliability = 0.0.obs;
   final RxBool _isLoading = false.obs;
 
+  get userId => _userId.value;
   get userName => _userName.value;
   get location => _location.value;
   get latitude => _latitude.value;
   get longitude => _longitude.value;
   get reliability => _reliability.value;
   get isLoading => _isLoading.value;
+
+  Future<void> getUserIdFromSharedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _userId.value = prefs.getInt('userId') ?? -1;
+  }
 
   Future getUserInfo(int userId) async {
     _isLoading.value = true;

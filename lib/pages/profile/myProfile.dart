@@ -265,7 +265,8 @@ class _MyProfileState extends State<MyProfile> {
                                               if (i == 0) {
                                                 showLogoutDialog(context);
                                               } else {
-                                                showSignOutDialog(context);
+                                                showSignOutDialog(
+                                                    context, widget.userId);
                                               }
                                             },
                                             child: Text(
@@ -323,7 +324,7 @@ void showLogoutDialog(context) {
       });
 }
 
-void showSignOutDialog(context) {
+void showSignOutDialog(context, userId) {
   showDialog(
       context: context,
       builder: (context) {
@@ -346,6 +347,7 @@ void showSignOutDialog(context) {
             TextButton(
               onPressed: () {
                 print('회원탈퇴 시도');
+                // requestSignOut(context, userId);
               },
               child: const Text(
                 "확인",

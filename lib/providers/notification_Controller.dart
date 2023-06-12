@@ -31,7 +31,9 @@ class NotificationController extends GetxController {
     String? token = await messaging.getToken();
     try {
       print(token);
-    } catch (e) {}
+    } catch (e) {
+      return null;
+    }
   }
 
   final AndroidNotificationChannel channel = const AndroidNotificationChannel(

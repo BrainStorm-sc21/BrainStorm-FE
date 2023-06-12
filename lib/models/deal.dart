@@ -1,3 +1,7 @@
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
+import 'package:dio/dio.dart';
+
 class DealData {
   final List<Deal> data;
 
@@ -108,5 +112,33 @@ class Deal {
       isClosed: json['isClosed'],
       createdAt: DateTime.parse(json['createdAt']),
     );
+  }
+}
+
+void requestCompleteDeal(int dealId) async {
+  Dio dio = Dio();
+  dio.options
+    ..baseUrl = baseURI
+    ..connectTimeout = const Duration(seconds: 20)
+    ..receiveTimeout = const Duration(seconds: 20);
+
+  print("딜 아이디: $dealId");
+
+  try {
+    final resp = await dio.put('/deal/$dealId/complete');
+    print(resp);
+    print("Complete Status: ${resp.statusCode}");
+
+    //Navigator.pop(context);
+
+    if (resp.statusCode == 200) {
+      showToast('해당 거래가 완료되었습니다');
+    } else {
+      print('??');
+    }
+  } catch (e) {
+    Exception(e);
+  } finally {
+    dio.close();
   }
 }

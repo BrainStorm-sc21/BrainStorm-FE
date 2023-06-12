@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 
 class DealHistoryPage extends StatefulWidget {
   final int userId;
-  const DealHistoryPage({super.key, required this.userId});
+  final bool buttonEnable;
+  const DealHistoryPage({
+    super.key,
+    required this.userId,
+    this.buttonEnable = true,
+  });
 
   @override
   State<DealHistoryPage> createState() => _DealHistoryPageState();
@@ -84,6 +89,8 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
                   print('내 게시글의 갯수: ${myPosts.length}');
                   return MyPostUnit(
                     deal: myPosts[index],
+                    buttonEnable: widget.buttonEnable,
+                    isComplete: myPosts[index].isClosed,
                   );
                 })),
       ),
@@ -93,7 +100,14 @@ class _DealHistoryPageState extends State<DealHistoryPage> {
 
 class MyPostUnit extends StatefulWidget {
   final Deal deal;
-  const MyPostUnit({super.key, required this.deal});
+  final bool? isComplete;
+  final bool buttonEnable;
+  const MyPostUnit({
+    super.key,
+    required this.deal,
+    required this.isComplete,
+    required this.buttonEnable,
+  });
 
   @override
   State<MyPostUnit> createState() => _MyPostUnitState();
@@ -174,17 +188,24 @@ class _MyPostUnitState extends State<MyPostUnit> {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: RoundedOutlinedButton(
-                  width: double.infinity,
-                  height: 26,
-                  text: '거래중',
-                  onPressed: () {
-                    Popups.showParticipantList(
-                        context, widget.deal.dealId, widget.deal.userId);
-                  },
-                  backgroundColor: ColorStyles.mainColor,
-                  foregroundColor: ColorStyles.white,
-                  borderColor: ColorStyles.mainColor),
+              child: AbsorbPointer(
+                absorbing: (widget.isComplete == true),
+                child: RoundedOutlinedButton(
+                    width: double.infinity,
+                    height: 26,
+                    text: (widget.isComplete == null) ? '거래중' : '거래완료',
+                    onPressed: () {
+                      Popups.showParticipantList(
+                          context, widget.deal.dealId!, widget.deal.userId);
+                    },
+                    backgroundColor: (widget.isComplete == null)
+                        ? ColorStyles.mainColor
+                        : ColorStyles.grey,
+                    foregroundColor: ColorStyles.white,
+                    borderColor: (widget.isComplete == null)
+                        ? ColorStyles.mainColor
+                        : ColorStyles.grey),
+              ),
             ),
             const SizedBox(height: 10),
           ],
