@@ -111,9 +111,13 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                                 reviewContents:
                                     sentReviewList[index].reviewContent,
                                 dealId: sentReviewList[index].dealId,
+                                dealName: sentReviewList[index].dealName!,
                                 userName: sentReviewList[index].reviewToName!,
                                 reliability:
                                     sentReviewList[index].reviewToReliability!,
+                                createAt: sentReviewList[index]
+                                    .createdAt!
+                                    .substring(0, 10),
                               );
                             }),
                           )
@@ -130,10 +134,14 @@ class _ReviewHistoryPageState extends State<ReviewHistoryPage> {
                               reviewContents:
                                   receivedReviewList[index].reviewContent,
                               dealId: receivedReviewList[index].dealId,
+                              dealName: receivedReviewList[index].dealName!,
                               userName:
                                   receivedReviewList[index].reviewFromName!,
                               reliability: receivedReviewList[index]
                                   .reviewFromReliability!,
+                              createAt: receivedReviewList[index]
+                                  .createdAt!
+                                  .substring(0, 10),
                             );
                           }),
                         )
@@ -162,10 +170,10 @@ class MyReviewUnit extends StatefulWidget {
     required this.reviewPoint,
     required this.reviewContents,
     required this.dealId,
-    this.dealName = '사과 나눔해요',
+    required this.dealName,
     required this.userName,
     required this.reliability,
-    this.createAt = '2023-06-08',
+    required this.createAt,
   });
 
   @override

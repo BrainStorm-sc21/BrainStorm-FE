@@ -52,6 +52,7 @@ class Review {
     this.dealName,
     required this.rating,
     required this.reviewContent,
+    this.createdAt,
   });
 
   Map<String, dynamic> toJson() {
@@ -77,6 +78,7 @@ class Review {
       dealName: json['dealName'],
       rating: json['rating'],
       reviewContent: json['reviewContent'],
+      createdAt: json['createdAt'],
     );
   }
 }
