@@ -24,7 +24,6 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   bool isClickedModifyButton = false;
   double reliability = 0;
-  final FocusNode _textFocus = FocusNode();
   final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   List<String> settings = ["거래 내역", "기타"];
@@ -39,17 +38,6 @@ class _MyProfileState extends State<MyProfile> {
     "로그아웃": '',
     "회원 탈퇴": '',
   };
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    //_textFocus.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

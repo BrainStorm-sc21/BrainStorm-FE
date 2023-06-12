@@ -180,34 +180,36 @@ class _TopPostUnitState extends State<TopPostUnit> {
       ),
     );
   }
+}
 
-  //Regrigerator의 다이얼로그를 활용
-  void showCompleteDealDialog(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: const Text("거래를 완료하시겠습니까?"),
-            actions: [
-              // 취소 버튼
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("취소"),
+//Regrigerator의 다이얼로그를 활용
+void showCompleteDealDialog(context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("거래를 완료하시겠습니까?"),
+          actions: [
+            // 취소 버튼
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("취소"),
+            ),
+            // 확인 버튼
+            TextButton(
+              onPressed: () {
+                //requestCompleteDeal();
+              },
+              child: const Text(
+                "확인",
+                style: TextStyle(color: Colors.pink),
               ),
-              // 확인 버튼
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "확인",
-                  style: TextStyle(color: Colors.pink),
-                ),
-              ),
-            ],
-          );
-        });
-  }
+            ),
+          ],
+        );
+      });
 }

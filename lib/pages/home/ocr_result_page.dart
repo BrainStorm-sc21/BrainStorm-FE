@@ -7,6 +7,8 @@ import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -415,13 +417,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       switch (res.data['status']) {
         case 200:
           showToast('식료품이 등록되었습니다');
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AppPagesContainer(userId: userId),
-            ),
-            (route) => false,
-          );
+          Get.offAll(() => AppPagesContainer(userId: widget.userId));
           break;
         case 400:
           throw Exception(res.data['message']);
