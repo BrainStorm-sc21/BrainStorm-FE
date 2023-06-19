@@ -129,7 +129,6 @@ class _DealDetailPageState extends State<DealDetailPage> {
         });
       }
     }
-
     setState(() {
       chatRoom = null;
     });

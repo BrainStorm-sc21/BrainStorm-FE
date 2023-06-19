@@ -303,6 +303,7 @@ class Popups {
                               print('거래완료한 상대 사용자 아이디: $reviewTo');
                               requestCompleteDeal(dealId);
                               //print('거래완료 완료');
+                              Navigator.of(context).pop();
                               showReview(context, dealId, reviewFrom, reviewTo);
                             },
                             backgroundColor: (reviewTo == -1)

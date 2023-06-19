@@ -121,7 +121,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         debugPrint('채팅방 생성 성공!!:\n ${res.data['data']}');
         Room room = Room.fromJson(res.data['data']);
         setRoomIds(room.id, room.roomId);
-        setIsRoomExistToTrue();
       } else {
         throw Exception();
       }
@@ -135,11 +134,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void checkRoomExist(MessageType type, String message) async {
     if (isRoomExist == false) {
       await createChatRoom();
+      setIsRoomExistToTrue();
       sendMessage(MessageType.ENTER, '');
-      sendMessage(type, message);
-    } else {
-      sendMessage(type, message);
     }
+    sendMessage(type, message);
   }
 
   void sendMessage(MessageType type, String message) {
