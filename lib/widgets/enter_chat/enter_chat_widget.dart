@@ -1,5 +1,11 @@
+import 'package:brainstorm_meokjang/models/chat_room.dart';
+import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/pages/chat/chat_detail_page.dart';
+import 'package:brainstorm_meokjang/pages/recipe/snapping_sheet.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/count_hour.dart';
+import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GoRecipe extends StatelessWidget {
@@ -7,70 +13,77 @@ class GoRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 80,
-      decoration: BoxDecoration(
-        color: ColorStyles.mainColor,
-        borderRadius: BorderRadius.circular(15),
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const RecipeSnappingSheet(),
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-            child: SizedBox(
-              width: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text('냉장고 속 식품 레시피',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyles.white)),
-                  Text('지금 확인하기',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.white)),
-                ],
+      child: Container(
+        decoration: const BoxDecoration(
+          color: ColorStyles.mainColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 10.0,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+              child: SizedBox(
+                width: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Text('냉장고 속 식품 레시피',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600, color: ColorStyles.white)),
+                    Text('지금 확인하기',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w400, color: ColorStyles.white)),
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Container(
-              width: 70,
-              height: 50,
-              decoration: const BoxDecoration(
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Container(
+                width: 70,
+                height: 50,
+                decoration: const BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage('assets/images/chatGPT.png'),
-              )),
+                    image: AssetImage('assets/images/chatGPT.png'),
+                  ),
+                ),
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class ChatUnit extends StatefulWidget {
-  final String imgUrl;
-  final String name;
-  final String content;
-  final String time;
+  final int fromId;
+  final int toId;
+  final Room room;
   final int unread;
+  final Deal deal;
 
   const ChatUnit({
     super.key,
-    this.imgUrl = 'assets/images/logo.png',
-    this.name = '먹짱 1호',
-    this.content = '혹시 감자도 파시나요?',
-    this.time = '오후 1:36',
-    this.unread = 1,
+    required this.fromId,
+    required this.toId,
+    required this.room,
+    this.unread = 0,
+    required this.deal,
   });
 
   @override
@@ -78,14 +91,62 @@ class ChatUnit extends StatefulWidget {
 }
 
 class _ChatUnitState extends State<ChatUnit> {
+  String timeAgo = '';
+  late String receiverName = '(알 수 없음)';
+
+  @override
+  void initState() {
+    super.initState();
+    getReceiverName();
+    initTimeAgo();
+  }
+
+  void initTimeAgo() {
+    DateTime? time = widget.room.lastTime;
+    setState(() {
+      timeAgo = time == null ? '' : countHour(time);
+    });
+  }
+
+  // 상대방 닉네임 가져오기
+  Future<void> getReceiverName() async {
+    Dio dio = Dio();
+    dio.options
+      ..baseUrl = baseURI
+      ..connectTimeout = const Duration(seconds: 5)
+      ..receiveTimeout = const Duration(seconds: 10);
+
+    final Response res = await dio.get('/users/${widget.toId}');
+
+    try {
+      if (res.data['status'] == 200) {
+        Map<String, dynamic> json = res.data['data'];
+        setState(() {
+          receiverName = json['userName'];
+        });
+      } else {
+        setState(() {
+          receiverName = '(알 수 없음)';
+        });
+      }
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      dio.close();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatDetailPage(
-            nickname: widget.name,
-            content: widget.content,
+            senderId: widget.fromId,
+            receiverId: widget.toId,
+            receiverName: receiverName,
+            room: widget.room,
+            deal: widget.deal,
           ),
         ),
       ),
@@ -94,49 +155,60 @@ class _ChatUnitState extends State<ChatUnit> {
         child: SizedBox(
           width: double.infinity,
           height: 70,
-          //color: ColorStyles.mainColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 55,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 55,
+                    height: 55,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: widget.deal.dealImage1 == null
+                          ? Image.asset('assets/images/logo.png')
+                          : Image.network(
+                              widget.deal.dealImage1!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SizedBox(
                       height: 55,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(widget.imgUrl),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            receiverName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: ColorStyles.textColor,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4.0,
+                          ),
+                          Text(
+                            widget.room.lastMessage!,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: ColorStyles.grey,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SizedBox(
-                        height: 55,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.name,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.black),
-                            ),
-                            Text(
-                              widget.content,
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorStyles.textColor),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
               const Spacer(),
               SizedBox(
@@ -146,11 +218,9 @@ class _ChatUnitState extends State<ChatUnit> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      widget.time,
+                      timeAgo,
                       style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: ColorStyles.textColor),
+                          fontSize: 11, fontWeight: FontWeight.w400, color: ColorStyles.grey),
                     ),
                     widget.unread != 0
                         ? Container(
@@ -163,12 +233,14 @@ class _ChatUnitState extends State<ChatUnit> {
                             child: Center(
                               child: Text(
                                 '${widget.unread}',
-                                style: const TextStyle(
-                                    fontSize: 12, color: ColorStyles.white),
+                                style: const TextStyle(fontSize: 12, color: ColorStyles.white),
                               ),
                             ),
                           )
-                        : Container(),
+                        : const SizedBox(
+                            width: 18,
+                            height: 18,
+                          ),
                   ],
                 ),
               ),

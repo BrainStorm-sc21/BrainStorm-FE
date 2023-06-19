@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/utilities/Colors.dart';
 import 'package:flutter/material.dart';
 
 class RoundedOutlinedButton extends StatelessWidget {
@@ -10,7 +11,9 @@ class RoundedOutlinedButton extends StatelessWidget {
   final Color backgroundColor;
   final Color borderColor;
   final double fontSize;
+  final FontWeight fontWeight;
   final double radius;
+  final bool enabled;
 
   const RoundedOutlinedButton({
     super.key,
@@ -20,16 +23,18 @@ class RoundedOutlinedButton extends StatelessWidget {
     this.height = 35,
     this.borderwidth = 1.5,
     required this.backgroundColor,
-    required this.foregroundColor,
+    this.foregroundColor = ColorStyles.textColor,
     required this.borderColor,
     this.fontSize = 16,
     this.radius = 50,
+    this.fontWeight = FontWeight.normal,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: enabled ? onPressed : null,
       style: ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         minimumSize: MaterialStateProperty.all(Size(width, height)),
@@ -50,10 +55,13 @@ class RoundedOutlinedButton extends StatelessWidget {
           ),
         ),
         textStyle: MaterialStateProperty.all(
-          TextStyle(fontSize: fontSize),
+          TextStyle(fontSize: fontSize, height: 1),
         ),
       ),
-      child: Text(text),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+      ),
     );
   }
 }

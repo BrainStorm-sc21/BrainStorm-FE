@@ -4,16 +4,26 @@ import 'package:brainstorm_meokjang/pages/home/loading_page.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
-import 'package:brainstorm_meokjang/widgets/all.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../widgets/food/foodAll.dart';
 
 class OCRResultPage extends StatefulWidget {
   final String imagePath;
   final String imageType;
+  final int userId;
 
-  const OCRResultPage({super.key, required this.imagePath, required this.imageType});
+  const OCRResultPage(
+      {super.key,
+      required this.imagePath,
+      required this.imageType,
+      required this.userId});
 
   @override
   State<OCRResultPage> createState() => _OCRResultPageState();
@@ -28,10 +38,19 @@ class _OCRResultPageState extends State<OCRResultPage> {
   bool recommendExist = false;
   final List<TextEditingController> _foodNameController = [];
 
+  int? userId;
+
   @override
   void initState() {
     super.initState();
     sendImageAndGetOCRResult();
+  }
+
+  void initUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = prefs.getInt('userId');
+    });
   }
 
   // json list parsing
@@ -44,7 +63,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
   }
 
   // json recommend parsing
-  Map<String, Map<String, dynamic>> fromRecommendJson(Map<String, dynamic> json) {
+  Map<String, Map<String, dynamic>> fromRecommendJson(
+      Map<String, dynamic> json) {
     Map<String, Map<String, dynamic>> result = {};
     json.forEach((key, value) {
       result[key] = value;
@@ -83,7 +103,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
         case 200:
           if (res.data['data']['recommend'] != null) {
             setState(() {
-              ocrRecommendValues = fromRecommendJson(res.data['data']['recommend']);
+              ocrRecommendValues =
+                  fromRecommendJson(res.data['data']['recommend']);
               recommendExist = true;
             });
           }
@@ -107,7 +128,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(),
+          builder: (context) => const AppPagesContainer(userId: null),
         ),
         (route) => false,
       );
@@ -132,7 +153,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
       (key, rawRecommendDays) {
         int index = int.parse(key);
         List<DateTime> recommendDays = List.empty(growable: true);
-        recommendNumberMap[index] = rawRecommendDays.values.toList().cast<int>();
+        recommendNumberMap[index] =
+            rawRecommendDays.values.toList().cast<int>();
         for (var day in recommendNumberMap[index]!) {
           DateTime expireDate = DateTime.now();
           expireDate = DateTime(
@@ -214,8 +236,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
     setState(() => foodList[index].storageWay = value);
   }
 
-  void setStock(int index, num value) {
-    setState(() => foodList[index].stock = value);
+  void setStock(num value, {int? index}) {
+    setState(() => foodList[index!].stock = value);
   }
 
   void setExpireDate(DateTime value, {int? index}) {
@@ -288,7 +310,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
                             ),
                             maxLength: 20,
                             onChanged: (value) => setFoodName(index, value),
-                            onSubmitted: (value) => updateFoodNameControllerText(index),
+                            onSubmitted: (value) =>
+                                updateFoodNameControllerText(index),
                             onTapOutside: (event) {
                               updateFoodNameControllerText(index);
                               FocusScope.of(context).unfocus(); // 키보드 숨김
@@ -315,9 +338,10 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       index: index,
                       storage: foodList[index].storageWay,
                       setStorage: setStorage,
-                      recommendList: recommendExist && recommendList.containsKey(index)
-                          ? recommendList[index]
-                          : null,
+                      recommendList:
+                          recommendExist && recommendList.containsKey(index)
+                              ? recommendList[index]
+                              : null,
                       setExpireDate: setExpireDate,
                     ),
                     // 식료품 수량
@@ -332,7 +356,9 @@ class _OCRResultPageState extends State<OCRResultPage> {
                       expireDate: foodList[index].expireDate,
                       setExpireDate: setExpireDate,
                       isRecommended:
-                          recommendExist && recommendList.containsKey(index) ? true : false,
+                          recommendExist && recommendList.containsKey(index)
+                              ? true
+                              : false,
                     ),
                   ],
                 ),
@@ -371,7 +397,7 @@ class _OCRResultPageState extends State<OCRResultPage> {
     }
 
     Map<String, dynamic> data = {
-      "userId": "3",
+      "userId": widget.userId,
       "foodList": encodedFoodList,
     };
     debugPrint('$data');
@@ -390,13 +416,8 @@ class _OCRResultPageState extends State<OCRResultPage> {
       if (!mounted) return;
       switch (res.data['status']) {
         case 200:
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AppPagesContainer(),
-            ),
-            (route) => false,
-          );
+          showToast('식료품이 등록되었습니다');
+          Get.offAll(() => AppPagesContainer(userId: widget.userId));
           break;
         case 400:
           throw Exception(res.data['message']);

@@ -1,18 +1,28 @@
 import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/firebase_options.dart';
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/pages/start/onboarding_page.dart';
+import 'package:brainstorm_meokjang/providers/notification_Controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> onBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+        options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
+
     runApp(const MyApp());
   } catch (e) {
     debugPrint('$e');
@@ -27,24 +37,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  dynamic userId;
-  late bool isMeokjangUser = false;
+  late User user;
+  late bool isMeokjangUser;
+  late int userId;
 
   void checkMeokjangUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isMeokjangUser = prefs.getBool('isUser') ?? false;
+
+    setState(() {
+      isMeokjangUser = prefs.getBool('isMeokjangUser') ?? false;
+      userId = prefs.getInt('userId') ?? -1;
+    });
   }
 
   @override
   void initState() {
-    checkMeokjangUser();
-
     super.initState();
+    checkMeokjangUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       // 날짜 선택기 및 달력에 표시되는 언어 세팅을 위한 localization
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -68,13 +82,19 @@ class _MyAppState extends State<MyApp> {
           bodyMedium: TextStyle(color: ColorStyles.textColor),
           bodySmall: TextStyle(color: ColorStyles.textColor),
         ),
+        disabledColor: ColorStyles.textColor,
         dividerColor: ColorStyles.lightGrey,
         primaryColor: ColorStyles.mainColor,
         iconTheme: const IconThemeData(
           color: ColorStyles.iconColor,
         ),
       ),
-      home: isMeokjangUser ? const AppPagesContainer() : const OnboardingPage(),
+      initialBinding:
+          BindingsBuilder.put(() => NotificationController(), permanent: true),
+      //home: const AppPagesContainer(userId: 7)
+      home: isMeokjangUser
+          ? AppPagesContainer(userId: userId)
+          : const OnboardingPage(),
     );
   }
 }

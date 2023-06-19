@@ -1,26 +1,8 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
+import 'package:brainstorm_meokjang/utilities/count_hour.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
-
-String countHour(DateTime givenDate) {
-  DateTime currentDate = DateTime.now();
-
-  Duration difference = currentDate.difference(givenDate);
-  int minutesDifference = difference.inMinutes;
-  int hoursDifference = difference.inHours;
-  int daysDifference = difference.inDays;
-
-  if (daysDifference >= 1) {
-    return '$daysDifference일 전';
-  } else if (hoursDifference >= 1) {
-    return '$hoursDifference시간 전';
-  } else if (minutesDifference == 0) {
-    return '방금 전';
-  } else {
-    return '$minutesDifference분 전';
-  }
-}
 
 class firstPostUnit extends StatefulWidget {
   final Deal deal;
@@ -53,7 +35,8 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       DealType.dealTypeName[widget.deal.dealType],
                       style: TextStyle(
-                          fontSize: 11, color: DealType.dealTextColors[widget.deal.dealType]),
+                          fontSize: 11,
+                          color: DealType.dealTextColors[widget.deal.dealType]),
                     ),
                   ),
                 ),
@@ -64,7 +47,9 @@ class _firstPostUnitState extends State<firstPostUnit> {
                     child: Text(
                       widget.deal.dealName,
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600, color: ColorStyles.black),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -103,14 +88,17 @@ class _secondPostUnitState extends State<secondPostUnit> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 12),
-                  child: Text('게시물 작성자 닉네임',
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600, color: ColorStyles.black)),
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(widget.deal.userName!,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyles.black)),
                 ),
-                Text('${widget.deal.distance.round()}M',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
+                Text('${widget.deal.distance?.round()}M',
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w400, height: 1)),
               ],
             ),
             Padding(
@@ -124,7 +112,9 @@ class _secondPostUnitState extends State<secondPostUnit> {
                     text: TextSpan(
                       text: widget.deal.dealContent,
                       style: const TextStyle(
-                          color: ColorStyles.black, fontSize: 13, fontWeight: FontWeight.w400),
+                          color: ColorStyles.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 )),

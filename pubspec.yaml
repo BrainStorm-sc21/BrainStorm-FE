@@ -35,7 +35,7 @@ dependencies:
   flutter_speed_dial:
   step_progress_indicator: ^1.0.2
   camera:
-  path_provider:
+  path_provider: ^2.0.15
   path:
   cupertino_icons: ^1.0.2
   introduction_screen: ^3.1.7
@@ -49,8 +49,8 @@ dependencies:
   get: ^4.6.5
   webview_flutter_android: ^3.6.2
   webview_flutter_wkwebview: ^3.4.0
-  firebase_core: ^2.10.0
-  firebase_auth: ^4.4.2
+  firebase_core: ^2.13.0
+  firebase_auth: ^4.6.1
   logger: ^1.3.0
   intl: ^0.17.0
   naver_map_plugin:
@@ -62,6 +62,11 @@ dependencies:
   image_cropper: ^3.0.3
   shared_preferences: ^2.1.1
   percent_indicator: ^4.2.3
+  firebase_messaging: ^14.6.1
+  flutter_local_notifications: ^14.1.0
+  web_socket_channel: ^2.4.0
+  fluttertoast: ^8.2.2
+  snapping_sheet: ^3.1.0
 
 dependency_overrides:
   intl: ^0.18.0
@@ -96,18 +101,23 @@ flutter:
     - assets/images/google.png
     - assets/images/kakao.png
     - assets/images/naver.png
-
+    # 마커이미지
     - assets/images/groupMarker.png
     - assets/images/exchangeMarker.png
     - assets/images/shareMarker.png
 
+    # 레시피
     - assets/images/chatGPT.png
+    - assets/images/recipe.png
 
     - assets/images/logo.png
     - assets/images/completeSignUp.png
 
     - assets/images/apple.png
     - assets/images/potato.png
+    # 마이페이지
+    - assets/images/inverted_triangle1.png
+    - assets/images/myPagebackground.png
 
     # 스마트등록 에셋
     - assets/images/smart_add_loading.png

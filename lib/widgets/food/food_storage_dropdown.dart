@@ -5,10 +5,9 @@ class FoodStorageDropdown extends StatelessWidget {
   final _storages = ['냉장', '냉동', '실온'];
 
   final String storage;
-  final int index;
-  final void Function(int index, String value) setStorage;
+  final void Function(String value) setStorage;
   FoodStorageDropdown(
-      {super.key, required this.index, required this.storage, required this.setStorage});
+      {super.key, required this.storage, required this.setStorage});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class FoodStorageDropdown extends StatelessWidget {
                   ))
               .toList(),
           onChanged: (value) {
-            setStorage(index, value!);
+            setStorage(value!);
           },
           icon: const Icon(Icons.arrow_drop_down_rounded),
           iconSize: 20,

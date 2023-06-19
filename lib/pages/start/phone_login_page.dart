@@ -1,3 +1,4 @@
+import 'package:brainstorm_meokjang/models/user.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -84,17 +85,18 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 
                         codeSent: (String verificationId,
                             int? forceResendingToken) async {
-                          setState(() {});
+                          setState(() {
+                            _verificationId = verificationId;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PhoneAuthPage(
+                                        phoneNumber: _phoneController.text,
+                                        verificationId: _verificationId,
+                                      )),
+                            );
+                          });
                         },
-                      );
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PhoneAuthPage(
-                                  phoneNumber: _phoneController.text,
-                                  verificationId: _verificationId,
-                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -113,8 +115,8 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
 
 class PhoneAuthPage extends StatefulWidget {
   final String phoneNumber;
-  late String verificationId;
-  PhoneAuthPage(
+  final String verificationId;
+  const PhoneAuthPage(
       {super.key, required this.phoneNumber, required this.verificationId});
 
   @override
@@ -168,9 +170,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                           PhoneAuthProvider.credential(
                               verificationId: widget.verificationId,
                               smsCode: _smsCodeController.text);
-                      await auth
-                          .signInWithCredential(credential)
-                          .then((value) => print(value));
+                      await auth.signInWithCredential(credential).then((value) {
+                        requestLogin(widget.phoneNumber, null, null, context);
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: ColorStyles.mainColor),

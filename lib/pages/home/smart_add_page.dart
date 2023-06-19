@@ -4,7 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class SmartAddPage extends StatefulWidget {
-  const SmartAddPage({super.key});
+  final int userId;
+  const SmartAddPage({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<SmartAddPage> createState() => _SmartAddPageState();
@@ -30,7 +34,10 @@ class _SmartAddPageState extends State<SmartAddPage> {
   @override
   Widget build(BuildContext context) {
     if (isCameraInitialized) {
-      return SubmitImagePage(camera: camera);
+      return SubmitImagePage(
+        camera: camera,
+        userId: widget.userId,
+      );
     } else {
       return Container(
         color: ColorStyles.mainColor,

@@ -1,8 +1,11 @@
 import 'package:brainstorm_meokjang/pages/chat/chat_page.dart';
 import 'package:brainstorm_meokjang/pages/deal/deal_page.dart';
 import 'package:brainstorm_meokjang/pages/home/home_page.dart';
+import 'package:brainstorm_meokjang/pages/profile/myProfile.dart';
+import 'package:brainstorm_meokjang/providers/chat_controller.dart';
 import 'package:brainstorm_meokjang/utilities/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // for switching bottom tab in app page container
 class AppPagesNumber {
@@ -13,9 +16,11 @@ class AppPagesNumber {
 }
 
 class AppPagesContainer extends StatefulWidget {
-  final int? index;
+  final int index;
+  final int? userId;
   const AppPagesContainer({
     super.key,
+    required this.userId,
     this.index = AppPagesNumber.home,
   });
 
@@ -25,14 +30,16 @@ class AppPagesContainer extends StatefulWidget {
 
 class _AppPagesContainerState extends State<AppPagesContainer> {
   int currentIndex = 0;
+  final ChatController _chatController = Get.put(ChatController());
 
   @override
   void initState() {
     super.initState();
     setCurrentIndex(widget.index);
+    print('유저아이디: ${widget.userId}');
   }
 
-  void setCurrentIndex(newIndex) {
+  Future<void> setCurrentIndex(newIndex) async {
     setState(() {
       currentIndex = newIndex;
     });
@@ -43,11 +50,12 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
     return Scaffold(
         backgroundColor: ColorStyles.backgroundColor,
         body: IndexedStack(
-          index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
-          children: const [
-            HomePage(),
-            DealPage(),
-            ChatPage(),
+          index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여
+          children: [
+            HomePage(userId: widget.userId!),
+            DealPage(userId: widget.userId!),
+            ChatPage(userId: widget.userId!),
+            MyProfile(userId: widget.userId!),
           ],
         ),
         bottomNavigationBar: Container(
@@ -61,7 +69,6 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
                 offset: Offset(0, 3), // changes position of shadow
               ),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -70,9 +77,13 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
               onTap: (newIndex) {
                 print("selected newIndex : $newIndex");
                 setCurrentIndex(newIndex); // 버튼 눌렀을 때 누른 페이지로 이동
+                if (newIndex == AppPagesNumber.chat) {
+                  _chatController.setChatRoomList(widget.userId!);
+                }
               },
               selectedItemColor: ColorStyles.darkmainColor, // 선택된 아이콘 색상
               unselectedItemColor: ColorStyles.iconColor, // 선택되지 않은 아이콘 색상
+              type: BottomNavigationBarType.fixed,
               //label 숨기려면 사용하기
               /* showSelectedLabels: false,
         showUnselectedLabels: false, */
@@ -83,6 +94,8 @@ class _AppPagesContainerState extends State<AppPagesContainer> {
                     icon: Icon(Icons.groups_2), label: '같이먹장'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.chat_bubble), label: '채팅'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_2), label: '마이페이지'),
               ],
             ),
           ),

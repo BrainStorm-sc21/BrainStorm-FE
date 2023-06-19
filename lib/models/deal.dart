@@ -1,7 +1,6 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
+import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 class DealData {
   final List<Deal> data;
@@ -14,8 +13,6 @@ class DealData {
     var list = json['data'] as List;
 
     List<Deal> dealList = list.map((i) => Deal.fromJson(i)).toList();
-
-    print('dealData');
 
     // for (Deal deals in dealList) {
     //   print(deals.dealName);
@@ -40,21 +37,26 @@ class DealData {
 class Deal {
   int? dealId;
   int userId;
+  String? userName;
+  double? reliability;
   int dealType;
   String dealName;
   String dealContent;
-  double distance;
+  double? distance;
   double latitude;
   double longitude;
   String? dealImage1;
   String? dealImage2;
   String? dealImage3;
   String? dealImage4;
+  bool? isClosed;
   DateTime createdAt;
 
   Deal(
       {this.dealId = 0,
       required this.userId,
+      this.userName,
+      this.reliability,
       required this.dealType,
       required this.dealName,
       required this.dealContent,
@@ -65,6 +67,7 @@ class Deal {
       this.dealImage2,
       this.dealImage3,
       this.dealImage4,
+      this.isClosed,
       required this.createdAt});
 
   // class to json
@@ -94,88 +97,47 @@ class Deal {
     return Deal(
       dealId: json['dealId'],
       userId: json['userId'],
+      userName: json['userName'] ?? '(알 수 없음)',
+      reliability: json['reliability'] ?? 0.0,
       dealType: json['dealType'],
       dealName: json['dealName'],
       dealContent: json['dealContent'],
-      distance: json['distance'],
+      distance: json['distance'] ?? 0.0,
       latitude: json['latitude'],
       longitude: json['longitude'],
       dealImage1: json['image1'] != null ? imageBaseURL + json['image1'] : null,
       dealImage2: json['image2'] != null ? imageBaseURL + json['image2'] : null,
       dealImage3: json['image3'] != null ? imageBaseURL + json['image3'] : null,
       dealImage4: json['image4'] != null ? imageBaseURL + json['image4'] : null,
+      isClosed: json['isClosed'],
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }
 
-void requestRegisterPost(Deal deal, context) async {
+void requestCompleteDeal(int dealId) async {
   Dio dio = Dio();
   dio.options
     ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10)
-    ..contentType = 'multipart/form-data';
+    ..connectTimeout = const Duration(seconds: 20)
+    ..receiveTimeout = const Duration(seconds: 20);
 
-  final FormData formData = FormData.fromMap({
-    'userId': deal.userId,
-    'dealType': deal.dealType,
-    'dealName': deal.dealName,
-    'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null ? null : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null ? null : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null ? null : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null ? null : MultipartFile.fromFileSync(deal.dealImage4!),
-  });
+  print("딜 아이디: $dealId");
 
   try {
-    final res = await dio.post(
-      '/deal',
-      data: formData,
-    );
+    final resp = await dio.put('/deal/$dealId/complete');
+    print(resp);
+    print("Complete Status: ${resp.statusCode}");
 
-    debugPrint('req data: ${res.data}');
-    debugPrint('req statusCode: ${res.statusCode}');
+    //Navigator.pop(context);
 
-    if (res.data['status'] == 200) {
-      print("게시글 등록 성공!!");
-      // Navigator.pop(context);
-
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const AppPagesContainer(index: AppPagesNumber.deal),
-        ),
-      );
-    } else if (res.data['status'] == 400) {
-      throw Exception(res.data['message']);
+    if (resp.statusCode == 200) {
+      showToast('해당 거래가 완료되었습니다');
     } else {
-      throw Exception('Failed to send data [${res.statusCode}]');
+      print('??');
     }
-  } catch (err) {
-    debugPrint('$err');
-  } finally {
-    dio.close();
-  }
-
-  seeTheAllDeal();
-}
-
-void seeTheAllDeal() async {
-  Dio dio = Dio();
-  dio.options
-    ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10);
-
-  try {
-    final res = await dio.get(
-      '/deal/3/around',
-    );
-
-    debugPrint('req data: ${res.data}');
-    debugPrint('req statusCode: ${res.statusCode}');
-  } catch (err) {
-    debugPrint('$err');
+  } catch (e) {
+    Exception(e);
   } finally {
     dio.close();
   }

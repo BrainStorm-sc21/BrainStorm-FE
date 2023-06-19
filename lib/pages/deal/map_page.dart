@@ -1,29 +1,26 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/providers/userInfo_controller.dart';
 import 'package:brainstorm_meokjang/utilities/popups.dart';
 import 'package:brainstorm_meokjang/utilities/rule.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.posts});
+  const MapPage({super.key, required this.posts, required this.userId});
   final List<Deal> posts;
+  final int userId;
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  //final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
   Completer<NaverMapController> _controller = Completer();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  late LatLng myPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +35,8 @@ class _MapPageState extends State<MapPage> {
 
   _onMapTap(LatLng position) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
       duration: const Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
@@ -58,7 +56,6 @@ class _MapPageState extends State<MapPage> {
       for (var post in widget.posts) {
         OverlayImage.fromAssetImage(
           assetName: DealType.markerImage[post.dealType],
-          devicePixelRatio: window.devicePixelRatio,
         ).then((image) {
           markers.add(Marker(
               markerId: post.dealName.toString(),
@@ -77,8 +74,10 @@ class _MapPageState extends State<MapPage> {
   _naverMap() {
     return Expanded(
       child: NaverMap(
-        initialCameraPosition:
-            const CameraPosition(target: LatLng(37.286828, 127.0577689), zoom: 17),
+        initialCameraPosition: CameraPosition(
+            target: LatLng(
+                _userInfoController.latitude, _userInfoController.longitude),
+            zoom: 17),
         zoomGestureEnable: true,
         onMapCreated: onMapCreated,
         mapType: MapType.Basic,
@@ -93,7 +92,8 @@ class _MapPageState extends State<MapPage> {
 
   void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
     int pos = widget.posts.indexWhere((m) => m.dealName == marker!.captionText);
-    Popups.goToPost(context, widget.posts[pos]);
+    bool isMine = (widget.posts[pos].userId == widget.userId) ? true : false;
+    Popups.goToPost(context, widget.userId, widget.posts[pos], isMine);
   }
 
   @override
