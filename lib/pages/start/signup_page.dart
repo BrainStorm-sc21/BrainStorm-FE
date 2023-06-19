@@ -87,50 +87,53 @@ class _SignUpPageState extends State<SignUpPage> {
           title: const Text("회원가입"),
           backgroundColor: ColorStyles.mainColor,
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              NicknameField(setNickname: setNickname),
-              GenderField(setGender: setGender),
-              PositionField(setAddress: setAddress),
-              AuthField(sendPhoneNumber: sendPhoneNumber),
-              AbsorbPointer(
-                absorbing: !isValid,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      String? firebaseToken =
-                          await FirebaseMessaging.instance.getToken();
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                NicknameField(setNickname: setNickname),
+                GenderField(setGender: setGender),
+                PositionField(setAddress: setAddress),
+                AuthField(sendPhoneNumber: sendPhoneNumber),
+                AbsorbPointer(
+                  absorbing: !isValid,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        String? firebaseToken =
+                            await FirebaseMessaging.instance.getToken();
 
-                      print('파이어베이스 토큰: $firebaseToken');
+                        print('파이어베이스 토큰: $firebaseToken');
 
-                      user.firebaseToken = firebaseToken;
+                        user.firebaseToken = firebaseToken;
 
-                      print(
-                          '유저 정보: ${user.userName}, ${user.gender}, ${user.firebaseToken}, ${user.phoneNumber}');
-                      int userId = await requestSignUp(user);
-                      if (userId != -1) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CompleteSignUpImage(userId: userId),
-                          ),
-                          (route) => false,
-                        );
-                      } else {
-                        showToast('회원가입에 실패했습니다!\n 다시 시도해주세요');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          (isValid) ? ColorStyles.mainColor : ColorStyles.grey,
-                    ),
-                    child: const Text("회원가입하기")),
-              ),
-            ],
+                        print(
+                            '유저 정보: ${user.userName}, ${user.gender}, ${user.firebaseToken}, ${user.phoneNumber}');
+                        int userId = await requestSignUp(user);
+                        if (userId != -1) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CompleteSignUpImage(userId: userId),
+                            ),
+                            (route) => false,
+                          );
+                        } else {
+                          showToast('회원가입에 실패했습니다!\n 다시 시도해주세요');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: (isValid)
+                            ? ColorStyles.mainColor
+                            : ColorStyles.grey,
+                      ),
+                      child: const Text("회원가입하기")),
+                ),
+              ],
+            ),
           ),
         ),
       ),

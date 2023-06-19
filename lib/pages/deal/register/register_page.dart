@@ -1,7 +1,11 @@
 import 'package:brainstorm_meokjang/models/deal.dart';
+import 'package:brainstorm_meokjang/providers/deal_controller.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:brainstorm_meokjang/widgets/register_post/register_post_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 
 class RegisterPage extends StatefulWidget {
   final int userId;
@@ -23,13 +27,33 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late Deal deal;
+  final DealListController _dealListController = Get.put(DealListController());
 
   void registerPost() async {
     if (deal.dealName == '' || deal.dealContent == '') {
       showToast('제목과 상세설명을 입력해주세요');
     } else {
-      requestRegisterPost(widget.userId, deal, context);
+      final FormData formData = FormData.fromMap({
+        'userId': deal.userId,
+        'dealType': deal.dealType,
+        'dealName': deal.dealName,
+        'dealContent': deal.dealContent,
+        'image1': deal.dealImage1 == null
+            ? null
+            : MultipartFile.fromFileSync(deal.dealImage1!),
+        'image2': deal.dealImage2 == null
+            ? null
+            : MultipartFile.fromFileSync(deal.dealImage2!),
+        'image3': deal.dealImage3 == null
+            ? null
+            : MultipartFile.fromFileSync(deal.dealImage3!),
+        'image4': deal.dealImage4 == null
+            ? null
+            : MultipartFile.fromFileSync(deal.dealImage4!),
+      });
+      _dealListController.requestRegisterPost(widget.userId, deal, formData);
     }
+    Navigator.pop(context);
   }
 
   @override

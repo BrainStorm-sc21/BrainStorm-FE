@@ -1,8 +1,6 @@
-import 'package:brainstorm_meokjang/app_pages_container.dart';
 import 'package:brainstorm_meokjang/utilities/domain.dart';
 import 'package:brainstorm_meokjang/utilities/toast.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 class DealData {
   final List<Deal> data;
@@ -114,69 +112,6 @@ class Deal {
       isClosed: json['isClosed'],
       createdAt: DateTime.parse(json['createdAt']),
     );
-  }
-}
-
-void requestRegisterPost(int userId, Deal deal, BuildContext context) async {
-  Dio dio = Dio();
-  dio.options
-    ..baseUrl = baseURI
-    ..connectTimeout = const Duration(seconds: 5)
-    ..receiveTimeout = const Duration(seconds: 10)
-    ..contentType = 'multipart/form-data';
-
-  final FormData formData = FormData.fromMap({
-    'userId': deal.userId,
-    'dealType': deal.dealType,
-    'dealName': deal.dealName,
-    'dealContent': deal.dealContent,
-    'image1': deal.dealImage1 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage1!),
-    'image2': deal.dealImage2 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage2!),
-    'image3': deal.dealImage3 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage3!),
-    'image4': deal.dealImage4 == null
-        ? null
-        : MultipartFile.fromFileSync(deal.dealImage4!),
-  });
-
-  try {
-    final res = await dio.post(
-      '/deal',
-      data: formData,
-    );
-
-    debugPrint('req data: ${res.data}');
-    debugPrint('req statusCode: ${res.statusCode}');
-
-    if (res.data['status'] == 200) {
-      print("게시글 등록 성공!!");
-      // Navigator.pop(context);
-
-      if (!context.mounted) return;
-
-      showToast('게시글이 등록되었습니다');
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              AppPagesContainer(index: AppPagesNumber.deal, userId: userId),
-        ),
-        (route) => false,
-      );
-    } else if (res.data['status'] == 400) {
-      throw Exception(res.data['message']);
-    } else {
-      throw Exception('Failed to send data [${res.statusCode}]');
-    }
-  } catch (err) {
-    debugPrint('$err');
-  } finally {
-    dio.close();
   }
 }
 
